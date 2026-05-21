@@ -1,0 +1,101 @@
+output: dist/
+
+variables:
+  RELEASE_TAG: ${RELEASE_TAG}
+  RELEASE_DRAFT: ${RELEASE_DRAFT}
+  RELEASE_PRERELEASE: ${RELEASE_PRERELEASE}
+
+releases:
+  - name: desktop-macos
+    jobs:
+      - name: macos-pkg
+        package:
+          platform: macos
+          target: pkg
+        publish:
+          target: github
+          args:
+            repo: ${GITHUB_REPOSITORY}
+            release-tag: ${RELEASE_TAG}
+            release-title: Pristine Cleaner {appVersion}
+            release-draft: ${RELEASE_DRAFT}
+            release-prerelease: ${RELEASE_PRERELEASE}
+
+  - name: desktop-windows
+    jobs:
+      - name: windows-msix
+        package:
+          platform: windows
+          target: msix
+        publish:
+          target: github
+          args:
+            repo: ${GITHUB_REPOSITORY}
+            release-tag: ${RELEASE_TAG}
+            release-title: Pristine Cleaner {appVersion}
+            release-draft: ${RELEASE_DRAFT}
+            release-prerelease: ${RELEASE_PRERELEASE}
+
+  - name: desktop-linux-x64
+    jobs:
+      - name: linux-x64-deb
+        package:
+          platform: linux
+          target: deb
+          build_args:
+            target-platform: linux-x64
+        publish:
+          target: github
+          args:
+            repo: ${GITHUB_REPOSITORY}
+            release-tag: ${RELEASE_TAG}
+            release-title: Pristine Cleaner {appVersion}
+            release-draft: ${RELEASE_DRAFT}
+            release-prerelease: ${RELEASE_PRERELEASE}
+
+      - name: linux-x64-rpm
+        package:
+          platform: linux
+          target: rpm
+          build_args:
+            target-platform: linux-x64
+        publish:
+          target: github
+          args:
+            repo: ${GITHUB_REPOSITORY}
+            release-tag: ${RELEASE_TAG}
+            release-title: Pristine Cleaner {appVersion}
+            release-draft: ${RELEASE_DRAFT}
+            release-prerelease: ${RELEASE_PRERELEASE}
+
+  - name: desktop-linux-arm64
+    jobs:
+      - name: linux-arm64-deb
+        package:
+          platform: linux
+          target: deb
+          build_args:
+            target-platform: linux-arm64
+        publish:
+          target: github
+          args:
+            repo: ${GITHUB_REPOSITORY}
+            release-tag: ${RELEASE_TAG}
+            release-title: Pristine Cleaner {appVersion}
+            release-draft: ${RELEASE_DRAFT}
+            release-prerelease: ${RELEASE_PRERELEASE}
+
+      - name: linux-arm64-rpm
+        package:
+          platform: linux
+          target: rpm
+          build_args:
+            target-platform: linux-arm64
+        publish:
+          target: github
+          args:
+            repo: ${GITHUB_REPOSITORY}
+            release-tag: ${RELEASE_TAG}
+            release-title: Pristine Cleaner {appVersion}
+            release-draft: ${RELEASE_DRAFT}
+            release-prerelease: ${RELEASE_PRERELEASE}

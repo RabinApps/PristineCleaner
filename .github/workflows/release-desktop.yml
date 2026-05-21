@@ -1,0 +1,128 @@
+name: Release Desktop
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: "GitHub release tag to publish assets to"
+        required: false
+        type: string
+      release_draft:
+        description: "Create release as draft"
+        required: false
+        default: false
+        type: boolean
+      release_prerelease:
+        description: "Mark release as prerelease"
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  FASTFORGE_VERSION: 0.6.6
+
+jobs:
+  release:
+    name: ${{ matrix.label }}
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - label: macOS pkg
+            runner: macos-latest
+            release_name: desktop-macos
+          - label: Windows msix
+            runner: windows-latest
+            release_name: desktop-windows
+          - label: Linux x86_64 deb/rpm
+            runner: ubuntu-latest
+            release_name: desktop-linux-x64
+          - label: Linux arm64 deb/rpm
+            runner: ubuntu-latest
+            release_name: desktop-linux-arm64
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Install Linux packaging dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            clang \
+            cmake \
+            dpkg-dev \
+            fakeroot \
+            file \
+            libgtk-3-dev \
+            ninja-build \
+            patchelf \
+            pkg-config \
+            rpm
+
+      - name: Install Fastforge
+        run: dart pub global activate fastforge $FASTFORGE_VERSION
+
+      - name: Add pub cache to PATH
+        shell: bash
+        run: |
+          if [[ "$RUNNER_OS" == "Windows" ]]; then
+            echo "$LOCALAPPDATA\\Pub\\Cache\\bin" >> "$GITHUB_PATH"
+          else
+            echo "$HOME/.pub-cache/bin" >> "$GITHUB_PATH"
+          fi
+
+      - name: Resolve dependencies
+        run: flutter pub get
+
+      - name: Compute release metadata
+        shell: bash
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          INPUT_RELEASE_TAG: ${{ inputs.release_tag }}
+          INPUT_RELEASE_DRAFT: ${{ inputs.release_draft }}
+          INPUT_RELEASE_PRERELEASE: ${{ inputs.release_prerelease }}
+        run: |
+          if [[ "$EVENT_NAME" == "workflow_dispatch" && -n "$INPUT_RELEASE_TAG" ]]; then
+            release_tag="$INPUT_RELEASE_TAG"
+          else
+            release_tag="$GITHUB_REF_NAME"
+          fi
+
+          release_draft="false"
+          release_prerelease="false"
+          if [[ "$EVENT_NAME" == "workflow_dispatch" ]]; then
+            if [[ "$INPUT_RELEASE_DRAFT" == "true" ]]; then
+              release_draft="true"
+            fi
+            if [[ "$INPUT_RELEASE_PRERELEASE" == "true" ]]; then
+              release_prerelease="true"
+            fi
+          fi
+
+          echo "RELEASE_TAG=$release_tag" >> "$GITHUB_ENV"
+          echo "RELEASE_DRAFT=$release_draft" >> "$GITHUB_ENV"
+          echo "RELEASE_PRERELEASE=$release_prerelease" >> "$GITHUB_ENV"
+
+      - name: Build and publish release assets
+        run: fastforge release --name ${{ matrix.release_name }} --skip-clean
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
