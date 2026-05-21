@@ -178,7 +178,7 @@ class FileService {
       return {
         'user_cache': ['$home/Library/Caches'],
         'user_logs': ['$home/Library/Logs'],
-        'language_files': [],
+        'language_files': ['/System/Library/LinguisticData'],
         'system_logs': ['/Library/Logs'],
         'broken_login_items': [],
       };
@@ -186,17 +186,18 @@ class FileService {
       return {
         'user_cache': ['$home/.cache'],
         'user_logs': ['/var/log'],
-        'language_files': [],
+        'language_files': ['/usr/share/locale'],
         'system_logs': ['/tmp'],
         'broken_login_items': [],
       };
     } else if (Platform.isWindows) {
       final tmp = Platform.environment['TEMP'] ?? '';
       final local = Platform.environment['LOCALAPPDATA'] ?? '';
+      final windir = Platform.environment['WINDIR'] ?? r'C:\Windows';
       return {
         'user_cache': ['$local\\Temp'],
         'user_logs': [],
-        'language_files': [],
+        'language_files': ['$windir\\System32'],
         'system_logs': [tmp],
         'broken_login_items': [],
       };
