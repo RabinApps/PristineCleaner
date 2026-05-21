@@ -239,6 +239,52 @@ class FileService {
     return itemsPayload.map(_fileItemFromPayload).toList(growable: false);
   }
 
+  // ─── Directory Browser ─────────────────────────────────────────────────────
+
+  Future<List<FileItem>> listDirectoryContents(
+    String dirPath, {
+    bool includeHidden = false,
+    int maxItems = 500,
+  }) async {
+    final out = <FileItem>[];
+    try {
+      final dir = Directory(dirPath);
+      if (!await dir.exists()) return out;
+
+      await for (final entity in dir.list(followLinks: false)) {
+        if (out.length >= maxItems) break;
+
+        final path = entity.path;
+        final name = _basename(path);
+        if (!includeHidden && name.startsWith('.')) {
+          continue;
+        }
+
+        try {
+          final stat = await entity.stat();
+          final isDir = entity is Directory;
+          out.add(
+            FileItem(
+              path: path,
+              name: name,
+              sizeBytes: isDir ? await _dirSizePayload(path) : stat.size,
+              modified: stat.modified,
+              isDirectory: isDir,
+            ),
+          );
+        } catch (_) {}
+      }
+    } catch (_) {}
+
+    out.sort((a, b) {
+      if (a.isDirectory != b.isDirectory) {
+        return a.isDirectory ? -1 : 1;
+      }
+      return a.name.toLowerCase().compareTo(b.name.toLowerCase());
+    });
+    return out;
+  }
+
   // ─── Applications ─────────────────────────────────────────────────────────
 
   Future<ScanResult> scanApplications({
@@ -531,8 +577,9 @@ Future<void> _collectCategorizedFilesPayload(
       if (entity is File) {
         try {
           final stat = await entity.stat();
-          if (isCancelled?.call() ?? false)
+          if (isCancelled?.call() ?? false) {
             throw const ScanCancelledException();
+          }
 
           // Determine group: first path segment within the root dir.
           String? group;

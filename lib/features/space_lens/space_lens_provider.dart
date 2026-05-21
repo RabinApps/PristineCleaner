@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/models/file_item.dart';
 import '../../core/models/scan_result.dart';
 import '../../core/services/file_service.dart';
 import '../../core/services/trash_service.dart';
@@ -59,6 +60,10 @@ class SpaceLensNotifier extends Notifier<ScanViewModel> {
   void deselectAll() => state = state.withAllSelected(false);
 
   void stop() => ref.read(fileServiceProvider).cancelActiveScan();
+
+  Future<List<FileItem>> listDirectoryContents(String path) {
+    return ref.read(fileServiceProvider).listDirectoryContents(path);
+  }
 
   Future<void> clean() async {
     final selected = state.result?.selectedItems ?? [];

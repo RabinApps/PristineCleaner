@@ -30,6 +30,7 @@ class SpaceLensScreen extends ConsumerWidget {
         theme: theme,
         isCleaning: vm.isCleaning,
         onToggle: notifier.toggleItem,
+        onBrowseFolder: notifier.listDirectoryContents,
         onSelectAll: notifier.selectAll,
         onDeselectAll: notifier.deselectAll,
         onClean: notifier.clean,
@@ -232,6 +233,7 @@ class _SpaceLensResults extends StatefulWidget {
   final SectionTheme theme;
   final bool isCleaning;
   final ValueChanged<int> onToggle;
+  final Future<List<FileItem>> Function(String path) onBrowseFolder;
   final VoidCallback onSelectAll;
   final VoidCallback onDeselectAll;
   final VoidCallback onClean;
@@ -243,6 +245,7 @@ class _SpaceLensResults extends StatefulWidget {
     required this.theme,
     required this.isCleaning,
     required this.onToggle,
+    required this.onBrowseFolder,
     required this.onSelectAll,
     required this.onDeselectAll,
     required this.onClean,
@@ -299,6 +302,21 @@ class _SpaceLensResultsState extends State<_SpaceLensResults> {
     });
 
     return indices;
+  }
+
+  Future<void> _openDirectoryBrowser(FileItem root) async {
+    await showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) {
+        return _DirectoryBrowserDialog(
+          rootPath: root.path,
+          rootName: root.name,
+          accentColor: widget.theme.accentColor,
+          onLoad: widget.onBrowseFolder,
+        );
+      },
+    );
   }
 
   @override
@@ -426,6 +444,7 @@ class _SpaceLensResultsState extends State<_SpaceLensResults> {
                           ratio: ratio,
                           accentColor: widget.theme.accentColor,
                           onTap: () => widget.onToggle(originalIndex),
+                          onBrowse: () => _openDirectoryBrowser(item),
                         );
                       },
                     ),
@@ -488,12 +507,14 @@ class _FolderBar extends StatelessWidget {
   final double ratio;
   final Color accentColor;
   final VoidCallback onTap;
+  final VoidCallback onBrowse;
 
   const _FolderBar({
     required this.item,
     required this.ratio,
     required this.accentColor,
     required this.onTap,
+    required this.onBrowse,
   });
 
   @override
@@ -550,14 +571,14 @@ class _FolderBar extends StatelessWidget {
                 ),
                 const SizedBox(width: 8),
                 Tooltip(
-                  message: 'Open folder',
+                  message: 'Browse folder',
                   child: IconButton(
-                    icon: Icon(
-                      Icons.open_in_new_rounded,
-                      size: 16,
+                    icon: const Icon(
+                      Icons.chevron_right_rounded,
+                      size: 18,
                       color: Colors.white54,
                     ),
-                    onPressed: () => revealFileOrFolder(item.path),
+                    onPressed: onBrowse,
                     constraints: const BoxConstraints(
                       minWidth: 32,
                       minHeight: 32,
@@ -588,6 +609,257 @@ class _FolderBar extends StatelessWidget {
       ),
     );
   }
+}
+
+class _DirectoryBrowserDialog extends StatefulWidget {
+  final String rootPath;
+  final String rootName;
+  final Color accentColor;
+  final Future<List<FileItem>> Function(String path) onLoad;
+
+  const _DirectoryBrowserDialog({
+    required this.rootPath,
+    required this.rootName,
+    required this.accentColor,
+    required this.onLoad,
+  });
+
+  @override
+  State<_DirectoryBrowserDialog> createState() =>
+      _DirectoryBrowserDialogState();
+}
+
+class _DirectoryBrowserDialogState extends State<_DirectoryBrowserDialog> {
+  late String _currentPath;
+  late String _currentName;
+  final List<_BreadcrumbNode> _trail = [];
+  bool _isLoading = true;
+  String? _error;
+  List<FileItem> _entries = const [];
+
+  @override
+  void initState() {
+    super.initState();
+    _currentPath = widget.rootPath;
+    _currentName = widget.rootName;
+    _trail.add(_BreadcrumbNode(name: widget.rootName, path: widget.rootPath));
+    _loadCurrent();
+  }
+
+  Future<void> _loadCurrent() async {
+    setState(() {
+      _isLoading = true;
+      _error = null;
+    });
+    try {
+      final items = await widget.onLoad(_currentPath);
+      if (!mounted) return;
+      setState(() {
+        _entries = items;
+        _isLoading = false;
+      });
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _error = e.toString();
+        _isLoading = false;
+      });
+    }
+  }
+
+  Future<void> _openEntry(FileItem item) async {
+    if (item.isDirectory) {
+      setState(() {
+        _currentPath = item.path;
+        _currentName = item.name;
+        _trail.add(_BreadcrumbNode(name: item.name, path: item.path));
+      });
+      await _loadCurrent();
+      return;
+    }
+    await revealFileOrFolder(item.path);
+  }
+
+  Future<void> _goToCrumb(int index) async {
+    final node = _trail[index];
+    setState(() {
+      _currentPath = node.path;
+      _currentName = node.name;
+      _trail.removeRange(index + 1, _trail.length);
+    });
+    await _loadCurrent();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      backgroundColor: const Color(0xFF120D1F),
+      insetPadding: const EdgeInsets.symmetric(horizontal: 40, vertical: 30),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+      child: SizedBox(
+        width: 860,
+        height: 560,
+        child: Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.fromLTRB(16, 12, 10, 12),
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(color: Colors.white.withOpacity(0.07)),
+                ),
+              ),
+              child: Row(
+                children: [
+                  Icon(Icons.folder_open_rounded, color: widget.accentColor),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          for (var i = 0; i < _trail.length; i++) ...[
+                            InkWell(
+                              onTap: () => _goToCrumb(i),
+                              child: Text(
+                                _trail[i].name,
+                                style: TextStyle(
+                                  color: i == _trail.length - 1
+                                      ? Colors.white
+                                      : Colors.white70,
+                                  fontSize: 13,
+                                  fontWeight: i == _trail.length - 1
+                                      ? FontWeight.w600
+                                      : FontWeight.w400,
+                                ),
+                              ),
+                            ),
+                            if (i != _trail.length - 1)
+                              const Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 8),
+                                child: Icon(
+                                  Icons.chevron_right_rounded,
+                                  color: Colors.white38,
+                                  size: 16,
+                                ),
+                              ),
+                          ],
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  IconButton(
+                    tooltip: 'Reveal in Finder',
+                    onPressed: () => revealFileOrFolder(_currentPath),
+                    icon: const Icon(
+                      Icons.open_in_new_rounded,
+                      color: Colors.white60,
+                      size: 18,
+                    ),
+                  ),
+                  IconButton(
+                    tooltip: 'Close',
+                    onPressed: () => Navigator.of(context).pop(),
+                    icon: const Icon(
+                      Icons.close_rounded,
+                      color: Colors.white70,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: _isLoading
+                  ? Center(
+                      child: CircularProgressIndicator(
+                        color: widget.accentColor,
+                      ),
+                    )
+                  : _error != null
+                  ? Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(24),
+                        child: Text(
+                          _error!,
+                          style: const TextStyle(color: Colors.redAccent),
+                        ),
+                      ),
+                    )
+                  : _entries.isEmpty
+                  ? Center(
+                      child: Text(
+                        'No files or folders in $_currentName',
+                        style: const TextStyle(color: Colors.white54),
+                      ),
+                    )
+                  : ListView.separated(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 10,
+                      ),
+                      itemCount: _entries.length,
+                      separatorBuilder: (context, index) => Divider(
+                        height: 1,
+                        color: Colors.white.withOpacity(0.05),
+                      ),
+                      itemBuilder: (context, index) {
+                        final item = _entries[index];
+                        return ListTile(
+                          dense: true,
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 2,
+                          ),
+                          leading: Icon(
+                            item.isDirectory
+                                ? Icons.folder_rounded
+                                : Icons.insert_drive_file_outlined,
+                            color: item.isDirectory
+                                ? const Color(0xFFFFCA5F)
+                                : Colors.white54,
+                            size: 18,
+                          ),
+                          title: Text(
+                            item.name,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 13,
+                            ),
+                          ),
+                          subtitle: Text(
+                            item.isDirectory
+                                ? 'Folder • ${item.formattedSize}'
+                                : item.formattedSize,
+                            style: const TextStyle(
+                              color: Colors.white54,
+                              fontSize: 11,
+                            ),
+                          ),
+                          trailing: Icon(
+                            item.isDirectory
+                                ? Icons.chevron_right_rounded
+                                : Icons.open_in_new_rounded,
+                            color: Colors.white54,
+                            size: 16,
+                          ),
+                          onTap: () => _openEntry(item),
+                        );
+                      },
+                    ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _BreadcrumbNode {
+  final String name;
+  final String path;
+
+  const _BreadcrumbNode({required this.name, required this.path});
 }
 
 class _DoneScreen extends StatelessWidget {
