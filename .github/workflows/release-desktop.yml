@@ -30,6 +30,7 @@ concurrency:
 
 env:
   FASTFORGE_VERSION: 0.6.6
+  RELEASE_GITHUB_TOKEN: ${{ secrets.RELEASE_GITHUB_TOKEN != '' && secrets.RELEASE_GITHUB_TOKEN || github.token }}
 
 jobs:
   release:
@@ -125,5 +126,5 @@ jobs:
       - name: Build and publish release assets
         run: fastforge release --name ${{ matrix.release_name }} --skip-clean
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ env.RELEASE_GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
