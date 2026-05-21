@@ -16,7 +16,7 @@ releases:
         publish:
           target: github
           args:
-            repo: ${GITHUB_REPOSITORY}
+            repo: RabinApps/PristineCleaner
             release-tag: ${RELEASE_TAG}
             release-title: Pristine Cleaner {appVersion}
             release-draft: ${RELEASE_DRAFT}
@@ -31,7 +31,7 @@ releases:
         publish:
           target: github
           args:
-            repo: ${GITHUB_REPOSITORY}
+            repo: RabinApps/PristineCleaner
             release-tag: ${RELEASE_TAG}
             release-title: Pristine Cleaner {appVersion}
             release-draft: ${RELEASE_DRAFT}
@@ -44,7 +44,7 @@ releases:
         publish:
           target: github
           args:
-            repo: ${GITHUB_REPOSITORY}
+            repo: RabinApps/PristineCleaner
             release-tag: ${RELEASE_TAG}
             release-title: Pristine Cleaner {appVersion}
             release-draft: ${RELEASE_DRAFT}
@@ -61,7 +61,7 @@ releases:
         publish:
           target: github
           args:
-            repo: ${GITHUB_REPOSITORY}
+            repo: RabinApps/PristineCleaner
             release-tag: ${RELEASE_TAG}
             release-title: Pristine Cleaner {appVersion}
             release-draft: ${RELEASE_DRAFT}
@@ -76,7 +76,7 @@ releases:
         publish:
           target: github
           args:
-            repo: ${GITHUB_REPOSITORY}
+            repo: RabinApps/PristineCleaner
             release-tag: ${RELEASE_TAG}
             release-title: Pristine Cleaner {appVersion}
             release-draft: ${RELEASE_DRAFT}
@@ -93,7 +93,7 @@ releases:
         publish:
           target: github
           args:
-            repo: ${GITHUB_REPOSITORY}
+            repo: RabinApps/PristineCleaner
             release-tag: ${RELEASE_TAG}
             release-title: Pristine Cleaner {appVersion}
             release-draft: ${RELEASE_DRAFT}
@@ -108,7 +108,7 @@ releases:
         publish:
           target: github
           args:
-            repo: ${GITHUB_REPOSITORY}
+            repo: RabinApps/PristineCleaner
             release-tag: ${RELEASE_TAG}
             release-title: Pristine Cleaner {appVersion}
             release-draft: ${RELEASE_DRAFT}
