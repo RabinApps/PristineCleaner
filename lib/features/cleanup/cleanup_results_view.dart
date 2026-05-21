@@ -4,6 +4,7 @@ import '../../core/models/file_item.dart';
 import '../../core/models/scan_result.dart';
 import '../../core/theme/section_themes.dart';
 import '../../core/utils/format_utils.dart';
+import '../../core/utils/file_launcher.dart';
 
 // ─── Category metadata ─────────────────────────────────────────────────────
 
@@ -942,6 +943,7 @@ class _GroupTile extends StatelessWidget {
                   item: item,
                   accentColor: theme.accentColor,
                   onToggle: () => onToggleItem(item),
+                  onOpen: () => revealFileOrFolder(item.path),
                 );
               }).toList(),
             ),
@@ -957,11 +959,13 @@ class _FileTile extends StatelessWidget {
   final FileItem item;
   final Color accentColor;
   final VoidCallback onToggle;
+  final VoidCallback? onOpen;
 
   const _FileTile({
     required this.item,
     required this.accentColor,
     required this.onToggle,
+    this.onOpen,
   });
 
   @override
@@ -1014,6 +1018,23 @@ class _FileTile extends StatelessWidget {
                   fontWeight: FontWeight.w500,
                 ),
               ),
+              if (onOpen != null) ...[
+                const SizedBox(width: 4),
+                SizedBox(
+                  width: 24,
+                  height: 24,
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.open_in_new_rounded,
+                      size: 12,
+                      color: Colors.white54,
+                    ),
+                    onPressed: onOpen,
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                  ),
+                ),
+              ],
             ],
           ),
         ),

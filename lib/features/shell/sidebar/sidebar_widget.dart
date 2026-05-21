@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:window_manager/window_manager.dart';
 
 import '../../../core/models/nav_item.dart';
-import '../shell_screen.dart';
 
-class SidebarWidget extends ConsumerWidget {
+class SidebarWidget extends StatelessWidget {
   final NavSection activeSection;
 
   const SidebarWidget({super.key, required this.activeSection});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return Container(
       width: 218,
       color: const Color(0xFF1A1A1A),
@@ -27,7 +26,7 @@ class SidebarWidget extends ConsumerWidget {
                 child: Text(
                   'PristineCleaner',
                   style: TextStyle(
-                    color: Colors.white.withOpacity(0.75),
+                    color: Colors.white.withValues(alpha: 0.75),
                     fontSize: 13,
                     fontWeight: FontWeight.w600,
                     letterSpacing: 0.2,
@@ -48,12 +47,11 @@ class SidebarWidget extends ConsumerWidget {
                   (item) => _NavTile(
                     item: item,
                     isActive: item.section == activeSection,
-                    onTap: () => ref.read(activeNavProvider.notifier).state =
-                        item.section,
+                    onTap: () => context.go(_pathForSection(item.section)),
                   ),
                 ),
                 Divider(
-                  color: Colors.white.withOpacity(0.08),
+                  color: Colors.white.withValues(alpha: 0.08),
                   height: 24,
                   indent: 10,
                   endIndent: 10,
@@ -62,7 +60,7 @@ class SidebarWidget extends ConsumerWidget {
                   (item) => _NavTile(
                     item: item,
                     isActive: item.section == activeSection,
-                    onTap: () {},
+                    onTap: () => context.go(_pathForSection(item.section)),
                   ),
                 ),
               ],
@@ -75,7 +73,7 @@ class SidebarWidget extends ConsumerWidget {
             child: Text(
               'v1.0.0',
               style: TextStyle(
-                color: Colors.white.withOpacity(0.2),
+                color: Colors.white.withValues(alpha: 0.2),
                 fontSize: 11,
               ),
             ),
@@ -86,7 +84,26 @@ class SidebarWidget extends ConsumerWidget {
   }
 }
 
-class _NavTile extends ConsumerStatefulWidget {
+String _pathForSection(NavSection section) {
+  switch (section) {
+    case NavSection.smartCare:
+      return '/smart-care';
+    case NavSection.cleanup:
+      return '/cleanup';
+    case NavSection.myClutter:
+      return '/my-clutter';
+    case NavSection.spaceLens:
+      return '/space-lens';
+    case NavSection.applications:
+      return '/applications';
+    case NavSection.myTools:
+      return '/my-tools';
+    case NavSection.myActivity:
+      return '/my-activity';
+  }
+}
+
+class _NavTile extends StatefulWidget {
   final NavItem item;
   final bool isActive;
   final VoidCallback onTap;
@@ -98,10 +115,10 @@ class _NavTile extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<_NavTile> createState() => _NavTileState();
+  State<_NavTile> createState() => _NavTileState();
 }
 
-class _NavTileState extends ConsumerState<_NavTile> {
+class _NavTileState extends State<_NavTile> {
   bool _hovered = false;
 
   Color get _accent =>
@@ -120,9 +137,9 @@ class _NavTileState extends ConsumerState<_NavTile> {
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
           decoration: BoxDecoration(
             color: widget.isActive
-                ? _accent.withOpacity(0.18)
+                ? _accent.withValues(alpha: 0.18)
                 : _hovered
-                ? Colors.white.withOpacity(0.05)
+                ? Colors.white.withValues(alpha: 0.05)
                 : Colors.transparent,
             borderRadius: BorderRadius.circular(8),
           ),

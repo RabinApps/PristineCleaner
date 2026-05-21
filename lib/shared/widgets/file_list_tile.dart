@@ -8,12 +8,14 @@ class FileListTile extends StatelessWidget {
   final FileItem item;
   final Color accentColor;
   final ValueChanged<bool?> onChanged;
+  final VoidCallback? onOpen;
 
   const FileListTile({
     super.key,
     required this.item,
     required this.accentColor,
     required this.onChanged,
+    this.onOpen,
   });
 
   @override
@@ -101,6 +103,26 @@ class FileListTile extends StatelessWidget {
                       fontWeight: FontWeight.w600,
                     ),
                   ),
+                  const SizedBox(width: 8),
+                  // Open file button
+                  if (onOpen != null)
+                    Tooltip(
+                      message: 'Open in Finder',
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.open_in_new_rounded,
+                          size: 16,
+                          color: Colors.white54,
+                        ),
+                        onPressed: onOpen,
+                        constraints: const BoxConstraints(
+                          minWidth: 32,
+                          minHeight: 32,
+                        ),
+                        padding: EdgeInsets.zero,
+                        splashRadius: 16,
+                      ),
+                    ),
                 ],
               ),
             ],

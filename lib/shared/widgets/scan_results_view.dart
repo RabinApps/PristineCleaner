@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../../core/models/scan_result.dart';
 import '../../core/theme/section_themes.dart';
+import '../../core/utils/file_launcher.dart';
 import 'file_list_tile.dart';
 import 'scan_button.dart';
+import 'search_and_sort_bar.dart';
 
 class ScanResultsView extends StatefulWidget {
   final ScanResult result;
@@ -14,6 +16,7 @@ class ScanResultsView extends StatefulWidget {
   final VoidCallback onDeselectAll;
   final VoidCallback onClean;
   final VoidCallback onRescan;
+  final bool enableOpen;
 
   const ScanResultsView({
     super.key,
@@ -25,6 +28,7 @@ class ScanResultsView extends StatefulWidget {
     required this.onDeselectAll,
     required this.onClean,
     required this.onRescan,
+    this.enableOpen = true,
   });
 
   @override
@@ -33,17 +37,58 @@ class ScanResultsView extends StatefulWidget {
 
 class _ScanResultsViewState extends State<ScanResultsView> {
   final ScrollController _scrollController = ScrollController();
+  bool _showSearch = false;
+  String _searchQuery = '';
+  late TextEditingController _searchController;
+  SortBy _sortBy = SortBy.size;
+
+  @override
+  void initState() {
+    super.initState();
+    _searchController = TextEditingController();
+  }
 
   @override
   void dispose() {
     _scrollController.dispose();
+    _searchController.dispose();
     super.dispose();
+  }
+
+  List<int> _getFilteredAndSortedIndices() {
+    final indices = List<int>.generate(widget.result.items.length, (i) => i);
+
+    // Filter by search query
+    if (_searchQuery.isNotEmpty) {
+      final query = _searchQuery.toLowerCase();
+      indices.retainWhere((i) {
+        final item = widget.result.items[i];
+        return item.name.toLowerCase().contains(query) ||
+            (item.group?.toLowerCase().contains(query) ?? false);
+      });
+    }
+
+    // Sort
+    indices.sort((aIdx, bIdx) {
+      final a = widget.result.items[aIdx];
+      final b = widget.result.items[bIdx];
+
+      return switch (_sortBy) {
+        SortBy.size => b.sizeBytes.compareTo(a.sizeBytes), // Descending
+        SortBy.name => a.name.compareTo(b.name), // Ascending
+        SortBy.ascending => a.sizeBytes.compareTo(b.sizeBytes),
+        SortBy.descending => b.sizeBytes.compareTo(a.sizeBytes),
+      };
+    });
+
+    return indices;
   }
 
   @override
   Widget build(BuildContext context) {
     final selectedCount = widget.result.selectedItems.length;
     final allSelected = selectedCount == widget.result.items.length;
+    final filteredIndices = _getFilteredAndSortedIndices();
 
     return Container(
       decoration: BoxDecoration(
@@ -55,7 +100,41 @@ class _ScanResultsViewState extends State<ScanResultsView> {
       ),
       child: Column(
         children: [
-          // ── Header bar ─────────────────────────────────────────────────
+          // ── Search and sort bar ────────────────────────────────────────
+          Container(
+            height: 52,
+            decoration: BoxDecoration(
+              color: Colors.black.withOpacity(0.2),
+              border: Border(
+                bottom: BorderSide(color: Colors.white.withOpacity(0.07)),
+              ),
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Row(
+              children: [
+                const Spacer(),
+                SearchAndSortBar(
+                  accentColor: widget.theme.accentColor,
+                  showSearch: _showSearch,
+                  searchController: _searchController,
+                  onToggleSearch: () {
+                    setState(() {
+                      _showSearch = !_showSearch;
+                      if (!_showSearch) {
+                        _searchQuery = '';
+                        _searchController.clear();
+                      }
+                    });
+                  },
+                  onSearchChanged: (v) => setState(() => _searchQuery = v),
+                  sortBy: _sortBy,
+                  onSortChanged: (v) => setState(() => _sortBy = v),
+                ),
+              ],
+            ),
+          ),
+
+          // ── Info bar ───────────────────────────────────────────────────
           Padding(
             padding: const EdgeInsets.fromLTRB(24, 24, 24, 12),
             child: Row(
@@ -64,7 +143,7 @@ class _ScanResultsViewState extends State<ScanResultsView> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '${widget.result.items.length} items found  •  ${widget.result.formattedTotal}',
+                      '${filteredIndices.length} items  •  ${widget.result.formattedTotal}',
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 16,
@@ -108,21 +187,39 @@ class _ScanResultsViewState extends State<ScanResultsView> {
 
           // ── File list ──────────────────────────────────────────────────
           Expanded(
-            child: Scrollbar(
-              controller: _scrollController,
-              child: ListView.builder(
-                controller: _scrollController,
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                itemCount: widget.result.items.length,
-                itemBuilder: (context, index) {
-                  return FileListTile(
-                    item: widget.result.items[index],
-                    accentColor: widget.theme.accentColor,
-                    onChanged: (_) => widget.onToggleItem(index),
-                  );
-                },
-              ),
-            ),
+            child: filteredIndices.isEmpty
+                ? Center(
+                    child: Text(
+                      _searchQuery.isNotEmpty
+                          ? 'No items match your search'
+                          : 'No items found',
+                      style: const TextStyle(
+                        color: Colors.white54,
+                        fontSize: 14,
+                      ),
+                    ),
+                  )
+                : Scrollbar(
+                    controller: _scrollController,
+                    child: ListView.builder(
+                      controller: _scrollController,
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      itemCount: filteredIndices.length,
+                      itemBuilder: (context, index) {
+                        final itemIndex = filteredIndices[index];
+                        return FileListTile(
+                          item: widget.result.items[itemIndex],
+                          accentColor: widget.theme.accentColor,
+                          onChanged: (_) => widget.onToggleItem(itemIndex),
+                          onOpen: widget.enableOpen
+                              ? () => revealFileOrFolder(
+                                  widget.result.items[itemIndex].path,
+                                )
+                              : null,
+                        );
+                      },
+                    ),
+                  ),
           ),
 
           // ── Footer action bar ──────────────────────────────────────────

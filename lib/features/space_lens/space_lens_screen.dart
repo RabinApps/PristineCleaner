@@ -4,8 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/models/file_item.dart';
 import '../../core/theme/section_themes.dart';
 import '../../core/utils/format_utils.dart';
+import '../../core/utils/file_launcher.dart';
 import '../../shared/widgets/glossy_icon_widget.dart';
 import '../../shared/widgets/scan_button.dart';
+import '../../shared/widgets/search_and_sort_bar.dart';
 import 'space_lens_provider.dart';
 
 class SpaceLensScreen extends ConsumerWidget {
@@ -224,7 +226,7 @@ class SpaceLensScreen extends ConsumerWidget {
   }
 }
 
-class _SpaceLensResults extends StatelessWidget {
+class _SpaceLensResults extends StatefulWidget {
   final List<FileItem> items;
   final int totalBytes;
   final SectionTheme theme;
@@ -248,26 +250,124 @@ class _SpaceLensResults extends StatelessWidget {
   });
 
   @override
+  State<_SpaceLensResults> createState() => _SpaceLensResultsState();
+}
+
+class _SpaceLensResultsState extends State<_SpaceLensResults> {
+  bool _showSearch = false;
+  String _searchQuery = '';
+  late TextEditingController _searchController;
+  final ScrollController _scrollController = ScrollController();
+  SortBy _sortBy = SortBy.size;
+
+  @override
+  void initState() {
+    super.initState();
+    _searchController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  List<int> _getFilteredAndSortedIndices() {
+    final indices = List<int>.generate(widget.items.length, (i) => i);
+
+    // Filter by search query
+    if (_searchQuery.isNotEmpty) {
+      final query = _searchQuery.toLowerCase();
+      indices.retainWhere((i) {
+        final item = widget.items[i];
+        return item.name.toLowerCase().contains(query);
+      });
+    }
+
+    // Sort
+    indices.sort((aIdx, bIdx) {
+      final a = widget.items[aIdx];
+      final b = widget.items[bIdx];
+
+      return switch (_sortBy) {
+        SortBy.size => b.sizeBytes.compareTo(a.sizeBytes), // Descending
+        SortBy.name => a.name.compareTo(b.name), // Ascending A-Z
+        SortBy.ascending => a.sizeBytes.compareTo(b.sizeBytes),
+        SortBy.descending => b.sizeBytes.compareTo(a.sizeBytes),
+      };
+    });
+
+    return indices;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final maxBytes = items.isNotEmpty ? items.first.sizeBytes : 1;
+    final filteredIndices = _getFilteredAndSortedIndices();
+    final filteredItems = [
+      for (final idx in filteredIndices) widget.items[idx],
+    ];
+    final maxBytes = filteredItems.isNotEmpty
+        ? filteredItems.first.sizeBytes
+        : 1;
 
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: theme.backgroundGradient,
+          colors: widget.theme.backgroundGradient,
         ),
       ),
       child: Column(
         children: [
-          // Header
+          // ── Search and sort bar ────────────────────────────────────────
+          Container(
+            height: 52,
+            decoration: BoxDecoration(
+              color: Colors.black.withOpacity(0.2),
+              border: Border(
+                bottom: BorderSide(color: Colors.white.withOpacity(0.07)),
+              ),
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Row(
+              children: [
+                const Spacer(),
+                SearchAndSortBar(
+                  accentColor: widget.theme.accentColor,
+                  showSearch: _showSearch,
+                  searchController: _searchController,
+                  onToggleSearch: () {
+                    setState(() {
+                      _showSearch = !_showSearch;
+                      if (!_showSearch) {
+                        _searchQuery = '';
+                        _searchController.clear();
+                      }
+                    });
+                  },
+                  onSearchChanged: (v) => setState(() => _searchQuery = v),
+                  sortBy: _sortBy,
+                  onSortChanged: (v) => setState(() => _sortBy = v),
+                  sortOptions: const [
+                    SortBy.size,
+                    SortBy.name,
+                    SortBy.ascending,
+                    SortBy.descending,
+                  ],
+                ),
+              ],
+            ),
+          ),
+
+          // ── Header ─────────────────────────────────────────────────────
           Padding(
             padding: const EdgeInsets.fromLTRB(24, 24, 24, 12),
             child: Row(
               children: [
                 Text(
-                  'Storage map  •  ${formatBytes(totalBytes)} total',
+                  'Storage map  •  ${formatBytes(widget.totalBytes)} total',
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 16,
@@ -276,42 +376,63 @@ class _SpaceLensResults extends StatelessWidget {
                 ),
                 const Spacer(),
                 TextButton.icon(
-                  onPressed: onSelectAll,
+                  onPressed: widget.onSelectAll,
                   icon: Icon(
                     Icons.check_box_rounded,
                     size: 16,
-                    color: theme.accentColor,
+                    color: widget.theme.accentColor,
                   ),
                   label: Text(
                     'Select All',
-                    style: TextStyle(color: theme.accentColor, fontSize: 13),
+                    style: TextStyle(
+                      color: widget.theme.accentColor,
+                      fontSize: 13,
+                    ),
                   ),
                 ),
               ],
             ),
           ),
 
-          // Bar chart list
+          // ── Bar chart list ────────────────────────────────────────────
           Expanded(
-            child: Scrollbar(
-              child: ListView.builder(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                itemCount: items.length,
-                itemBuilder: (context, index) {
-                  final item = items[index];
-                  final ratio = maxBytes > 0 ? item.sizeBytes / maxBytes : 0.0;
-                  return _FolderBar(
-                    item: item,
-                    ratio: ratio,
-                    accentColor: theme.accentColor,
-                    onTap: () => onToggle(index),
-                  );
-                },
-              ),
-            ),
+            child: filteredItems.isEmpty
+                ? Center(
+                    child: Text(
+                      _searchQuery.isNotEmpty
+                          ? 'No folders match your search'
+                          : 'No folders found',
+                      style: const TextStyle(
+                        color: Colors.white54,
+                        fontSize: 14,
+                      ),
+                    ),
+                  )
+                : Scrollbar(
+                    controller: _scrollController,
+
+                    child: ListView.builder(
+                      controller: _scrollController,
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      itemCount: filteredItems.length,
+                      itemBuilder: (context, index) {
+                        final originalIndex = filteredIndices[index];
+                        final item = filteredItems[index];
+                        final ratio = maxBytes > 0
+                            ? item.sizeBytes / maxBytes
+                            : 0.0;
+                        return _FolderBar(
+                          item: item,
+                          ratio: ratio,
+                          accentColor: widget.theme.accentColor,
+                          onTap: () => widget.onToggle(originalIndex),
+                        );
+                      },
+                    ),
+                  ),
           ),
 
-          // Footer
+          // ── Footer ─────────────────────────────────────────────────────
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
             decoration: BoxDecoration(
@@ -323,12 +444,12 @@ class _SpaceLensResults extends StatelessWidget {
             child: Row(
               children: [
                 Text(
-                  '${items.where((i) => i.isSelected).length} folders selected',
+                  '${widget.items.where((i) => i.isSelected).length} folders selected',
                   style: const TextStyle(color: Colors.white70, fontSize: 13),
                 ),
                 const Spacer(),
                 OutlinedButton(
-                  onPressed: isCleaning ? null : onRescan,
+                  onPressed: widget.isCleaning ? null : widget.onRescan,
                   style: OutlinedButton.styleFrom(
                     foregroundColor: Colors.white60,
                     side: const BorderSide(color: Colors.white24),
@@ -344,12 +465,14 @@ class _SpaceLensResults extends StatelessWidget {
                 ),
                 const SizedBox(width: 12),
                 ScanButton(
-                  color: theme.accentColor,
+                  color: widget.theme.accentColor,
                   label: 'Clean',
-                  isLoading: isCleaning,
-                  onPressed: (items.every((i) => !i.isSelected) || isCleaning)
+                  isLoading: widget.isCleaning,
+                  onPressed:
+                      (widget.items.every((i) => !i.isSelected) ||
+                          widget.isCleaning)
                       ? null
-                      : onClean,
+                      : widget.onClean,
                 ),
               ],
             ),
@@ -423,6 +546,24 @@ class _FolderBar extends StatelessWidget {
                     color: accentColor,
                     fontSize: 13,
                     fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Tooltip(
+                  message: 'Open folder',
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.open_in_new_rounded,
+                      size: 16,
+                      color: Colors.white54,
+                    ),
+                    onPressed: () => revealFileOrFolder(item.path),
+                    constraints: const BoxConstraints(
+                      minWidth: 32,
+                      minHeight: 32,
+                    ),
+                    padding: EdgeInsets.zero,
+                    splashRadius: 16,
                   ),
                 ),
               ],
