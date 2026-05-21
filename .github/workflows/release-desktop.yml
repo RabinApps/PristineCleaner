@@ -20,7 +20,6 @@ concurrency:
 
 env:
   FASTFORGE_VERSION: 0.6.6
-  R2_PREFIX_BASE: pristine-cleaner-releases
 
 jobs:
   release:
@@ -106,19 +105,12 @@ jobs:
         run: |
           set -euo pipefail
 
-          for required in RELEASE_TAG; do
-            if [[ -z "${!required:-}" ]]; then
-              echo "Missing required environment variable: $required" >&2
-              exit 1
-            fi
-          done
-
           if [[ ! -d dist ]]; then
             echo "dist directory not found. Packaging likely failed." >&2
             exit 1
           fi
 
-          upload_root="r2-upload/${RELEASE_TAG}"
+          upload_root="r2-upload"
           mkdir -p "$upload_root"
 
           while IFS= read -r file; do
@@ -141,7 +133,6 @@ jobs:
           r2-secret-access-key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
           r2-bucket: ${{ secrets.R2_BUCKET }}
           source-dir: r2-upload
-          destination-dir: ${{ env.R2_PREFIX_BASE }}
           output-file-url: true
 
       - name: Print uploaded artifact URLs
