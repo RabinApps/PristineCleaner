@@ -100,30 +100,6 @@ jobs:
       - name: Build release assets
         run: fastforge release --name ${{ matrix.release_name }} --skip-clean
 
-      - name: Prepare artifacts for R2 upload
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          if [[ ! -d dist ]]; then
-            echo "dist directory not found. Packaging likely failed." >&2
-            exit 1
-          fi
-
-          upload_root="r2-upload"
-          mkdir -p "$upload_root"
-
-          while IFS= read -r file; do
-            rel_path="${file#dist/}"
-            mkdir -p "${upload_root}/$(dirname "$rel_path")"
-            cp "$file" "${upload_root}/${rel_path}"
-          done < <(find dist -type f \( -name "*.dmg" -o -name "*.exe" -o -name "*.msix" -o -name "*.deb" -o -name "*.rpm" \) | sort)
-
-          if [[ -z "$(find "$upload_root" -type f -print -quit)" ]]; then
-            echo "No supported artifacts found to upload." >&2
-            exit 1
-          fi
-
       - name: Upload artifacts to Cloudflare R2
         id: r2_upload
         uses: ryand56/r2-upload-action@v1.4
@@ -132,7 +108,8 @@ jobs:
           r2-access-key-id: ${{ secrets.R2_ACCESS_KEY_ID }}
           r2-secret-access-key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
           r2-bucket: ${{ secrets.R2_BUCKET }}
-          source-dir: r2-upload
+          source-dir: dist
+          destination-dir: ${{ env.RELEASE_TAG }}
           output-file-url: true
 
       - name: Print uploaded artifact URLs
