@@ -110,9 +110,3 @@ jobs:
           r2-bucket: ${{ secrets.R2_BUCKET }}
           source-dir: dist
           output-file-url: true
-
-      - name: Print uploaded artifact URLs
-        shell: bash
-        run: |
-          echo "Uploaded artifact URLs:"
-          echo "${{ steps.r2_upload.outputs.file-urls }}"
