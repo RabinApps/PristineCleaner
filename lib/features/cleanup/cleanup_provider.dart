@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/models/scan_result.dart';
 import '../../core/services/file_service.dart';
 import '../../core/services/trash_service.dart';
 import '../shared/scan_view_model.dart';
@@ -13,13 +14,31 @@ class CleanupNotifier extends Notifier<ScanViewModel> {
   ScanViewModel build() => const ScanViewModel();
 
   Future<void> scan() async {
-    state = const ScanViewModel(isScanning: true);
+    state = const ScanViewModel(
+      isScanning: true,
+      progressPercent: 0,
+      progressLabel: 'Counting files...',
+    );
     try {
-      final result = await ref.read(fileServiceProvider).scanCleanup();
+      final result = await ref
+          .read(fileServiceProvider)
+          .scanCleanup(onProgress: _onProgress);
       state = ScanViewModel(result: result);
     } catch (e) {
       state = ScanViewModel(error: e.toString());
     }
+  }
+
+  void _onProgress(ScanProgress progress) {
+    final label = progress.phase == ScanPhase.counting
+        ? 'Counting files...'
+        : '${progress.percentLabel} (${progress.processed}/${progress.total})';
+    state = state.copyWith(
+      isScanning: true,
+      progressPercent: progress.percent,
+      progressLabel: label,
+      clearError: true,
+    );
   }
 
   void toggleItem(int index) {

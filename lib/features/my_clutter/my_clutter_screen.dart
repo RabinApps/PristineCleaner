@@ -39,6 +39,7 @@ class MyClutterScreen extends ConsumerWidget {
       orbShape: OrbShape.blob,
       onScan: notifier.scan,
       isScanning: vm.isScanning,
+      progressPercent: vm.progressPercent,
       extraContent: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

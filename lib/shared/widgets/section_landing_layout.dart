@@ -10,10 +10,12 @@ class SectionLandingLayout extends StatelessWidget {
   final VoidCallback? onScan;
   final bool isScanning;
   final Widget? extraContent;
+  final double? progressPercent;
 
   const SectionLandingLayout({
     super.key,
     required this.theme,
+    this.progressPercent,
     this.orbShape = OrbShape.circle,
     this.onScan,
     this.isScanning = false,
@@ -87,6 +89,23 @@ class SectionLandingLayout extends StatelessWidget {
                       if (extraContent != null) ...[
                         const SizedBox(height: 16),
                         extraContent!,
+                      ],
+                      if (isScanning && progressPercent != null) ...[
+                        const SizedBox(height: 16),
+                        SizedBox(
+                          width: 300,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(999),
+                            child: LinearProgressIndicator(
+                              value: progressPercent!.clamp(0.0, 1.0),
+                              minHeight: 8,
+                              backgroundColor: Colors.white12,
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                theme.accentColor,
+                              ),
+                            ),
+                          ),
+                        ),
                       ],
                     ],
                   ),

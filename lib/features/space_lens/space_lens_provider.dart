@@ -16,14 +16,18 @@ class SpaceLensNotifier extends Notifier<ScanViewModel> {
   ScanViewModel build() => const ScanViewModel();
 
   Future<void> scan() async {
-    state = const ScanViewModel(isScanning: true);
+    state = const ScanViewModel(
+      isScanning: true,
+      progressPercent: 0,
+      progressLabel: 'Counting folders...',
+    );
     try {
       final home =
           Platform.environment[Platform.isWindows ? 'USERPROFILE' : 'HOME'] ??
           '/';
       final folders = await ref
           .read(fileServiceProvider)
-          .getTopFolders(home, limit: 30);
+          .getTopFolders(home, limit: 30, onProgress: _onProgress);
       final totalBytes = folders.fold<int>(0, (s, f) => s + f.sizeBytes);
       final result = ScanResult(
         items: folders,
@@ -34,6 +38,18 @@ class SpaceLensNotifier extends Notifier<ScanViewModel> {
     } catch (e) {
       state = ScanViewModel(error: e.toString());
     }
+  }
+
+  void _onProgress(ScanProgress progress) {
+    final label = progress.phase == ScanPhase.counting
+        ? 'Counting folders...'
+        : progress.percentLabel;
+    state = state.copyWith(
+      isScanning: true,
+      progressPercent: progress.percent,
+      progressLabel: label,
+      clearError: true,
+    );
   }
 
   void toggleItem(int index) => state = state.withToggled(index);

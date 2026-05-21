@@ -39,6 +39,7 @@ class CleanupScreen extends ConsumerWidget {
       theme: theme,
       onScan: notifier.scan,
       isScanning: vm.isScanning,
+      progressPercent: vm.progressPercent,
       extraContent: vm.error != null
           ? Text(
               vm.error!,

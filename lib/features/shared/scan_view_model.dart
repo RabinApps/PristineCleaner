@@ -5,6 +5,8 @@ import '../../core/models/scan_result.dart';
 class ScanViewModel {
   final bool isScanning;
   final ScanResult? result;
+  final double? progressPercent;
+  final String? progressLabel;
   final bool isCleaning;
   final bool isDone;
   final String? error;
@@ -12,6 +14,8 @@ class ScanViewModel {
   const ScanViewModel({
     this.isScanning = false,
     this.result,
+    this.progressPercent,
+    this.progressLabel,
     this.isCleaning = false,
     this.isDone = false,
     this.error,
@@ -23,15 +27,22 @@ class ScanViewModel {
   ScanViewModel copyWith({
     bool? isScanning,
     ScanResult? result,
+    double? progressPercent,
+    String? progressLabel,
     bool? isCleaning,
     bool? isDone,
     String? error,
     bool clearResult = false,
+    bool clearProgress = false,
     bool clearError = false,
   }) {
     return ScanViewModel(
       isScanning: isScanning ?? this.isScanning,
       result: clearResult ? null : (result ?? this.result),
+      progressPercent: clearProgress
+          ? null
+          : (progressPercent ?? this.progressPercent),
+      progressLabel: clearProgress ? null : (progressLabel ?? this.progressLabel),
       isCleaning: isCleaning ?? this.isCleaning,
       isDone: isDone ?? this.isDone,
       error: clearError ? null : (error ?? this.error),

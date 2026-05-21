@@ -117,6 +117,38 @@ class SpaceLensScreen extends ConsumerWidget {
                           ),
                         ),
                       ),
+                      if (vm.isScanning && vm.progressPercent != null) ...[
+                        const SizedBox(height: 10),
+                        SizedBox(
+                          width: 300,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(999),
+                                child: LinearProgressIndicator(
+                                  value: vm.progressPercent!.clamp(0.0, 1.0),
+                                  minHeight: 8,
+                                  backgroundColor: Colors.white12,
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                    theme.accentColor,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                vm.progressLabel ??
+                                    '${(vm.progressPercent! * 100).toStringAsFixed(0)}%',
+                                style: const TextStyle(
+                                  color: Colors.white70,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                       if (vm.error != null) ...[
                         const SizedBox(height: 8),
                         Text(

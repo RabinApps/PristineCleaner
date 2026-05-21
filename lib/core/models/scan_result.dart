@@ -1,6 +1,26 @@
 import '../utils/format_utils.dart';
 import 'file_item.dart';
 
+enum ScanPhase { counting, scanning }
+
+class ScanProgress {
+  final ScanPhase phase;
+  final int processed;
+  final int total;
+  final int processedBytes;
+
+  const ScanProgress({
+    required this.phase,
+    required this.processed,
+    required this.total,
+    this.processedBytes = 0,
+  });
+
+  double get percent => total <= 0 ? 0 : (processed / total).clamp(0.0, 1.0);
+
+  String get percentLabel => '${(percent * 100).toStringAsFixed(0)}%';
+}
+
 class ScanResult {
   final List<FileItem> items;
   final int totalBytes;

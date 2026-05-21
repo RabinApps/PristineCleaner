@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/models/scan_result.dart';
 import '../../core/services/file_service.dart';
 import '../../core/services/trash_service.dart';
 import '../shared/scan_view_model.dart';
@@ -38,19 +39,45 @@ class MyClutterNotifier extends Notifier<MyClutterState> {
   }
 
   Future<void> scan() async {
-    state = state.copyWith(vm: const ScanViewModel(isScanning: true));
+    final countingLabel = state.activeType == ClutterType.largeFiles
+        ? 'Counting files...'
+        : 'Counting downloads...';
+    state = state.copyWith(
+      vm: ScanViewModel(
+        isScanning: true,
+        progressPercent: 0,
+        progressLabel: countingLabel,
+      ),
+    );
     try {
       final svc = ref.read(fileServiceProvider);
       final home =
           Platform.environment[Platform.isWindows ? 'USERPROFILE' : 'HOME'] ??
           '';
       final result = state.activeType == ClutterType.largeFiles
-          ? await svc.scanLargeFiles(home)
-          : await svc.scanDownloads();
+          ? await svc.scanLargeFiles(home, onProgress: _onProgress)
+          : await svc.scanDownloads(onProgress: _onProgress);
       state = state.copyWith(vm: ScanViewModel(result: result));
     } catch (e) {
       state = state.copyWith(vm: ScanViewModel(error: e.toString()));
     }
+  }
+
+  void _onProgress(ScanProgress progress) {
+    final countingLabel = state.activeType == ClutterType.largeFiles
+        ? 'Counting files...'
+        : 'Counting downloads...';
+    final label = progress.phase == ScanPhase.counting
+        ? countingLabel
+        : '${progress.percentLabel} (${progress.processed}/${progress.total})';
+    state = state.copyWith(
+      vm: state.vm.copyWith(
+        isScanning: true,
+        progressPercent: progress.percent,
+        progressLabel: label,
+        clearError: true,
+      ),
+    );
   }
 
   void toggleItem(int index) {

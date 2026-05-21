@@ -38,6 +38,7 @@ class ApplicationsScreen extends ConsumerWidget {
       orbShape: OrbShape.hexagon,
       onScan: notifier.scan,
       isScanning: vm.isScanning,
+      progressPercent: vm.progressPercent,
       extraContent: vm.error != null
           ? Text(
               vm.error!,
