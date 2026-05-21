@@ -145,8 +145,8 @@ class _ItemIcon extends StatelessWidget {
         borderRadius: BorderRadius.circular(6),
         child: Image.file(
           File(item.iconPath!),
-          width: 18,
-          height: 18,
+          width: 35,
+          height: 35,
           fit: BoxFit.cover,
           errorBuilder: (context, error, stackTrace) =>
               _FallbackIcon(item: item),
@@ -166,7 +166,7 @@ class _FallbackIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return Icon(
       item.isDirectory ? Icons.folder_rounded : Icons.insert_drive_file_rounded,
-      size: 18,
+      size: 30,
       color: item.isDirectory ? Colors.amber.shade400 : Colors.white38,
     );
   }

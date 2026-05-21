@@ -1968,45 +1968,145 @@ Future<String?> _resolveApplicationIconPath(String appPath) async {
 
   final candidates = <String>{'AppIcon', 'icon'};
   final infoPlist = File('$appPath/Contents/Info.plist');
-  if (await infoPlist.exists()) {
+  final plistContent = await _readMacOsPlistXml(infoPlist.path);
+  if (plistContent != null) {
     try {
-      final content = await infoPlist.readAsString();
       final iconFileMatch = RegExp(
-        r'<key>\\s*CFBundleIconFile\\s*</key>\\s*<string>([^<]+)</string>',
-      ).firstMatch(content);
+        r'<key>\s*CFBundleIconFile\s*</key>\s*<string>([^<]+)</string>',
+      ).firstMatch(plistContent);
       final iconNameMatch = RegExp(
-        r'<key>\\s*CFBundleIconName\\s*</key>\\s*<string>([^<]+)</string>',
-      ).firstMatch(content);
+        r'<key>\s*CFBundleIconName\s*</key>\s*<string>([^<]+)</string>',
+      ).firstMatch(plistContent);
       final iconFile = iconFileMatch?.group(1)?.trim();
       final iconName = iconNameMatch?.group(1)?.trim();
       if (iconFile != null && iconFile.isNotEmpty) {
-        candidates.add(iconFile.replaceAll('.icns', '').replaceAll('.png', ''));
+        candidates.add(_stripFileExtension(iconFile));
       }
       if (iconName != null && iconName.isNotEmpty) {
-        candidates.add(iconName.replaceAll('.icns', '').replaceAll('.png', ''));
+        candidates.add(_stripFileExtension(iconName));
       }
     } catch (_) {}
   }
 
-  const exts = ['.png', '.jpg', '.jpeg', '.webp'];
   for (final base in candidates) {
-    for (final ext in exts) {
-      final path = '${resourcesDir.path}/$base$ext';
-      if (await File(path).exists()) return path;
-    }
+    final resolved = await _resolveApplicationIconCandidate(
+      resourcesDir.path,
+      base,
+    );
+    if (resolved != null) return resolved;
   }
 
   try {
     await for (final entity in resourcesDir.list(followLinks: false)) {
       if (entity is! File) continue;
       final name = _basename(entity.path).toLowerCase();
-      final isImage = exts.any((ext) => name.endsWith(ext));
+      final isImage = _supportedApplicationIconExtensions.any(
+        (ext) => name.endsWith(ext),
+      );
       if (!isImage) continue;
-      if (name.contains('icon') || name.contains('app')) return entity.path;
+      if (!name.contains('icon') && !name.contains('app')) continue;
+      if (name.endsWith('.icns')) {
+        return _materializeMacOsIcnsPreview(entity.path);
+      }
+      return entity.path;
     }
   } catch (_) {}
 
   return null;
+}
+
+const _supportedApplicationIconExtensions = [
+  '.png',
+  '.jpg',
+  '.jpeg',
+  '.webp',
+  '.icns',
+];
+
+Future<String?> _resolveApplicationIconCandidate(
+  String resourcesDir,
+  String baseName,
+) async {
+  final normalizedBase = _stripFileExtension(baseName);
+  for (final ext in _supportedApplicationIconExtensions) {
+    final sourcePath = '$resourcesDir/$normalizedBase$ext';
+    if (!await File(sourcePath).exists()) continue;
+    if (ext == '.icns') {
+      return _materializeMacOsIcnsPreview(sourcePath);
+    }
+    return sourcePath;
+  }
+  return null;
+}
+
+Future<String?> _readMacOsPlistXml(String plistPath) async {
+  final plistFile = File(plistPath);
+  if (!await plistFile.exists()) return null;
+
+  try {
+    final result = await Process.run('plutil', [
+      '-convert',
+      'xml1',
+      '-o',
+      '-',
+      plistPath,
+    ]);
+    if (result.exitCode == 0 && result.stdout is String) {
+      final output = (result.stdout as String).trim();
+      if (output.isNotEmpty) return output;
+    }
+  } catch (_) {}
+
+  try {
+    return await plistFile.readAsString();
+  } catch (_) {
+    return null;
+  }
+}
+
+Future<String?> _materializeMacOsIcnsPreview(String sourcePath) async {
+  final sourceFile = File(sourcePath);
+  if (!await sourceFile.exists()) return null;
+
+  try {
+    final stat = await sourceFile.stat();
+    final signature = [
+      sourcePath,
+      stat.modified.millisecondsSinceEpoch.toString(),
+      stat.size.toString(),
+    ].join(':');
+    final cacheDir = Directory(
+      '${Directory.systemTemp.path}${Platform.pathSeparator}pristine_cleaner_app_icons',
+    );
+    if (!await cacheDir.exists()) {
+      await cacheDir.create(recursive: true);
+    }
+
+    final outputPath =
+        '${cacheDir.path}${Platform.pathSeparator}${_stablePathId(signature)}.png';
+    final outputFile = File(outputPath);
+    if (await outputFile.exists()) return outputPath;
+
+    final sipsResult = await Process.run('sips', [
+      '-s',
+      'format',
+      'png',
+      sourcePath,
+      '--out',
+      outputPath,
+    ]);
+    if (sipsResult.exitCode == 0 && await outputFile.exists()) {
+      return outputPath;
+    }
+
+    final bytes = await sourceFile.readAsBytes();
+    final decoded = img.decodeImage(bytes);
+    if (decoded == null) return null;
+    await outputFile.writeAsBytes(img.encodePng(decoded), flush: true);
+    return outputPath;
+  } catch (_) {
+    return null;
+  }
 }
 
 class _FileScanCandidate {
@@ -2146,6 +2246,28 @@ int _hammingDistance64(String aHex, String bHex) {
 }
 
 String _basename(String path) => path.split(Platform.pathSeparator).last;
+
+String _stripFileExtension(String value) {
+  final normalized = value.trim();
+  for (final ext in _supportedApplicationIconExtensions) {
+    if (normalized.toLowerCase().endsWith(ext)) {
+      return normalized.substring(0, normalized.length - ext.length);
+    }
+  }
+  return normalized;
+}
+
+String _stablePathId(String input) {
+  const offset = 0xcbf29ce484222325;
+  const prime = 0x100000001b3;
+  const mask64 = 0xFFFFFFFFFFFFFFFF;
+  var hash = offset;
+  for (final unit in input.codeUnits) {
+    hash ^= unit;
+    hash = (hash * prime) & mask64;
+  }
+  return hash.toRadixString(16).padLeft(16, '0');
+}
 
 Map<String, dynamic> _fileItemToPayload(FileItem item) => {
   'path': item.path,
