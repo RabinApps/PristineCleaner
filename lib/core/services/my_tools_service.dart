@@ -131,6 +131,56 @@ class MyToolsService {
     );
   }
 
+  Future<ScanResult> scanBackgroundItems() async {
+    final home = _homePath;
+    final roots = <String>[];
+
+    if (Platform.isMacOS) {
+      roots.addAll([
+        '$home/Library/LaunchAgents',
+        '/Library/LaunchAgents',
+        '/Library/LaunchDaemons',
+        '/System/Library/LaunchAgents',
+        '/System/Library/LaunchDaemons',
+      ]);
+    } else if (Platform.isLinux) {
+      roots.addAll([
+        '$home/.config/autostart',
+        '/etc/xdg/autostart',
+        '$home/.config/systemd/user',
+        '/etc/systemd/user',
+        '/usr/lib/systemd/user',
+      ]);
+    } else if (Platform.isWindows) {
+      final appData = Platform.environment['APPDATA'] ?? '';
+      final programData =
+          Platform.environment['ProgramData'] ?? r'C:\ProgramData';
+      roots.addAll([
+        '$appData\\Microsoft\\Windows\\Start Menu\\Programs\\Startup',
+        '$programData\\Microsoft\\Windows\\Start Menu\\Programs\\Startup',
+      ]);
+    }
+
+    return _scanFileRoots(
+      roots,
+      recursive: false,
+      includeFile: (file, _) {
+        final path = file.path.toLowerCase();
+        if (Platform.isMacOS) {
+          return path.endsWith('.plist');
+        }
+        if (Platform.isLinux) {
+          return path.endsWith('.desktop') ||
+              path.endsWith('.service') ||
+              path.endsWith('.timer') ||
+              path.endsWith('.socket');
+        }
+        return true;
+      },
+      maxItems: 500,
+    );
+  }
+
   Future<ScanResult> scanMailAttachments() async {
     final home = _homePath;
     final roots = <String>[];

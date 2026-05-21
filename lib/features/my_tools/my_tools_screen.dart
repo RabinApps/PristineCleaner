@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/models/scan_result.dart';
@@ -118,10 +119,30 @@ class _MyToolsScreenState extends ConsumerState<MyToolsScreen> {
                               ),
                           itemBuilder: (context, index) {
                             final tool = state.filteredTools[index];
+                            final supportsDirectory = _supportsDirectoryPicker(
+                              tool,
+                            );
                             return MyToolCard(
                               tool: tool,
                               isRunning: state.runningToolIds.contains(tool.id),
                               summary: state.summaries[tool.id],
+                              selectedDirectory: supportsDirectory
+                                  ? notifier.directoryForTool(tool)
+                                  : null,
+                              onPickDirectory: supportsDirectory
+                                  ? () async {
+                                      final picked = await _pickDirectory(
+                                        initialDirectory: notifier
+                                            .directoryForTool(tool),
+                                      );
+                                      if (picked != null && picked.isNotEmpty) {
+                                        notifier.setToolDirectory(
+                                          tool.id,
+                                          picked,
+                                        );
+                                      }
+                                    }
+                                  : null,
                               onScan: () => notifier.runTool(tool),
                             );
                           },
@@ -146,6 +167,23 @@ class _MyToolsScreenState extends ConsumerState<MyToolsScreen> {
     }
     return null;
   }
+
+  bool _supportsDirectoryPicker(MyTool tool) {
+    return switch (tool.scanType) {
+      MyToolScanType.largeAndOldFiles => true,
+      MyToolScanType.duplicateFinder => true,
+      MyToolScanType.similarImages => true,
+      _ => false,
+    };
+  }
+}
+
+Future<String?> _pickDirectory({String? initialDirectory}) {
+  return FilePicker.platform.getDirectoryPath(
+    dialogTitle: 'Choose folder',
+    initialDirectory: initialDirectory,
+    lockParentWindow: true,
+  );
 }
 
 class _ToolDetailView extends StatelessWidget {
@@ -252,7 +290,7 @@ class _Header extends StatelessWidget {
                 'Your go-to tools for keeping your Mac clean, safe and running smoothly.',
                 style: TextStyle(
                   color: Color(0xFFC4BBD9),
-                  fontSize: 20,
+                  fontSize: 14,
                   fontWeight: FontWeight.w500,
                   height: 1.24,
                 ),

@@ -44,6 +44,7 @@ class ToolRunOutcome {
 class MyToolsState {
   final List<MyTool> tools;
   final String query;
+  final Map<String, String> selectedDirectories;
   final Set<String> runningToolIds;
   final Map<String, ToolScanSummary> summaries;
   final String? activeDetailToolId;
@@ -54,6 +55,7 @@ class MyToolsState {
   const MyToolsState({
     required this.tools,
     this.query = '',
+    this.selectedDirectories = const <String, String>{},
     this.runningToolIds = const <String>{},
     this.summaries = const <String, ToolScanSummary>{},
     this.activeDetailToolId,
@@ -76,6 +78,7 @@ class MyToolsState {
   MyToolsState copyWith({
     List<MyTool>? tools,
     String? query,
+    Map<String, String>? selectedDirectories,
     Set<String>? runningToolIds,
     Map<String, ToolScanSummary>? summaries,
     String? activeDetailToolId,
@@ -89,6 +92,7 @@ class MyToolsState {
     return MyToolsState(
       tools: tools ?? this.tools,
       query: query ?? this.query,
+      selectedDirectories: selectedDirectories ?? this.selectedDirectories,
       runningToolIds: runningToolIds ?? this.runningToolIds,
       summaries: summaries ?? this.summaries,
       activeDetailToolId: clearActiveDetail
@@ -105,7 +109,15 @@ class MyToolsState {
 
 class MyToolsNotifier extends Notifier<MyToolsState> {
   @override
-  MyToolsState build() => MyToolsState(tools: _defaultTools());
+  MyToolsState build() {
+    final tools = _defaultTools();
+    final selectedDirectories = <String, String>{
+      for (final tool in tools)
+        if (_toolUsesDirectorySelector(tool))
+          tool.id: _defaultDirectoryFor(tool),
+    };
+    return MyToolsState(tools: tools, selectedDirectories: selectedDirectories);
+  }
 
   void setQuery(String value) {
     state = state.copyWith(query: value);
@@ -115,6 +127,18 @@ class MyToolsNotifier extends Notifier<MyToolsState> {
     if (state.lastNotice != null) {
       state = state.copyWith(clearLastNotice: true);
     }
+  }
+
+  void setToolDirectory(String toolId, String path) {
+    final cleanPath = path.trim();
+    if (cleanPath.isEmpty) return;
+    final updated = Map<String, String>.from(state.selectedDirectories)
+      ..[toolId] = cleanPath;
+    state = state.copyWith(selectedDirectories: updated, clearLastNotice: true);
+  }
+
+  String directoryForTool(MyTool tool) {
+    return state.selectedDirectories[tool.id] ?? _defaultDirectoryFor(tool);
   }
 
   Future<void> runTool(MyTool tool) async {
@@ -276,19 +300,25 @@ class MyToolsNotifier extends Notifier<MyToolsState> {
         final result = await fileService.scanDownloads();
         return _outcomeFromResult(result, fallback: 'Downloads are tidy.');
       case MyToolScanType.largeAndOldFiles:
-        final result = await fileService.scanLargeAndOldFiles(_scanRootPath);
+        final result = await fileService.scanLargeAndOldFiles(
+          directoryForTool(tool),
+        );
         return _outcomeFromResult(
           result,
           fallback: 'No oversized stale files were found.',
         );
       case MyToolScanType.duplicateFinder:
-        final result = await fileService.scanFreshDuplicates(_scanRootPath);
+        final result = await fileService.scanFreshDuplicates(
+          directoryForTool(tool),
+        );
         return _outcomeFromResult(
           result,
           fallback: 'No recent duplicates found.',
         );
       case MyToolScanType.similarImages:
-        final result = await fileService.scanLargeSimilarImages(_scanRootPath);
+        final result = await fileService.scanLargeSimilarImages(
+          directoryForTool(tool),
+        );
         return _outcomeFromResult(
           result,
           fallback: 'No similar large images found.',
@@ -332,12 +362,17 @@ class MyToolsNotifier extends Notifier<MyToolsState> {
           fallback: 'No cleanup candidates in system junk.',
         );
       case MyToolScanType.loginItems:
-      case MyToolScanType.backgroundItems:
         final result = await fileService.scanCleanup();
         return _outcomeFromFilteredResult(
           result,
           categories: const {'broken_login_items'},
           fallback: 'No broken startup/background entries found.',
+        );
+      case MyToolScanType.backgroundItems:
+        final result = await toolsService.scanBackgroundItems();
+        return _outcomeFromResult(
+          result,
+          fallback: 'No background items were found.',
         );
       case MyToolScanType.privacyItems:
         final result = await fileService.scanCleanup();
@@ -432,15 +467,32 @@ class MyToolsNotifier extends Notifier<MyToolsState> {
     );
   }
 
-  String get _scanRootPath {
+  bool _toolUsesDirectorySelector(MyTool tool) {
+    return switch (tool.scanType) {
+      MyToolScanType.largeAndOldFiles => true,
+      MyToolScanType.duplicateFinder => true,
+      MyToolScanType.similarImages => true,
+      _ => false,
+    };
+  }
+
+  String _defaultDirectoryFor(MyTool tool) {
     final home = _homePath;
-    final downloads = Platform.isWindows
-        ? '$home\\Downloads'
-        : '$home/Downloads';
-    if (Directory(downloads).existsSync()) {
-      return downloads;
+    switch (tool.scanType) {
+      case MyToolScanType.similarImages:
+        final pictures = Platform.isWindows
+            ? '$home\\Pictures'
+            : '$home/Pictures';
+        if (Directory(pictures).existsSync()) {
+          return pictures;
+        }
+        return home;
+      case MyToolScanType.largeAndOldFiles:
+      case MyToolScanType.duplicateFinder:
+        return home;
+      default:
+        return home;
     }
-    return home;
   }
 
   String get _homePath {
@@ -493,7 +545,6 @@ List<MyTool> _defaultTools() {
           'Review and clean one-time use files from Downloads to keep folders tidy.',
       icon: Icons.download_for_offline_rounded,
       accentColor: Color(0xFF29CAD6),
-      locationLabel: 'Downloads',
       scanType: MyToolScanType.downloads,
     ),
     MyTool(

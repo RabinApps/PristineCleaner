@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../shared/widgets/project_directory_selector.dart';
 import '../models/my_tool.dart';
 import '../my_tools_provider.dart';
 
@@ -7,6 +8,8 @@ class MyToolCard extends StatefulWidget {
   final MyTool tool;
   final bool isRunning;
   final ToolScanSummary? summary;
+  final String? selectedDirectory;
+  final VoidCallback? onPickDirectory;
   final VoidCallback onScan;
 
   const MyToolCard({
@@ -14,6 +17,8 @@ class MyToolCard extends StatefulWidget {
     required this.tool,
     required this.isRunning,
     required this.summary,
+    this.selectedDirectory,
+    this.onPickDirectory,
     required this.onScan,
   });
 
@@ -113,7 +118,17 @@ class _MyToolCardState extends State<MyToolCard> {
             Row(
               children: [
                 Expanded(
-                  child: _LocationPill(label: widget.tool.locationLabel),
+                  child:
+                      widget.onPickDirectory != null &&
+                          widget.selectedDirectory != null
+                      ? ProjectDirectorySelector(
+                          selectedPath: widget.selectedDirectory!,
+                          accentColor: widget.tool.accentColor,
+                          menuColor: const Color(0xFF3C275B),
+                          onPickFolder: widget.onPickDirectory!,
+                          chooseFolderLabel: 'Choose Folder...',
+                        )
+                      : _LocationPill(label: widget.tool.locationLabel),
                 ),
                 const SizedBox(width: 12),
                 _ScanButton(
