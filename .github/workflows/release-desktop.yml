@@ -101,21 +101,12 @@ jobs:
       - name: Build release assets
         run: fastforge release --name ${{ matrix.release_name }} --skip-clean
 
-      - name: Set up AWS CLI
-        uses: aws-actions/setup-aws-cli@v4
-
-      - name: Upload artifacts to Cloudflare R2
+      - name: Prepare artifacts for R2 upload
         shell: bash
-        env:
-          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
-          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
-          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-          R2_BUCKET: ${{ secrets.R2_BUCKET }}
-          R2_PUBLIC_BASE_URL: ${{ secrets.R2_PUBLIC_BASE_URL }}
         run: |
           set -euo pipefail
 
-          for required in R2_ACCOUNT_ID R2_ACCESS_KEY_ID R2_SECRET_ACCESS_KEY R2_BUCKET RELEASE_TAG; do
+          for required in RELEASE_TAG; do
             if [[ -z "${!required:-}" ]]; then
               echo "Missing required environment variable: $required" >&2
               exit 1
@@ -127,30 +118,34 @@ jobs:
             exit 1
           fi
 
-          dest_prefix="${R2_PREFIX_BASE%/}/${RELEASE_TAG}"
-          endpoint="https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com"
+          upload_root="r2-upload/${RELEASE_TAG}"
+          mkdir -p "$upload_root"
 
-          export AWS_ACCESS_KEY_ID="$R2_ACCESS_KEY_ID"
-          export AWS_SECRET_ACCESS_KEY="$R2_SECRET_ACCESS_KEY"
-
-          aws s3 cp dist/ "s3://${R2_BUCKET}/${dest_prefix}/" \
-            --recursive \
-            --endpoint-url "$endpoint" \
-            --exclude "*" \
-            --include "*.dmg" \
-            --include "*.exe" \
-            --include "*.msix" \
-            --include "*.deb" \
-            --include "*.rpm" \
-            --only-show-errors
-
-          echo "Uploaded artifact URLs:"
           while IFS= read -r file; do
             rel_path="${file#dist/}"
-            if [[ -n "${R2_PUBLIC_BASE_URL:-}" ]]; then
-              base="${R2_PUBLIC_BASE_URL%/}"
-              echo "${base}/${dest_prefix}/${rel_path}"
-            else
-              echo "https://${R2_BUCKET}.${R2_ACCOUNT_ID}.r2.cloudflarestorage.com/${dest_prefix}/${rel_path}"
-            fi
+            mkdir -p "${upload_root}/$(dirname "$rel_path")"
+            cp "$file" "${upload_root}/${rel_path}"
           done < <(find dist -type f \( -name "*.dmg" -o -name "*.exe" -o -name "*.msix" -o -name "*.deb" -o -name "*.rpm" \) | sort)
+
+          if [[ -z "$(find "$upload_root" -type f -print -quit)" ]]; then
+            echo "No supported artifacts found to upload." >&2
+            exit 1
+          fi
+
+      - name: Upload artifacts to Cloudflare R2
+        id: r2_upload
+        uses: ryand56/r2-upload-action@v1.4
+        with:
+          r2-account-id: ${{ secrets.R2_ACCOUNT_ID }}
+          r2-access-key-id: ${{ secrets.R2_ACCESS_KEY_ID }}
+          r2-secret-access-key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          r2-bucket: ${{ secrets.R2_BUCKET }}
+          source-dir: r2-upload
+          destination-dir: ${{ env.R2_PREFIX_BASE }}
+          output-file-url: true
+
+      - name: Print uploaded artifact URLs
+        shell: bash
+        run: |
+          echo "Uploaded artifact URLs:"
+          echo "${{ steps.r2_upload.outputs.file-urls }}"
