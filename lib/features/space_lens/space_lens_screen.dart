@@ -1,13 +1,14 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:file_picker/file_picker.dart';
 
 import '../../core/models/file_item.dart';
 import '../../core/theme/section_themes.dart';
-import '../../core/utils/format_utils.dart';
-import '../../core/utils/file_launcher.dart';
+import '../shared/scan_view_model.dart';
 import '../../shared/widgets/glossy_icon_widget.dart';
 import '../../shared/widgets/scan_button.dart';
-import '../../shared/widgets/search_and_sort_bar.dart';
 import 'space_lens_provider.dart';
 
 class SpaceLensScreen extends ConsumerWidget {
@@ -23,20 +24,103 @@ class SpaceLensScreen extends ConsumerWidget {
       return _DoneScreen(theme: theme, onDismiss: notifier.reset);
     }
 
-    if (vm.hasResults) {
-      return _SpaceLensResults(
-        items: vm.result!.items,
-        totalBytes: vm.result!.totalBytes,
+    final hasWorkspace = vm.result != null;
+    if (hasWorkspace) {
+      return _SpaceLensWorkspace(
+        vm: vm,
         theme: theme,
-        isCleaning: vm.isCleaning,
         onToggle: notifier.toggleItem,
-        onBrowseFolder: notifier.listDirectoryContents,
+        onOpenFolder: notifier.navigateIntoFolder,
+        onOpenBreadcrumb: notifier.navigateToBreadcrumb,
         onSelectAll: notifier.selectAll,
         onDeselectAll: notifier.deselectAll,
-        onClean: notifier.clean,
+        onSetParent: notifier.setParentFolder,
         onRescan: notifier.scan,
+        onClean: notifier.clean,
       );
     }
+
+    return _SpaceLensStart(
+      vm: vm,
+      theme: theme,
+      onSetParent: notifier.setParentFolder,
+      onScan: notifier.scan,
+      onStop: notifier.stop,
+    );
+  }
+}
+
+class _SpaceLensStart extends StatelessWidget {
+  final ScanViewModel vm;
+  final SectionTheme theme;
+  final Future<void> Function(String path) onSetParent;
+  final VoidCallback onScan;
+  final VoidCallback onStop;
+
+  const _SpaceLensStart({
+    required this.vm,
+    required this.theme,
+    required this.onSetParent,
+    required this.onScan,
+    required this.onStop,
+  });
+
+  Future<void> _pickParentFolder(BuildContext context) async {
+    final pickedPath = await _pickNativeDirectory(
+      initialDirectory: vm.selectedParentPath,
+    );
+    if (pickedPath != null && pickedPath.isNotEmpty) {
+      await onSetParent(pickedPath);
+    }
+  }
+
+  Future<void> _handleScanTap(BuildContext context) async {
+    if (!vm.isScanning) {
+      onScan();
+      return;
+    }
+
+    final shouldStop =
+        await showDialog<bool>(
+          context: context,
+          builder: (dialogContext) {
+            return AlertDialog(
+              backgroundColor: const Color(0xFF191919),
+              title: const Text(
+                'Stop scanning?',
+                style: TextStyle(color: Colors.white),
+              ),
+              content: const Text(
+                'This will cancel the current scan and discard any partial progress.',
+                style: TextStyle(color: Colors.white70),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(dialogContext).pop(false),
+                  child: const Text('Keep scanning'),
+                ),
+                ElevatedButton(
+                  onPressed: () => Navigator.of(dialogContext).pop(true),
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.white,
+                    backgroundColor: Colors.redAccent,
+                  ),
+                  child: const Text('Stop'),
+                ),
+              ],
+            );
+          },
+        ) ??
+        false;
+
+    if (shouldStop) {
+      onStop();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final parentPath = vm.selectedParentPath ?? '/';
 
     return Container(
       decoration: BoxDecoration(
@@ -48,9 +132,19 @@ class SpaceLensScreen extends ConsumerWidget {
       ),
       child: Stack(
         children: [
-          Padding(
-            padding: const EdgeInsets.only(bottom: 120),
-            child: Center(
+          Positioned(
+            left: 32,
+            right: 32,
+            top: 28,
+            child: _ParentFolderPickerCard(
+              accentColor: theme.accentColor,
+              selectedPath: parentPath,
+              onPickFolder: () => _pickParentFolder(context),
+            ),
+          ),
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 86),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -58,111 +152,66 @@ class SpaceLensScreen extends ConsumerWidget {
                   GlossyIconWidget(
                     baseColor: theme.orbColor,
                     icon: theme.icon,
-                    size: 258,
+                    size: 232,
                     shape: OrbShape.squircle,
                   ),
-                  const SizedBox(width: 60),
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Space Lens',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 36,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: -0.5,
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      Text(
-                        theme.subtitle,
-                        style: TextStyle(
-                          color: Color(0xFFBBBBBB),
-                          fontSize: 15,
-                          height: 1.6,
-                        ),
-                      ),
-                      const SizedBox(height: 28),
-                      ...theme.features.map(
-                        (f) => Padding(
-                          padding: const EdgeInsets.only(bottom: 14),
-                          child: Row(
-                            children: [
-                              Container(
-                                width: 32,
-                                height: 32,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: theme.accentColor.withOpacity(0.18),
-                                  border: Border.all(
-                                    color: theme.accentColor.withOpacity(0.35),
-                                    width: 1,
-                                  ),
-                                ),
-                                child: Icon(
-                                  f.icon,
-                                  size: 15,
-                                  color: theme.accentColor,
-                                ),
-                              ),
-                              const SizedBox(width: 12),
-                              Text(
-                                f.label,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      if (vm.isScanning && vm.progressPercent != null) ...[
-                        const SizedBox(height: 10),
-                        SizedBox(
-                          width: 300,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(999),
-                                child: LinearProgressIndicator(
-                                  value: vm.progressPercent!.clamp(0.0, 1.0),
-                                  minHeight: 8,
-                                  backgroundColor: Colors.white12,
-                                  valueColor: AlwaysStoppedAnimation<Color>(
-                                    theme.accentColor,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 8),
-                              Text(
-                                vm.progressLabel ??
-                                    '${(vm.progressPercent! * 100).toStringAsFixed(0)}%',
-                                style: const TextStyle(
-                                  color: Colors.white70,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                      if (vm.error != null) ...[
-                        const SizedBox(height: 8),
-                        Text(
-                          vm.error!,
+                  const SizedBox(width: 56),
+                  ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 420),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Space Lens',
                           style: TextStyle(
-                            color: Colors.red.shade300,
-                            fontSize: 13,
+                            color: Colors.white,
+                            fontSize: 42,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: -0.8,
                           ),
                         ),
+                        const SizedBox(height: 10),
+                        const Text(
+                          'Pick a parent folder, then scan to map what is taking up the most space.',
+                          style: TextStyle(
+                            color: Color(0xFFBDB6DD),
+                            fontSize: 15,
+                            height: 1.6,
+                          ),
+                        ),
+                        const SizedBox(height: 22),
+                        _FeatureTag(
+                          icon: Icons.folder_open_rounded,
+                          text: 'Default root path is your main hard drive',
+                          accentColor: theme.accentColor,
+                        ),
+                        const SizedBox(height: 10),
+                        _FeatureTag(
+                          icon: Icons.bubble_chart_rounded,
+                          text:
+                              'Explore folder sizes through interactive bubbles',
+                          accentColor: theme.accentColor,
+                        ),
+                        const SizedBox(height: 10),
+                        _FeatureTag(
+                          icon: Icons.ads_click_rounded,
+                          text:
+                              'Click folders to drill down and inspect deeper',
+                          accentColor: theme.accentColor,
+                        ),
+                        if (vm.error != null) ...[
+                          const SizedBox(height: 10),
+                          Text(
+                            vm.error!,
+                            style: TextStyle(
+                              color: Colors.red.shade300,
+                              fontSize: 13,
+                            ),
+                          ),
+                        ],
                       ],
-                    ],
+                    ),
                   ),
                 ],
               ),
@@ -172,53 +221,47 @@ class SpaceLensScreen extends ConsumerWidget {
             bottom: 34,
             left: 0,
             right: 0,
-            child: Center(
-              child: ScanButton(
-                color: vm.isScanning ? Colors.redAccent : theme.accentColor,
-                label: vm.isScanning ? 'Stop' : 'Scan',
-                isLoading: false,
-                onPressed: vm.isScanning
-                    ? () async {
-                        final shouldStop =
-                            await showDialog<bool>(
-                              context: context,
-                              builder: (dialogContext) {
-                                return AlertDialog(
-                                  backgroundColor: const Color(0xFF191919),
-                                  title: const Text(
-                                    'Stop scanning?',
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                  content: const Text(
-                                    'This will cancel the current scan and discard any partial progress.',
-                                    style: TextStyle(color: Colors.white70),
-                                  ),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () => Navigator.of(
-                                        dialogContext,
-                                      ).pop(false),
-                                      child: const Text('Keep scanning'),
-                                    ),
-                                    ElevatedButton(
-                                      onPressed: () =>
-                                          Navigator.of(dialogContext).pop(true),
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.redAccent,
-                                      ),
-                                      child: const Text('Stop'),
-                                    ),
-                                  ],
-                                );
-                              },
-                            ) ??
-                            false;
-                        if (shouldStop) {
-                          notifier.stop();
-                        }
-                      }
-                    : notifier.scan,
-              ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (vm.isScanning && vm.progressPercent != null)
+                  SizedBox(
+                    width: 360,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(999),
+                          child: LinearProgressIndicator(
+                            value: vm.progressPercent!.clamp(0.0, 1.0),
+                            minHeight: 8,
+                            backgroundColor: Colors.white12,
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              theme.accentColor,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          vm.progressLabel ??
+                              '${(vm.progressPercent! * 100).toStringAsFixed(0)}%',
+                          style: const TextStyle(
+                            color: Colors.white70,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                const SizedBox(height: 14),
+                ScanButton(
+                  color: vm.isScanning ? Colors.redAccent : theme.accentColor,
+                  label: vm.isScanning ? 'Stop' : 'Scan',
+                  isLoading: false,
+                  onPressed: () => _handleScanTap(context),
+                ),
+              ],
             ),
           ),
         ],
@@ -227,107 +270,65 @@ class SpaceLensScreen extends ConsumerWidget {
   }
 }
 
-class _SpaceLensResults extends StatefulWidget {
-  final List<FileItem> items;
-  final int totalBytes;
+class _SpaceLensWorkspace extends StatefulWidget {
+  final ScanViewModel vm;
   final SectionTheme theme;
-  final bool isCleaning;
   final ValueChanged<int> onToggle;
-  final Future<List<FileItem>> Function(String path) onBrowseFolder;
+  final ValueChanged<FileItem> onOpenFolder;
+  final ValueChanged<int> onOpenBreadcrumb;
   final VoidCallback onSelectAll;
   final VoidCallback onDeselectAll;
-  final VoidCallback onClean;
+  final Future<void> Function(String path) onSetParent;
   final VoidCallback onRescan;
+  final VoidCallback onClean;
 
-  const _SpaceLensResults({
-    required this.items,
-    required this.totalBytes,
+  const _SpaceLensWorkspace({
+    required this.vm,
     required this.theme,
-    required this.isCleaning,
     required this.onToggle,
-    required this.onBrowseFolder,
+    required this.onOpenFolder,
+    required this.onOpenBreadcrumb,
     required this.onSelectAll,
     required this.onDeselectAll,
-    required this.onClean,
+    required this.onSetParent,
     required this.onRescan,
+    required this.onClean,
   });
 
   @override
-  State<_SpaceLensResults> createState() => _SpaceLensResultsState();
+  State<_SpaceLensWorkspace> createState() => _SpaceLensWorkspaceState();
 }
 
-class _SpaceLensResultsState extends State<_SpaceLensResults> {
-  bool _showSearch = false;
-  String _searchQuery = '';
-  late TextEditingController _searchController;
-  final ScrollController _scrollController = ScrollController();
-  SortBy _sortBy = SortBy.size;
-
+class _SpaceLensWorkspaceState extends State<_SpaceLensWorkspace> {
   @override
   void initState() {
     super.initState();
-    _searchController = TextEditingController();
   }
 
   @override
   void dispose() {
-    _searchController.dispose();
-    _scrollController.dispose();
     super.dispose();
   }
 
-  List<int> _getFilteredAndSortedIndices() {
-    final indices = List<int>.generate(widget.items.length, (i) => i);
+  List<_IndexedItem> _filtered() {
+    final items = widget.vm.result?.items ?? const <FileItem>[];
+    final indices = List<int>.generate(items.length, (i) => i);
 
-    // Filter by search query
-    if (_searchQuery.isNotEmpty) {
-      final query = _searchQuery.toLowerCase();
-      indices.retainWhere((i) {
-        final item = widget.items[i];
-        return item.name.toLowerCase().contains(query);
-      });
-    }
-
-    // Sort
     indices.sort((aIdx, bIdx) {
-      final a = widget.items[aIdx];
-      final b = widget.items[bIdx];
-
-      return switch (_sortBy) {
-        SortBy.size => b.sizeBytes.compareTo(a.sizeBytes), // Descending
-        SortBy.name => a.name.compareTo(b.name), // Ascending A-Z
-        SortBy.ascending => a.sizeBytes.compareTo(b.sizeBytes),
-        SortBy.descending => b.sizeBytes.compareTo(a.sizeBytes),
-      };
+      final a = items[aIdx];
+      final b = items[bIdx];
+      return b.sizeBytes.compareTo(a.sizeBytes);
     });
 
-    return indices;
-  }
-
-  Future<void> _openDirectoryBrowser(FileItem root) async {
-    await showDialog<void>(
-      context: context,
-      barrierDismissible: true,
-      builder: (context) {
-        return _DirectoryBrowserDialog(
-          rootPath: root.path,
-          rootName: root.name,
-          accentColor: widget.theme.accentColor,
-          onLoad: widget.onBrowseFolder,
-        );
-      },
-    );
+    return [for (final idx in indices) _IndexedItem(idx, items[idx])];
   }
 
   @override
   Widget build(BuildContext context) {
-    final filteredIndices = _getFilteredAndSortedIndices();
-    final filteredItems = [
-      for (final idx in filteredIndices) widget.items[idx],
-    ];
-    final maxBytes = filteredItems.isNotEmpty
-        ? filteredItems.first.sizeBytes
-        : 1;
+    final filtered = _filtered();
+    final selectedCount =
+        (widget.vm.result?.items.where((i) => i.isSelected).length) ?? 0;
+    final selectedBytes = widget.vm.result?.selectedBytes ?? 0;
 
     return Container(
       decoration: BoxDecoration(
@@ -339,121 +340,68 @@ class _SpaceLensResultsState extends State<_SpaceLensResults> {
       ),
       child: Column(
         children: [
-          // ── Search and sort bar ────────────────────────────────────────
           Container(
-            height: 52,
+            padding: const EdgeInsets.fromLTRB(20, 14, 20, 14),
             decoration: BoxDecoration(
-              color: Colors.black.withOpacity(0.2),
+              color: Colors.black.withOpacity(0.22),
               border: Border(
-                bottom: BorderSide(color: Colors.white.withOpacity(0.07)),
+                bottom: BorderSide(color: Colors.white.withOpacity(0.08)),
               ),
             ),
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Row(
+            child: Column(
               children: [
-                const Spacer(),
-                SearchAndSortBar(
-                  accentColor: widget.theme.accentColor,
-                  showSearch: _showSearch,
-                  searchController: _searchController,
-                  onToggleSearch: () {
-                    setState(() {
-                      _showSearch = !_showSearch;
-                      if (!_showSearch) {
-                        _searchQuery = '';
-                        _searchController.clear();
-                      }
-                    });
-                  },
-                  onSearchChanged: (v) => setState(() => _searchQuery = v),
-                  sortBy: _sortBy,
-                  onSortChanged: (v) => setState(() => _sortBy = v),
-                  sortOptions: const [
-                    SortBy.size,
-                    SortBy.name,
-                    SortBy.ascending,
-                    SortBy.descending,
-                  ],
-                ),
-              ],
-            ),
-          ),
-
-          // ── Header ─────────────────────────────────────────────────────
-          Padding(
-            padding: const EdgeInsets.fromLTRB(24, 24, 24, 12),
-            child: Row(
-              children: [
-                Text(
-                  'Storage map  •  ${formatBytes(widget.totalBytes)} total',
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                const Spacer(),
                 TextButton.icon(
-                  onPressed: widget.onSelectAll,
+                  onPressed: widget.onRescan,
                   icon: Icon(
-                    Icons.check_box_rounded,
+                    Icons.refresh_rounded,
                     size: 16,
                     color: widget.theme.accentColor,
                   ),
                   label: Text(
-                    'Select All',
+                    'Rescan',
                     style: TextStyle(
                       color: widget.theme.accentColor,
                       fontSize: 13,
                     ),
                   ),
                 ),
+                const SizedBox(height: 10),
+                _BreadcrumbBar(
+                  paths: widget.vm.breadcrumbs,
+                  accentColor: widget.theme.accentColor,
+                  onTap: widget.onOpenBreadcrumb,
+                ),
               ],
             ),
           ),
-
-          // ── Bar chart list ────────────────────────────────────────────
           Expanded(
-            child: filteredItems.isEmpty
-                ? Center(
-                    child: Text(
-                      _searchQuery.isNotEmpty
-                          ? 'No folders match your search'
-                          : 'No folders found',
-                      style: const TextStyle(
-                        color: Colors.white54,
-                        fontSize: 14,
-                      ),
-                    ),
-                  )
-                : Scrollbar(
-                    controller: _scrollController,
-
-                    child: ListView.builder(
-                      controller: _scrollController,
-                      padding: const EdgeInsets.symmetric(horizontal: 24),
-                      itemCount: filteredItems.length,
-                      itemBuilder: (context, index) {
-                        final originalIndex = filteredIndices[index];
-                        final item = filteredItems[index];
-                        final ratio = maxBytes > 0
-                            ? item.sizeBytes / maxBytes
-                            : 0.0;
-                        return _FolderBar(
-                          item: item,
-                          ratio: ratio,
-                          accentColor: widget.theme.accentColor,
-                          onTap: () => widget.onToggle(originalIndex),
-                          onBrowse: () => _openDirectoryBrowser(item),
-                        );
-                      },
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: 370,
+                    child: _FolderListPane(
+                      accentColor: widget.theme.accentColor,
+                      items: filtered,
+                      onToggle: widget.onToggle,
+                      onOpenFolder: widget.onOpenFolder,
                     ),
                   ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: _BubbleCanvas(
+                      accentColor: widget.theme.accentColor,
+                      items: filtered,
+                      onOpenFolder: widget.onOpenFolder,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
-
-          // ── Footer ─────────────────────────────────────────────────────
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
             decoration: BoxDecoration(
               color: Colors.black.withOpacity(0.2),
               border: Border(
@@ -463,38 +411,648 @@ class _SpaceLensResultsState extends State<_SpaceLensResults> {
             child: Row(
               children: [
                 Text(
-                  '${widget.items.where((i) => i.isSelected).length} folders selected',
+                  '$selectedCount items selected',
+                  style: const TextStyle(color: Colors.white70, fontSize: 13),
+                ),
+                const SizedBox(width: 10),
+                Text(
+                  '|',
+                  style: TextStyle(
+                    color: Colors.white.withOpacity(0.4),
+                    fontSize: 13,
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Text(
+                  _formatBytes(selectedBytes),
                   style: const TextStyle(color: Colors.white70, fontSize: 13),
                 ),
                 const Spacer(),
-                OutlinedButton(
-                  onPressed: widget.isCleaning ? null : widget.onRescan,
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: Colors.white60,
-                    side: const BorderSide(color: Colors.white24),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 14,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
+                TextButton(
+                  onPressed: widget.onDeselectAll,
+                  child: const Text(
+                    'Clear Selection',
+                    style: TextStyle(color: Colors.white60),
                   ),
-                  child: const Text('Rescan'),
+                ),
+                const SizedBox(width: 8),
+                TextButton(
+                  onPressed: widget.onSelectAll,
+                  child: Text(
+                    'Select All',
+                    style: TextStyle(color: widget.theme.accentColor),
+                  ),
                 ),
                 const SizedBox(width: 12),
                 ScanButton(
                   color: widget.theme.accentColor,
                   label: 'Clean',
-                  isLoading: widget.isCleaning,
-                  onPressed:
-                      (widget.items.every((i) => !i.isSelected) ||
-                          widget.isCleaning)
+                  isLoading: widget.vm.isCleaning,
+                  onPressed: (selectedCount == 0 || widget.vm.isCleaning)
                       ? null
                       : widget.onClean,
                 ),
               ],
             ),
+          ),
+          if (widget.vm.isScanning)
+            LinearProgressIndicator(
+              minHeight: 2,
+              backgroundColor: Colors.transparent,
+              valueColor: AlwaysStoppedAnimation<Color>(
+                widget.theme.accentColor,
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class _FolderListPane extends StatelessWidget {
+  final Color accentColor;
+  final List<_IndexedItem> items;
+  final ValueChanged<int> onToggle;
+  final ValueChanged<FileItem> onOpenFolder;
+
+  const _FolderListPane({
+    required this.accentColor,
+    required this.items,
+    required this.onToggle,
+    required this.onOpenFolder,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    if (items.isEmpty) {
+      return Container(
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.05),
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: Colors.white.withOpacity(0.08)),
+        ),
+        child: const Center(
+          child: Text(
+            'No folders found for this level',
+            style: TextStyle(color: Colors.white54),
+          ),
+        ),
+      );
+    }
+
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.06),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: Colors.white.withOpacity(0.08)),
+      ),
+      child: ListView.separated(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        itemCount: items.length,
+        separatorBuilder: (_, _) =>
+            Divider(height: 1, color: Colors.white.withOpacity(0.05)),
+        itemBuilder: (context, idx) {
+          final indexed = items[idx];
+          final item = indexed.item;
+          return ListTile(
+            dense: true,
+            contentPadding: const EdgeInsets.symmetric(horizontal: 10),
+            onTap: item.isDirectory ? () => onOpenFolder(item) : null,
+            leading: Checkbox(
+              value: item.isSelected,
+              onChanged: (_) => onToggle(indexed.index),
+              activeColor: accentColor,
+              side: const BorderSide(color: Colors.white30),
+            ),
+            title: Text(
+              item.name,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            subtitle: Text(
+              item.formattedSize,
+              style: TextStyle(color: accentColor, fontSize: 12),
+            ),
+            trailing: item.isDirectory
+                ? const Icon(
+                    Icons.chevron_right_rounded,
+                    color: Colors.white54,
+                    size: 16,
+                  )
+                : const Icon(
+                    Icons.insert_drive_file_outlined,
+                    color: Colors.white54,
+                    size: 16,
+                  ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _BubbleCanvas extends StatelessWidget {
+  final Color accentColor;
+  final List<_IndexedItem> items;
+  final ValueChanged<FileItem> onOpenFolder;
+
+  const _BubbleCanvas({
+    required this.accentColor,
+    required this.items,
+    required this.onOpenFolder,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    if (items.isEmpty) {
+      return Container(
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.04),
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: Colors.white.withOpacity(0.08)),
+        ),
+        child: const Center(
+          child: Text(
+            'No bubbles to render',
+            style: TextStyle(color: Colors.white54),
+          ),
+        ),
+      );
+    }
+
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.04),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: Colors.white.withOpacity(0.08)),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(18),
+        child: _StaticBubbleChart(
+          accentColor: accentColor,
+          items: items,
+          onOpenFolder: onOpenFolder,
+        ),
+      ),
+    );
+  }
+}
+
+class _StaticBubbleChart extends StatelessWidget {
+  final Color accentColor;
+  final List<_IndexedItem> items;
+  final ValueChanged<FileItem> onOpenFolder;
+
+  const _StaticBubbleChart({
+    required this.accentColor,
+    required this.items,
+    required this.onOpenFolder,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    const maxPrimaryFolders = 8;
+    final collisions = <String, int>{};
+    final sortedItems = items.map((entry) => entry.item).toList(growable: false)
+      ..sort((a, b) => b.sizeBytes.compareTo(a.sizeBytes));
+
+    final folderItems = sortedItems.where((item) => item.isDirectory).toList();
+    final source = folderItems.isEmpty ? sortedItems : folderItems;
+    final topItems = source.take(maxPrimaryFolders).toList(growable: false);
+    final remainingItems = source
+        .skip(maxPrimaryFolders)
+        .toList(growable: false);
+    final bubbles = <_BubbleVisual>[];
+
+    for (final item in topItems) {
+      final base = item.name.isEmpty ? 'Untitled' : item.name;
+      final count = (collisions[base] ?? 0) + 1;
+      collisions[base] = count;
+      final bubbleLabel = count == 1 ? base : '$base ($count)';
+      bubbles.add(
+        _BubbleVisual(
+          title: bubbleLabel,
+          subtitle: _formatBytes(item.sizeBytes),
+          value: item.sizeBytes <= 0 ? 1.0 : item.sizeBytes.toDouble(),
+          item: item,
+        ),
+      );
+    }
+
+    if (remainingItems.isNotEmpty) {
+      final otherBytes = remainingItems.fold<int>(
+        0,
+        (sum, item) => sum + item.sizeBytes,
+      );
+      bubbles.add(
+        _BubbleVisual(
+          title: 'Other items',
+          subtitle: _formatBytes(otherBytes),
+          value: otherBytes <= 0 ? 1.0 : otherBytes.toDouble(),
+        ),
+      );
+    }
+
+    if (bubbles.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final sortedByValue = [...bubbles]
+          ..sort((a, b) => b.value.compareTo(a.value));
+        final placements = _computePlacements(
+          width: constraints.maxWidth,
+          height: constraints.maxHeight,
+          bubbles: sortedByValue,
+        );
+
+        return Stack(
+          children: [
+            for (final placement in placements)
+              Positioned(
+                left: placement.center.dx - (placement.diameter / 2),
+                top: placement.center.dy - (placement.diameter / 2),
+                child: _StaticBubbleNode(
+                  bubble: placement.bubble,
+                  accentColor: accentColor,
+                  diameter: placement.diameter,
+                  onTap:
+                      placement.bubble.item != null &&
+                          placement.bubble.item!.isDirectory
+                      ? () => onOpenFolder(placement.bubble.item!)
+                      : null,
+                ),
+              ),
+          ],
+        );
+      },
+    );
+  }
+
+  List<_BubblePlacement> _computePlacements({
+    required double width,
+    required double height,
+    required List<_BubbleVisual> bubbles,
+  }) {
+    final maxValue = bubbles.first.value;
+    final minValue = bubbles.last.value;
+    final slots = _slotCenters(bubbles.length);
+    const rankToSlot = [3, 4, 1, 0, 2, 6, 5, 7, 8, 9];
+
+    final baseDiameters = <double>[];
+    for (final bubble in bubbles) {
+      final normalized = maxValue == minValue
+          ? 0.5
+          : (bubble.value - minValue) / (maxValue - minValue);
+      baseDiameters.add(84.0 + (normalized * 78.0));
+    }
+
+    final baseArea = baseDiameters.fold<double>(
+      0,
+      (sum, d) => sum + math.pi * math.pow(d / 2, 2),
+    );
+    final targetArea = (width * height) * 0.50;
+    final areaScale = baseArea <= 0
+        ? 1.0
+        : math.sqrt((targetArea / baseArea).clamp(0.35, 1.0));
+
+    List<_BubblePlacement> last = const [];
+    for (var attempt = 0; attempt < 8; attempt++) {
+      final attemptScale = areaScale * math.pow(0.93, attempt);
+      final diameters = [
+        for (final d in baseDiameters) (d * attemptScale).clamp(52.0, 168.0),
+      ];
+
+      final centers = <Offset>[];
+      for (var i = 0; i < bubbles.length; i++) {
+        final slotIndex = i < rankToSlot.length ? rankToSlot[i] : i;
+        final raw = slots[slotIndex % slots.length];
+        centers.add(Offset(raw.dx * width, raw.dy * height));
+      }
+
+      final desiredCenters = List<Offset>.from(centers);
+      for (var iter = 0; iter < 160; iter++) {
+        for (var i = 0; i < centers.length; i++) {
+          for (var j = i + 1; j < centers.length; j++) {
+            final dx = centers[j].dx - centers[i].dx;
+            final dy = centers[j].dy - centers[i].dy;
+            final distance = math.sqrt((dx * dx) + (dy * dy));
+            final minDistance = (diameters[i] + diameters[j]) / 2 + 6;
+            if (distance >= minDistance) continue;
+
+            final safeDistance = distance < 0.0001 ? 0.0001 : distance;
+            final overlap = minDistance - safeDistance;
+            final nx = dx / safeDistance;
+            final ny = dy / safeDistance;
+            final push = overlap * 0.5;
+
+            centers[i] = Offset(
+              centers[i].dx - (nx * push),
+              centers[i].dy - (ny * push),
+            );
+            centers[j] = Offset(
+              centers[j].dx + (nx * push),
+              centers[j].dy + (ny * push),
+            );
+          }
+        }
+
+        for (var i = 0; i < centers.length; i++) {
+          final pull = 0.03;
+          centers[i] = Offset(
+            centers[i].dx + ((desiredCenters[i].dx - centers[i].dx) * pull),
+            centers[i].dy + ((desiredCenters[i].dy - centers[i].dy) * pull),
+          );
+
+          final radius = diameters[i] / 2;
+          final minX = radius;
+          final maxX = width - radius;
+          final minY = radius;
+          final maxY = height - radius;
+
+          centers[i] = Offset(
+            centers[i].dx.clamp(minX, maxX),
+            centers[i].dy.clamp(minY, maxY),
+          );
+        }
+      }
+
+      last = [
+        for (var i = 0; i < bubbles.length; i++)
+          _BubblePlacement(
+            bubble: bubbles[i],
+            center: centers[i],
+            diameter: diameters[i],
+          ),
+      ];
+
+      if (!_hasOverlap(last)) {
+        return last;
+      }
+    }
+
+    return last;
+  }
+
+  bool _hasOverlap(List<_BubblePlacement> placements) {
+    for (var i = 0; i < placements.length; i++) {
+      for (var j = i + 1; j < placements.length; j++) {
+        final dx = placements[j].center.dx - placements[i].center.dx;
+        final dy = placements[j].center.dy - placements[i].center.dy;
+        final distance = math.sqrt((dx * dx) + (dy * dy));
+        final minDistance =
+            (placements[i].diameter + placements[j].diameter) / 2 + 1;
+        if (distance < minDistance) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  List<Offset> _slotCenters(int count) {
+    final pattern = <Offset>[
+      const Offset(0.20, 0.20),
+      const Offset(0.50, 0.20),
+      const Offset(0.80, 0.20),
+      const Offset(0.34, 0.48),
+      const Offset(0.66, 0.48),
+      const Offset(0.20, 0.77),
+      const Offset(0.50, 0.77),
+      const Offset(0.80, 0.77),
+      const Offset(0.36, 0.32),
+      const Offset(0.64, 0.32),
+    ];
+    if (count <= pattern.length) {
+      return pattern;
+    }
+    return [
+      ...pattern,
+      for (var i = pattern.length; i < count; i++)
+        Offset(0.15 + ((i % 6) * 0.14), 0.15 + ((i ~/ 6) * 0.16)),
+    ];
+  }
+}
+
+class _StaticBubbleNode extends StatelessWidget {
+  final _BubbleVisual bubble;
+  final Color accentColor;
+  final double diameter;
+  final VoidCallback? onTap;
+
+  const _StaticBubbleNode({
+    required this.bubble,
+    required this.accentColor,
+    required this.diameter,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final isSelected = bubble.item?.isSelected == true;
+    return InkWell(
+      borderRadius: BorderRadius.circular(diameter),
+      onTap: onTap,
+      child: Container(
+        width: diameter,
+        height: diameter,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          gradient: RadialGradient(
+            colors: [
+              accentColor.withOpacity(isSelected ? 0.58 : 0.44),
+              accentColor.withOpacity(isSelected ? 0.30 : 0.18),
+              const Color(0x40101010),
+            ],
+            stops: const [0.0, 0.65, 1.0],
+          ),
+          border: Border.all(
+            color: isSelected
+                ? accentColor.withOpacity(0.95)
+                : accentColor.withOpacity(0.45),
+            width: isSelected ? 2.6 : 1.2,
+          ),
+          boxShadow: [
+            BoxShadow(color: accentColor.withOpacity(0.30), blurRadius: 26),
+          ],
+        ),
+        child: Center(
+          child: SizedBox(
+            width: diameter * 0.72,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  bubble.item?.isDirectory == false
+                      ? Icons.insert_drive_file_rounded
+                      : Icons.folder_rounded,
+                  color: Colors.white.withOpacity(0.86),
+                  size: diameter > 140 ? 30 : 24,
+                ),
+                const SizedBox(height: 7),
+                Text(
+                  bubble.title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: diameter > 140 ? 20 : 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  bubble.subtitle,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white.withOpacity(0.82),
+                    fontSize: diameter > 140 ? 17 : 13,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _BubbleVisual {
+  final String title;
+  final String subtitle;
+  final double value;
+  final FileItem? item;
+
+  const _BubbleVisual({
+    required this.title,
+    required this.subtitle,
+    required this.value,
+    this.item,
+  });
+}
+
+class _BubblePlacement {
+  final _BubbleVisual bubble;
+  final Offset center;
+  final double diameter;
+
+  const _BubblePlacement({
+    required this.bubble,
+    required this.center,
+    required this.diameter,
+  });
+}
+
+class _BreadcrumbBar extends StatelessWidget {
+  final List<String> paths;
+  final Color accentColor;
+  final ValueChanged<int> onTap;
+
+  const _BreadcrumbBar({
+    required this.paths,
+    required this.accentColor,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      height: 42,
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.04),
+        borderRadius: BorderRadius.circular(11),
+      ),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: Row(
+          children: [
+            for (var i = 0; i < paths.length; i++) ...[
+              TextButton(
+                onPressed: () => onTap(i),
+                child: Text(
+                  _pathLabel(paths[i]),
+                  style: TextStyle(
+                    color: i == paths.length - 1
+                        ? Colors.white
+                        : Colors.white70,
+                    fontWeight: i == paths.length - 1
+                        ? FontWeight.w700
+                        : FontWeight.w500,
+                    fontSize: 12,
+                  ),
+                ),
+              ),
+              if (i != paths.length - 1)
+                Icon(
+                  Icons.chevron_right_rounded,
+                  color: accentColor.withOpacity(0.7),
+                  size: 15,
+                ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ParentFolderPickerCard extends StatelessWidget {
+  final Color accentColor;
+  final String selectedPath;
+  final VoidCallback onPickFolder;
+
+  const _ParentFolderPickerCard({
+    required this.accentColor,
+    required this.selectedPath,
+    required this.onPickFolder,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.06),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.white.withOpacity(0.12)),
+      ),
+      child: Row(
+        children: [
+          Icon(Icons.folder_open_rounded, color: accentColor, size: 18),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              selectedPath,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 13,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+          const SizedBox(width: 10),
+          OutlinedButton.icon(
+            onPressed: onPickFolder,
+            style: OutlinedButton.styleFrom(
+              foregroundColor: Colors.white,
+              side: BorderSide(color: accentColor.withOpacity(0.6)),
+            ),
+            icon: const Icon(Icons.create_new_folder_outlined, size: 15),
+            label: const Text('Choose Folder'),
           ),
         ],
       ),
@@ -502,364 +1060,85 @@ class _SpaceLensResultsState extends State<_SpaceLensResults> {
   }
 }
 
-class _FolderBar extends StatelessWidget {
-  final FileItem item;
-  final double ratio;
+class _FeatureTag extends StatelessWidget {
+  final IconData icon;
+  final String text;
   final Color accentColor;
-  final VoidCallback onTap;
-  final VoidCallback onBrowse;
 
-  const _FolderBar({
-    required this.item,
-    required this.ratio,
+  const _FeatureTag({
+    required this.icon,
+    required this.text,
     required this.accentColor,
-    required this.onTap,
-    required this.onBrowse,
   });
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 6),
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-        decoration: BoxDecoration(
-          color: item.isSelected
-              ? accentColor.withOpacity(0.1)
-              : Colors.white.withOpacity(0.04),
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(
-            color: item.isSelected
-                ? accentColor.withOpacity(0.3)
-                : Colors.transparent,
+    return Row(
+      children: [
+        Container(
+          width: 30,
+          height: 30,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: accentColor.withOpacity(0.16),
+            border: Border.all(color: accentColor.withOpacity(0.32)),
+          ),
+          child: Icon(icon, size: 16, color: accentColor),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: Text(
+            text,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Checkbox(
-                  value: item.isSelected,
-                  onChanged: (_) => onTap(),
-                  activeColor: accentColor,
-                  side: const BorderSide(color: Colors.white30),
-                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                ),
-                const SizedBox(width: 6),
-                const Icon(Icons.folder_rounded, size: 16, color: Colors.amber),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    item.name,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 13,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                Text(
-                  item.formattedSize,
-                  style: TextStyle(
-                    color: accentColor,
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Tooltip(
-                  message: 'Browse folder',
-                  child: IconButton(
-                    icon: const Icon(
-                      Icons.chevron_right_rounded,
-                      size: 18,
-                      color: Colors.white54,
-                    ),
-                    onPressed: onBrowse,
-                    constraints: const BoxConstraints(
-                      minWidth: 32,
-                      minHeight: 32,
-                    ),
-                    padding: EdgeInsets.zero,
-                    splashRadius: 16,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 6),
-            Padding(
-              padding: const EdgeInsets.only(left: 44),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(3),
-                child: LinearProgressIndicator(
-                  value: ratio,
-                  backgroundColor: Colors.white10,
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                    accentColor.withOpacity(0.7),
-                  ),
-                  minHeight: 4,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
+      ],
     );
   }
 }
 
-class _DirectoryBrowserDialog extends StatefulWidget {
-  final String rootPath;
-  final String rootName;
-  final Color accentColor;
-  final Future<List<FileItem>> Function(String path) onLoad;
-
-  const _DirectoryBrowserDialog({
-    required this.rootPath,
-    required this.rootName,
-    required this.accentColor,
-    required this.onLoad,
-  });
-
-  @override
-  State<_DirectoryBrowserDialog> createState() =>
-      _DirectoryBrowserDialogState();
+Future<String?> _pickNativeDirectory({String? initialDirectory}) {
+  return FilePicker.platform.getDirectoryPath(
+    dialogTitle: 'Choose parent folder',
+    initialDirectory: initialDirectory,
+    lockParentWindow: true,
+  );
 }
 
-class _DirectoryBrowserDialogState extends State<_DirectoryBrowserDialog> {
-  late String _currentPath;
-  late String _currentName;
-  final List<_BreadcrumbNode> _trail = [];
-  bool _isLoading = true;
-  String? _error;
-  List<FileItem> _entries = const [];
+class _IndexedItem {
+  final int index;
+  final FileItem item;
 
-  @override
-  void initState() {
-    super.initState();
-    _currentPath = widget.rootPath;
-    _currentName = widget.rootName;
-    _trail.add(_BreadcrumbNode(name: widget.rootName, path: widget.rootPath));
-    _loadCurrent();
-  }
-
-  Future<void> _loadCurrent() async {
-    setState(() {
-      _isLoading = true;
-      _error = null;
-    });
-    try {
-      final items = await widget.onLoad(_currentPath);
-      if (!mounted) return;
-      setState(() {
-        _entries = items;
-        _isLoading = false;
-      });
-    } catch (e) {
-      if (!mounted) return;
-      setState(() {
-        _error = e.toString();
-        _isLoading = false;
-      });
-    }
-  }
-
-  Future<void> _openEntry(FileItem item) async {
-    if (item.isDirectory) {
-      setState(() {
-        _currentPath = item.path;
-        _currentName = item.name;
-        _trail.add(_BreadcrumbNode(name: item.name, path: item.path));
-      });
-      await _loadCurrent();
-      return;
-    }
-    await revealFileOrFolder(item.path);
-  }
-
-  Future<void> _goToCrumb(int index) async {
-    final node = _trail[index];
-    setState(() {
-      _currentPath = node.path;
-      _currentName = node.name;
-      _trail.removeRange(index + 1, _trail.length);
-    });
-    await _loadCurrent();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Dialog(
-      backgroundColor: const Color(0xFF120D1F),
-      insetPadding: const EdgeInsets.symmetric(horizontal: 40, vertical: 30),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-      child: SizedBox(
-        width: 860,
-        height: 560,
-        child: Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.fromLTRB(16, 12, 10, 12),
-              decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(color: Colors.white.withOpacity(0.07)),
-                ),
-              ),
-              child: Row(
-                children: [
-                  Icon(Icons.folder_open_rounded, color: widget.accentColor),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: [
-                          for (var i = 0; i < _trail.length; i++) ...[
-                            InkWell(
-                              onTap: () => _goToCrumb(i),
-                              child: Text(
-                                _trail[i].name,
-                                style: TextStyle(
-                                  color: i == _trail.length - 1
-                                      ? Colors.white
-                                      : Colors.white70,
-                                  fontSize: 13,
-                                  fontWeight: i == _trail.length - 1
-                                      ? FontWeight.w600
-                                      : FontWeight.w400,
-                                ),
-                              ),
-                            ),
-                            if (i != _trail.length - 1)
-                              const Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 8),
-                                child: Icon(
-                                  Icons.chevron_right_rounded,
-                                  color: Colors.white38,
-                                  size: 16,
-                                ),
-                              ),
-                          ],
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  IconButton(
-                    tooltip: 'Reveal in Finder',
-                    onPressed: () => revealFileOrFolder(_currentPath),
-                    icon: const Icon(
-                      Icons.open_in_new_rounded,
-                      color: Colors.white60,
-                      size: 18,
-                    ),
-                  ),
-                  IconButton(
-                    tooltip: 'Close',
-                    onPressed: () => Navigator.of(context).pop(),
-                    icon: const Icon(
-                      Icons.close_rounded,
-                      color: Colors.white70,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: _isLoading
-                  ? Center(
-                      child: CircularProgressIndicator(
-                        color: widget.accentColor,
-                      ),
-                    )
-                  : _error != null
-                  ? Center(
-                      child: Padding(
-                        padding: const EdgeInsets.all(24),
-                        child: Text(
-                          _error!,
-                          style: const TextStyle(color: Colors.redAccent),
-                        ),
-                      ),
-                    )
-                  : _entries.isEmpty
-                  ? Center(
-                      child: Text(
-                        'No files or folders in $_currentName',
-                        style: const TextStyle(color: Colors.white54),
-                      ),
-                    )
-                  : ListView.separated(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 14,
-                        vertical: 10,
-                      ),
-                      itemCount: _entries.length,
-                      separatorBuilder: (context, index) => Divider(
-                        height: 1,
-                        color: Colors.white.withOpacity(0.05),
-                      ),
-                      itemBuilder: (context, index) {
-                        final item = _entries[index];
-                        return ListTile(
-                          dense: true,
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 2,
-                          ),
-                          leading: Icon(
-                            item.isDirectory
-                                ? Icons.folder_rounded
-                                : Icons.insert_drive_file_outlined,
-                            color: item.isDirectory
-                                ? const Color(0xFFFFCA5F)
-                                : Colors.white54,
-                            size: 18,
-                          ),
-                          title: Text(
-                            item.name,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 13,
-                            ),
-                          ),
-                          subtitle: Text(
-                            item.isDirectory
-                                ? 'Folder • ${item.formattedSize}'
-                                : item.formattedSize,
-                            style: const TextStyle(
-                              color: Colors.white54,
-                              fontSize: 11,
-                            ),
-                          ),
-                          trailing: Icon(
-                            item.isDirectory
-                                ? Icons.chevron_right_rounded
-                                : Icons.open_in_new_rounded,
-                            color: Colors.white54,
-                            size: 16,
-                          ),
-                          onTap: () => _openEntry(item),
-                        );
-                      },
-                    ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  const _IndexedItem(this.index, this.item);
 }
 
-class _BreadcrumbNode {
-  final String name;
-  final String path;
+String _pathLabel(String path) {
+  if (path == '/' || path == '\\' || path.endsWith(':\\')) {
+    return path;
+  }
 
-  const _BreadcrumbNode({required this.name, required this.path});
+  final normalized = path.replaceAll('\\', '/');
+  final parts = normalized.split('/').where((p) => p.isNotEmpty).toList();
+  if (parts.isEmpty) return path;
+  return parts.last;
+}
+
+String _formatBytes(int bytes) {
+  const units = ['B', 'KB', 'MB', 'GB', 'TB'];
+  double size = bytes.toDouble();
+  var unitIndex = 0;
+  while (size >= 1024 && unitIndex < units.length - 1) {
+    size /= 1024;
+    unitIndex++;
+  }
+  if (unitIndex == 0) {
+    return '${size.toStringAsFixed(0)} ${units[unitIndex]}';
+  }
+  return '${size.toStringAsFixed(1)} ${units[unitIndex]}';
 }
 
 class _DoneScreen extends StatelessWidget {

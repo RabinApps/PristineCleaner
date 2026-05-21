@@ -10,6 +10,11 @@ class ScanViewModel {
   final bool isCleaning;
   final bool isDone;
   final String? error;
+  final String? selectedParentPath;
+  final String? selectedParentName;
+  final String? currentPath;
+  final String? currentName;
+  final List<String> breadcrumbs;
 
   const ScanViewModel({
     this.isScanning = false,
@@ -19,6 +24,11 @@ class ScanViewModel {
     this.isCleaning = false,
     this.isDone = false,
     this.error,
+    this.selectedParentPath,
+    this.selectedParentName,
+    this.currentPath,
+    this.currentName,
+    this.breadcrumbs = const [],
   });
 
   bool get hasResults => result != null && !isScanning;
@@ -32,9 +42,17 @@ class ScanViewModel {
     bool? isCleaning,
     bool? isDone,
     String? error,
+    String? selectedParentPath,
+    String? selectedParentName,
+    String? currentPath,
+    String? currentName,
+    List<String>? breadcrumbs,
     bool clearResult = false,
     bool clearProgress = false,
     bool clearError = false,
+    bool clearCurrentPath = false,
+    bool clearCurrentName = false,
+    bool clearBreadcrumbs = false,
   }) {
     return ScanViewModel(
       isScanning: isScanning ?? this.isScanning,
@@ -42,10 +60,19 @@ class ScanViewModel {
       progressPercent: clearProgress
           ? null
           : (progressPercent ?? this.progressPercent),
-      progressLabel: clearProgress ? null : (progressLabel ?? this.progressLabel),
+      progressLabel: clearProgress
+          ? null
+          : (progressLabel ?? this.progressLabel),
       isCleaning: isCleaning ?? this.isCleaning,
       isDone: isDone ?? this.isDone,
       error: clearError ? null : (error ?? this.error),
+      selectedParentPath: selectedParentPath ?? this.selectedParentPath,
+      selectedParentName: selectedParentName ?? this.selectedParentName,
+      currentPath: clearCurrentPath ? null : (currentPath ?? this.currentPath),
+      currentName: clearCurrentName ? null : (currentName ?? this.currentName),
+      breadcrumbs: clearBreadcrumbs
+          ? const []
+          : (breadcrumbs ?? this.breadcrumbs),
     );
   }
 
