@@ -62,6 +62,7 @@ class NavItem {
       section: NavSection.myTools,
       label: 'My Tools',
       icon: Icons.build_outlined,
+      theme: SectionThemes.myTools,
     ),
     NavItem(
       section: NavSection.myActivity,

@@ -5,6 +5,7 @@ import 'core/models/nav_item.dart';
 import 'core/theme/app_theme.dart';
 import 'features/applications/applications_screen.dart';
 import 'features/cleanup/cleanup_screen.dart';
+import 'features/my_tools/my_tools_screen.dart';
 import 'features/my_clutter/my_clutter_screen.dart';
 import 'features/smart_care/smart_care_screen.dart';
 import 'features/space_lens/space_lens_screen.dart';
@@ -48,10 +49,8 @@ final GoRouter _router = GoRouter(
         ),
         GoRoute(
           path: '/my-tools',
-          pageBuilder: (context, state) => _fadePage(
-            state: state,
-            child: const ComingSoonScreen(section: NavSection.myTools),
-          ),
+          pageBuilder: (context, state) =>
+              _fadePage(state: state, child: const MyToolsScreen()),
         ),
         GoRoute(
           path: '/my-activity',

@@ -151,5 +151,31 @@ class SectionThemes {
     orbColor: Color(0xFF0D47A1),
   );
 
-  static const all = [smartCare, cleanup, myClutter, spaceLens, applications];
+  static const myTools = SectionTheme(
+    id: 'my_tools',
+    title: 'My Tools',
+    subtitle: 'Your go-to toolkit for system care and maintenance.',
+    icon: Icons.build_rounded,
+    features: [
+      SectionFeature(label: 'Targeted Scanners', icon: Icons.search_rounded),
+      SectionFeature(label: 'Quick Actions', icon: Icons.bolt_rounded),
+      SectionFeature(label: 'Live Filtering', icon: Icons.filter_alt_outlined),
+    ],
+    backgroundGradient: [
+      Color(0xFF382158),
+      Color(0xFF2A1845),
+      Color(0xFF1C1030),
+    ],
+    accentColor: Color(0xFFB893FF),
+    orbColor: Color(0xFF7B59C9),
+  );
+
+  static const all = [
+    smartCare,
+    cleanup,
+    myClutter,
+    spaceLens,
+    applications,
+    myTools,
+  ];
 }
