@@ -1,12 +1,14 @@
 import 'dart:io';
 import 'dart:isolate';
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image/image.dart' as img;
 
 import '../models/file_item.dart';
 import '../models/scan_result.dart';
+import '../models/space_lens_snapshot.dart';
 
 final fileServiceProvider = Provider<FileService>((ref) => FileService());
 
@@ -30,6 +32,16 @@ class _ScanControlMessage {
   final String type;
 
   const _ScanControlMessage(this.type);
+}
+
+class _SpaceLensWorkerMessage {
+  final String rootPath;
+  final SendPort sendPort;
+
+  const _SpaceLensWorkerMessage({
+    required this.rootPath,
+    required this.sendPort,
+  });
 }
 
 class _ProgressEmitter {
@@ -328,6 +340,19 @@ class FileService {
     return itemsPayload.map(_fileItemFromPayload).toList(growable: false);
   }
 
+  Future<SpaceLensSnapshot> scanSpaceLensSnapshot(
+    String rootPath, {
+    int topFolderLimit = 30,
+    ScanProgressCallback? onProgress,
+  }) async {
+    final payload = await _runScanPayloadTask(
+      task: 'spaceLensSnapshot',
+      args: {'rootPath': rootPath, 'topFolderLimit': topFolderLimit},
+      onProgress: onProgress,
+    );
+    return _spaceLensSnapshotFromPayload(payload);
+  }
+
   // ─── Directory Browser ─────────────────────────────────────────────────────
 
   Future<List<FileItem>> listDirectoryContents(
@@ -566,6 +591,13 @@ void _scanTaskIsolateEntry(_ScanTaskMessage message) async {
         emitProgress,
         () => cancelled,
       );
+    } else if (task == 'spaceLensSnapshot') {
+      payload = await _spaceLensSnapshotPayload(
+        args['rootPath'] as String,
+        args['topFolderLimit'] as int,
+        emitProgress,
+        () => cancelled,
+      );
     } else if (task == 'scanApplications') {
       payload = await _scanApplicationsPayload(emitProgress, () => cancelled);
     } else {
@@ -597,6 +629,31 @@ ScanResult _scanResultFromPayload(Map<String, dynamic> payload) {
     items: items,
     totalBytes: payload['totalBytes'] as int,
     scanDuration: Duration(milliseconds: payload['scanDurationMs'] as int),
+  );
+}
+
+SpaceLensSnapshot _spaceLensSnapshotFromPayload(Map<String, dynamic> payload) {
+  final rootPath = payload['rootPath'] as String;
+  final topFolders = (payload['topFolders'] as List<dynamic>)
+      .cast<Map<String, dynamic>>()
+      .map(_fileItemFromPayload)
+      .toList(growable: false);
+  final rawItemsByPath = (payload['itemsByPath'] as Map<dynamic, dynamic>).map(
+    (key, value) => MapEntry(key as String, value as List<dynamic>),
+  );
+  final itemsByPath = rawItemsByPath.map(
+    (path, rawItems) => MapEntry(
+      path,
+      rawItems
+          .cast<Map<String, dynamic>>()
+          .map(_fileItemFromPayload)
+          .toList(growable: false),
+    ),
+  );
+  return SpaceLensSnapshot(
+    rootPath: rootPath,
+    topFolders: topFolders,
+    itemsByPath: itemsByPath,
   );
 }
 
@@ -1382,6 +1439,189 @@ Future<Map<String, dynamic>> _topFoldersPayload(
   };
 }
 
+Future<Map<String, dynamic>> _spaceLensSnapshotPayload(
+  String rootPath,
+  int topFolderLimit,
+  void Function(ScanProgress progress) onProgress,
+  bool Function() isCancelled,
+) async {
+  if (isCancelled()) throw const ScanCancelledException();
+  onProgress(
+    const ScanProgress(phase: ScanPhase.scanning, processed: 0, total: 1),
+  );
+
+  final emitter = _ProgressEmitter(emit: onProgress);
+  int rootProcessedUnits = 0;
+  int processedBytes = 0;
+  int totalRootUnits = 0;
+  final subtreeProcessedUnits = <String, int>{};
+  final subtreeTotalUnits = <String, int>{};
+  double lastEmittedFraction = 0;
+
+  void emitSnapshotProgress() {
+    final subtreeProcessedTotal = subtreeProcessedUnits.values.fold<int>(
+      0,
+      (sum, units) => sum + units,
+    );
+    final subtreeKnownTotal = subtreeTotalUnits.values.fold<int>(
+      0,
+      (sum, units) => sum + units,
+    );
+    final unknownSubtreeCount = subtreeProcessedUnits.keys
+        .where((path) => !subtreeTotalUnits.containsKey(path))
+        .length;
+    final unknownSubtreeBudget = unknownSubtreeCount * 5000;
+    var processedUnits = rootProcessedUnits + subtreeProcessedTotal;
+    final totalUnits = math.max(
+      processedUnits + 1,
+      totalRootUnits + subtreeKnownTotal + unknownSubtreeBudget,
+    );
+
+    final nextFraction = totalUnits <= 0 ? 0.0 : processedUnits / totalUnits;
+    if (nextFraction < lastEmittedFraction) {
+      processedUnits = (lastEmittedFraction * totalUnits).ceil();
+    } else {
+      lastEmittedFraction = nextFraction;
+    }
+
+    if (processedUnits > totalUnits) {
+      processedUnits = totalUnits;
+    }
+
+    emitter.push(
+      ScanPhase.scanning,
+      processedUnits,
+      totalUnits,
+      processedBytes: processedBytes,
+    );
+  }
+
+  emitter.push(ScanPhase.scanning, 0, 1, force: true);
+
+  final itemsByPath = <String, List<Map<String, dynamic>>>{};
+  final rootChildren = <Map<String, dynamic>>[];
+  final rootDir = Directory(rootPath);
+
+  try {
+    final subdirectories = <String>[];
+    await for (final entity in rootDir.list(followLinks: false)) {
+      if (isCancelled()) throw const ScanCancelledException();
+      final path = entity.path;
+      final name = _basename(path);
+      if (name.startsWith('.')) {
+        continue;
+      }
+
+      if (entity is Directory) {
+        subdirectories.add(path);
+        subtreeProcessedUnits[path] = 0;
+        emitSnapshotProgress();
+        continue;
+      }
+
+      if (entity is File) {
+        try {
+          totalRootUnits++;
+          final stat = await entity.stat();
+          rootProcessedUnits++;
+          processedBytes += stat.size;
+          emitSnapshotProgress();
+          rootChildren.add(
+            _fileItemToPayload(
+              FileItem(
+                path: path,
+                name: name,
+                sizeBytes: stat.size,
+                modified: stat.modified,
+                isDirectory: false,
+              ),
+            ),
+          );
+        } catch (_) {}
+      }
+    }
+
+    final subtreePayloads = await _runSpaceLensSubtreesWithMaxConcurrency(
+      subdirectories,
+      maxConcurrent: 4,
+      isCancelled: isCancelled,
+      onSubtreeCounted: (path, totalUnits) {
+        subtreeTotalUnits[path] = totalUnits;
+        emitSnapshotProgress();
+      },
+      onSubtreeProgress: (path, processedUnits) {
+        subtreeProcessedUnits[path] = processedUnits;
+        emitSnapshotProgress();
+      },
+    );
+
+    for (final subtree in subtreePayloads) {
+      if (isCancelled()) throw const ScanCancelledException();
+
+      final path = (subtree['rootItem'] as Map)['path'] as String;
+      subtreeTotalUnits[path] = subtree['entityCount'] as int;
+      subtreeProcessedUnits[path] = subtree['entityCount'] as int;
+
+      rootChildren.add((subtree['rootItem'] as Map).cast<String, dynamic>());
+
+      final subtreeItemsByPath = (subtree['itemsByPath'] as Map)
+          .cast<String, dynamic>();
+      for (final entry in subtreeItemsByPath.entries) {
+        final value = (entry.value as List<dynamic>)
+            .cast<Map<String, dynamic>>()
+            .toList(growable: false);
+        itemsByPath[entry.key] = value;
+      }
+
+      processedBytes += subtree['totalBytes'] as int;
+      emitSnapshotProgress();
+    }
+  } on ScanCancelledException {
+    rethrow;
+  } catch (_) {}
+
+  rootChildren.sort((a, b) {
+    final aIsDir = a['isDirectory'] as bool;
+    final bIsDir = b['isDirectory'] as bool;
+    if (aIsDir != bIsDir) {
+      return aIsDir ? -1 : 1;
+    }
+    final aName = (a['name'] as String).toLowerCase();
+    final bName = (b['name'] as String).toLowerCase();
+    return aName.compareTo(bName);
+  });
+  itemsByPath[rootPath] = rootChildren;
+
+  emitter.push(
+    ScanPhase.scanning,
+    math.max(
+      1,
+      totalRootUnits + subtreeTotalUnits.values.fold<int>(0, (s, v) => s + v),
+    ),
+    math.max(
+      1,
+      totalRootUnits + subtreeTotalUnits.values.fold<int>(0, (s, v) => s + v),
+    ),
+    processedBytes: processedBytes,
+    force: true,
+  );
+
+  final topFolders =
+      rootChildren
+          .where((item) => item['isDirectory'] == true)
+          .toList(growable: false)
+        ..sort(
+          (a, b) => (b['sizeBytes'] as int).compareTo(a['sizeBytes'] as int),
+        );
+
+  return {
+    'rootPath': rootPath,
+    'topFolders': topFolders.take(topFolderLimit).toList(growable: false),
+    'itemsByPath': itemsByPath,
+    'scanDurationMs': 0,
+  };
+}
+
 Future<Map<String, dynamic>> _scanApplicationsPayload(
   void Function(ScanProgress progress) onProgress,
   bool Function() isCancelled,
@@ -1566,6 +1806,345 @@ Future<List<Directory>> _collectApplicationCandidates() async {
   return dirs;
 }
 
+Future<List<Map<String, dynamic>>> _runSpaceLensSubtreesWithMaxConcurrency(
+  List<String> subdirectories, {
+  required int maxConcurrent,
+  required bool Function() isCancelled,
+  required void Function(String path, int totalUnits) onSubtreeCounted,
+  required void Function(String path, int processedUnits) onSubtreeProgress,
+}) async {
+  if (subdirectories.isEmpty) return <Map<String, dynamic>>[];
+
+  final results = List<Map<String, dynamic>?>.filled(
+    subdirectories.length,
+    null,
+  );
+  final activeWorkers = <Isolate>{};
+  var nextIndex = 0;
+
+  void killActiveWorkers() {
+    for (final worker in activeWorkers.toList(growable: false)) {
+      worker.kill(priority: Isolate.immediate);
+    }
+    activeWorkers.clear();
+  }
+
+  Future<void> runner() async {
+    while (true) {
+      if (isCancelled()) {
+        killActiveWorkers();
+        throw const ScanCancelledException();
+      }
+
+      if (nextIndex >= subdirectories.length) {
+        return;
+      }
+
+      final index = nextIndex;
+      nextIndex++;
+
+      results[index] = await _awaitFutureWithCancellation(
+        _runSpaceLensSubtreeInIsolate(
+          subdirectories[index],
+          onSpawned: (worker) => activeWorkers.add(worker),
+          onDisposed: (worker) => activeWorkers.remove(worker),
+          onCounted: (totalUnits) {
+            onSubtreeCounted(subdirectories[index], totalUnits);
+          },
+          onProgress: (processedUnits) {
+            onSubtreeProgress(subdirectories[index], processedUnits);
+          },
+        ),
+        isCancelled: isCancelled,
+        onCancel: killActiveWorkers,
+      );
+    }
+  }
+
+  final runnerCount = math.min(maxConcurrent, subdirectories.length);
+  try {
+    await Future.wait(
+      List<Future<void>>.generate(runnerCount, (_) => runner()),
+    );
+    return results.cast<Map<String, dynamic>>();
+  } on ScanCancelledException {
+    killActiveWorkers();
+    rethrow;
+  } catch (_) {
+    killActiveWorkers();
+    rethrow;
+  }
+}
+
+Future<T> _awaitFutureWithCancellation<T>(
+  Future<T> future, {
+  required bool Function() isCancelled,
+  required void Function() onCancel,
+}) async {
+  var isDone = false;
+  Object? caughtError;
+  StackTrace? caughtStack;
+  T? value;
+
+  future.then(
+    (result) {
+      isDone = true;
+      value = result;
+    },
+    onError: (Object error, StackTrace stack) {
+      isDone = true;
+      caughtError = error;
+      caughtStack = stack;
+    },
+  );
+
+  while (!isDone) {
+    if (isCancelled()) {
+      onCancel();
+      throw const ScanCancelledException();
+    }
+    await Future<void>.delayed(const Duration(milliseconds: 80));
+  }
+
+  if (caughtError != null) {
+    Error.throwWithStackTrace(caughtError!, caughtStack ?? StackTrace.current);
+  }
+  return value as T;
+}
+
+Future<Map<String, dynamic>> _runSpaceLensSubtreeInIsolate(
+  String rootPath, {
+  required void Function(Isolate worker) onSpawned,
+  required void Function(Isolate worker) onDisposed,
+  required void Function(int totalUnits) onCounted,
+  required void Function(int processedUnits) onProgress,
+}) async {
+  final receivePort = ReceivePort();
+  final errorPort = ReceivePort();
+  final completer = Completer<Map<String, dynamic>>();
+  StreamSubscription<dynamic>? resultSub;
+  StreamSubscription<dynamic>? errorSub;
+
+  final worker = await Isolate.spawn<_SpaceLensWorkerMessage>(
+    _spaceLensSubtreeIsolateEntry,
+    _SpaceLensWorkerMessage(rootPath: rootPath, sendPort: receivePort.sendPort),
+    onError: errorPort.sendPort,
+    errorsAreFatal: true,
+  );
+  onSpawned(worker);
+
+  resultSub = receivePort.listen((dynamic message) {
+    if (completer.isCompleted) return;
+    if (message is! Map) return;
+
+    final type = message['type'] as String?;
+    if (type == 'counted') {
+      onCounted(message['total'] as int? ?? 0);
+      return;
+    }
+    if (type == 'progress') {
+      onProgress(message['processed'] as int? ?? 0);
+      return;
+    }
+    if (type == 'result') {
+      completer.complete((message['payload'] as Map).cast<String, dynamic>());
+      return;
+    }
+
+    completer.completeError(
+      Exception((message['message'] as String?) ?? 'Subtree worker failed'),
+    );
+  });
+
+  errorSub = errorPort.listen((dynamic message) {
+    if (!completer.isCompleted) {
+      completer.completeError(Exception('Subtree isolate error: $message'));
+    }
+  });
+
+  try {
+    return await completer.future;
+  } finally {
+    await resultSub.cancel();
+    await errorSub.cancel();
+    receivePort.close();
+    errorPort.close();
+    onDisposed(worker);
+    worker.kill(priority: Isolate.immediate);
+  }
+}
+
+void _spaceLensSubtreeIsolateEntry(_SpaceLensWorkerMessage message) async {
+  try {
+    final totalUnits = await _countSpaceLensSubtreeEntities(message.rootPath);
+    message.sendPort.send({'type': 'counted', 'total': totalUnits});
+
+    var lastReported = DateTime.fromMillisecondsSinceEpoch(0);
+    var lastProcessed = 0;
+
+    void emitWorkerProgress(int processedUnits, {bool force = false}) {
+      final now = DateTime.now();
+      final elapsed = now.difference(lastReported);
+      final changedEnough = processedUnits - lastProcessed >= 50;
+      if (!force &&
+          !changedEnough &&
+          elapsed < const Duration(milliseconds: 120)) {
+        return;
+      }
+      lastProcessed = processedUnits;
+      lastReported = now;
+      message.sendPort.send({'type': 'progress', 'processed': processedUnits});
+    }
+
+    final payload = await _spaceLensSubtreePayloadEntry(
+      message.rootPath,
+      onProgress: emitWorkerProgress,
+    );
+    emitWorkerProgress(payload['entityCount'] as int, force: true);
+    message.sendPort.send({'type': 'result', 'payload': payload});
+  } catch (e) {
+    message.sendPort.send({'type': 'error', 'message': e.toString()});
+  }
+}
+
+Future<Map<String, dynamic>> _spaceLensSubtreePayloadEntry(
+  String rootPath, {
+  void Function(int processedUnits)? onProgress,
+}) async {
+  final itemsByPath = <String, List<Map<String, dynamic>>>{};
+  var processedUnits = 0;
+  final summary = await _buildSpaceLensSubtreeSummary(
+    rootPath,
+    itemsByPath,
+    onEntityScanned: () {
+      processedUnits++;
+      onProgress?.call(processedUnits);
+    },
+  );
+  return {
+    'rootItem': summary.itemPayload,
+    'itemsByPath': itemsByPath,
+    'totalBytes': summary.totalBytes,
+    'entityCount': summary.entityCount,
+  };
+}
+
+Future<int> _countSpaceLensSubtreeEntities(String dirPath) async {
+  int total = 1;
+  try {
+    await for (final entity in Directory(dirPath).list(followLinks: false)) {
+      final name = _basename(entity.path);
+      if (name.startsWith('.')) {
+        continue;
+      }
+      if (entity is Directory) {
+        total += await _countSpaceLensSubtreeEntities(entity.path);
+        continue;
+      }
+      if (entity is File) {
+        total++;
+      }
+    }
+  } catch (_) {}
+  return total;
+}
+
+Future<_SpaceLensSubtreeSummary> _buildSpaceLensSubtreeSummary(
+  String dirPath,
+  Map<String, List<Map<String, dynamic>>> itemsByPath, {
+  void Function()? onEntityScanned,
+}) async {
+  final children = <Map<String, dynamic>>[];
+  int totalBytes = 0;
+  int entityCount = 1;
+  onEntityScanned?.call();
+
+  try {
+    await for (final entity in Directory(dirPath).list(followLinks: false)) {
+      final path = entity.path;
+      final name = _basename(path);
+      if (name.startsWith('.')) {
+        continue;
+      }
+
+      if (entity is Directory) {
+        final summary = await _buildSpaceLensSubtreeSummary(
+          path,
+          itemsByPath,
+          onEntityScanned: onEntityScanned,
+        );
+        totalBytes += summary.totalBytes;
+        entityCount += summary.entityCount;
+        children.add(summary.itemPayload);
+        continue;
+      }
+
+      if (entity is File) {
+        try {
+          final stat = await entity.stat();
+          onEntityScanned?.call();
+          totalBytes += stat.size;
+          entityCount++;
+          children.add(
+            _fileItemToPayload(
+              FileItem(
+                path: path,
+                name: name,
+                sizeBytes: stat.size,
+                modified: stat.modified,
+                isDirectory: false,
+              ),
+            ),
+          );
+        } catch (_) {}
+      }
+    }
+  } catch (_) {}
+
+  children.sort((a, b) {
+    final aIsDir = a['isDirectory'] as bool;
+    final bIsDir = b['isDirectory'] as bool;
+    if (aIsDir != bIsDir) {
+      return aIsDir ? -1 : 1;
+    }
+    final aName = (a['name'] as String).toLowerCase();
+    final bName = (b['name'] as String).toLowerCase();
+    return aName.compareTo(bName);
+  });
+  itemsByPath[dirPath] = children;
+
+  DateTime modified = DateTime.fromMillisecondsSinceEpoch(0);
+  try {
+    modified = (await Directory(dirPath).stat()).modified;
+  } catch (_) {}
+
+  return _SpaceLensSubtreeSummary(
+    itemPayload: _fileItemToPayload(
+      FileItem(
+        path: dirPath,
+        name: _basename(dirPath),
+        sizeBytes: totalBytes,
+        modified: modified,
+        isDirectory: true,
+      ),
+    ),
+    totalBytes: totalBytes,
+    entityCount: entityCount,
+  );
+}
+
+class _SpaceLensSubtreeSummary {
+  final Map<String, dynamic> itemPayload;
+  final int totalBytes;
+  final int entityCount;
+
+  const _SpaceLensSubtreeSummary({
+    required this.itemPayload,
+    required this.totalBytes,
+    required this.entityCount,
+  });
+}
+
 Future<int> _dirSizePayload(String path) async {
   int total = 0;
   try {
@@ -1579,6 +2158,8 @@ Future<int> _dirSizePayload(String path) async {
         } catch (_) {}
       }
     }
+  } on ScanCancelledException {
+    rethrow;
   } catch (_) {}
   return total;
 }

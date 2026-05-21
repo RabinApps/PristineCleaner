@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/models/file_item.dart';
 import '../../core/models/removal_models.dart';
 import '../../core/models/scan_result.dart';
+import '../../core/models/space_lens_snapshot.dart';
 import '../../core/services/file_service.dart';
 import '../../core/services/trash_service.dart';
 import '../shared/scan_view_model.dart';
@@ -14,6 +15,8 @@ final spaceLensProvider = NotifierProvider<SpaceLensNotifier, ScanViewModel>(
 );
 
 class SpaceLensNotifier extends Notifier<ScanViewModel> {
+  SpaceLensSnapshot? _snapshot;
+
   @override
   ScanViewModel build() {
     final root = _defaultRootPath();
@@ -40,9 +43,15 @@ class SpaceLensNotifier extends Notifier<ScanViewModel> {
       breadcrumbs: [root],
     );
     try {
-      final folders = await ref
+      final snapshot = await ref
           .read(fileServiceProvider)
-          .getTopFolders(root, limit: 30, onProgress: _onProgress);
+          .scanSpaceLensSnapshot(
+            root,
+            topFolderLimit: 30,
+            onProgress: _onProgress,
+          );
+      _snapshot = snapshot;
+      final folders = snapshot.topFolders;
       final totalBytes = folders.fold<int>(0, (s, f) => s + f.sizeBytes);
       final result = ScanResult(
         items: folders,
@@ -56,12 +65,14 @@ class SpaceLensNotifier extends Notifier<ScanViewModel> {
         clearError: true,
       );
     } on ScanCancelledException {
+      _snapshot = null;
       state = state.copyWith(
         isScanning: false,
         clearProgress: true,
         clearResult: true,
       );
     } catch (e) {
+      _snapshot = null;
       state = state.copyWith(
         isScanning: false,
         clearProgress: true,
@@ -103,6 +114,7 @@ class SpaceLensNotifier extends Notifier<ScanViewModel> {
       clearError: true,
       clearProgress: true,
     );
+    _snapshot = null;
   }
 
   Future<void> navigateIntoFolder(FileItem item) async {
@@ -146,6 +158,7 @@ class SpaceLensNotifier extends Notifier<ScanViewModel> {
     if (selected.isEmpty) return;
     state = state.copyWith(isCleaning: true, clearError: true);
     try {
+      _snapshot = null;
       await ref.read(trashServiceProvider).deleteItems(selected);
       final root = state.selectedParentPath ?? _defaultRootPath();
       state = ScanViewModel(
@@ -186,6 +199,10 @@ class SpaceLensNotifier extends Notifier<ScanViewModel> {
           : '${outcome.errors.length} item(s) failed to remove.',
       clearError: outcome.errors.isEmpty,
     );
+
+    // A removal mutates the filesystem; drop the cached snapshot to avoid stale
+    // folder trees during subsequent navigation.
+    _snapshot = null;
   }
 
   Future<void> _loadDirectory({
@@ -195,9 +212,10 @@ class SpaceLensNotifier extends Notifier<ScanViewModel> {
   }) async {
     state = state.copyWith(isScanning: true, clearError: true);
     try {
-      final items = await ref
-          .read(fileServiceProvider)
-          .listDirectoryContents(path);
+      final snapshot = _snapshot;
+      final items = snapshot == null
+          ? await ref.read(fileServiceProvider).listDirectoryContents(path)
+          : snapshot.childrenFor(path);
       final totalBytes = items.fold<int>(0, (s, f) => s + f.sizeBytes);
       state = state.copyWith(
         isScanning: false,
@@ -221,6 +239,7 @@ class SpaceLensNotifier extends Notifier<ScanViewModel> {
   }
 
   void reset() {
+    _snapshot = null;
     final root = _defaultRootPath();
     state = ScanViewModel(
       selectedParentPath: root,

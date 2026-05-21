@@ -162,9 +162,9 @@ class _SpaceLensStart extends StatelessWidget {
           Center(
             child: Padding(
               padding: const EdgeInsets.only(bottom: 86),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
+              child: Wrap(
+                alignment: WrapAlignment.center,
+                crossAxisAlignment: WrapCrossAlignment.center,
                 children: [
                   GlossyIconWidget(
                     baseColor: theme.orbColor,
