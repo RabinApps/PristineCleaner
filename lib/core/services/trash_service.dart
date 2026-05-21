@@ -87,6 +87,8 @@ Map<String, dynamic> _fileItemToPayload(FileItem item) => {
   'name': item.name,
   'sizeBytes': item.sizeBytes,
   'modifiedMs': item.modified.millisecondsSinceEpoch,
+  'iconPath': item.iconPath,
+  'lastUsedMs': item.lastUsed?.millisecondsSinceEpoch,
   'isDirectory': item.isDirectory,
   'isSelected': item.isSelected,
 };
@@ -97,6 +99,10 @@ FileItem _fileItemFromPayload(Map<String, dynamic> payload) {
     name: payload['name'] as String,
     sizeBytes: payload['sizeBytes'] as int,
     modified: DateTime.fromMillisecondsSinceEpoch(payload['modifiedMs'] as int),
+    iconPath: payload['iconPath'] as String?,
+    lastUsed: payload['lastUsedMs'] == null
+        ? null
+        : DateTime.fromMillisecondsSinceEpoch(payload['lastUsedMs'] as int),
     isDirectory: payload['isDirectory'] as bool,
     isSelected: payload['isSelected'] as bool,
   );

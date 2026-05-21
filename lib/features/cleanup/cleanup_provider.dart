@@ -34,7 +34,7 @@ class CleanupNotifier extends Notifier<ScanViewModel> {
   void _onProgress(ScanProgress progress) {
     final label = progress.phase == ScanPhase.counting
         ? 'Counting files...'
-        : '${progress.percentLabel} (${progress.processed}/${progress.total})';
+        : progress.percentLabel;
     state = state.copyWith(
       isScanning: true,
       progressPercent: progress.percent,

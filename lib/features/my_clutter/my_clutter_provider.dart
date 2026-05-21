@@ -71,7 +71,7 @@ class MyClutterNotifier extends Notifier<MyClutterState> {
         : 'Counting downloads...';
     final label = progress.phase == ScanPhase.counting
         ? countingLabel
-        : '${progress.percentLabel} (${progress.processed}/${progress.total})';
+        : progress.percentLabel;
     state = state.copyWith(
       vm: state.vm.copyWith(
         isScanning: true,

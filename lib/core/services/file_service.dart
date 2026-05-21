@@ -731,6 +731,8 @@ Future<Map<String, dynamic>> _scanApplicationsPayload(
             name: name,
             sizeBytes: size,
             modified: stat.modified,
+            iconPath: await _resolveApplicationIconPath(dir.path),
+            lastUsed: stat.accessed,
             isDirectory: true,
           ),
         ),
@@ -774,8 +776,9 @@ Future<void> _collectFilesPayload(
       if (entity is File) {
         try {
           final stat = await entity.stat();
-          if (isCancelled?.call() ?? false)
+          if (isCancelled?.call() ?? false) {
             throw const ScanCancelledException();
+          }
           onTick?.call(1, stat.size);
           out.add(
             _fileItemToPayload(
@@ -885,6 +888,54 @@ Future<int> _dirSizePayload(String path) async {
   return total;
 }
 
+Future<String?> _resolveApplicationIconPath(String appPath) async {
+  if (!Platform.isMacOS || !appPath.endsWith('.app')) return null;
+  final resourcesDir = Directory('$appPath/Contents/Resources');
+  if (!await resourcesDir.exists()) return null;
+
+  final candidates = <String>{'AppIcon', 'icon'};
+  final infoPlist = File('$appPath/Contents/Info.plist');
+  if (await infoPlist.exists()) {
+    try {
+      final content = await infoPlist.readAsString();
+      final iconFileMatch = RegExp(
+        r'<key>\\s*CFBundleIconFile\\s*</key>\\s*<string>([^<]+)</string>',
+      ).firstMatch(content);
+      final iconNameMatch = RegExp(
+        r'<key>\\s*CFBundleIconName\\s*</key>\\s*<string>([^<]+)</string>',
+      ).firstMatch(content);
+      final iconFile = iconFileMatch?.group(1)?.trim();
+      final iconName = iconNameMatch?.group(1)?.trim();
+      if (iconFile != null && iconFile.isNotEmpty) {
+        candidates.add(iconFile.replaceAll('.icns', '').replaceAll('.png', ''));
+      }
+      if (iconName != null && iconName.isNotEmpty) {
+        candidates.add(iconName.replaceAll('.icns', '').replaceAll('.png', ''));
+      }
+    } catch (_) {}
+  }
+
+  const exts = ['.png', '.jpg', '.jpeg', '.webp'];
+  for (final base in candidates) {
+    for (final ext in exts) {
+      final path = '${resourcesDir.path}/$base$ext';
+      if (await File(path).exists()) return path;
+    }
+  }
+
+  try {
+    await for (final entity in resourcesDir.list(followLinks: false)) {
+      if (entity is! File) continue;
+      final name = _basename(entity.path).toLowerCase();
+      final isImage = exts.any((ext) => name.endsWith(ext));
+      if (!isImage) continue;
+      if (name.contains('icon') || name.contains('app')) return entity.path;
+    }
+  } catch (_) {}
+
+  return null;
+}
+
 String _basename(String path) => path.split(Platform.pathSeparator).last;
 
 Map<String, dynamic> _fileItemToPayload(FileItem item) => {
@@ -892,6 +943,8 @@ Map<String, dynamic> _fileItemToPayload(FileItem item) => {
   'name': item.name,
   'sizeBytes': item.sizeBytes,
   'modifiedMs': item.modified.millisecondsSinceEpoch,
+  'iconPath': item.iconPath,
+  'lastUsedMs': item.lastUsed?.millisecondsSinceEpoch,
   'isDirectory': item.isDirectory,
   'isSelected': item.isSelected,
 };
@@ -902,6 +955,10 @@ FileItem _fileItemFromPayload(Map<String, dynamic> payload) {
     name: payload['name'] as String,
     sizeBytes: payload['sizeBytes'] as int,
     modified: DateTime.fromMillisecondsSinceEpoch(payload['modifiedMs'] as int),
+    iconPath: payload['iconPath'] as String?,
+    lastUsed: payload['lastUsedMs'] == null
+        ? null
+        : DateTime.fromMillisecondsSinceEpoch(payload['lastUsedMs'] as int),
     isDirectory: payload['isDirectory'] as bool,
     isSelected: payload['isSelected'] as bool,
   );
