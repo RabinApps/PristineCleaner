@@ -3,6 +3,7 @@ import 'dart:isolate';
 import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image/image.dart' as img;
 
 import '../models/file_item.dart';
 import '../models/scan_result.dart';
@@ -73,18 +74,28 @@ class ScanCancelledException implements Exception {
   String toString() => 'Scan cancelled';
 }
 
+class _ActiveScanTask {
+  final Completer<Map<String, dynamic>> completer;
+  Isolate? isolate;
+  SendPort? controlPort;
+
+  _ActiveScanTask({required this.completer});
+}
+
 class FileService {
-  Isolate? _activeScanIsolate;
-  Completer<Map<String, dynamic>>? _activeScanCompleter;
-  SendPort? _activeScanControlPort;
+  final Map<int, _ActiveScanTask> _activeScanTasks = {};
+  int _nextScanTaskId = 0;
 
   void cancelActiveScan() {
-    _activeScanControlPort?.send(const _ScanControlMessage('cancel'));
-    final completer = _activeScanCompleter;
-    if (completer != null && !completer.isCompleted) {
-      completer.completeError(const ScanCancelledException());
+    final tasks = _activeScanTasks.values.toList(growable: false);
+    for (final task in tasks) {
+      task.controlPort?.send(const _ScanControlMessage('cancel'));
+      if (!task.completer.isCompleted) {
+        task.completer.completeError(const ScanCancelledException());
+      }
+      task.isolate?.kill(priority: Isolate.immediate);
     }
-    _activeScanIsolate?.kill(priority: Isolate.immediate);
+    _activeScanTasks.clear();
   }
 
   // ─── Disk Info ────────────────────────────────────────────────────────────
@@ -222,6 +233,67 @@ class FileService {
     return _scanResultFromPayload(payload);
   }
 
+  // ─── Fresh Duplicates ────────────────────────────────────────────────────
+
+  Future<ScanResult> scanFreshDuplicates(
+    String rootPath, {
+    Duration freshWindow = const Duration(days: 90),
+    ScanProgressCallback? onProgress,
+  }) async {
+    final cutoffMs = DateTime.now()
+        .subtract(freshWindow)
+        .millisecondsSinceEpoch;
+    final payload = await _runScanPayloadTask(
+      task: 'scanFreshDuplicates',
+      args: {'rootPath': rootPath, 'cutoffMs': cutoffMs},
+      onProgress: onProgress,
+    );
+    return _scanResultFromPayload(payload);
+  }
+
+  // ─── Large Similar Images ────────────────────────────────────────────────
+
+  Future<ScanResult> scanLargeSimilarImages(
+    String rootPath, {
+    int minSizeBytes = 5 * 1024 * 1024,
+    int maxHammingDistance = 8,
+    ScanProgressCallback? onProgress,
+  }) async {
+    final payload = await _runScanPayloadTask(
+      task: 'scanLargeSimilarImages',
+      args: {
+        'rootPath': rootPath,
+        'minSizeBytes': minSizeBytes,
+        'maxHammingDistance': maxHammingDistance,
+      },
+      onProgress: onProgress,
+    );
+    return _scanResultFromPayload(payload);
+  }
+
+  // ─── Large and Old Files ─────────────────────────────────────────────────
+
+  Future<ScanResult> scanLargeAndOldFiles(
+    String rootPath, {
+    int minSizeBytes = 500 * 1024 * 1024,
+    Duration minAge = const Duration(days: 365),
+    ScanProgressCallback? onProgress,
+  }) async {
+    final modifiedBeforeMs = DateTime.now()
+        .subtract(minAge)
+        .millisecondsSinceEpoch;
+    final payload = await _runScanPayloadTask(
+      task: 'scanLargeAndOldFiles',
+      args: {
+        'rootPath': rootPath,
+        'minSizeBytes': minSizeBytes,
+        'modifiedBeforeMs': modifiedBeforeMs,
+      },
+      onProgress: onProgress,
+    );
+    return _scanResultFromPayload(payload);
+  }
+
   // ─── Top Folders (Space Lens) ─────────────────────────────────────────────
 
   Future<List<FileItem>> getTopFolders(
@@ -308,18 +380,21 @@ class FileService {
     required Map<String, dynamic> args,
     ScanProgressCallback? onProgress,
   }) async {
+    final taskId = _nextScanTaskId++;
     final receivePort = ReceivePort();
     final controlPort = ReceivePort();
     final errorPort = ReceivePort();
     final completer = Completer<Map<String, dynamic>>();
+    final activeTask = _ActiveScanTask(completer: completer);
     StreamSubscription<dynamic>? dataSub;
     StreamSubscription<dynamic>? errSub;
+    StreamSubscription<dynamic>? controlSub;
 
-    _activeScanCompleter = completer;
+    _activeScanTasks[taskId] = activeTask;
 
-    controlPort.listen((dynamic message) {
+    controlSub = controlPort.listen((dynamic message) {
       if (message is SendPort) {
-        _activeScanControlPort = message;
+        activeTask.controlPort = message;
       }
     });
 
@@ -334,7 +409,7 @@ class FileService {
       onError: errorPort.sendPort,
       errorsAreFatal: true,
     );
-    _activeScanIsolate = isolate;
+    activeTask.isolate = isolate;
 
     dataSub = receivePort.listen((dynamic message) {
       if (completer.isCompleted) return;
@@ -372,15 +447,12 @@ class FileService {
       return await completer.future;
     } finally {
       await dataSub.cancel();
+      await controlSub.cancel();
       controlPort.close();
       await errSub.cancel();
       receivePort.close();
       errorPort.close();
-      if (identical(_activeScanCompleter, completer)) {
-        _activeScanCompleter = null;
-        _activeScanIsolate = null;
-        _activeScanControlPort = null;
-      }
+      _activeScanTasks.remove(taskId);
       isolate.kill(priority: Isolate.immediate);
     }
   }
@@ -444,6 +516,29 @@ void _scanTaskIsolateEntry(_ScanTaskMessage message) async {
     } else if (task == 'scanDownloads') {
       payload = await _scanDownloadsPayload(
         args['downloads'] as String,
+        emitProgress,
+        () => cancelled,
+      );
+    } else if (task == 'scanFreshDuplicates') {
+      payload = await _scanFreshDuplicatesPayload(
+        args['rootPath'] as String,
+        args['cutoffMs'] as int,
+        emitProgress,
+        () => cancelled,
+      );
+    } else if (task == 'scanLargeSimilarImages') {
+      payload = await _scanLargeSimilarImagesPayload(
+        args['rootPath'] as String,
+        args['minSizeBytes'] as int,
+        args['maxHammingDistance'] as int,
+        emitProgress,
+        () => cancelled,
+      );
+    } else if (task == 'scanLargeAndOldFiles') {
+      payload = await _scanLargeAndOldFilesPayload(
+        args['rootPath'] as String,
+        args['minSizeBytes'] as int,
+        args['modifiedBeforeMs'] as int,
         emitProgress,
         () => cancelled,
       );
@@ -816,6 +911,364 @@ Future<Map<String, dynamic>> _scanDownloadsPayload(
   };
 }
 
+Future<Map<String, dynamic>> _scanFreshDuplicatesPayload(
+  String rootPath,
+  int cutoffMs,
+  void Function(ScanProgress progress) onProgress,
+  bool Function() isCancelled,
+) async {
+  final sw = Stopwatch()..start();
+  final groups = <String, List<_FileScanCandidate>>{};
+  int processed = 0;
+  int processedBytes = 0;
+
+  if (isCancelled()) throw const ScanCancelledException();
+
+  onProgress(
+    const ScanProgress(phase: ScanPhase.counting, processed: 0, total: 0),
+  );
+  if (isCancelled()) throw const ScanCancelledException();
+  final totalFiles = await _countFilesInDir(rootPath, recursive: true);
+  if (isCancelled()) throw const ScanCancelledException();
+  final emitter = _ProgressEmitter(emit: onProgress);
+  emitter.push(
+    ScanPhase.scanning,
+    0,
+    totalFiles,
+    processedBytes: 0,
+    force: true,
+  );
+
+  try {
+    await for (final entity in Directory(
+      rootPath,
+    ).list(recursive: true, followLinks: false)) {
+      if (isCancelled()) throw const ScanCancelledException();
+      if (entity is! File) continue;
+
+      try {
+        final stat = await entity.stat();
+        if (isCancelled()) throw const ScanCancelledException();
+
+        processed++;
+        processedBytes += stat.size;
+        emitter.push(
+          ScanPhase.scanning,
+          processed,
+          totalFiles,
+          processedBytes: processedBytes,
+        );
+
+        final modifiedMs = stat.modified.millisecondsSinceEpoch;
+        if (modifiedMs < cutoffMs || stat.size <= 0) continue;
+
+        final contentHash = await _hashFileContentFnv64(entity.path);
+        if (isCancelled()) throw const ScanCancelledException();
+        if (contentHash == null) continue;
+
+        final key = '${stat.size}:$contentHash';
+        groups
+            .putIfAbsent(key, () => <_FileScanCandidate>[])
+            .add(
+              _FileScanCandidate(
+                path: entity.path,
+                name: _basename(entity.path),
+                sizeBytes: stat.size,
+                modified: stat.modified,
+              ),
+            );
+      } catch (_) {}
+    }
+  } catch (_) {}
+
+  final items = <Map<String, dynamic>>[];
+  int clusterNo = 0;
+  final sortedGroupKeys = groups.keys.toList()..sort();
+  for (final key in sortedGroupKeys) {
+    if (isCancelled()) throw const ScanCancelledException();
+    final candidates = groups[key]!;
+    if (candidates.length < 2) continue;
+
+    clusterNo++;
+    candidates.sort((a, b) => b.modified.compareTo(a.modified));
+    final groupName = 'Duplicate Group $clusterNo';
+
+    for (var i = 0; i < candidates.length; i++) {
+      final c = candidates[i];
+      items.add(
+        _fileItemToPayload(
+          FileItem(
+            path: c.path,
+            name: c.name,
+            sizeBytes: c.sizeBytes,
+            modified: c.modified,
+            isDirectory: false,
+            isSelected: i != 0,
+            category: 'fresh_duplicates',
+            group: groupName,
+          ),
+        ),
+      );
+    }
+  }
+
+  emitter.push(
+    ScanPhase.scanning,
+    totalFiles,
+    totalFiles,
+    processedBytes: processedBytes,
+    force: true,
+  );
+
+  items.sort(
+    (a, b) => (b['sizeBytes'] as int).compareTo(a['sizeBytes'] as int),
+  );
+  sw.stop();
+  final total = items.fold<int>(0, (s, i) => s + (i['sizeBytes'] as int));
+  return {
+    'items': items,
+    'totalBytes': total,
+    'scanDurationMs': sw.elapsedMilliseconds,
+  };
+}
+
+Future<Map<String, dynamic>> _scanLargeSimilarImagesPayload(
+  String rootPath,
+  int minSizeBytes,
+  int maxHammingDistance,
+  void Function(ScanProgress progress) onProgress,
+  bool Function() isCancelled,
+) async {
+  final sw = Stopwatch()..start();
+  final candidates = <_ImageHashCandidate>[];
+  int processed = 0;
+  int processedBytes = 0;
+
+  if (isCancelled()) throw const ScanCancelledException();
+
+  onProgress(
+    const ScanProgress(phase: ScanPhase.counting, processed: 0, total: 0),
+  );
+  if (isCancelled()) throw const ScanCancelledException();
+  final totalFiles = await _countFilesInDir(rootPath, recursive: true);
+  if (isCancelled()) throw const ScanCancelledException();
+
+  final emitter = _ProgressEmitter(emit: onProgress);
+  emitter.push(
+    ScanPhase.scanning,
+    0,
+    totalFiles,
+    processedBytes: 0,
+    force: true,
+  );
+
+  try {
+    await for (final entity in Directory(
+      rootPath,
+    ).list(recursive: true, followLinks: false)) {
+      if (isCancelled()) throw const ScanCancelledException();
+      if (entity is! File) continue;
+
+      try {
+        final stat = await entity.stat();
+        if (isCancelled()) throw const ScanCancelledException();
+
+        processed++;
+        processedBytes += stat.size;
+        emitter.push(
+          ScanPhase.scanning,
+          processed,
+          totalFiles,
+          processedBytes: processedBytes,
+        );
+
+        if (stat.size < minSizeBytes || !_isSupportedImagePath(entity.path)) {
+          continue;
+        }
+
+        final hash = await _averageImageHash64(entity.path);
+        if (isCancelled()) throw const ScanCancelledException();
+        if (hash == null) continue;
+
+        candidates.add(
+          _ImageHashCandidate(
+            path: entity.path,
+            name: _basename(entity.path),
+            sizeBytes: stat.size,
+            modified: stat.modified,
+            hashHex: hash,
+          ),
+        );
+      } catch (_) {}
+    }
+  } catch (_) {}
+
+  final dsu = _DisjointSet(candidates.length);
+  for (var i = 0; i < candidates.length; i++) {
+    if (isCancelled()) throw const ScanCancelledException();
+    for (var j = i + 1; j < candidates.length; j++) {
+      final distance = _hammingDistance64(
+        candidates[i].hashHex,
+        candidates[j].hashHex,
+      );
+      if (distance <= maxHammingDistance) {
+        dsu.union(i, j);
+      }
+    }
+  }
+
+  final clustered = <int, List<_ImageHashCandidate>>{};
+  for (var i = 0; i < candidates.length; i++) {
+    final root = dsu.find(i);
+    clustered
+        .putIfAbsent(root, () => <_ImageHashCandidate>[])
+        .add(candidates[i]);
+  }
+
+  final items = <Map<String, dynamic>>[];
+  int clusterNo = 0;
+  final clusterKeys = clustered.keys.toList()..sort();
+  for (final key in clusterKeys) {
+    if (isCancelled()) throw const ScanCancelledException();
+    final cluster = clustered[key]!;
+    if (cluster.length < 2) continue;
+
+    clusterNo++;
+    cluster.sort((a, b) {
+      final sizeCmp = b.sizeBytes.compareTo(a.sizeBytes);
+      if (sizeCmp != 0) return sizeCmp;
+      return b.modified.compareTo(a.modified);
+    });
+
+    final groupName = 'Similar Images $clusterNo';
+    for (var i = 0; i < cluster.length; i++) {
+      final c = cluster[i];
+      items.add(
+        _fileItemToPayload(
+          FileItem(
+            path: c.path,
+            name: c.name,
+            sizeBytes: c.sizeBytes,
+            modified: c.modified,
+            isDirectory: false,
+            isSelected: i != 0,
+            category: 'large_similar_images',
+            group: groupName,
+          ),
+        ),
+      );
+    }
+  }
+
+  emitter.push(
+    ScanPhase.scanning,
+    totalFiles,
+    totalFiles,
+    processedBytes: processedBytes,
+    force: true,
+  );
+
+  items.sort(
+    (a, b) => (b['sizeBytes'] as int).compareTo(a['sizeBytes'] as int),
+  );
+  sw.stop();
+  final total = items.fold<int>(0, (s, i) => s + (i['sizeBytes'] as int));
+  return {
+    'items': items,
+    'totalBytes': total,
+    'scanDurationMs': sw.elapsedMilliseconds,
+  };
+}
+
+Future<Map<String, dynamic>> _scanLargeAndOldFilesPayload(
+  String rootPath,
+  int minSizeBytes,
+  int modifiedBeforeMs,
+  void Function(ScanProgress progress) onProgress,
+  bool Function() isCancelled,
+) async {
+  final sw = Stopwatch()..start();
+  final items = <Map<String, dynamic>>[];
+  int processed = 0;
+  int processedBytes = 0;
+
+  if (isCancelled()) throw const ScanCancelledException();
+
+  onProgress(
+    const ScanProgress(phase: ScanPhase.counting, processed: 0, total: 0),
+  );
+  if (isCancelled()) throw const ScanCancelledException();
+  final totalFiles = await _countFilesInDir(rootPath, recursive: true);
+  if (isCancelled()) throw const ScanCancelledException();
+  final emitter = _ProgressEmitter(emit: onProgress);
+  emitter.push(
+    ScanPhase.scanning,
+    0,
+    totalFiles,
+    processedBytes: 0,
+    force: true,
+  );
+
+  try {
+    await for (final entity in Directory(
+      rootPath,
+    ).list(recursive: true, followLinks: false)) {
+      if (isCancelled()) throw const ScanCancelledException();
+      if (entity is! File) continue;
+
+      try {
+        final stat = await entity.stat();
+        if (isCancelled()) throw const ScanCancelledException();
+
+        processed++;
+        processedBytes += stat.size;
+        emitter.push(
+          ScanPhase.scanning,
+          processed,
+          totalFiles,
+          processedBytes: processedBytes,
+        );
+
+        if (stat.size < minSizeBytes) continue;
+        if (stat.modified.millisecondsSinceEpoch > modifiedBeforeMs) continue;
+
+        items.add(
+          _fileItemToPayload(
+            FileItem(
+              path: entity.path,
+              name: _basename(entity.path),
+              sizeBytes: stat.size,
+              modified: stat.modified,
+              isDirectory: false,
+              isSelected: true,
+              category: 'large_and_old_files',
+            ),
+          ),
+        );
+      } catch (_) {}
+    }
+  } catch (_) {}
+
+  emitter.push(
+    ScanPhase.scanning,
+    totalFiles,
+    totalFiles,
+    processedBytes: processedBytes,
+    force: true,
+  );
+
+  items.sort(
+    (a, b) => (b['sizeBytes'] as int).compareTo(a['sizeBytes'] as int),
+  );
+  sw.stop();
+  final total = items.fold<int>(0, (s, i) => s + (i['sizeBytes'] as int));
+  return {
+    'items': items,
+    'totalBytes': total,
+    'scanDurationMs': sw.elapsedMilliseconds,
+  };
+}
+
 Future<Map<String, dynamic>> _topFoldersPayload(
   String rootPath,
   int limit,
@@ -1131,6 +1584,142 @@ Future<String?> _resolveApplicationIconPath(String appPath) async {
   } catch (_) {}
 
   return null;
+}
+
+class _FileScanCandidate {
+  final String path;
+  final String name;
+  final int sizeBytes;
+  final DateTime modified;
+
+  const _FileScanCandidate({
+    required this.path,
+    required this.name,
+    required this.sizeBytes,
+    required this.modified,
+  });
+}
+
+class _ImageHashCandidate extends _FileScanCandidate {
+  final String hashHex;
+
+  const _ImageHashCandidate({
+    required super.path,
+    required super.name,
+    required super.sizeBytes,
+    required super.modified,
+    required this.hashHex,
+  });
+}
+
+class _DisjointSet {
+  final List<int> _parent;
+  final List<int> _rank;
+
+  _DisjointSet(int size)
+    : _parent = List<int>.generate(size, (i) => i),
+      _rank = List<int>.filled(size, 0);
+
+  int find(int x) {
+    if (_parent[x] != x) {
+      _parent[x] = find(_parent[x]);
+    }
+    return _parent[x];
+  }
+
+  void union(int a, int b) {
+    var ra = find(a);
+    var rb = find(b);
+    if (ra == rb) return;
+    if (_rank[ra] < _rank[rb]) {
+      final t = ra;
+      ra = rb;
+      rb = t;
+    }
+    _parent[rb] = ra;
+    if (_rank[ra] == _rank[rb]) {
+      _rank[ra]++;
+    }
+  }
+}
+
+bool _isSupportedImagePath(String path) {
+  final lower = path.toLowerCase();
+  return lower.endsWith('.jpg') ||
+      lower.endsWith('.jpeg') ||
+      lower.endsWith('.png') ||
+      lower.endsWith('.webp') ||
+      lower.endsWith('.bmp') ||
+      lower.endsWith('.gif') ||
+      lower.endsWith('.tif') ||
+      lower.endsWith('.tiff');
+}
+
+Future<String?> _hashFileContentFnv64(String path) async {
+  const mask64 = 0xFFFFFFFFFFFFFFFF;
+  var hash = 0xCBF29CE484222325;
+  const prime = 0x100000001B3;
+
+  try {
+    await for (final chunk in File(path).openRead()) {
+      for (final b in chunk) {
+        hash ^= b;
+        hash = (hash * prime) & mask64;
+      }
+    }
+    return hash.toRadixString(16).padLeft(16, '0');
+  } catch (_) {
+    return null;
+  }
+}
+
+Future<String?> _averageImageHash64(String path) async {
+  try {
+    final bytes = await File(path).readAsBytes();
+    final decoded = img.decodeImage(bytes);
+    if (decoded == null) return null;
+
+    final resized = img.copyResize(
+      decoded,
+      width: 8,
+      height: 8,
+      interpolation: img.Interpolation.average,
+    );
+
+    final luminance = <int>[];
+    var sum = 0;
+    for (var y = 0; y < 8; y++) {
+      for (var x = 0; x < 8; x++) {
+        final p = resized.getPixel(x, y);
+        final value =
+            ((p.r.toInt() * 299) + (p.g.toInt() * 587) + (p.b.toInt() * 114)) ~/
+            1000;
+        luminance.add(value);
+        sum += value;
+      }
+    }
+
+    final avg = sum / 64.0;
+    var hash = 0;
+    for (var i = 0; i < luminance.length; i++) {
+      if (luminance[i] >= avg) {
+        hash |= (1 << i);
+      }
+    }
+    return hash.toRadixString(16).padLeft(16, '0');
+  } catch (_) {
+    return null;
+  }
+}
+
+int _hammingDistance64(String aHex, String bHex) {
+  var value = int.parse(aHex, radix: 16) ^ int.parse(bHex, radix: 16);
+  var count = 0;
+  while (value != 0) {
+    value &= (value - 1);
+    count++;
+  }
+  return count;
 }
 
 String _basename(String path) => path.split(Platform.pathSeparator).last;

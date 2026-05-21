@@ -82,7 +82,10 @@ class SectionThemes {
     features: [
       SectionFeature(label: 'Large Files', icon: Icons.file_open_outlined),
       SectionFeature(label: 'Duplicates', icon: Icons.copy_outlined),
-      SectionFeature(label: 'Downloads', icon: Icons.download_outlined),
+      SectionFeature(
+        label: 'Large Similar Images',
+        icon: Icons.image_search_outlined,
+      ),
     ],
     backgroundGradient: [
       Color(0xFF0D3330),

@@ -8,6 +8,7 @@ import '../../core/models/file_item.dart';
 import '../../core/theme/section_themes.dart';
 import '../shared/scan_view_model.dart';
 import '../../shared/widgets/glossy_icon_widget.dart';
+import '../../shared/widgets/project_directory_selector.dart';
 import '../../shared/widgets/scan_button.dart';
 import 'space_lens_provider.dart';
 
@@ -132,16 +133,6 @@ class _SpaceLensStart extends StatelessWidget {
       ),
       child: Stack(
         children: [
-          Positioned(
-            left: 32,
-            right: 32,
-            top: 28,
-            child: _ParentFolderPickerCard(
-              accentColor: theme.accentColor,
-              selectedPath: parentPath,
-              onPickFolder: () => _pickParentFolder(context),
-            ),
-          ),
           Center(
             child: Padding(
               padding: const EdgeInsets.only(bottom: 86),
@@ -199,6 +190,14 @@ class _SpaceLensStart extends StatelessWidget {
                           text:
                               'Click folders to drill down and inspect deeper',
                           accentColor: theme.accentColor,
+                        ),
+                        const SizedBox(height: 10),
+
+                        ProjectDirectorySelector(
+                          accentColor: theme.accentColor,
+                          menuColor: theme.orbColor,
+                          selectedPath: parentPath,
+                          onPickFolder: () => _pickParentFolder(context),
                         ),
                         if (vm.error != null) ...[
                           const SizedBox(height: 10),
@@ -1004,57 +1003,6 @@ class _BreadcrumbBar extends StatelessWidget {
             ],
           ],
         ),
-      ),
-    );
-  }
-}
-
-class _ParentFolderPickerCard extends StatelessWidget {
-  final Color accentColor;
-  final String selectedPath;
-  final VoidCallback onPickFolder;
-
-  const _ParentFolderPickerCard({
-    required this.accentColor,
-    required this.selectedPath,
-    required this.onPickFolder,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.06),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.white.withOpacity(0.12)),
-      ),
-      child: Row(
-        children: [
-          Icon(Icons.folder_open_rounded, color: accentColor, size: 18),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Text(
-              selectedPath,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 13,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ),
-          const SizedBox(width: 10),
-          OutlinedButton.icon(
-            onPressed: onPickFolder,
-            style: OutlinedButton.styleFrom(
-              foregroundColor: Colors.white,
-              side: BorderSide(color: accentColor.withOpacity(0.6)),
-            ),
-            icon: const Icon(Icons.create_new_folder_outlined, size: 15),
-            label: const Text('Choose Folder'),
-          ),
-        ],
       ),
     );
   }
