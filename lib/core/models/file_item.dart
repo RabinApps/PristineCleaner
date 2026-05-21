@@ -9,8 +9,10 @@ class FileItem {
   final DateTime? lastUsed;
   final bool isDirectory;
   final bool isSelected;
+
   /// Cleanup category id, e.g. 'user_cache', 'user_logs', 'system_logs'.
   final String? category;
+
   /// Display name of the immediate parent group within the scan root.
   final String? group;
 

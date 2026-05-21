@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/theme/section_themes.dart';
-import '../../shared/widgets/scan_results_view.dart';
 import '../../shared/widgets/section_landing_layout.dart';
 import 'cleanup_provider.dart';
+import 'cleanup_results_view.dart';
 
 class CleanupScreen extends ConsumerWidget {
   const CleanupScreen({super.key});
@@ -20,13 +20,15 @@ class CleanupScreen extends ConsumerWidget {
       return _DoneScreen(theme: theme, onDismiss: notifier.reset);
     }
 
-    // Results state
+    // Results state — new Cleanup Manager layout
     if (vm.hasResults) {
-      return ScanResultsView(
+      return CleanupResultsView(
         result: vm.result!,
         theme: theme,
         isCleaning: vm.isCleaning,
         onToggleItem: notifier.toggleItem,
+        onToggleGroup: notifier.toggleGroup,
+        onToggleCategory: notifier.toggleCategory,
         onSelectAll: notifier.selectAll,
         onDeselectAll: notifier.deselectAll,
         onClean: notifier.clean,

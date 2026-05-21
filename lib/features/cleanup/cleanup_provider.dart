@@ -47,6 +47,32 @@ class CleanupNotifier extends Notifier<ScanViewModel> {
     state = state.withToggled(index);
   }
 
+  /// Toggle all items whose [category] and [group] match [groupKey].
+  void toggleGroup(String category, String groupKey, bool selected) {
+    final r = state.result;
+    if (r == null) return;
+    final items = r.items.map((item) {
+      if (item.category == category && item.group == groupKey) {
+        return item.copyWith(isSelected: selected);
+      }
+      return item;
+    }).toList();
+    state = state.copyWith(result: r.withUpdatedItems(items));
+  }
+
+  /// Toggle all items in a specific category.
+  void toggleCategory(String category, bool selected) {
+    final r = state.result;
+    if (r == null) return;
+    final items = r.items.map((item) {
+      if (item.category == category) {
+        return item.copyWith(isSelected: selected);
+      }
+      return item;
+    }).toList();
+    state = state.copyWith(result: r.withUpdatedItems(items));
+  }
+
   void selectAll() => state = state.withAllSelected(true);
   void deselectAll() => state = state.withAllSelected(false);
 
