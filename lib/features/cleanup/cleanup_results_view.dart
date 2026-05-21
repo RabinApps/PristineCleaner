@@ -340,8 +340,8 @@ class _TopBar extends StatelessWidget {
               foregroundColor: Colors.white70,
               padding: const EdgeInsets.symmetric(horizontal: 8),
             ),
-            icon: const Icon(Icons.chevron_left_rounded, size: 20),
-            label: const Text('Back', style: TextStyle(fontSize: 13)),
+            icon: const Icon(Icons.refresh, size: 20),
+            label: const Text('Start Over', style: TextStyle(fontSize: 13)),
           ),
 
           const Spacer(),

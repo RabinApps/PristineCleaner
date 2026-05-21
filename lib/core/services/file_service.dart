@@ -180,7 +180,11 @@ class FileService {
         'user_logs': ['$home/Library/Logs'],
         'language_files': ['/System/Library/LinguisticData'],
         'system_logs': ['/Library/Logs'],
-        'broken_login_items': [],
+        'broken_login_items': [
+          '$home/Library/LaunchAgents',
+          '/Library/LaunchAgents',
+          '/Library/LaunchDaemons',
+        ],
       };
     } else if (Platform.isLinux) {
       return {
@@ -188,18 +192,30 @@ class FileService {
         'user_logs': ['/var/log'],
         'language_files': ['/usr/share/locale'],
         'system_logs': ['/tmp'],
-        'broken_login_items': [],
+        'broken_login_items': [
+          '$home/.config/autostart',
+          '/etc/xdg/autostart',
+          '$home/.config/systemd/user',
+          '/etc/systemd/user',
+          '/usr/lib/systemd/user',
+        ],
       };
     } else if (Platform.isWindows) {
       final tmp = Platform.environment['TEMP'] ?? '';
       final local = Platform.environment['LOCALAPPDATA'] ?? '';
+      final appData = Platform.environment['APPDATA'] ?? '';
+      final programData =
+          Platform.environment['ProgramData'] ?? r'C:\ProgramData';
       final windir = Platform.environment['WINDIR'] ?? r'C:\Windows';
       return {
         'user_cache': ['$local\\Temp'],
         'user_logs': [],
         'language_files': ['$windir\\System32'],
         'system_logs': [tmp],
-        'broken_login_items': [],
+        'broken_login_items': [
+          '$appData\\Microsoft\\Windows\\Start Menu\\Programs\\Startup',
+          '$programData\\Microsoft\\Windows\\Start Menu\\Programs\\Startup',
+        ],
       };
     }
     return {};
@@ -638,6 +654,10 @@ Future<Map<String, dynamic>> _scanCleanupCategorizedPayload(
     }
   }
 
+  if (Platform.isWindows && categories.containsKey('broken_login_items')) {
+    await _collectBrokenWindowsRegistryLoginItemsPayload(items);
+  }
+
   emitter.push(
     ScanPhase.scanning,
     totalFiles,
@@ -677,6 +697,31 @@ Future<void> _collectCategorizedFilesPayload(
             throw const ScanCancelledException();
           }
 
+          onTick?.call(1, stat.size);
+
+          if (categoryId == 'broken_login_items') {
+            final brokenReason = await _findBrokenLoginItemReason(entity.path);
+            if (brokenReason == null) {
+              continue;
+            }
+
+            out.add({
+              ..._fileItemToPayload(
+                FileItem(
+                  path: entity.path,
+                  name: _basename(entity.path),
+                  sizeBytes: stat.size,
+                  modified: stat.modified,
+                  isDirectory: false,
+                  isSelected: true,
+                  category: categoryId,
+                  group: brokenReason,
+                ),
+              ),
+            });
+            continue;
+          }
+
           // Determine group: first path segment within the root dir.
           String? group;
           if (entity.path.startsWith(rootPrefix)) {
@@ -685,7 +730,6 @@ Future<void> _collectCategorizedFilesPayload(
             group = firstSep == -1 ? rest : rest.substring(0, firstSep);
           }
 
-          onTick?.call(1, stat.size);
           out.add({
             ..._fileItemToPayload(
               FileItem(
@@ -1537,6 +1581,384 @@ Future<int> _dirSizePayload(String path) async {
     }
   } catch (_) {}
   return total;
+}
+
+Future<String?> _findBrokenMacLoginItemReason(String plistPath) async {
+  if (!plistPath.toLowerCase().endsWith('.plist')) {
+    return null;
+  }
+
+  String content;
+  try {
+    content = await File(plistPath).readAsString();
+  } catch (_) {
+    return 'Unreadable launch item plist';
+  }
+
+  final program = _plistStringValue(content, 'Program');
+  final programArg0 = _plistArrayFirstValue(content, 'ProgramArguments');
+  final command = (program ?? programArg0)?.trim();
+  if (command == null || command.isEmpty) {
+    return 'Missing Program or ProgramArguments';
+  }
+
+  final exists = await _macCommandExists(command);
+  if (!exists) {
+    return 'Missing executable target';
+  }
+
+  return null;
+}
+
+Future<String?> _findBrokenLoginItemReason(String path) async {
+  if (Platform.isMacOS) {
+    return _findBrokenMacLoginItemReason(path);
+  }
+  if (Platform.isLinux) {
+    return _findBrokenLinuxLoginItemReason(path);
+  }
+  if (Platform.isWindows) {
+    return _findBrokenWindowsStartupFileReason(path);
+  }
+  return null;
+}
+
+Future<String?> _findBrokenLinuxLoginItemReason(String path) async {
+  final lower = path.toLowerCase();
+  if (lower.endsWith('.desktop')) {
+    String content;
+    try {
+      content = await File(path).readAsString();
+    } catch (_) {
+      return 'Unreadable desktop entry';
+    }
+
+    final tryExec = _iniKeyValue(content, 'TryExec');
+    if (tryExec != null && tryExec.trim().isNotEmpty) {
+      final tryExecCommand = _stripLinuxCommandPrefixes(tryExec.trim());
+      if (!await _linuxCommandExists(tryExecCommand)) {
+        return 'Missing TryExec target';
+      }
+    }
+
+    final exec = _iniKeyValue(content, 'Exec');
+    if (exec == null || exec.trim().isEmpty) {
+      return 'Missing Exec target';
+    }
+
+    final normalizedExec = _stripLinuxCommandPrefixes(
+      _removeDesktopExecFieldCodes(exec.trim()),
+    );
+    if (!await _linuxCommandExists(normalizedExec)) {
+      return 'Missing executable target';
+    }
+    return null;
+  }
+
+  if (lower.endsWith('.service')) {
+    String content;
+    try {
+      content = await File(path).readAsString();
+    } catch (_) {
+      return 'Unreadable systemd service file';
+    }
+
+    final execStart = _iniKeyValue(content, 'ExecStart');
+    if (execStart == null || execStart.trim().isEmpty) {
+      return 'Missing ExecStart target';
+    }
+
+    var command = execStart.trim();
+    if (command.startsWith('-')) {
+      command = command.substring(1).trim();
+    }
+    if (command.startsWith('@')) {
+      command = command.substring(1).trim();
+    }
+
+    command = _stripLinuxCommandPrefixes(command);
+    if (!await _linuxCommandExists(command)) {
+      return 'Missing executable target';
+    }
+    return null;
+  }
+
+  return null;
+}
+
+Future<String?> _findBrokenWindowsStartupFileReason(String path) async {
+  final lower = path.toLowerCase();
+  if (lower.endsWith('.lnk')) {
+    try {
+      final stat = await File(path).stat();
+      if (stat.size == 0) {
+        return 'Invalid shortcut file';
+      }
+    } catch (_) {
+      return 'Unreadable shortcut file';
+    }
+  }
+  return null;
+}
+
+Future<void> _collectBrokenWindowsRegistryLoginItemsPayload(
+  List<Map<String, dynamic>> out,
+) async {
+  if (!Platform.isWindows) return;
+
+  const runKeys = [
+    r'HKCU\Software\Microsoft\Windows\CurrentVersion\Run',
+    r'HKCU\Software\Microsoft\Windows\CurrentVersion\RunOnce',
+    r'HKLM\Software\Microsoft\Windows\CurrentVersion\Run',
+    r'HKLM\Software\Microsoft\Windows\CurrentVersion\RunOnce',
+    r'HKLM\Software\WOW6432Node\Microsoft\Windows\CurrentVersion\Run',
+  ];
+
+  final now = DateTime.now();
+  for (final key in runKeys) {
+    try {
+      final result = await Process.run('reg', ['query', key]);
+      if (result.exitCode != 0) continue;
+
+      final lines = (result.stdout as String).split(RegExp(r'\r?\n'));
+      for (final line in lines) {
+        final trimmed = line.trim();
+        if (trimmed.isEmpty || trimmed.startsWith('HKEY_')) continue;
+
+        final cols = trimmed.split(RegExp(r'\s{2,}'));
+        if (cols.length < 3) continue;
+
+        final valueName = cols[0].trim();
+        final valueType = cols[1].trim().toUpperCase();
+        final valueData = cols.sublist(2).join(' ').trim();
+        if (valueData.isEmpty) continue;
+        if (valueType != 'REG_SZ' && valueType != 'REG_EXPAND_SZ') continue;
+
+        final reason = await _findBrokenWindowsCommandReason(valueData);
+        if (reason == null) continue;
+
+        out.add({
+          ..._fileItemToPayload(
+            FileItem(
+              path: 'Registry: $key\\$valueName',
+              name: '$valueName ($key)',
+              sizeBytes: 0,
+              modified: now,
+              isDirectory: false,
+              isSelected: true,
+              category: 'broken_login_items',
+              group: reason,
+            ),
+          ),
+        });
+      }
+    } catch (_) {}
+  }
+}
+
+Future<String?> _findBrokenWindowsCommandReason(String rawCommand) async {
+  final expanded = _expandWindowsEnvVars(rawCommand.trim());
+  final executable = _extractExecutableToken(expanded);
+  if (executable == null || executable.isEmpty) {
+    return 'Missing command target';
+  }
+
+  final exists = await _windowsCommandExists(executable);
+  if (!exists) {
+    return 'Missing executable target';
+  }
+  return null;
+}
+
+String? _iniKeyValue(String content, String key) {
+  final match = RegExp(
+    '^\\s*${RegExp.escape(key)}\\s*=\\s*(.+)\$',
+    multiLine: true,
+    caseSensitive: false,
+  ).firstMatch(content);
+  return match?.group(1)?.trim();
+}
+
+String _removeDesktopExecFieldCodes(String value) {
+  return value.replaceAll(RegExp(r'%[fFuUdDnNickvm]'), '').trim();
+}
+
+String _stripLinuxCommandPrefixes(String command) {
+  var work = command.trim();
+  if (work.startsWith('/usr/bin/env ')) {
+    work = work.substring('/usr/bin/env '.length).trim();
+  }
+
+  while (true) {
+    final token = _extractExecutableToken(work);
+    if (token == null) return work;
+    final isEnvAssignment = RegExp(r'^[A-Za-z_][A-Za-z0-9_]*=').hasMatch(token);
+    if (!isEnvAssignment) return work;
+
+    final idx = work.indexOf(token);
+    if (idx == -1) return work;
+    work = work.substring(idx + token.length).trimLeft();
+  }
+}
+
+String? _extractExecutableToken(String rawCommand) {
+  final s = rawCommand.trim();
+  if (s.isEmpty) return null;
+  if (s.startsWith('"')) {
+    final end = s.indexOf('"', 1);
+    if (end > 1) return s.substring(1, end).trim();
+  }
+
+  final match = RegExp(r'^([^\s]+)').firstMatch(s);
+  return match?.group(1)?.trim();
+}
+
+Future<bool> _linuxCommandExists(String rawCommand) async {
+  final token = _extractExecutableToken(rawCommand);
+  if (token == null || token.isEmpty) return false;
+
+  if (token.startsWith('/')) {
+    return await File(token).exists() || await Directory(token).exists();
+  }
+
+  if (token.contains('/')) {
+    return await File(token).exists() || await Directory(token).exists();
+  }
+
+  final candidates = <String>{};
+  final pathEnv = Platform.environment['PATH'] ?? '';
+  for (final part in pathEnv.split(':')) {
+    final dir = part.trim();
+    if (dir.isNotEmpty) candidates.add(dir);
+  }
+  candidates.addAll(const ['/usr/bin', '/bin', '/usr/sbin', '/sbin']);
+
+  for (final dir in candidates) {
+    final fullPath = '$dir/$token';
+    if (await File(fullPath).exists()) {
+      return true;
+    }
+  }
+  return false;
+}
+
+String _expandWindowsEnvVars(String value) {
+  return value.replaceAllMapped(RegExp(r'%([^%]+)%'), (match) {
+    final key = match.group(1) ?? '';
+    return Platform.environment[key] ?? match.group(0)!;
+  });
+}
+
+Future<bool> _windowsCommandExists(String commandToken) async {
+  final token = commandToken.replaceAll('"', '').trim();
+  if (token.isEmpty) return false;
+
+  final pathExtRaw = Platform.environment['PATHEXT'] ?? '.EXE;.CMD;.BAT;.COM';
+  final pathExt = pathExtRaw
+      .split(';')
+      .map((e) => e.trim().toLowerCase())
+      .where((e) => e.isNotEmpty)
+      .toList(growable: false);
+
+  final hasExt =
+      token.contains('.') && RegExp(r'\.[a-zA-Z0-9]+$').hasMatch(token);
+
+  final isAbsolute =
+      RegExp(r'^[a-zA-Z]:[\\/]').hasMatch(token) || token.startsWith('\\\\');
+  final hasSeparator = token.contains('\\') || token.contains('/');
+
+  Future<bool> fileExistsWithPathext(String basePath) async {
+    if (await File(basePath).exists() || await Directory(basePath).exists()) {
+      return true;
+    }
+    if (hasExt) return false;
+    for (final ext in pathExt) {
+      if (await File('$basePath$ext').exists()) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  if (isAbsolute || hasSeparator) {
+    return fileExistsWithPathext(token);
+  }
+
+  final searchDirs = <String>{};
+  final pathEnv = Platform.environment['PATH'] ?? '';
+  for (final part in pathEnv.split(';')) {
+    final dir = part.trim();
+    if (dir.isNotEmpty) searchDirs.add(dir);
+  }
+
+  final windir = Platform.environment['WINDIR'] ?? r'C:\Windows';
+  searchDirs.add('$windir\\System32');
+  searchDirs.add(windir);
+
+  for (final dir in searchDirs) {
+    final basePath = '$dir\\$token';
+    if (await fileExistsWithPathext(basePath)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+String? _plistStringValue(String plistXml, String key) {
+  final match = RegExp(
+    '<key>\\s*${RegExp.escape(key)}\\s*</key>\\s*<string>([^<]+)</string>',
+    caseSensitive: false,
+    dotAll: true,
+  ).firstMatch(plistXml);
+  return match?.group(1)?.trim();
+}
+
+String? _plistArrayFirstValue(String plistXml, String key) {
+  final arrayMatch = RegExp(
+    '<key>\\s*${RegExp.escape(key)}\\s*</key>\\s*<array>(.*?)</array>',
+    caseSensitive: false,
+    dotAll: true,
+  ).firstMatch(plistXml);
+  final arrayBody = arrayMatch?.group(1);
+  if (arrayBody == null) return null;
+
+  final firstStringMatch = RegExp(
+    '<string>([^<]+)</string>',
+    caseSensitive: false,
+    dotAll: true,
+  ).firstMatch(arrayBody);
+  return firstStringMatch?.group(1)?.trim();
+}
+
+Future<bool> _macCommandExists(String command) async {
+  if (command.startsWith('/')) {
+    return await File(command).exists() || await Directory(command).exists();
+  }
+
+  final candidates = <String>{};
+  final pathEnv = Platform.environment['PATH'] ?? '';
+  for (final part in pathEnv.split(':')) {
+    if (part.trim().isNotEmpty) {
+      candidates.add(part.trim());
+    }
+  }
+
+  candidates.addAll(const [
+    '/usr/bin',
+    '/bin',
+    '/usr/sbin',
+    '/sbin',
+    '/usr/local/bin',
+    '/opt/homebrew/bin',
+  ]);
+
+  for (final dir in candidates) {
+    final fullPath = '$dir/$command';
+    if (await File(fullPath).exists()) {
+      return true;
+    }
+  }
+  return false;
 }
 
 Future<String?> _resolveApplicationIconPath(String appPath) async {
