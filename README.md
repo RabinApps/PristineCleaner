@@ -108,8 +108,11 @@ lib/
 - Flutter (desktop)
 - Dart
 - `flutter_riverpod` for state management
+- `go_router` for navigation/routing
 - `window_manager` for custom desktop window behavior
-- `file_picker`, `path_provider`, `intl`
+- `file_picker`, `path_provider`, `intl`, `image`
+- Fastforge (`distribute_options.yaml`) for desktop packaging
+- GitHub Actions + Cloudflare R2 for release artifact publishing
 
 ## Requirements
 
@@ -149,6 +152,38 @@ flutter build windows
 flutter build linux
 ```
 
+## Release and Distribution
+
+Desktop release packaging is configured in `distribute_options.yaml` and automated by `.github/workflows/release-desktop.yml`.
+
+### CI release flow
+
+- Triggered by pushing tags that match `v*`.
+- Can also run manually via `workflow_dispatch` with an optional `release_tag` input.
+- Builds desktop artifacts with Fastforge for:
+  - macOS: DMG
+  - Windows: EXE and MSIX
+  - Linux x86_64: DEB and RPM
+- Uploads generated files from `dist/` to Cloudflare R2 using `ryand56/r2-upload-action@v1.4`.
+
+### Required GitHub repository secrets
+
+- `R2_ACCOUNT_ID`
+- `R2_ACCESS_KEY_ID`
+- `R2_SECRET_ACCESS_KEY`
+- `R2_BUCKET`
+
+### Local packaging command (without upload)
+
+```bash
+dart pub global activate fastforge 0.6.6
+fastforge release --name desktop-macos --skip-clean
+fastforge release --name desktop-windows --skip-clean
+fastforge release --name desktop-linux-x64 --skip-clean
+```
+
+Artifacts are written to `dist/`.
+
 ## Behavior and Safety Notes
 
 - Clean actions use OS-native trash flows when possible:
@@ -160,10 +195,11 @@ flutter build linux
 
 ## Current Limitations
 
-- No Android/iOS targets in this workspace.
 - No automated integration tests for scan/clean flows yet.
-- Some sections are intentionally placeholders (`My Tools`, `My Activity`).
+- Some sections are intentionally placeholders (`My Activity`).
 - Very large recursive scans can be time-consuming on slow disks.
+- CI release matrix currently builds Linux `x86_64` artifacts only (ARM64 definitions exist in `distribute_options.yaml` but are not included in the workflow matrix).
+- Need to code sign macos in the future https://federicoterzi.com/blog/automatic-code-signing-and-notarization-for-macos-apps-using-github-actions/
 
 ## Configuration Notes
 
@@ -180,7 +216,3 @@ flutter doctor
 flutter analyze
 flutter test
 ```
-
-## License
-
-No license file is currently included in this repository.
