@@ -8,6 +8,7 @@ class SectionLandingLayout extends StatelessWidget {
   final SectionTheme theme;
   final OrbShape orbShape;
   final VoidCallback? onScan;
+  final VoidCallback? onStop;
   final bool isScanning;
   final Widget? extraContent;
   final double? progressPercent;
@@ -18,6 +19,7 @@ class SectionLandingLayout extends StatelessWidget {
     this.progressPercent,
     this.orbShape = OrbShape.circle,
     this.onScan,
+    this.onStop,
     this.isScanning = false,
     this.extraContent,
   });
@@ -121,9 +123,58 @@ class SectionLandingLayout extends StatelessWidget {
             right: 0,
             child: Center(
               child: ScanButton(
-                color: theme.accentColor,
-                isLoading: isScanning,
-                onPressed: isScanning ? null : onScan,
+                color: isScanning ? Colors.redAccent : theme.accentColor,
+                label: isScanning ? 'Stop' : 'Scan',
+                isLoading: false,
+                onPressed: isScanning
+                    ? (onStop == null
+                          ? null
+                          : () async {
+                              final shouldStop =
+                                  await showDialog<bool>(
+                                    context: context,
+                                    builder: (dialogContext) {
+                                      return AlertDialog(
+                                        backgroundColor: const Color(
+                                          0xFF191919,
+                                        ),
+                                        title: const Text(
+                                          'Stop scanning?',
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                        content: const Text(
+                                          'This will cancel the current scan and discard any partial progress.',
+                                          style: TextStyle(
+                                            color: Colors.white70,
+                                          ),
+                                        ),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () => Navigator.of(
+                                              dialogContext,
+                                            ).pop(false),
+                                            child: const Text('Keep scanning'),
+                                          ),
+                                          ElevatedButton(
+                                            onPressed: () => Navigator.of(
+                                              dialogContext,
+                                            ).pop(true),
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: Colors.redAccent,
+                                              foregroundColor: Colors.white,
+                                            ),
+                                            child: const Text('Stop'),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  ) ??
+                                  false;
+                              if (shouldStop) {
+                                onStop?.call();
+                              }
+                            })
+                    : onScan,
               ),
             ),
           ),

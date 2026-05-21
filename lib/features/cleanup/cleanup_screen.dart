@@ -38,6 +38,7 @@ class CleanupScreen extends ConsumerWidget {
     return SectionLandingLayout(
       theme: theme,
       onScan: notifier.scan,
+      onStop: notifier.stop,
       isScanning: vm.isScanning,
       progressPercent: vm.progressPercent,
       extraContent: vm.error != null

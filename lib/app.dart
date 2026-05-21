@@ -12,7 +12,13 @@ class PristineCleanerApp extends ConsumerWidget {
     return MaterialApp(
       title: 'PristineCleaner',
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.darkTheme,
+      theme: AppTheme.darkTheme.copyWith(
+        scaffoldBackgroundColor: const Color(0xFF111111),
+        colorScheme: AppTheme.darkTheme.colorScheme.copyWith(
+          primary: const Color(0xFF1E88E5),
+          secondary: const Color(0xFF90CAF9),
+        ),
+      ),
       home: const ShellScreen(),
     );
   }

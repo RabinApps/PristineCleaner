@@ -58,6 +58,8 @@ class MyClutterNotifier extends Notifier<MyClutterState> {
           ? await svc.scanLargeFiles(home, onProgress: _onProgress)
           : await svc.scanDownloads(onProgress: _onProgress);
       state = state.copyWith(vm: ScanViewModel(result: result));
+    } on ScanCancelledException {
+      state = state.copyWith(vm: const ScanViewModel());
     } catch (e) {
       state = state.copyWith(vm: ScanViewModel(error: e.toString()));
     }
@@ -88,6 +90,8 @@ class MyClutterNotifier extends Notifier<MyClutterState> {
       state = state.copyWith(vm: state.vm.withAllSelected(true));
   void deselectAll() =>
       state = state.copyWith(vm: state.vm.withAllSelected(false));
+
+  void stop() => ref.read(fileServiceProvider).cancelActiveScan();
 
   Future<void> clean() async {
     final selected = state.vm.result?.selectedItems ?? [];

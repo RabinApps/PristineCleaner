@@ -15,12 +15,20 @@ class _ScanTaskMessage {
   final String task;
   final Map<String, dynamic> args;
   final SendPort sendPort;
+  final SendPort controlPort;
 
   const _ScanTaskMessage({
     required this.task,
     required this.args,
     required this.sendPort,
+    required this.controlPort,
   });
+}
+
+class _ScanControlMessage {
+  final String type;
+
+  const _ScanControlMessage(this.type);
 }
 
 class _ProgressEmitter {
@@ -58,7 +66,27 @@ class _ProgressEmitter {
   }
 }
 
+class ScanCancelledException implements Exception {
+  const ScanCancelledException();
+
+  @override
+  String toString() => 'Scan cancelled';
+}
+
 class FileService {
+  Isolate? _activeScanIsolate;
+  Completer<Map<String, dynamic>>? _activeScanCompleter;
+  SendPort? _activeScanControlPort;
+
+  void cancelActiveScan() {
+    _activeScanControlPort?.send(const _ScanControlMessage('cancel'));
+    final completer = _activeScanCompleter;
+    if (completer != null && !completer.isCompleted) {
+      completer.completeError(const ScanCancelledException());
+    }
+    _activeScanIsolate?.kill(priority: Isolate.immediate);
+  }
+
   // ─── Disk Info ────────────────────────────────────────────────────────────
 
   Future<DiskInfo> getDiskInfo() async {
@@ -217,19 +245,35 @@ class FileService {
     ScanProgressCallback? onProgress,
   }) async {
     final receivePort = ReceivePort();
+    final controlPort = ReceivePort();
     final errorPort = ReceivePort();
     final completer = Completer<Map<String, dynamic>>();
     StreamSubscription<dynamic>? dataSub;
     StreamSubscription<dynamic>? errSub;
 
+    _activeScanCompleter = completer;
+
+    controlPort.listen((dynamic message) {
+      if (message is SendPort) {
+        _activeScanControlPort = message;
+      }
+    });
+
     final isolate = await Isolate.spawn<_ScanTaskMessage>(
       _scanTaskIsolateEntry,
-      _ScanTaskMessage(task: task, args: args, sendPort: receivePort.sendPort),
+      _ScanTaskMessage(
+        task: task,
+        args: args,
+        sendPort: receivePort.sendPort,
+        controlPort: controlPort.sendPort,
+      ),
       onError: errorPort.sendPort,
       errorsAreFatal: true,
     );
+    _activeScanIsolate = isolate;
 
     dataSub = receivePort.listen((dynamic message) {
+      if (completer.isCompleted) return;
       if (message is! Map) return;
       final type = message['type'] as String?;
       if (type == 'progress') {
@@ -255,16 +299,24 @@ class FileService {
     });
 
     errSub = errorPort.listen((dynamic message) {
-      completer.completeError(Exception('Isolate error: $message'));
+      if (!completer.isCompleted) {
+        completer.completeError(Exception('Isolate error: $message'));
+      }
     });
 
     try {
       return await completer.future;
     } finally {
       await dataSub.cancel();
+      controlPort.close();
       await errSub.cancel();
       receivePort.close();
       errorPort.close();
+      if (identical(_activeScanCompleter, completer)) {
+        _activeScanCompleter = null;
+        _activeScanIsolate = null;
+        _activeScanControlPort = null;
+      }
       isolate.kill(priority: Isolate.immediate);
     }
   }
@@ -277,8 +329,19 @@ ScanPhase _scanPhaseFromName(String value) {
 
 void _scanTaskIsolateEntry(_ScanTaskMessage message) async {
   final send = message.sendPort;
+  var cancelled = false;
+
+  final controlSub = ReceivePort();
+  message.controlPort.send(controlSub.sendPort);
+  controlSub.listen((dynamic controlMessage) {
+    if (controlMessage is _ScanControlMessage &&
+        controlMessage.type == 'cancel') {
+      cancelled = true;
+    }
+  });
 
   void emitProgress(ScanProgress progress) {
+    if (cancelled) return;
     send.send({
       'type': 'progress',
       'phase': progress.phase.name,
@@ -295,32 +358,45 @@ void _scanTaskIsolateEntry(_ScanTaskMessage message) async {
 
     if (task == 'scanCleanup') {
       final dirs = (args['dirs'] as List<dynamic>).cast<String>();
-      payload = await _scanCleanupPayload(dirs, emitProgress);
+      payload = await _scanCleanupPayload(dirs, emitProgress, () => cancelled);
     } else if (task == 'scanLargeFiles') {
       payload = await _scanLargeFilesPayload(
         args['rootPath'] as String,
         args['minSizeBytes'] as int,
         emitProgress,
+        () => cancelled,
       );
     } else if (task == 'scanDownloads') {
       payload = await _scanDownloadsPayload(
         args['downloads'] as String,
         emitProgress,
+        () => cancelled,
       );
     } else if (task == 'topFolders') {
       payload = await _topFoldersPayload(
         args['rootPath'] as String,
         args['limit'] as int,
         emitProgress,
+        () => cancelled,
       );
     } else if (task == 'scanApplications') {
-      payload = await _scanApplicationsPayload(emitProgress);
+      payload = await _scanApplicationsPayload(emitProgress, () => cancelled);
     } else {
       throw StateError('Unknown scan task: $task');
     }
 
+    if (cancelled) {
+      throw const ScanCancelledException();
+    }
+
     send.send({'type': 'result', 'payload': payload});
+    controlSub.close();
   } catch (e) {
+    controlSub.close();
+    if (cancelled || e is ScanCancelledException) {
+      send.send({'type': 'error', 'message': 'Scan cancelled'});
+      return;
+    }
     send.send({'type': 'error', 'message': e.toString()});
   }
 }
@@ -340,16 +416,21 @@ ScanResult _scanResultFromPayload(Map<String, dynamic> payload) {
 Future<Map<String, dynamic>> _scanCleanupPayload(
   List<String> dirs,
   void Function(ScanProgress progress) onProgress,
+  bool Function() isCancelled,
 ) async {
   final sw = Stopwatch()..start();
   final items = <Map<String, dynamic>>[];
   int processed = 0;
   int processedBytes = 0;
 
+  if (isCancelled()) throw const ScanCancelledException();
+
   onProgress(
     const ScanProgress(phase: ScanPhase.counting, processed: 0, total: 0),
   );
+  if (isCancelled()) throw const ScanCancelledException();
   final totalFiles = await _countFilesAcrossDirs(dirs, recursive: true);
+  if (isCancelled()) throw const ScanCancelledException();
   final emitter = _ProgressEmitter(emit: onProgress);
   emitter.push(
     ScanPhase.scanning,
@@ -364,6 +445,7 @@ Future<Map<String, dynamic>> _scanCleanupPayload(
       dir,
       items,
       selectAll: true,
+      isCancelled: isCancelled,
       onTick: (deltaItems, deltaBytes) {
         processed += deltaItems;
         processedBytes += deltaBytes;
@@ -397,16 +479,21 @@ Future<Map<String, dynamic>> _scanLargeFilesPayload(
   String rootPath,
   int minSizeBytes,
   void Function(ScanProgress progress) onProgress,
+  bool Function() isCancelled,
 ) async {
   final sw = Stopwatch()..start();
   final items = <Map<String, dynamic>>[];
   int processed = 0;
   int processedBytes = 0;
 
+  if (isCancelled()) throw const ScanCancelledException();
+
   onProgress(
     const ScanProgress(phase: ScanPhase.counting, processed: 0, total: 0),
   );
+  if (isCancelled()) throw const ScanCancelledException();
   final totalFiles = await _countFilesInDir(rootPath, recursive: true);
+  if (isCancelled()) throw const ScanCancelledException();
   final emitter = _ProgressEmitter(emit: onProgress);
   emitter.push(
     ScanPhase.scanning,
@@ -420,9 +507,11 @@ Future<Map<String, dynamic>> _scanLargeFilesPayload(
     await for (final entity in Directory(
       rootPath,
     ).list(recursive: true, followLinks: false)) {
+      if (isCancelled()) throw const ScanCancelledException();
       if (entity is File) {
         try {
           final stat = await entity.stat();
+          if (isCancelled()) throw const ScanCancelledException();
           processed++;
           processedBytes += stat.size;
           emitter.push(
@@ -472,16 +561,21 @@ Future<Map<String, dynamic>> _scanLargeFilesPayload(
 Future<Map<String, dynamic>> _scanDownloadsPayload(
   String downloads,
   void Function(ScanProgress progress) onProgress,
+  bool Function() isCancelled,
 ) async {
   final sw = Stopwatch()..start();
   final items = <Map<String, dynamic>>[];
   int processed = 0;
   int processedBytes = 0;
 
+  if (isCancelled()) throw const ScanCancelledException();
+
   onProgress(
     const ScanProgress(phase: ScanPhase.counting, processed: 0, total: 0),
   );
+  if (isCancelled()) throw const ScanCancelledException();
   final totalFiles = await _countFilesInDir(downloads, recursive: false);
+  if (isCancelled()) throw const ScanCancelledException();
   final emitter = _ProgressEmitter(emit: onProgress);
   emitter.push(
     ScanPhase.scanning,
@@ -495,6 +589,7 @@ Future<Map<String, dynamic>> _scanDownloadsPayload(
     downloads,
     items,
     recursive: false,
+    isCancelled: isCancelled,
     onTick: (deltaItems, deltaBytes) {
       processed += deltaItems;
       processedBytes += deltaBytes;
@@ -528,12 +623,16 @@ Future<Map<String, dynamic>> _topFoldersPayload(
   String rootPath,
   int limit,
   void Function(ScanProgress progress) onProgress,
+  bool Function() isCancelled,
 ) async {
+  if (isCancelled()) throw const ScanCancelledException();
   onProgress(
     const ScanProgress(phase: ScanPhase.counting, processed: 0, total: 0),
   );
+  if (isCancelled()) throw const ScanCancelledException();
   final items = <Map<String, dynamic>>[];
   final candidates = await _collectTopFolderCandidates(rootPath);
+  if (isCancelled()) throw const ScanCancelledException();
   final emitter = _ProgressEmitter(emit: onProgress);
   emitter.push(ScanPhase.scanning, 0, candidates.length, force: true);
   int processed = 0;
@@ -541,9 +640,11 @@ Future<Map<String, dynamic>> _topFoldersPayload(
 
   try {
     for (final entity in candidates) {
+      if (isCancelled()) throw const ScanCancelledException();
       try {
         final name = _basename(entity.path);
         final size = await _dirSizePayload(entity.path);
+        if (isCancelled()) throw const ScanCancelledException();
         final stat = await entity.stat();
         processed++;
         processedBytes += size;
@@ -588,14 +689,19 @@ Future<Map<String, dynamic>> _topFoldersPayload(
 
 Future<Map<String, dynamic>> _scanApplicationsPayload(
   void Function(ScanProgress progress) onProgress,
+  bool Function() isCancelled,
 ) async {
   final sw = Stopwatch()..start();
   final items = <Map<String, dynamic>>[];
 
+  if (isCancelled()) throw const ScanCancelledException();
+
   onProgress(
     const ScanProgress(phase: ScanPhase.counting, processed: 0, total: 0),
   );
+  if (isCancelled()) throw const ScanCancelledException();
   final candidates = await _collectApplicationCandidates();
+  if (isCancelled()) throw const ScanCancelledException();
   final emitter = _ProgressEmitter(emit: onProgress);
   emitter.push(ScanPhase.scanning, 0, candidates.length, force: true);
 
@@ -603,8 +709,10 @@ Future<Map<String, dynamic>> _scanApplicationsPayload(
   int processedBytes = 0;
 
   for (final dir in candidates) {
+    if (isCancelled()) throw const ScanCancelledException();
     try {
       final size = await _dirSizePayload(dir.path);
+      if (isCancelled()) throw const ScanCancelledException();
       final stat = await dir.stat();
       final rawName = _basename(dir.path);
       final name = Platform.isMacOS ? rawName.replaceAll('.app', '') : rawName;
@@ -655,15 +763,19 @@ Future<void> _collectFilesPayload(
   List<Map<String, dynamic>> out, {
   bool recursive = true,
   bool selectAll = false,
+  bool Function()? isCancelled,
   void Function(int deltaItems, int deltaBytes)? onTick,
 }) async {
   try {
     await for (final entity in Directory(
       dirPath,
     ).list(recursive: recursive, followLinks: false)) {
+      if (isCancelled?.call() ?? false) throw const ScanCancelledException();
       if (entity is File) {
         try {
           final stat = await entity.stat();
+          if (isCancelled?.call() ?? false)
+            throw const ScanCancelledException();
           onTick?.call(1, stat.size);
           out.add(
             _fileItemToPayload(

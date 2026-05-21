@@ -171,9 +171,50 @@ class SpaceLensScreen extends ConsumerWidget {
             right: 0,
             child: Center(
               child: ScanButton(
-                color: theme.accentColor,
-                isLoading: vm.isScanning,
-                onPressed: vm.isScanning ? null : notifier.scan,
+                color: vm.isScanning ? Colors.redAccent : theme.accentColor,
+                label: vm.isScanning ? 'Stop' : 'Scan',
+                isLoading: false,
+                onPressed: vm.isScanning
+                    ? () async {
+                        final shouldStop =
+                            await showDialog<bool>(
+                              context: context,
+                              builder: (dialogContext) {
+                                return AlertDialog(
+                                  backgroundColor: const Color(0xFF191919),
+                                  title: const Text(
+                                    'Stop scanning?',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  content: const Text(
+                                    'This will cancel the current scan and discard any partial progress.',
+                                    style: TextStyle(color: Colors.white70),
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () => Navigator.of(
+                                        dialogContext,
+                                      ).pop(false),
+                                      child: const Text('Keep scanning'),
+                                    ),
+                                    ElevatedButton(
+                                      onPressed: () =>
+                                          Navigator.of(dialogContext).pop(true),
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.redAccent,
+                                      ),
+                                      child: const Text('Stop'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            ) ??
+                            false;
+                        if (shouldStop) {
+                          notifier.stop();
+                        }
+                      }
+                    : notifier.scan,
               ),
             ),
           ),

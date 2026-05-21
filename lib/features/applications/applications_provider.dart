@@ -25,6 +25,8 @@ class ApplicationsNotifier extends Notifier<ScanViewModel> {
           .read(fileServiceProvider)
           .scanApplications(onProgress: _onProgress);
       state = ScanViewModel(result: result);
+    } on ScanCancelledException {
+      state = const ScanViewModel();
     } catch (e) {
       state = ScanViewModel(error: e.toString());
     }
@@ -45,6 +47,8 @@ class ApplicationsNotifier extends Notifier<ScanViewModel> {
   void toggleItem(int index) => state = state.withToggled(index);
   void selectAll() => state = state.withAllSelected(true);
   void deselectAll() => state = state.withAllSelected(false);
+
+  void stop() => ref.read(fileServiceProvider).cancelActiveScan();
 
   Future<void> clean() async {
     final selected = state.result?.selectedItems ?? [];
