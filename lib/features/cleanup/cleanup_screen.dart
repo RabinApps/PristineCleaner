@@ -1,10 +1,15 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/services/trash_service.dart';
 import '../../core/theme/section_themes.dart';
+import '../../shared/removal/removal_flow.dart';
 import '../../shared/widgets/section_landing_layout.dart';
 import 'cleanup_provider.dart';
 import 'cleanup_results_view.dart';
+import '../shared/scan_view_model.dart';
 
 class CleanupScreen extends ConsumerWidget {
   const CleanupScreen({super.key});
@@ -31,7 +36,9 @@ class CleanupScreen extends ConsumerWidget {
         onToggleCategory: notifier.toggleCategory,
         onSelectAll: notifier.selectAll,
         onDeselectAll: notifier.deselectAll,
-        onClean: notifier.clean,
+        onClean: () {
+          unawaited(_handleClean(context, ref, vm, notifier, theme));
+        },
         onRescan: notifier.scan,
       );
     }
@@ -50,6 +57,27 @@ class CleanupScreen extends ConsumerWidget {
             )
           : null,
     );
+  }
+
+  Future<void> _handleClean(
+    BuildContext context,
+    WidgetRef ref,
+    ScanViewModel vm,
+    CleanupNotifier notifier,
+    SectionTheme theme,
+  ) async {
+    final selected = vm.result?.selectedItems ?? const [];
+    if (selected.isEmpty) return;
+
+    final outcome = await runTrashRemovalFlow(
+      context: context,
+      title: theme.title,
+      accentColor: theme.accentColor,
+      selectedItems: selected,
+      trashService: ref.read(trashServiceProvider),
+    );
+    if (outcome == null) return;
+    notifier.applyRemovalOutcome(outcome);
   }
 }
 

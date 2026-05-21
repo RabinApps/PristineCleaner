@@ -1,9 +1,15 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/models/scan_result.dart';
+import '../../core/services/my_tools_service.dart';
+import '../../core/services/trash_service.dart';
 import '../../core/theme/section_themes.dart';
+import '../../shared/removal/removal_flow.dart';
+import '../../shared/widgets/removal_screen.dart';
 import '../../shared/widgets/scan_results_view.dart';
 import 'models/my_tool.dart';
 import 'my_tools_provider.dart';
@@ -65,7 +71,16 @@ class _MyToolsScreenState extends ConsumerState<MyToolsScreen> {
         onToggleItem: notifier.toggleActiveDetailItem,
         onSelectAll: notifier.selectAllActiveDetail,
         onDeselectAll: notifier.deselectAllActiveDetail,
-        onClean: notifier.cleanActiveDetail,
+        onClean: () {
+          unawaited(
+            _handleDetailClean(
+              context: context,
+              tool: activeTool,
+              result: activeResult,
+              notifier: notifier,
+            ),
+          );
+        },
         onRescan: notifier.rescanActiveDetail,
       );
     }
@@ -157,6 +172,50 @@ class _MyToolsScreenState extends ConsumerState<MyToolsScreen> {
         ],
       ),
     );
+  }
+
+  Future<void> _handleDetailClean({
+    required BuildContext context,
+    required MyTool tool,
+    required ScanResult result,
+    required MyToolsNotifier notifier,
+  }) async {
+    final selected = result.selectedItems;
+    if (selected.isEmpty) {
+      notifier.clearNotice();
+      return;
+    }
+
+    if (tool.scanType == MyToolScanType.timeMachineSnapshots) {
+      final service = ref.read(myToolsServiceProvider);
+      final outcome = await showRemovalScreen(
+        context: context,
+        title: tool.title,
+        accentColor: tool.accentColor,
+        selectedItems: selected,
+        runRemoval: (token, onProgress) {
+          return service.deleteTimeMachineSnapshotsTracked(
+            selected,
+            cancellationToken: token,
+            onProgress: onProgress,
+          );
+        },
+      );
+      if (outcome == null) return;
+      notifier.applyActiveDetailRemovalOutcome(outcome: outcome);
+      return;
+    }
+
+    final outcome = await runTrashRemovalFlow(
+      context: context,
+      title: tool.title,
+      accentColor: tool.accentColor,
+      selectedItems: selected,
+      trashService: ref.read(trashServiceProvider),
+      permanent: tool.scanType == MyToolScanType.trashBins,
+    );
+    if (outcome == null) return;
+    notifier.applyActiveDetailRemovalOutcome(outcome: outcome);
   }
 
   MyTool? _findActiveTool(MyToolsState state) {

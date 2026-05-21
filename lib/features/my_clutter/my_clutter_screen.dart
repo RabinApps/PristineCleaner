@@ -1,9 +1,13 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pristine_cleaner/features/my_clutter/widgets/done_screen.dart';
 
+import '../../core/services/trash_service.dart';
 import '../../core/theme/section_themes.dart';
+import '../../shared/removal/removal_flow.dart';
 import '../../shared/widgets/section_landing_layout.dart';
 import '../../shared/widgets/glossy_icon_widget.dart';
 import '../../shared/widgets/project_directory_selector.dart';
@@ -40,7 +44,9 @@ class _MyClutterScreenState extends ConsumerState<MyClutterScreen> {
         onViewChanged: (next) => setState(() => _view = next),
         onToggleOriginalItem: notifier.toggleItem,
         onSetSelectionForIndexes: notifier.setSelectionForIndexes,
-        onClean: notifier.clean,
+        onClean: () {
+          unawaited(_handleClean(context));
+        },
         onRescan: () {
           setState(() => _view = MyClutterView.dashboard);
           notifier.scan();
@@ -96,6 +102,22 @@ class _MyClutterScreenState extends ConsumerState<MyClutterScreen> {
         ],
       ),
     );
+  }
+
+  Future<void> _handleClean(BuildContext context) async {
+    final vm = ref.read(myClutterProvider).vm;
+    final selected = vm.result?.selectedItems ?? const [];
+    if (selected.isEmpty) return;
+
+    final outcome = await runTrashRemovalFlow(
+      context: context,
+      title: SectionThemes.myClutter.title,
+      accentColor: SectionThemes.myClutter.accentColor,
+      selectedItems: selected,
+      trashService: ref.read(trashServiceProvider),
+    );
+    if (outcome == null) return;
+    ref.read(myClutterProvider.notifier).applyRemovalOutcome(outcome);
   }
 }
 

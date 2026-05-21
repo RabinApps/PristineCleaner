@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/models/file_item.dart';
+import '../../core/models/removal_models.dart';
 import '../../core/models/scan_result.dart';
 import '../../core/services/file_service.dart';
 import '../../core/services/my_tools_service.dart';
@@ -274,6 +275,49 @@ class MyToolsNotifier extends Notifier<MyToolsState> {
         lastNotice: _prettyError(e),
       );
     }
+  }
+
+  void applyActiveDetailRemovalOutcome({required RemovalOutcome outcome}) {
+    final result = state.activeDetailResult;
+    final toolId = state.activeDetailToolId;
+    if (result == null || toolId == null) return;
+
+    final deletedPaths = outcome.deletedItems.map((item) => item.path).toSet();
+    final remaining = result.items
+        .where((item) => !deletedPaths.contains(item.path))
+        .toList(growable: false);
+    final totalBytes = remaining.fold<int>(
+      0,
+      (sum, item) => sum + item.sizeBytes,
+    );
+
+    final updatedResult = ScanResult(
+      items: remaining,
+      totalBytes: totalBytes,
+      scanDuration: result.scanDuration,
+    );
+    final updatedSummary = ToolScanSummary(
+      itemCount: remaining.length,
+      totalBytes: totalBytes,
+      scannedAt: DateTime.now(),
+      message: remaining.isEmpty
+          ? 'Everything selected was cleaned.'
+          : 'Cleanup updated.',
+    );
+    final summaries = Map<String, ToolScanSummary>.from(state.summaries)
+      ..[toolId] = updatedSummary;
+
+    final failures = outcome.errors.length;
+    final stopPrefix = outcome.stoppedByUser ? 'Stopped. ' : '';
+    final failureSuffix = failures > 0 ? ' $failures failed.' : '';
+    state = state.copyWith(
+      summaries: summaries,
+      activeDetailResult: updatedResult,
+      isCleaningDetail: false,
+      lastNotice:
+          '$stopPrefix Removed ${outcome.deletedCount} item(s).$failureSuffix'
+              .trim(),
+    );
   }
 
   Future<List<String>> _deleteSelectedItems({

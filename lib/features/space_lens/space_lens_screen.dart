@@ -1,12 +1,15 @@
 import 'dart:math' as math;
+import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:file_picker/file_picker.dart';
 
 import '../../core/models/file_item.dart';
+import '../../core/services/trash_service.dart';
 import '../../core/theme/section_themes.dart';
 import '../shared/scan_view_model.dart';
+import '../../shared/removal/removal_flow.dart';
 import '../../shared/widgets/glossy_icon_widget.dart';
 import '../../shared/widgets/project_directory_selector.dart';
 import '../../shared/widgets/scan_button.dart';
@@ -37,7 +40,9 @@ class SpaceLensScreen extends ConsumerWidget {
         onDeselectAll: notifier.deselectAll,
         onSetParent: notifier.setParentFolder,
         onRescan: notifier.scan,
-        onClean: notifier.clean,
+        onClean: () {
+          unawaited(_handleClean(context, ref, vm, notifier, theme));
+        },
       );
     }
 
@@ -48,6 +53,27 @@ class SpaceLensScreen extends ConsumerWidget {
       onScan: notifier.scan,
       onStop: notifier.stop,
     );
+  }
+
+  Future<void> _handleClean(
+    BuildContext context,
+    WidgetRef ref,
+    ScanViewModel vm,
+    SpaceLensNotifier notifier,
+    SectionTheme theme,
+  ) async {
+    final selected = vm.result?.selectedItems ?? const [];
+    if (selected.isEmpty) return;
+
+    final outcome = await runTrashRemovalFlow(
+      context: context,
+      title: theme.title,
+      accentColor: theme.accentColor,
+      selectedItems: selected,
+      trashService: ref.read(trashServiceProvider),
+    );
+    if (outcome == null) return;
+    notifier.applyRemovalOutcome(outcome);
   }
 }
 

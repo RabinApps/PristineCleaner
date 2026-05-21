@@ -4,6 +4,7 @@ import 'dart:isolate';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/file_item.dart';
+import '../models/removal_models.dart';
 
 final trashServiceProvider = Provider<TrashService>((ref) => TrashService());
 
@@ -16,33 +17,72 @@ class TrashService {
     List<FileItem> items, {
     bool permanent = false,
   }) async {
-    final payloadItems = items.map(_fileItemToPayload).toList(growable: false);
-    final errors = await Isolate.run<List<String>>(
-      () => _deleteItemsPayload(payloadItems, permanent: permanent),
-    );
-    return errors;
+    final outcome = await deleteItemsTracked(items, permanent: permanent);
+    return outcome.errors;
   }
-}
 
-Future<List<String>> _deleteItemsPayload(
-  List<Map<String, dynamic>> items, {
-  required bool permanent,
-}) async {
-  final errors = <String>[];
-  for (final payload in items) {
-    final item = _fileItemFromPayload(payload);
-    try {
-      if (permanent) {
-        await _permanentDeleteItem(item);
-      } else {
-        final ok = await _moveToTrashPath(item.path);
-        if (!ok) await _permanentDeleteItem(item);
+  Future<RemovalOutcome> deleteItemsTracked(
+    List<FileItem> items, {
+    bool permanent = false,
+    RemovalCancellationToken? cancellationToken,
+    void Function(RemovalProgress progress)? onProgress,
+  }) async {
+    final token = cancellationToken ?? RemovalCancellationToken();
+    final errors = <String>[];
+    final deleted = <FileItem>[];
+    var deletedBytes = 0;
+
+    onProgress?.call(
+      RemovalProgress(
+        processedItems: 0,
+        totalItems: items.length,
+        deletedItems: 0,
+        deletedBytes: 0,
+        stopRequested: token.isStopRequested,
+      ),
+    );
+
+    for (var i = 0; i < items.length; i++) {
+      if (token.isStopRequested) {
+        break;
       }
-    } catch (e) {
-      errors.add('${item.name}: $e');
+
+      final item = items[i];
+      try {
+        if (permanent) {
+          await _permanentDeleteItem(item);
+        } else {
+          final ok = await _moveToTrashPath(item.path);
+          if (!ok) {
+            await _permanentDeleteItem(item);
+          }
+        }
+
+        deleted.add(item);
+        deletedBytes += item.sizeBytes;
+      } catch (e) {
+        errors.add('${item.name}: $e');
+      }
+
+      onProgress?.call(
+        RemovalProgress(
+          processedItems: i + 1,
+          totalItems: items.length,
+          deletedItems: deleted.length,
+          deletedBytes: deletedBytes,
+          currentItemName: item.name,
+          stopRequested: token.isStopRequested,
+        ),
+      );
     }
+
+    return RemovalOutcome(
+      deletedItems: deleted,
+      deletedBytes: deletedBytes,
+      errors: errors,
+      stoppedByUser: token.isStopRequested && deleted.length < items.length,
+    );
   }
-  return errors;
 }
 
 Future<bool> _moveToTrashPath(String path) async {
@@ -80,30 +120,4 @@ Future<void> _permanentDeleteItem(FileItem item) async {
   } else {
     await File(item.path).delete();
   }
-}
-
-Map<String, dynamic> _fileItemToPayload(FileItem item) => {
-  'path': item.path,
-  'name': item.name,
-  'sizeBytes': item.sizeBytes,
-  'modifiedMs': item.modified.millisecondsSinceEpoch,
-  'iconPath': item.iconPath,
-  'lastUsedMs': item.lastUsed?.millisecondsSinceEpoch,
-  'isDirectory': item.isDirectory,
-  'isSelected': item.isSelected,
-};
-
-FileItem _fileItemFromPayload(Map<String, dynamic> payload) {
-  return FileItem(
-    path: payload['path'] as String,
-    name: payload['name'] as String,
-    sizeBytes: payload['sizeBytes'] as int,
-    modified: DateTime.fromMillisecondsSinceEpoch(payload['modifiedMs'] as int),
-    iconPath: payload['iconPath'] as String?,
-    lastUsed: payload['lastUsedMs'] == null
-        ? null
-        : DateTime.fromMillisecondsSinceEpoch(payload['lastUsedMs'] as int),
-    isDirectory: payload['isDirectory'] as bool,
-    isSelected: payload['isSelected'] as bool,
-  );
 }

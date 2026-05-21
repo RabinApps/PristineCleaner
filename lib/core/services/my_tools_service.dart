@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/file_item.dart';
+import '../models/removal_models.dart';
 import '../models/scan_result.dart';
 
 final myToolsServiceProvider = Provider<MyToolsService>((ref) {
@@ -326,13 +327,56 @@ class MyToolsService {
   Future<List<String>> deleteTimeMachineSnapshots(
     List<String> snapshotIds,
   ) async {
+    final snapshots = snapshotIds
+        .map(
+          (id) => FileItem(
+            path: id,
+            name: 'Snapshot $id',
+            sizeBytes: 0,
+            modified: DateTime.now(),
+            isDirectory: false,
+            isSelected: true,
+          ),
+        )
+        .toList(growable: false);
+    final outcome = await deleteTimeMachineSnapshotsTracked(snapshots);
+    return outcome.errors;
+  }
+
+  Future<RemovalOutcome> deleteTimeMachineSnapshotsTracked(
+    List<FileItem> snapshots, {
+    RemovalCancellationToken? cancellationToken,
+    void Function(RemovalProgress progress)? onProgress,
+  }) async {
+    final token = cancellationToken ?? RemovalCancellationToken();
     final errors = <String>[];
+    final deleted = <FileItem>[];
+
     if (!Platform.isMacOS) {
-      errors.add('Time Machine snapshots are only available on macOS.');
-      return errors;
+      return const RemovalOutcome(
+        deletedItems: <FileItem>[],
+        deletedBytes: 0,
+        errors: <String>['Time Machine snapshots are only available on macOS.'],
+      );
     }
 
-    for (final id in snapshotIds) {
+    onProgress?.call(
+      RemovalProgress(
+        processedItems: 0,
+        totalItems: snapshots.length,
+        deletedItems: 0,
+        deletedBytes: 0,
+        stopRequested: token.isStopRequested,
+      ),
+    );
+
+    for (var i = 0; i < snapshots.length; i++) {
+      if (token.isStopRequested) {
+        break;
+      }
+
+      final snapshot = snapshots[i];
+      final id = snapshot.path;
       try {
         final result = await Process.run('tmutil', [
           'deletelocalsnapshots',
@@ -341,12 +385,33 @@ class MyToolsService {
         if (result.exitCode != 0) {
           final stderr = (result.stderr as String?)?.trim();
           errors.add(stderr == null || stderr.isEmpty ? id : '$id: $stderr');
+        } else {
+          deleted.add(snapshot);
         }
       } catch (e) {
         errors.add('$id: $e');
       }
+
+      onProgress?.call(
+        RemovalProgress(
+          processedItems: i + 1,
+          totalItems: snapshots.length,
+          deletedItems: deleted.length,
+          deletedBytes: 0,
+          currentItemName: snapshot.name,
+          stopRequested: token.isStopRequested,
+        ),
+      );
     }
-    return errors;
+
+    return RemovalOutcome(
+      deletedItems: deleted,
+      deletedBytes: 0,
+      errors: errors,
+      stoppedByUser:
+          token.isStopRequested &&
+          deleted.length + errors.length < snapshots.length,
+    );
   }
 
   Future<ScanResult> _scanFileRoots(
