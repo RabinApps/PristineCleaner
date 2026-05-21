@@ -1,0 +1,16 @@
+display_name: PristineCleaner
+package_name: pristine-cleaner
+maintainer:
+  name: Rabin Apps
+  email: support@rabinapps.com
+priority: optional
+section: x11
+essential: false
+startup_notify: true
+keywords:
+  - cleaner
+  - utility
+  - storage
+categories:
+  - Utility
+generic_name: Desktop Cleaner

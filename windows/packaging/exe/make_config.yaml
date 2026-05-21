@@ -1,0 +1,7 @@
+app_id: 8B2D4A18-CA9E-4F4E-90F4-8C57316B8A3F
+publisher: Rabin Apps
+publisher_url: https://github.com/RabinApps/PrisitineCleaer
+display_name: PristineCleaner
+create_desktop_icon: true
+locales:
+  - en

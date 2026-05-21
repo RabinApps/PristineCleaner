@@ -39,10 +39,10 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - label: macOS pkg
+          - label: macOS dmg
             runner: macos-latest
             release_name: desktop-macos
-          - label: Windows msix
+          - label: Windows exe/msix
             runner: windows-latest
             release_name: desktop-windows
           - label: Linux x86_64 deb/rpm
@@ -76,6 +76,10 @@ jobs:
             patchelf \
             pkg-config \
             rpm
+
+      - name: Install macOS packaging dependencies
+        if: runner.os == 'macOS'
+        run: npm install -g appdmg
 
       - name: Install Fastforge
         run: dart pub global activate fastforge $FASTFORGE_VERSION

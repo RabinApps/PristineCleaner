@@ -1,0 +1,16 @@
+summary: Desktop file cleaning utility
+group: Applications/Utilities
+vendor: Rabin Apps
+packager: Rabin Apps
+packagerEmail: support@rabinapps.com
+license: Proprietary
+url: https://github.com/RabinApps/PrisitineCleaer
+display_name: PristineCleaner
+startup_notify: true
+keywords:
+  - cleaner
+  - utility
+  - storage
+categories:
+  - Utility
+generic_name: Desktop Cleaner

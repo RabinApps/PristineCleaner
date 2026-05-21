@@ -8,10 +8,10 @@ variables:
 releases:
   - name: desktop-macos
     jobs:
-      - name: macos-pkg
+      - name: macos-dmg
         package:
           platform: macos
-          target: pkg
+          target: dmg
         publish:
           target: github
           args:
@@ -23,6 +23,19 @@ releases:
 
   - name: desktop-windows
     jobs:
+      - name: windows-exe
+        package:
+          platform: windows
+          target: exe
+        publish:
+          target: github
+          args:
+            repo: ${GITHUB_REPOSITORY}
+            release-tag: ${RELEASE_TAG}
+            release-title: Pristine Cleaner {appVersion}
+            release-draft: ${RELEASE_DRAFT}
+            release-prerelease: ${RELEASE_PRERELEASE}
+
       - name: windows-msix
         package:
           platform: windows
