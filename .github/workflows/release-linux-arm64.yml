@@ -1,4 +1,4 @@
-name: Release Desktop
+name: Release Linux arm64
 
 on:
   push:
@@ -25,29 +25,16 @@ permissions:
   contents: write
 
 concurrency:
-  group: release-${{ github.ref }}
+  group: release-linux-arm64-${{ github.ref }}
   cancel-in-progress: false
 
 env:
   FASTFORGE_VERSION: 0.6.6
 
 jobs:
-  release:
-    name: ${{ matrix.label }}
-    runs-on: ${{ matrix.runner }}
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - label: macOS dmg
-            runner: macos-latest
-            release_name: desktop-macos
-          - label: Windows exe/msix
-            runner: windows-latest
-            release_name: desktop-windows
-          - label: Linux x86_64 deb/rpm
-            runner: ubuntu-latest
-            release_name: desktop-linux-x64
+  release-linux-arm64:
+    name: Linux arm64 deb/rpm
+    runs-on: ubuntu-24.04-arm
 
     steps:
       - name: Checkout
@@ -59,7 +46,6 @@ jobs:
           channel: stable
 
       - name: Install Linux packaging dependencies
-        if: runner.os == 'Linux'
         run: |
           sudo apt-get update
           sudo apt-get install -y \
@@ -74,21 +60,12 @@ jobs:
             pkg-config \
             rpm
 
-      - name: Install macOS packaging dependencies
-        if: runner.os == 'macOS'
-        run: npm install -g appdmg
-
       - name: Install Fastforge
         run: dart pub global activate fastforge $FASTFORGE_VERSION
 
       - name: Add pub cache to PATH
         shell: bash
-        run: |
-          if [[ "$RUNNER_OS" == "Windows" ]]; then
-            echo "$LOCALAPPDATA\\Pub\\Cache\\bin" >> "$GITHUB_PATH"
-          else
-            echo "$HOME/.pub-cache/bin" >> "$GITHUB_PATH"
-          fi
+        run: echo "$HOME/.pub-cache/bin" >> "$GITHUB_PATH"
 
       - name: Resolve dependencies
         run: flutter pub get
@@ -122,8 +99,8 @@ jobs:
           echo "RELEASE_DRAFT=$release_draft" >> "$GITHUB_ENV"
           echo "RELEASE_PRERELEASE=$release_prerelease" >> "$GITHUB_ENV"
 
-      - name: Build and publish release assets
-        run: fastforge release --name ${{ matrix.release_name }} --skip-clean
+      - name: Build and publish Linux arm64 assets
+        run: fastforge release --name desktop-linux-arm64 --skip-clean
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}

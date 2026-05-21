@@ -5,6 +5,7 @@ maintainer:
   email: support@rabinapps.com
 priority: optional
 section: x11
+installed_size: 6604
 essential: false
 startup_notify: true
 keywords:
