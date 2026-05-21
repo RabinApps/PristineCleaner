@@ -5,6 +5,7 @@ variables:
   RELEASE_TAG: ${RELEASE_TAG}
   RELEASE_DRAFT: ${RELEASE_DRAFT}
   RELEASE_PRERELEASE: ${RELEASE_PRERELEASE}
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 releases:
   - name: desktop-macos
