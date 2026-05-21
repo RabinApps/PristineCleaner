@@ -7,22 +7,12 @@ on:
   workflow_dispatch:
     inputs:
       release_tag:
-        description: "GitHub release tag to publish assets to"
+        description: "Release tag used in R2 object prefix"
         required: false
         type: string
-      release_draft:
-        description: "Create release as draft"
-        required: false
-        default: false
-        type: boolean
-      release_prerelease:
-        description: "Mark release as prerelease"
-        required: false
-        default: false
-        type: boolean
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: release-${{ github.ref }}
@@ -30,7 +20,7 @@ concurrency:
 
 env:
   FASTFORGE_VERSION: 0.6.6
-  RELEASE_GITHUB_TOKEN: ${{ secrets.RELEASE_GITHUB_TOKEN != '' && secrets.RELEASE_GITHUB_TOKEN || github.token }}
+  R2_PREFIX_BASE: pristine-cleaner-releases
 
 jobs:
   release:
@@ -94,13 +84,11 @@ jobs:
       - name: Resolve dependencies
         run: flutter pub get
 
-      - name: Compute release metadata
+      - name: Compute release tag
         shell: bash
         env:
           EVENT_NAME: ${{ github.event_name }}
           INPUT_RELEASE_TAG: ${{ inputs.release_tag }}
-          INPUT_RELEASE_DRAFT: ${{ inputs.release_draft }}
-          INPUT_RELEASE_PRERELEASE: ${{ inputs.release_prerelease }}
         run: |
           if [[ "$EVENT_NAME" == "workflow_dispatch" && -n "$INPUT_RELEASE_TAG" ]]; then
             release_tag="$INPUT_RELEASE_TAG"
@@ -108,23 +96,61 @@ jobs:
             release_tag="$GITHUB_REF_NAME"
           fi
 
-          release_draft="false"
-          release_prerelease="false"
-          if [[ "$EVENT_NAME" == "workflow_dispatch" ]]; then
-            if [[ "$INPUT_RELEASE_DRAFT" == "true" ]]; then
-              release_draft="true"
+          echo "RELEASE_TAG=$release_tag" >> "$GITHUB_ENV"
+
+      - name: Build release assets
+        run: fastforge release --name ${{ matrix.release_name }} --skip-clean
+
+      - name: Set up AWS CLI
+        uses: aws-actions/setup-aws-cli@v4
+
+      - name: Upload artifacts to Cloudflare R2
+        shell: bash
+        env:
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+          R2_PUBLIC_BASE_URL: ${{ secrets.R2_PUBLIC_BASE_URL }}
+        run: |
+          set -euo pipefail
+
+          for required in R2_ACCOUNT_ID R2_ACCESS_KEY_ID R2_SECRET_ACCESS_KEY R2_BUCKET RELEASE_TAG; do
+            if [[ -z "${!required:-}" ]]; then
+              echo "Missing required environment variable: $required" >&2
+              exit 1
             fi
-            if [[ "$INPUT_RELEASE_PRERELEASE" == "true" ]]; then
-              release_prerelease="true"
-            fi
+          done
+
+          if [[ ! -d dist ]]; then
+            echo "dist directory not found. Packaging likely failed." >&2
+            exit 1
           fi
 
-          echo "RELEASE_TAG=$release_tag" >> "$GITHUB_ENV"
-          echo "RELEASE_DRAFT=$release_draft" >> "$GITHUB_ENV"
-          echo "RELEASE_PRERELEASE=$release_prerelease" >> "$GITHUB_ENV"
+          dest_prefix="${R2_PREFIX_BASE%/}/${RELEASE_TAG}"
+          endpoint="https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com"
 
-      - name: Build and publish release assets
-        run: fastforge release --name ${{ matrix.release_name }} --skip-clean
-        env:
-          GITHUB_TOKEN: ${{ env.RELEASE_GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
+          export AWS_ACCESS_KEY_ID="$R2_ACCESS_KEY_ID"
+          export AWS_SECRET_ACCESS_KEY="$R2_SECRET_ACCESS_KEY"
+
+          aws s3 cp dist/ "s3://${R2_BUCKET}/${dest_prefix}/" \
+            --recursive \
+            --endpoint-url "$endpoint" \
+            --exclude "*" \
+            --include "*.dmg" \
+            --include "*.exe" \
+            --include "*.msix" \
+            --include "*.deb" \
+            --include "*.rpm" \
+            --only-show-errors
+
+          echo "Uploaded artifact URLs:"
+          while IFS= read -r file; do
+            rel_path="${file#dist/}"
+            if [[ -n "${R2_PUBLIC_BASE_URL:-}" ]]; then
+              base="${R2_PUBLIC_BASE_URL%/}"
+              echo "${base}/${dest_prefix}/${rel_path}"
+            else
+              echo "https://${R2_BUCKET}.${R2_ACCOUNT_ID}.r2.cloudflarestorage.com/${dest_prefix}/${rel_path}"
+            fi
+          done < <(find dist -type f \( -name "*.dmg" -o -name "*.exe" -o -name "*.msix" -o -name "*.deb" -o -name "*.rpm" \) | sort)
