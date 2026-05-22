@@ -1,7 +1,7 @@
 part of 'file_service.dart';
 
-class SpaceLensService {
-  const SpaceLensService();
+class SpaceViewService {
+  const SpaceViewService();
 
   Future<List<FileItem>> getTopFolders(
     FileService fileService,
@@ -19,18 +19,18 @@ class SpaceLensService {
     return itemsPayload.map(_fileItemFromPayload).toList(growable: false);
   }
 
-  Future<SpaceLensSnapshot> scanSpaceLensSnapshot(
+  Future<SpaceViewSnapshot> scanSpaceViewSnapshot(
     FileService fileService,
     String rootPath, {
     int topFolderLimit = 30,
     ScanProgressCallback? onProgress,
   }) async {
     final payload = await fileService._runScanPayloadTask(
-      task: 'spaceLensSnapshot',
+      task: 'spaceViewSnapshot',
       args: {'rootPath': rootPath, 'topFolderLimit': topFolderLimit},
       onProgress: onProgress,
     );
-    return _spaceLensSnapshotFromPayload(payload);
+    return _spaceViewSnapshotFromPayload(payload);
   }
 
   Future<List<FileItem>> listDirectoryContents(
@@ -79,11 +79,11 @@ class SpaceLensService {
   }
 }
 
-class _SpaceLensWorkerMessage {
+class _SpaceViewWorkerMessage {
   final String rootPath;
   final SendPort sendPort;
 
-  const _SpaceLensWorkerMessage({
+  const _SpaceViewWorkerMessage({
     required this.rootPath,
     required this.sendPort,
   });
@@ -157,7 +157,7 @@ Future<Map<String, dynamic>> _topFoldersPayload(
   };
 }
 
-Future<Map<String, dynamic>> _spaceLensSnapshotPayload(
+Future<Map<String, dynamic>> _spaceViewSnapshotPayload(
   String rootPath,
   int topFolderLimit,
   void Function(ScanProgress progress) onProgress,
@@ -259,7 +259,7 @@ Future<Map<String, dynamic>> _spaceLensSnapshotPayload(
       }
     }
 
-    final subtreePayloads = await _runSpaceLensSubtreesWithMaxConcurrency(
+    final subtreePayloads = await _runSpaceViewSubtreesWithMaxConcurrency(
       subdirectories,
       maxConcurrent: 4,
       isCancelled: isCancelled,
@@ -354,7 +354,7 @@ Future<List<Directory>> _collectTopFolderCandidates(String rootPath) async {
   return dirs;
 }
 
-Future<List<Map<String, dynamic>>> _runSpaceLensSubtreesWithMaxConcurrency(
+Future<List<Map<String, dynamic>>> _runSpaceViewSubtreesWithMaxConcurrency(
   List<String> subdirectories, {
   required int maxConcurrent,
   required bool Function() isCancelled,
@@ -392,7 +392,7 @@ Future<List<Map<String, dynamic>>> _runSpaceLensSubtreesWithMaxConcurrency(
       nextIndex++;
 
       results[index] = await _awaitFutureWithCancellation(
-        _runSpaceLensSubtreeInIsolate(
+        _runSpaceViewSubtreeInIsolate(
           subdirectories[index],
           onSpawned: (worker) => activeWorkers.add(worker),
           onDisposed: (worker) => activeWorkers.remove(worker),
@@ -460,7 +460,7 @@ Future<T> _awaitFutureWithCancellation<T>(
   return value as T;
 }
 
-Future<Map<String, dynamic>> _runSpaceLensSubtreeInIsolate(
+Future<Map<String, dynamic>> _runSpaceViewSubtreeInIsolate(
   String rootPath, {
   required void Function(Isolate worker) onSpawned,
   required void Function(Isolate worker) onDisposed,
@@ -473,9 +473,9 @@ Future<Map<String, dynamic>> _runSpaceLensSubtreeInIsolate(
   StreamSubscription<dynamic>? resultSub;
   StreamSubscription<dynamic>? errorSub;
 
-  final worker = await Isolate.spawn<_SpaceLensWorkerMessage>(
-    _spaceLensSubtreeIsolateEntry,
-    _SpaceLensWorkerMessage(rootPath: rootPath, sendPort: receivePort.sendPort),
+  final worker = await Isolate.spawn<_SpaceViewWorkerMessage>(
+    _spaceViewSubtreeIsolateEntry,
+    _SpaceViewWorkerMessage(rootPath: rootPath, sendPort: receivePort.sendPort),
     onError: errorPort.sendPort,
     errorsAreFatal: true,
   );
@@ -522,9 +522,9 @@ Future<Map<String, dynamic>> _runSpaceLensSubtreeInIsolate(
   }
 }
 
-void _spaceLensSubtreeIsolateEntry(_SpaceLensWorkerMessage message) async {
+void _spaceViewSubtreeIsolateEntry(_SpaceViewWorkerMessage message) async {
   try {
-    final totalUnits = await _countSpaceLensSubtreeEntities(message.rootPath);
+    final totalUnits = await _countSpaceViewSubtreeEntities(message.rootPath);
     message.sendPort.send({'type': 'counted', 'total': totalUnits});
 
     var lastReported = DateTime.fromMillisecondsSinceEpoch(0);
@@ -544,7 +544,7 @@ void _spaceLensSubtreeIsolateEntry(_SpaceLensWorkerMessage message) async {
       message.sendPort.send({'type': 'progress', 'processed': processedUnits});
     }
 
-    final payload = await _spaceLensSubtreePayloadEntry(
+    final payload = await _spaceViewSubtreePayloadEntry(
       message.rootPath,
       onProgress: emitWorkerProgress,
     );
@@ -555,13 +555,13 @@ void _spaceLensSubtreeIsolateEntry(_SpaceLensWorkerMessage message) async {
   }
 }
 
-Future<Map<String, dynamic>> _spaceLensSubtreePayloadEntry(
+Future<Map<String, dynamic>> _spaceViewSubtreePayloadEntry(
   String rootPath, {
   void Function(int processedUnits)? onProgress,
 }) async {
   final itemsByPath = <String, List<Map<String, dynamic>>>{};
   var processedUnits = 0;
-  final summary = await _buildSpaceLensSubtreeSummary(
+  final summary = await _buildSpaceViewSubtreeSummary(
     rootPath,
     itemsByPath,
     onEntityScanned: () {
@@ -577,7 +577,7 @@ Future<Map<String, dynamic>> _spaceLensSubtreePayloadEntry(
   };
 }
 
-Future<int> _countSpaceLensSubtreeEntities(String dirPath) async {
+Future<int> _countSpaceViewSubtreeEntities(String dirPath) async {
   int total = 1;
   try {
     await for (final entity in Directory(dirPath).list(followLinks: false)) {
@@ -586,7 +586,7 @@ Future<int> _countSpaceLensSubtreeEntities(String dirPath) async {
         continue;
       }
       if (entity is Directory) {
-        total += await _countSpaceLensSubtreeEntities(entity.path);
+        total += await _countSpaceViewSubtreeEntities(entity.path);
         continue;
       }
       if (entity is File) {
@@ -597,7 +597,7 @@ Future<int> _countSpaceLensSubtreeEntities(String dirPath) async {
   return total;
 }
 
-Future<_SpaceLensSubtreeSummary> _buildSpaceLensSubtreeSummary(
+Future<_SpaceViewSubtreeSummary> _buildSpaceViewSubtreeSummary(
   String dirPath,
   Map<String, List<Map<String, dynamic>>> itemsByPath, {
   void Function()? onEntityScanned,
@@ -616,7 +616,7 @@ Future<_SpaceLensSubtreeSummary> _buildSpaceLensSubtreeSummary(
       }
 
       if (entity is Directory) {
-        final summary = await _buildSpaceLensSubtreeSummary(
+        final summary = await _buildSpaceViewSubtreeSummary(
           path,
           itemsByPath,
           onEntityScanned: onEntityScanned,
@@ -666,7 +666,7 @@ Future<_SpaceLensSubtreeSummary> _buildSpaceLensSubtreeSummary(
     modified = (await Directory(dirPath).stat()).modified;
   } catch (_) {}
 
-  return _SpaceLensSubtreeSummary(
+  return _SpaceViewSubtreeSummary(
     itemPayload: _fileItemToPayload(
       FileItem(
         path: dirPath,
@@ -681,12 +681,12 @@ Future<_SpaceLensSubtreeSummary> _buildSpaceLensSubtreeSummary(
   );
 }
 
-class _SpaceLensSubtreeSummary {
+class _SpaceViewSubtreeSummary {
   final Map<String, dynamic> itemPayload;
   final int totalBytes;
   final int entityCount;
 
-  const _SpaceLensSubtreeSummary({
+  const _SpaceViewSubtreeSummary({
     required this.itemPayload,
     required this.totalBytes,
     required this.entityCount,

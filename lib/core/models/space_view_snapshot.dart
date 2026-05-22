@@ -1,11 +1,11 @@
 import 'file_item.dart';
 
-class SpaceLensSnapshot {
+class SpaceViewSnapshot {
   final String rootPath;
   final List<FileItem> topFolders;
   final Map<String, List<FileItem>> itemsByPath;
 
-  const SpaceLensSnapshot({
+  const SpaceViewSnapshot({
     required this.rootPath,
     required this.topFolders,
     required this.itemsByPath,

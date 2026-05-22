@@ -13,16 +13,16 @@ import '../shared/removal/removal_flow.dart';
 import '../shared/widgets/glossy_icon_widget.dart';
 import '../shared/widgets/project_directory_selector.dart';
 import '../shared/widgets/scan_button.dart';
-import '../providers/space_lens_provider.dart';
+import '../providers/space_view_provider.dart';
 
-class SpaceLensScreen extends ConsumerWidget {
-  const SpaceLensScreen({super.key});
+class SpaceViewScreen extends ConsumerWidget {
+  const SpaceViewScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final vm = ref.watch(spaceLensProvider);
-    final notifier = ref.read(spaceLensProvider.notifier);
-    const theme = SectionThemes.spaceLens;
+    final vm = ref.watch(spaceViewProvider);
+    final notifier = ref.read(spaceViewProvider.notifier);
+    const theme = SectionThemes.spaceView;
 
     if (vm.isDone) {
       return _DoneScreen(theme: theme, onDismiss: notifier.reset);
@@ -30,7 +30,7 @@ class SpaceLensScreen extends ConsumerWidget {
 
     final hasWorkspace = vm.result != null;
     if (hasWorkspace) {
-      return _SpaceLensWorkspace(
+      return _SpaceViewWorkspace(
         vm: vm,
         theme: theme,
         onToggle: notifier.toggleItem,
@@ -46,7 +46,7 @@ class SpaceLensScreen extends ConsumerWidget {
       );
     }
 
-    return _SpaceLensStart(
+    return _SpaceViewStart(
       vm: vm,
       theme: theme,
       onSetParent: notifier.setParentFolder,
@@ -59,7 +59,7 @@ class SpaceLensScreen extends ConsumerWidget {
     BuildContext context,
     WidgetRef ref,
     ScanViewModel vm,
-    SpaceLensNotifier notifier,
+    SpaceViewNotifier notifier,
     SectionTheme theme,
   ) async {
     final selected = vm.result?.selectedItems ?? const [];
@@ -77,14 +77,14 @@ class SpaceLensScreen extends ConsumerWidget {
   }
 }
 
-class _SpaceLensStart extends StatelessWidget {
+class _SpaceViewStart extends StatelessWidget {
   final ScanViewModel vm;
   final SectionTheme theme;
   final Future<void> Function(String path) onSetParent;
   final VoidCallback onScan;
   final VoidCallback onStop;
 
-  const _SpaceLensStart({
+  const _SpaceViewStart({
     required this.vm,
     required this.theme,
     required this.onSetParent,
@@ -180,7 +180,7 @@ class _SpaceLensStart extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
-                          'Space Lens',
+                          'Space View',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 42,
@@ -295,7 +295,7 @@ class _SpaceLensStart extends StatelessWidget {
   }
 }
 
-class _SpaceLensWorkspace extends StatefulWidget {
+class _SpaceViewWorkspace extends StatefulWidget {
   final ScanViewModel vm;
   final SectionTheme theme;
   final ValueChanged<int> onToggle;
@@ -307,7 +307,7 @@ class _SpaceLensWorkspace extends StatefulWidget {
   final VoidCallback onRescan;
   final VoidCallback onClean;
 
-  const _SpaceLensWorkspace({
+  const _SpaceViewWorkspace({
     required this.vm,
     required this.theme,
     required this.onToggle,
@@ -321,10 +321,10 @@ class _SpaceLensWorkspace extends StatefulWidget {
   });
 
   @override
-  State<_SpaceLensWorkspace> createState() => _SpaceLensWorkspaceState();
+  State<_SpaceViewWorkspace> createState() => _SpaceViewWorkspaceState();
 }
 
-class _SpaceLensWorkspaceState extends State<_SpaceLensWorkspace> {
+class _SpaceViewWorkspaceState extends State<_SpaceViewWorkspace> {
   @override
   void initState() {
     super.initState();

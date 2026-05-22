@@ -8,7 +8,7 @@ import 'screens/cleanup_screen.dart';
 import 'screens/my_tools_screen.dart';
 import 'screens/my_clutter_screen.dart';
 import 'screens/smart_care_screen.dart';
-import 'screens/space_lens_screen.dart';
+import 'screens/space_view_screen.dart';
 import 'shared/widgets/shell/shell_screen.dart';
 
 final GoRouter _router = GoRouter(
@@ -38,9 +38,9 @@ final GoRouter _router = GoRouter(
               _fadePage(state: state, child: const MyClutterScreen()),
         ),
         GoRoute(
-          path: '/space-lens',
+          path: '/space-view',
           pageBuilder: (context, state) =>
-              _fadePage(state: state, child: const SpaceLensScreen()),
+              _fadePage(state: state, child: const SpaceViewScreen()),
         ),
         GoRoute(
           path: '/applications',
@@ -87,8 +87,8 @@ NavSection _sectionFromPath(String path) {
       return NavSection.cleanup;
     case '/my-clutter':
       return NavSection.myClutter;
-    case '/space-lens':
-      return NavSection.spaceLens;
+    case '/space-view':
+      return NavSection.spaceView;
     case '/applications':
       return NavSection.applications;
     case '/my-tools':

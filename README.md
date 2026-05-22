@@ -36,7 +36,7 @@ Supported desktop targets:
   - Downloads folder contents
 - Supports item selection and cleanup flow.
 
-### Space Lens
+### Space View
 
 - Scans top folders in the user home directory.
 - Computes folder sizes and displays storage distribution.
@@ -96,7 +96,7 @@ lib/
 		smart_care/
 		cleanup/
 		my_clutter/
-		space_lens/
+		space_view/
 		applications/
 		shell/                     # sidebar + section host screen
 		shared/                    # shared view model logic

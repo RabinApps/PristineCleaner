@@ -92,8 +92,8 @@ String _pathForSection(NavSection section) {
       return '/cleanup';
     case NavSection.myClutter:
       return '/my-clutter';
-    case NavSection.spaceLens:
-      return '/space-lens';
+    case NavSection.spaceView:
+      return '/space-view';
     case NavSection.applications:
       return '/applications';
     case NavSection.myTools:

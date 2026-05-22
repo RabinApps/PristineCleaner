@@ -3,35 +3,35 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pristine_cleaner/core/models/file_item.dart';
 import 'package:pristine_cleaner/core/models/scan_result.dart';
-import 'package:pristine_cleaner/core/models/space_lens_snapshot.dart';
+import 'package:pristine_cleaner/core/models/space_view_snapshot.dart';
 import 'package:pristine_cleaner/services/file_service.dart';
-import 'package:pristine_cleaner/providers/space_lens_provider.dart';
+import 'package:pristine_cleaner/providers/space_view_provider.dart';
 
 void main() {
-  group('SpaceLensNotifier', () {
+  group('SpaceViewNotifier', () {
     test('scan builds snapshot once and navigation uses cache', () async {
-      final fake = _FakeSpaceLensFileService();
+      final fake = _FakeSpaceViewFileService();
       final container = ProviderContainer(
         overrides: [fileServiceProvider.overrideWithValue(fake)],
       );
       addTearDown(container.dispose);
 
-      final notifier = container.read(spaceLensProvider.notifier);
+      final notifier = container.read(spaceViewProvider.notifier);
       await notifier.setParentFolder('/root');
       await notifier.scan();
 
       expect(fake.snapshotCalls, 1);
       expect(fake.listDirectoryCalls, 0);
-      expect(container.read(spaceLensProvider).result?.items, hasLength(2));
+      expect(container.read(spaceViewProvider).result?.items, hasLength(2));
 
-      final rootFolders = container.read(spaceLensProvider).result!.items;
+      final rootFolders = container.read(spaceViewProvider).result!.items;
       await notifier.navigateIntoFolder(rootFolders.first);
-      expect(container.read(spaceLensProvider).currentPath, '/root/A');
-      expect(container.read(spaceLensProvider).result?.items, hasLength(2));
+      expect(container.read(spaceViewProvider).currentPath, '/root/A');
+      expect(container.read(spaceViewProvider).result?.items, hasLength(2));
       expect(fake.listDirectoryCalls, 0);
 
       await notifier.navigateToBreadcrumb(0);
-      expect(container.read(spaceLensProvider).currentPath, '/root');
+      expect(container.read(spaceViewProvider).currentPath, '/root');
       expect(fake.listDirectoryCalls, 0);
 
       await notifier.refreshCurrentFolder();
@@ -41,13 +41,13 @@ void main() {
     test(
       'setParentFolder clears cache and falls back to directory listing',
       () async {
-        final fake = _FakeSpaceLensFileService();
+        final fake = _FakeSpaceViewFileService();
         final container = ProviderContainer(
           overrides: [fileServiceProvider.overrideWithValue(fake)],
         );
         addTearDown(container.dispose);
 
-        final notifier = container.read(spaceLensProvider.notifier);
+        final notifier = container.read(spaceViewProvider.notifier);
         await notifier.setParentFolder('/root');
         await notifier.scan();
 
@@ -55,7 +55,7 @@ void main() {
         await notifier.refreshCurrentFolder();
 
         expect(fake.listDirectoryCalls, 1);
-        expect(container.read(spaceLensProvider).currentPath, '/other');
+        expect(container.read(spaceViewProvider).currentPath, '/other');
       },
     );
 
@@ -66,11 +66,11 @@ void main() {
       );
       addTearDown(container.dispose);
 
-      final notifier = container.read(spaceLensProvider.notifier);
+      final notifier = container.read(spaceViewProvider.notifier);
       await notifier.setParentFolder('/root');
       await notifier.scan();
 
-      final vm = container.read(spaceLensProvider);
+      final vm = container.read(spaceViewProvider);
       expect(vm.isScanning, false);
       expect(vm.result, isNull);
       expect(vm.error, isNull);
@@ -83,7 +83,7 @@ void main() {
       );
       addTearDown(container.dispose);
 
-      final notifier = container.read(spaceLensProvider.notifier);
+      final notifier = container.read(spaceViewProvider.notifier);
       await notifier.setParentFolder('/root');
 
       final scanFuture = notifier.scan();
@@ -92,7 +92,7 @@ void main() {
       notifier.stop();
       await scanFuture;
 
-      final vm = container.read(spaceLensProvider);
+      final vm = container.read(spaceViewProvider);
       expect(fake.cancelCalls, 1);
       expect(vm.isScanning, false);
       expect(vm.result, isNull);
@@ -101,12 +101,12 @@ void main() {
   });
 }
 
-class _FakeSpaceLensFileService extends FileService {
+class _FakeSpaceViewFileService extends FileService {
   int snapshotCalls = 0;
   int listDirectoryCalls = 0;
 
   @override
-  Future<SpaceLensSnapshot> scanSpaceLensSnapshot(
+  Future<SpaceViewSnapshot> scanSpaceViewSnapshot(
     String rootPath, {
     int topFolderLimit = 30,
     ScanProgressCallback? onProgress,
@@ -118,7 +118,7 @@ class _FakeSpaceLensFileService extends FileService {
     final nestedA = _dir('/root/A/nested', 'nested', 180);
     final nestedFile = _file('/root/A/nested/photo.jpg', 'photo.jpg', 180);
 
-    return SpaceLensSnapshot(
+    return SpaceViewSnapshot(
       rootPath: rootPath,
       topFolders: [dirA, dirB].take(topFolderLimit).toList(growable: false),
       itemsByPath: {
@@ -143,7 +143,7 @@ class _FakeSpaceLensFileService extends FileService {
 
 class _CancelledSnapshotFileService extends FileService {
   @override
-  Future<SpaceLensSnapshot> scanSpaceLensSnapshot(
+  Future<SpaceViewSnapshot> scanSpaceViewSnapshot(
     String rootPath, {
     int topFolderLimit = 30,
     ScanProgressCallback? onProgress,
@@ -154,11 +154,11 @@ class _CancelledSnapshotFileService extends FileService {
 
 class _BlockingSnapshotFileService extends FileService {
   int cancelCalls = 0;
-  final Completer<SpaceLensSnapshot> _snapshotCompleter =
-      Completer<SpaceLensSnapshot>();
+  final Completer<SpaceViewSnapshot> _snapshotCompleter =
+      Completer<SpaceViewSnapshot>();
 
   @override
-  Future<SpaceLensSnapshot> scanSpaceLensSnapshot(
+  Future<SpaceViewSnapshot> scanSpaceViewSnapshot(
     String rootPath, {
     int topFolderLimit = 30,
     ScanProgressCallback? onProgress,

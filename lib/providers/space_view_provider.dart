@@ -5,17 +5,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../core/models/file_item.dart';
 import '../core/models/removal_models.dart';
 import '../core/models/scan_result.dart';
-import '../core/models/space_lens_snapshot.dart';
+import '../core/models/space_view_snapshot.dart';
 import '../services/file_service.dart';
 import '../services/trash_service.dart';
 import '../core/models/scan_view_model.dart';
 
-final spaceLensProvider = NotifierProvider<SpaceLensNotifier, ScanViewModel>(
-  SpaceLensNotifier.new,
+final spaceViewProvider = NotifierProvider<SpaceViewNotifier, ScanViewModel>(
+  SpaceViewNotifier.new,
 );
 
-class SpaceLensNotifier extends Notifier<ScanViewModel> {
-  SpaceLensSnapshot? _snapshot;
+class SpaceViewNotifier extends Notifier<ScanViewModel> {
+  SpaceViewSnapshot? _snapshot;
 
   @override
   ScanViewModel build() {
@@ -45,7 +45,7 @@ class SpaceLensNotifier extends Notifier<ScanViewModel> {
     try {
       final snapshot = await ref
           .read(fileServiceProvider)
-          .scanSpaceLensSnapshot(
+          .scanSpaceViewSnapshot(
             root,
             topFolderLimit: 30,
             onProgress: _onProgress,

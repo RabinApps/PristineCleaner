@@ -96,9 +96,9 @@ class SectionThemes {
     orbColor: Color(0xFF004D45),
   );
 
-  static const spaceLens = SectionTheme(
-    id: 'space_lens',
-    title: 'Space Lens',
+  static const spaceView = SectionTheme(
+    id: 'space_view',
+    title: 'Space View',
     subtitle:
         "Visualize what's taking up the most\ndisk space and clean up quickly.",
     icon: Icons.lens_blur_rounded,
@@ -174,7 +174,7 @@ class SectionThemes {
     smartCare,
     cleanup,
     myClutter,
-    spaceLens,
+    spaceView,
     applications,
     myTools,
   ];

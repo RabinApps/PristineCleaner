@@ -8,13 +8,13 @@ import 'package:image/image.dart' as img;
 
 import '../core/models/file_item.dart';
 import '../core/models/scan_result.dart';
-import '../core/models/space_lens_snapshot.dart';
+import '../core/models/space_view_snapshot.dart';
 
 part 'applications_service.dart';
 part 'cleanup_service.dart';
 part 'duplicates_service.dart';
 part 'images_service.dart';
-part 'spacelens_service.dart';
+part 'space_view_service.dart';
 
 final fileServiceProvider = Provider<FileService>((ref) => FileService());
 
@@ -96,7 +96,7 @@ class FileService {
   final CleanupService _cleanupService;
   final DuplicatesService _duplicatesService;
   final ImagesService _imagesService;
-  final SpaceLensService _spaceLensService;
+  final SpaceViewService _spaceViewService;
   int _nextScanTaskId = 0;
 
   FileService({
@@ -104,13 +104,13 @@ class FileService {
     CleanupService? cleanupService,
     DuplicatesService? duplicatesService,
     ImagesService? imagesService,
-    SpaceLensService? spaceLensService,
+    SpaceViewService? spaceViewService,
   }) : _applicationsService =
            applicationsService ?? const ApplicationsService(),
        _cleanupService = cleanupService ?? const CleanupService(),
        _duplicatesService = duplicatesService ?? const DuplicatesService(),
        _imagesService = imagesService ?? const ImagesService(),
-       _spaceLensService = spaceLensService ?? const SpaceLensService();
+       _spaceViewService = spaceViewService ?? const SpaceViewService();
 
   void cancelActiveScan() {
     final tasks = _activeScanTasks.values.toList(growable: false);
@@ -277,14 +277,14 @@ class FileService {
     return _scanResultFromPayload(payload);
   }
 
-  // ─── Top Folders (Space Lens) ─────────────────────────────────────────────
+  // ─── Top Folders (Space View) ─────────────────────────────────────────────
 
   Future<List<FileItem>> getTopFolders(
     String rootPath, {
     int limit = 25,
     ScanProgressCallback? onProgress,
   }) async {
-    return _spaceLensService.getTopFolders(
+    return _spaceViewService.getTopFolders(
       this,
       rootPath,
       limit: limit,
@@ -292,12 +292,12 @@ class FileService {
     );
   }
 
-  Future<SpaceLensSnapshot> scanSpaceLensSnapshot(
+  Future<SpaceViewSnapshot> scanSpaceViewSnapshot(
     String rootPath, {
     int topFolderLimit = 30,
     ScanProgressCallback? onProgress,
   }) async {
-    return _spaceLensService.scanSpaceLensSnapshot(
+    return _spaceViewService.scanSpaceViewSnapshot(
       this,
       rootPath,
       topFolderLimit: topFolderLimit,
@@ -312,7 +312,7 @@ class FileService {
     bool includeHidden = false,
     int maxItems = 500,
   }) async {
-    return _spaceLensService.listDirectoryContents(
+    return _spaceViewService.listDirectoryContents(
       this,
       dirPath,
       includeHidden: includeHidden,
@@ -507,8 +507,8 @@ void _scanTaskIsolateEntry(_ScanTaskMessage message) async {
         emitProgress,
         () => cancelled,
       );
-    } else if (task == 'spaceLensSnapshot') {
-      payload = await _spaceLensSnapshotPayload(
+    } else if (task == 'spaceViewSnapshot') {
+      payload = await _spaceViewSnapshotPayload(
         args['rootPath'] as String,
         args['topFolderLimit'] as int,
         emitProgress,
@@ -548,7 +548,7 @@ ScanResult _scanResultFromPayload(Map<String, dynamic> payload) {
   );
 }
 
-SpaceLensSnapshot _spaceLensSnapshotFromPayload(Map<String, dynamic> payload) {
+SpaceViewSnapshot _spaceViewSnapshotFromPayload(Map<String, dynamic> payload) {
   final rootPath = payload['rootPath'] as String;
   final topFolders = (payload['topFolders'] as List<dynamic>)
       .cast<Map<String, dynamic>>()
@@ -566,7 +566,7 @@ SpaceLensSnapshot _spaceLensSnapshotFromPayload(Map<String, dynamic> payload) {
           .toList(growable: false),
     ),
   );
-  return SpaceLensSnapshot(
+  return SpaceViewSnapshot(
     rootPath: rootPath,
     topFolders: topFolders,
     itemsByPath: itemsByPath,

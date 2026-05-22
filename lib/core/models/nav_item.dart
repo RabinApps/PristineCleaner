@@ -5,7 +5,7 @@ enum NavSection {
   smartCare,
   cleanup,
   myClutter,
-  spaceLens,
+  spaceView,
   applications,
   myTools,
   myActivity,
@@ -44,10 +44,10 @@ class NavItem {
       theme: SectionThemes.myClutter,
     ),
     NavItem(
-      section: NavSection.spaceLens,
-      label: 'Space Lens',
+      section: NavSection.spaceView,
+      label: 'Space View',
       icon: Icons.lens_blur_rounded,
-      theme: SectionThemes.spaceLens,
+      theme: SectionThemes.spaceView,
     ),
     NavItem(
       section: NavSection.applications,
