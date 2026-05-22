@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../core/models/file_item.dart';
 import '../../core/models/removal_models.dart';
-import '../../core/services/trash_service.dart';
+import '../../services/trash_service.dart';
 import '../widgets/removal_screen.dart';
 
 Future<RemovalOutcome?> runTrashRemovalFlow({

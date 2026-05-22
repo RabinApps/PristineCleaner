@@ -3,16 +3,16 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pristine_cleaner/features/my_clutter/widgets/done_screen.dart';
+import 'package:pristine_cleaner/screens/done_screen.dart';
 
-import '../../core/services/trash_service.dart';
-import '../../core/theme/section_themes.dart';
-import '../../shared/removal/removal_flow.dart';
-import '../../shared/widgets/section_landing_layout.dart';
-import '../../shared/widgets/glossy_icon_widget.dart';
-import '../../shared/widgets/project_directory_selector.dart';
-import 'my_clutter_provider.dart';
-import 'widgets/my_clutter_results_workspace.dart';
+import '../services/trash_service.dart';
+import '../core/theme/section_themes.dart';
+import '../shared/removal/removal_flow.dart';
+import '../shared/widgets/section_landing_layout.dart';
+import '../shared/widgets/glossy_icon_widget.dart';
+import '../shared/widgets/project_directory_selector.dart';
+import '../providers/my_clutter_provider.dart';
+import '../shared/widgets/my_clutter_results_workspace.dart';
 
 class MyClutterScreen extends ConsumerStatefulWidget {
   const MyClutterScreen({super.key});

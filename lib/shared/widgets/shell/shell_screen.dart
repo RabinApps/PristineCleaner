@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../core/models/nav_item.dart';
+import '../../../core/models/nav_item.dart';
 import 'sidebar/sidebar_widget.dart';
 
 class ShellScreen extends StatelessWidget {

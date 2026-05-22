@@ -3,8 +3,8 @@ import 'dart:isolate';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../models/file_item.dart';
-import '../models/removal_models.dart';
+import '../core/models/file_item.dart';
+import '../core/models/removal_models.dart';
 
 final trashServiceProvider = Provider<TrashService>((ref) => TrashService());
 

@@ -3,13 +3,13 @@ import 'package:go_router/go_router.dart';
 
 import 'core/models/nav_item.dart';
 import 'core/theme/app_theme.dart';
-import 'features/applications/applications_screen.dart';
-import 'features/cleanup/cleanup_screen.dart';
-import 'features/my_tools/my_tools_screen.dart';
-import 'features/my_clutter/my_clutter_screen.dart';
-import 'features/smart_care/smart_care_screen.dart';
-import 'features/space_lens/space_lens_screen.dart';
-import 'features/shell/shell_screen.dart';
+import 'screens/applications_screen.dart';
+import 'screens/cleanup_screen.dart';
+import 'screens/my_tools_screen.dart';
+import 'screens/my_clutter_screen.dart';
+import 'screens/smart_care_screen.dart';
+import 'screens/space_lens_screen.dart';
+import 'shared/widgets/shell/shell_screen.dart';
 
 final GoRouter _router = GoRouter(
   initialLocation: '/smart-care',

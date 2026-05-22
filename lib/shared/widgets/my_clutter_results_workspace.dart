@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/models/file_item.dart';
-import '../../../core/models/scan_result.dart';
-import '../../../core/theme/section_themes.dart';
-import '../../../core/utils/format_utils.dart';
-import '../../../shared/widgets/scan_results_view.dart';
+import '../../core/models/file_item.dart';
+import '../../core/models/scan_result.dart';
+import '../../core/theme/section_themes.dart';
+import '../../core/utils/format_utils.dart';
+import 'scan_results_view.dart';
 
 enum MyClutterView { dashboard, all, duplicates, similarImages, largeFiles }
 

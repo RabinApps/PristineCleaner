@@ -5,15 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:file_picker/file_picker.dart';
 
-import '../../core/models/file_item.dart';
-import '../../core/services/trash_service.dart';
-import '../../core/theme/section_themes.dart';
-import '../shared/scan_view_model.dart';
-import '../../shared/removal/removal_flow.dart';
-import '../../shared/widgets/glossy_icon_widget.dart';
-import '../../shared/widgets/project_directory_selector.dart';
-import '../../shared/widgets/scan_button.dart';
-import 'space_lens_provider.dart';
+import '../core/models/file_item.dart';
+import '../services/trash_service.dart';
+import '../core/theme/section_themes.dart';
+import '../core/models/scan_view_model.dart';
+import '../shared/removal/removal_flow.dart';
+import '../shared/widgets/glossy_icon_widget.dart';
+import '../shared/widgets/project_directory_selector.dart';
+import '../shared/widgets/scan_button.dart';
+import '../providers/space_lens_provider.dart';
 
 class SpaceLensScreen extends ConsumerWidget {
   const SpaceLensScreen({super.key});

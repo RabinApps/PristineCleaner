@@ -4,8 +4,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:pristine_cleaner/core/models/file_item.dart';
 import 'package:pristine_cleaner/core/models/scan_result.dart';
 import 'package:pristine_cleaner/core/models/space_lens_snapshot.dart';
-import 'package:pristine_cleaner/core/services/file_service.dart';
-import 'package:pristine_cleaner/features/space_lens/space_lens_provider.dart';
+import 'package:pristine_cleaner/services/file_service.dart';
+import 'package:pristine_cleaner/providers/space_lens_provider.dart';
 
 void main() {
   group('SpaceLensNotifier', () {

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../../shared/widgets/project_directory_selector.dart';
-import '../models/my_tool.dart';
-import '../my_tools_provider.dart';
+import 'project_directory_selector.dart';
+import '../../core/models/my_tool.dart';
+import '../../providers/my_tools_provider.dart';
 
 class MyToolCard extends StatefulWidget {
   final MyTool tool;

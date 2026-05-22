@@ -4,16 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/models/scan_result.dart';
-import '../../core/services/my_tools_service.dart';
-import '../../core/services/trash_service.dart';
-import '../../core/theme/section_themes.dart';
-import '../../shared/removal/removal_flow.dart';
-import '../../shared/widgets/removal_screen.dart';
-import '../../shared/widgets/scan_results_view.dart';
-import 'models/my_tool.dart';
-import 'my_tools_provider.dart';
-import 'widgets/my_tool_card.dart';
+import '../core/models/scan_result.dart';
+import '../services/my_tools_service.dart';
+import '../services/trash_service.dart';
+import '../core/theme/section_themes.dart';
+import '../shared/removal/removal_flow.dart';
+import '../shared/widgets/removal_screen.dart';
+import '../shared/widgets/scan_results_view.dart';
+import '../core/models/my_tool.dart';
+import '../providers/my_tools_provider.dart';
+import '../shared/widgets/my_tool_card.dart';
 
 class MyToolsScreen extends ConsumerStatefulWidget {
   const MyToolsScreen({super.key});

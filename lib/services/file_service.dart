@@ -6,9 +6,9 @@ import 'dart:math' as math;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image/image.dart' as img;
 
-import '../models/file_item.dart';
-import '../models/scan_result.dart';
-import '../models/space_lens_snapshot.dart';
+import '../core/models/file_item.dart';
+import '../core/models/scan_result.dart';
+import '../core/models/space_lens_snapshot.dart';
 
 part 'applications_service.dart';
 part 'cleanup_service.dart';

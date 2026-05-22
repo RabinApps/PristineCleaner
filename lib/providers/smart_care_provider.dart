@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/models/scan_result.dart';
-import '../../core/services/file_service.dart';
+import '../core/models/scan_result.dart';
+import '../services/file_service.dart';
 
 final smartCareProvider = AsyncNotifierProvider<SmartCareNotifier, DiskInfo>(
   SmartCareNotifier.new,

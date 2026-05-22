@@ -1,5 +1,5 @@
-import '../../core/models/file_item.dart';
-import '../../core/models/scan_result.dart';
+import 'file_item.dart';
+import 'scan_result.dart';
 
 /// Shared view-model for sections that follow the scan → review → clean workflow.
 class ScanViewModel {

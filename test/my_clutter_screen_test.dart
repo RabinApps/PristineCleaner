@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pristine_cleaner/features/my_clutter/my_clutter_screen.dart';
+import 'package:pristine_cleaner/screens/my_clutter_screen.dart';
 
 void main() {
   testWidgets('shows project directory picker and no scan type selector', (

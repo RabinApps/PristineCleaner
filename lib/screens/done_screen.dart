@@ -4,7 +4,7 @@ import 'package:pristine_cleaner/core/theme/section_themes.dart';
 class DoneScreen extends StatelessWidget {
   final SectionTheme theme;
   final VoidCallback onDismiss;
-  const DoneScreen({required this.theme, required this.onDismiss});
+  const DoneScreen({super.key, required this.theme, required this.onDismiss});
 
   @override
   Widget build(BuildContext context) {

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:window_manager/window_manager.dart';
 
-import '../../../core/models/nav_item.dart';
+import '../../../../core/models/nav_item.dart';
 
 class SidebarWidget extends StatelessWidget {
   final NavSection activeSection;

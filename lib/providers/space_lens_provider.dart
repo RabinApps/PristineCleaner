@@ -2,13 +2,13 @@ import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/models/file_item.dart';
-import '../../core/models/removal_models.dart';
-import '../../core/models/scan_result.dart';
-import '../../core/models/space_lens_snapshot.dart';
-import '../../core/services/file_service.dart';
-import '../../core/services/trash_service.dart';
-import '../shared/scan_view_model.dart';
+import '../core/models/file_item.dart';
+import '../core/models/removal_models.dart';
+import '../core/models/scan_result.dart';
+import '../core/models/space_lens_snapshot.dart';
+import '../services/file_service.dart';
+import '../services/trash_service.dart';
+import '../core/models/scan_view_model.dart';
 
 final spaceLensProvider = NotifierProvider<SpaceLensNotifier, ScanViewModel>(
   SpaceLensNotifier.new,

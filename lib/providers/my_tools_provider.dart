@@ -3,14 +3,14 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/models/file_item.dart';
-import '../../core/models/removal_models.dart';
-import '../../core/models/scan_result.dart';
-import '../../core/services/file_service.dart';
-import '../../core/services/my_tools_service.dart';
-import '../../core/services/trash_service.dart';
-import '../../core/utils/format_utils.dart';
-import 'models/my_tool.dart';
+import '../core/models/file_item.dart';
+import '../core/models/removal_models.dart';
+import '../core/models/scan_result.dart';
+import '../services/file_service.dart';
+import '../services/my_tools_service.dart';
+import '../services/trash_service.dart';
+import '../core/utils/format_utils.dart';
+import '../core/models/my_tool.dart';
 
 final myToolsProvider = NotifierProvider<MyToolsNotifier, MyToolsState>(
   MyToolsNotifier.new,

@@ -3,37 +3,34 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/services/trash_service.dart';
-import '../../core/theme/section_themes.dart';
-import '../../shared/removal/removal_flow.dart';
-import '../../shared/widgets/section_landing_layout.dart';
-import 'cleanup_provider.dart';
-import 'cleanup_results_view.dart';
-import '../shared/scan_view_model.dart';
+import '../core/theme/section_themes.dart';
+import '../services/trash_service.dart';
+import '../shared/removal/removal_flow.dart';
+import '../shared/widgets/scan_results_view.dart';
+import '../shared/widgets/section_landing_layout.dart';
+import '../shared/widgets/glossy_icon_widget.dart';
+import '../providers/applications_provider.dart';
+import '../core/models/scan_view_model.dart';
 
-class CleanupScreen extends ConsumerWidget {
-  const CleanupScreen({super.key});
+class ApplicationsScreen extends ConsumerWidget {
+  const ApplicationsScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final vm = ref.watch(cleanupProvider);
-    final notifier = ref.read(cleanupProvider.notifier);
-    const theme = SectionThemes.cleanup;
+    final vm = ref.watch(applicationsProvider);
+    final notifier = ref.read(applicationsProvider.notifier);
+    const theme = SectionThemes.applications;
 
-    // Done state — show success then reset
     if (vm.isDone) {
       return _DoneScreen(theme: theme, onDismiss: notifier.reset);
     }
 
-    // Results state — new Cleanup Manager layout
     if (vm.hasResults) {
-      return CleanupResultsView(
+      return ScanResultsView(
         result: vm.result!,
         theme: theme,
         isCleaning: vm.isCleaning,
         onToggleItem: notifier.toggleItem,
-        onToggleGroup: notifier.toggleGroup,
-        onToggleCategory: notifier.toggleCategory,
         onSelectAll: notifier.selectAll,
         onDeselectAll: notifier.deselectAll,
         onClean: () {
@@ -43,9 +40,9 @@ class CleanupScreen extends ConsumerWidget {
       );
     }
 
-    // Idle / scanning state
     return SectionLandingLayout(
       theme: theme,
+      orbShape: OrbShape.hexagon,
       onScan: notifier.scan,
       onStop: notifier.stop,
       isScanning: vm.isScanning,
@@ -63,7 +60,7 @@ class CleanupScreen extends ConsumerWidget {
     BuildContext context,
     WidgetRef ref,
     ScanViewModel vm,
-    CleanupNotifier notifier,
+    ApplicationsNotifier notifier,
     SectionTheme theme,
   ) async {
     final selected = vm.result?.selectedItems ?? const [];
@@ -84,7 +81,6 @@ class CleanupScreen extends ConsumerWidget {
 class _DoneScreen extends StatelessWidget {
   final SectionTheme theme;
   final VoidCallback onDismiss;
-
   const _DoneScreen({required this.theme, required this.onDismiss});
 
   @override
@@ -108,7 +104,7 @@ class _DoneScreen extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             const Text(
-              'All cleaned!',
+              'Applications removed!',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 28,
@@ -117,7 +113,7 @@ class _DoneScreen extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             const Text(
-              'Selected files have been moved to Trash.',
+              'Selected apps have been moved to Trash.',
               style: TextStyle(color: Colors.white54, fontSize: 15),
             ),
             const SizedBox(height: 32),

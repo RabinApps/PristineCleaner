@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../models/file_item.dart';
-import '../models/removal_models.dart';
-import '../models/scan_result.dart';
+import '../core/models/file_item.dart';
+import '../core/models/removal_models.dart';
+import '../core/models/scan_result.dart';
 
 final myToolsServiceProvider = Provider<MyToolsService>((ref) {
   return MyToolsService();

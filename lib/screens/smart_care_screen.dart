@@ -2,11 +2,11 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/models/scan_result.dart';
-import '../../core/theme/section_themes.dart';
-import '../../shared/widgets/glossy_icon_widget.dart';
-import '../../shared/widgets/scan_button.dart';
-import 'smart_care_provider.dart';
+import '../core/models/scan_result.dart';
+import '../core/theme/section_themes.dart';
+import '../shared/widgets/glossy_icon_widget.dart';
+import '../shared/widgets/scan_button.dart';
+import '../providers/smart_care_provider.dart';
 
 class SmartCareScreen extends ConsumerWidget {
   const SmartCareScreen({super.key});

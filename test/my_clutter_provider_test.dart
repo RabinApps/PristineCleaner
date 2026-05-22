@@ -4,8 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pristine_cleaner/core/models/file_item.dart';
 import 'package:pristine_cleaner/core/models/scan_result.dart';
-import 'package:pristine_cleaner/core/services/file_service.dart';
-import 'package:pristine_cleaner/features/my_clutter/my_clutter_provider.dart';
+import 'package:pristine_cleaner/services/file_service.dart';
+import 'package:pristine_cleaner/providers/my_clutter_provider.dart';
 
 void main() {
   group('MyClutterNotifier', () {
