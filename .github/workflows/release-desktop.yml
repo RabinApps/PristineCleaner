@@ -47,6 +47,7 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: stable
+          cache: true
 
       - name: Install Linux packaging dependencies
         if: runner.os == 'Linux'

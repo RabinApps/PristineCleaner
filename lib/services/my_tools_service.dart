@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../core/models/file_item.dart';
 import '../core/models/removal_models.dart';
 import '../core/models/scan_result.dart';
+import '../gen/strings.g.dart';
 
 final myToolsServiceProvider = Provider<MyToolsService>((ref) {
   return MyToolsService();
@@ -308,12 +309,12 @@ class MyToolsService {
           items.add(
             FileItem(
               path: id,
-              name: 'Snapshot $id',
+              name: t.myToolsService.snapshotName.replaceAll('{id}', id),
               sizeBytes: 0,
               modified: DateTime.now(),
               isDirectory: false,
               isSelected: true,
-              group: 'Time Machine',
+              group: t.myToolsService.timeMachineGroup,
             ),
           );
         }
@@ -331,7 +332,7 @@ class MyToolsService {
         .map(
           (id) => FileItem(
             path: id,
-            name: 'Snapshot $id',
+            name: t.myToolsService.snapshotName.replaceAll('{id}', id),
             sizeBytes: 0,
             modified: DateTime.now(),
             isDirectory: false,
@@ -353,10 +354,10 @@ class MyToolsService {
     final deleted = <FileItem>[];
 
     if (!Platform.isMacOS) {
-      return const RemovalOutcome(
-        deletedItems: <FileItem>[],
+      return RemovalOutcome(
+        deletedItems: const <FileItem>[],
         deletedBytes: 0,
-        errors: <String>['Time Machine snapshots are only available on macOS.'],
+        errors: <String>[t.myToolsService.timeMachineMacOnly],
       );
     }
 

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../gen/strings.g.dart';
+
 class SectionFeature {
   final String label;
   final IconData icon;
@@ -30,6 +32,27 @@ class SectionTheme {
 
 class SectionThemes {
   SectionThemes._();
+
+  static SectionTheme _localized({
+    required SectionTheme base,
+    required String title,
+    required String subtitle,
+    required List<String> featureLabels,
+  }) {
+    return SectionTheme(
+      id: base.id,
+      title: title,
+      subtitle: subtitle,
+      icon: base.icon,
+      features: [
+        for (int i = 0; i < base.features.length; i++)
+          SectionFeature(label: featureLabels[i], icon: base.features[i].icon),
+      ],
+      backgroundGradient: base.backgroundGradient,
+      accentColor: base.accentColor,
+      orbColor: base.orbColor,
+    );
+  }
 
   static const smartCare = SectionTheme(
     id: 'smart_care',
@@ -178,4 +201,88 @@ class SectionThemes {
     applications,
     myTools,
   ];
+
+  static SectionTheme smartCareLocalized(BuildContext context) {
+    final tx = context.t.sections.smartCare;
+    return _localized(
+      base: smartCare,
+      title: tx.title,
+      subtitle: tx.subtitle,
+      featureLabels: [
+        tx.features.systemStatus,
+        tx.features.storageUsage,
+        tx.features.quickActions,
+      ],
+    );
+  }
+
+  static SectionTheme cleanupLocalized(BuildContext context) {
+    final tx = context.t.sections.cleanup;
+    return _localized(
+      base: cleanup,
+      title: tx.title,
+      subtitle: tx.subtitle,
+      featureLabels: [
+        tx.features.systemJunk,
+        tx.features.userCache,
+        tx.features.tempFiles,
+      ],
+    );
+  }
+
+  static SectionTheme myClutterLocalized(BuildContext context) {
+    final tx = context.t.sections.myClutter;
+    return _localized(
+      base: myClutter,
+      title: tx.title,
+      subtitle: tx.subtitle,
+      featureLabels: [
+        tx.features.largeFiles,
+        tx.features.duplicates,
+        tx.features.largeSimilarImages,
+      ],
+    );
+  }
+
+  static SectionTheme spaceViewLocalized(BuildContext context) {
+    final tx = context.t.sections.spaceView;
+    return _localized(
+      base: spaceView,
+      title: tx.title,
+      subtitle: tx.subtitle,
+      featureLabels: [
+        tx.features.visualStorageMap,
+        tx.features.largeFoldersOverview,
+        tx.features.hiddenFilesUncovered,
+      ],
+    );
+  }
+
+  static SectionTheme applicationsLocalized(BuildContext context) {
+    final tx = context.t.sections.applications;
+    return _localized(
+      base: applications,
+      title: tx.title,
+      subtitle: tx.subtitle,
+      featureLabels: [
+        tx.features.appUninstaller,
+        tx.features.largeApps,
+        tx.features.fileLeftovers,
+      ],
+    );
+  }
+
+  static SectionTheme myToolsLocalized(BuildContext context) {
+    final tx = context.t.sections.myTools;
+    return _localized(
+      base: myTools,
+      title: tx.title,
+      subtitle: tx.subtitle,
+      featureLabels: [
+        tx.features.targetedScanners,
+        tx.features.quickActions,
+        tx.features.liveFiltering,
+      ],
+    );
+  }
 }

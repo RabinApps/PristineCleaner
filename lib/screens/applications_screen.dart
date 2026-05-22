@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../gen/strings.g.dart';
 import '../core/theme/section_themes.dart';
 import '../services/trash_service.dart';
 import '../shared/removal/removal_flow.dart';
@@ -19,7 +20,7 @@ class ApplicationsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final vm = ref.watch(applicationsProvider);
     final notifier = ref.read(applicationsProvider.notifier);
-    const theme = SectionThemes.applications;
+    final theme = SectionThemes.applicationsLocalized(context);
 
     if (vm.isDone) {
       return _DoneScreen(theme: theme, onDismiss: notifier.reset);
@@ -103,8 +104,8 @@ class _DoneScreen extends StatelessWidget {
               color: theme.accentColor,
             ),
             const SizedBox(height: 20),
-            const Text(
-              'Applications removed!',
+            Text(
+              context.t.done.applicationsRemovedTitle,
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 28,
@@ -112,8 +113,8 @@ class _DoneScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 8),
-            const Text(
-              'Selected apps have been moved to Trash.',
+            Text(
+              context.t.done.appsMovedToTrashMessage,
               style: TextStyle(color: Colors.white54, fontSize: 15),
             ),
             const SizedBox(height: 32),
@@ -130,7 +131,7 @@ class _DoneScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              child: const Text('Done'),
+              child: Text(context.t.buttons.done),
             ),
           ],
         ),

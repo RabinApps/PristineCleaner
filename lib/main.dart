@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'app.dart';
+import 'gen/strings.g.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,5 +23,9 @@ void main() async {
     await windowManager.focus();
   });
 
-  runApp(const ProviderScope(child: PristineCleanerApp()));
+  runApp(
+    TranslationProvider(
+      child: const ProviderScope(child: PristineCleanerApp()),
+    ),
+  );
 }

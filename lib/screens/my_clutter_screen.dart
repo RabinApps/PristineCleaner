@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pristine_cleaner/screens/done_screen.dart';
+import 'package:pristine_cleaner/gen/strings.g.dart';
 
 import '../services/trash_service.dart';
 import '../core/theme/section_themes.dart';
@@ -29,7 +30,7 @@ class _MyClutterScreenState extends ConsumerState<MyClutterScreen> {
     final state = ref.watch(myClutterProvider);
     final notifier = ref.read(myClutterProvider.notifier);
     final vm = state.vm;
-    const theme = SectionThemes.myClutter;
+    final theme = SectionThemes.myClutterLocalized(context);
 
     if (vm.isDone) {
       return DoneScreen(theme: theme, onDismiss: notifier.reset);
@@ -74,7 +75,9 @@ class _MyClutterScreenState extends ConsumerState<MyClutterScreen> {
         children: [
           ProjectDirectorySelector(
             selectedPath:
-                vm.selectedParentPath ?? vm.selectedParentName ?? 'No folder',
+                vm.selectedParentPath ??
+                vm.selectedParentName ??
+                context.t.projectDirectory.noFolder,
             accentColor: theme.accentColor,
             onPickFolder: () async {
               final pickedPath = await _pickNativeDirectory(
@@ -111,7 +114,7 @@ class _MyClutterScreenState extends ConsumerState<MyClutterScreen> {
 
     final outcome = await runTrashRemovalFlow(
       context: context,
-      title: SectionThemes.myClutter.title,
+      title: SectionThemes.myClutterLocalized(context).title,
       accentColor: SectionThemes.myClutter.accentColor,
       selectedItems: selected,
       trashService: ref.read(trashServiceProvider),
@@ -123,7 +126,7 @@ class _MyClutterScreenState extends ConsumerState<MyClutterScreen> {
 
 Future<String?> _pickNativeDirectory({String? initialDirectory}) {
   return FilePicker.platform.getDirectoryPath(
-    dialogTitle: 'Choose project directory',
+    dialogTitle: t.projectDirectory.chooseProjectDirectory,
     initialDirectory: initialDirectory,
     lockParentWindow: true,
   );

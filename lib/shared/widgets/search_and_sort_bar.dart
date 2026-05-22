@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
+import '../../gen/strings.g.dart';
 
 /// Sort order enum for generic use across all pages
 enum SortBy { size, name, ascending, descending }
 
 extension SortByLabel on SortBy {
-  String get label {
+  String label(BuildContext context) {
     return switch (this) {
-      SortBy.size => 'Size',
-      SortBy.name => 'Name',
-      SortBy.ascending => 'Ascending',
-      SortBy.descending => 'Descending',
+      SortBy.size => context.t.searchAndSort.size,
+      SortBy.name => context.t.searchAndSort.name,
+      SortBy.ascending => context.t.searchAndSort.ascending,
+      SortBy.descending => context.t.searchAndSort.descending,
     };
   }
 }
@@ -53,10 +54,10 @@ class SearchAndSortBar extends StatelessWidget {
               autofocus: true,
               style: const TextStyle(color: Colors.white, fontSize: 13),
               decoration: InputDecoration(
-                hintText: 'Search...',
+                hintText: context.t.searchAndSort.searchHint,
                 hintStyle: const TextStyle(color: Colors.white38, fontSize: 13),
                 filled: true,
-                fillColor: Colors.white.withOpacity(0.07),
+                fillColor: Colors.white.withValues(alpha: 0.07),
                 contentPadding: const EdgeInsets.symmetric(
                   horizontal: 10,
                   vertical: 0,
@@ -84,7 +85,7 @@ class SearchAndSortBar extends StatelessWidget {
             size: 18,
             color: showSearch ? Colors.white : Colors.white60,
           ),
-          tooltip: 'Search',
+          tooltip: context.t.tooltips.search,
           padding: EdgeInsets.zero,
           constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
         ),
@@ -103,7 +104,7 @@ class SearchAndSortBar extends StatelessWidget {
               PopupMenuItem(
                 value: option,
                 child: Text(
-                  option.label,
+                  option.label(context),
                   style: TextStyle(
                     color: sortBy == option ? accentColor : Colors.white70,
                     fontSize: 13,
@@ -117,7 +118,7 @@ class SearchAndSortBar extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  'Sort by: ${sortBy.label}',
+                  '${context.t.searchAndSort.sortBy}: ${sortBy.label(context)}',
                   style: TextStyle(
                     color: Colors.white70,
                     fontSize: 13,

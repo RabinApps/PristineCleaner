@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
+import '../../gen/strings.g.dart';
+
 import '../../core/models/file_item.dart';
 
 class FileListTile extends StatelessWidget {
@@ -107,7 +109,7 @@ class FileListTile extends StatelessWidget {
                   // Open file button
                   if (onOpen != null)
                     Tooltip(
-                      message: 'Open in Finder',
+                      message: context.t.tooltips.openInFinder,
                       child: IconButton(
                         icon: Icon(
                           Icons.open_in_new_rounded,

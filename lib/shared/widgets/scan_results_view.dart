@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../core/models/scan_result.dart';
+import '../../gen/strings.g.dart';
 import '../../core/theme/section_themes.dart';
 import '../../core/utils/file_launcher.dart';
 import 'file_list_tile.dart';
@@ -143,7 +144,9 @@ class _ScanResultsViewState extends State<ScanResultsView> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '${filteredIndices.length} items  •  ${widget.result.formattedTotal}',
+                      context.t.scanResults.itemsSummary
+                          .replaceAll('{count}', '${filteredIndices.length}')
+                          .replaceAll('{size}', widget.result.formattedTotal),
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 16,
@@ -152,7 +155,10 @@ class _ScanResultsViewState extends State<ScanResultsView> {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      'Scanned in ${widget.result.scanDuration.inMilliseconds}ms',
+                      context.t.scanResults.scannedInMs.replaceAll(
+                        '{ms}',
+                        '${widget.result.scanDuration.inMilliseconds}',
+                      ),
                       style: const TextStyle(
                         color: Colors.white38,
                         fontSize: 12,
@@ -174,7 +180,9 @@ class _ScanResultsViewState extends State<ScanResultsView> {
                     color: widget.theme.accentColor,
                   ),
                   label: Text(
-                    allSelected ? 'Deselect All' : 'Select All',
+                    allSelected
+                        ? context.t.scanResults.deselectAll
+                        : context.t.scanResults.selectAll,
                     style: TextStyle(
                       color: widget.theme.accentColor,
                       fontSize: 13,
@@ -191,8 +199,8 @@ class _ScanResultsViewState extends State<ScanResultsView> {
                 ? Center(
                     child: Text(
                       _searchQuery.isNotEmpty
-                          ? 'No items match your search'
-                          : 'No items found',
+                          ? context.t.scanResults.noItemsMatchSearch
+                          : context.t.scanResults.noItemsFound,
                       style: const TextStyle(
                         color: Colors.white54,
                         fontSize: 14,
@@ -238,7 +246,10 @@ class _ScanResultsViewState extends State<ScanResultsView> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '$selectedCount items selected',
+                      context.t.scanResults.itemsSelected.replaceAll(
+                        '{count}',
+                        '$selectedCount',
+                      ),
                       style: const TextStyle(
                         color: Colors.white70,
                         fontSize: 13,
@@ -269,7 +280,7 @@ class _ScanResultsViewState extends State<ScanResultsView> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  child: const Text('Rescan'),
+                  child: Text(context.t.scanResults.rescan),
                 ),
                 const SizedBox(width: 12),
                 // Clean button

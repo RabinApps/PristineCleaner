@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../gen/strings.g.dart';
 import '../../core/models/file_item.dart';
 import '../../core/models/removal_models.dart';
 import '../../core/utils/format_utils.dart';
@@ -20,7 +21,7 @@ Future<RemovalOutcome?> showRemovalScreen({
   return showGeneralDialog<RemovalOutcome>(
     context: context,
     barrierDismissible: false,
-    barrierLabel: 'Removal progress',
+    barrierLabel: context.t.removal.barrierLabel,
     barrierColor: Colors.black.withValues(alpha: 0.72),
     pageBuilder: (_, _, _) {
       return _RemovalScreen(
@@ -110,18 +111,18 @@ class _RemovalScreenState extends State<_RemovalScreen> {
           builder: (dialogContext) {
             return AlertDialog(
               backgroundColor: const Color(0xFF191919),
-              title: const Text(
-                'Stop removal?',
+              title: Text(
+                context.t.dialogs.stopRemovalTitle,
                 style: TextStyle(color: Colors.white),
               ),
-              content: const Text(
-                'The current file will finish, then remaining files will be skipped.',
+              content: Text(
+                context.t.dialogs.stopRemovalMessage,
                 style: TextStyle(color: Colors.white70),
               ),
               actions: [
                 TextButton(
                   onPressed: () => Navigator.of(dialogContext).pop(false),
-                  child: const Text('Keep removing'),
+                  child: Text(context.t.buttons.keepRemoving),
                 ),
                 ElevatedButton(
                   onPressed: () => Navigator.of(dialogContext).pop(true),
@@ -129,7 +130,7 @@ class _RemovalScreenState extends State<_RemovalScreen> {
                     foregroundColor: Colors.white,
                     backgroundColor: Colors.redAccent,
                   ),
-                  child: const Text('Stop'),
+                  child: Text(context.t.buttons.stop),
                 ),
               ],
             );
@@ -199,14 +200,16 @@ class _RunningView extends StatelessWidget {
     final totalItems = progress.totalItems;
     final processed = progress.processedItems;
     final progressLabel = totalItems <= 0
-        ? 'Preparing...'
-        : '$processed of $totalItems processed';
+        ? context.t.removal.preparing
+        : context.t.removal.processedSummary
+              .replaceAll('{processed}', '$processed')
+              .replaceAll('{total}', '$totalItems');
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Removing from $title',
+          context.t.removal.removingFrom.replaceAll('{title}', title),
           style: const TextStyle(
             color: Colors.white,
             fontSize: 30,
@@ -216,8 +219,8 @@ class _RunningView extends StatelessWidget {
         const SizedBox(height: 12),
         Text(
           progress.stopRequested
-              ? 'Stopping after the current file...'
-              : 'Please keep this window open while removal runs.',
+              ? context.t.removal.stoppingAfterCurrentFile
+              : context.t.removal.keepWindowOpen,
           style: const TextStyle(color: Colors.white70, fontSize: 14),
         ),
         const SizedBox(height: 30),
@@ -237,7 +240,9 @@ class _RunningView extends StatelessWidget {
         ),
         const SizedBox(height: 6),
         Text(
-          '${progress.deletedItems} deleted • ${formatBytes(progress.deletedBytes)} freed',
+          context.t.removal.deletedFreed
+              .replaceAll('{deleted}', '${progress.deletedItems}')
+              .replaceAll('{bytes}', formatBytes(progress.deletedBytes)),
           style: TextStyle(
             color: accentColor,
             fontSize: 15,
@@ -247,7 +252,10 @@ class _RunningView extends StatelessWidget {
         if (progress.currentItemName != null) ...[
           const SizedBox(height: 12),
           Text(
-            'Current: ${progress.currentItemName}',
+            context.t.removal.currentItem.replaceAll(
+              '{name}',
+              progress.currentItemName ?? '',
+            ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: const TextStyle(color: Colors.white54, fontSize: 12),
@@ -266,7 +274,11 @@ class _RunningView extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 14),
             ),
             icon: const Icon(Icons.stop_rounded),
-            label: Text(progress.stopRequested ? 'Stopping...' : 'Stop'),
+            label: Text(
+              progress.stopRequested
+                  ? context.t.removal.stopping
+                  : context.t.buttons.stop,
+            ),
           ),
         ),
       ],
@@ -296,8 +308,8 @@ class _CompletedView extends StatelessWidget {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Removal failed',
+          Text(
+            context.t.removal.removalFailed,
             style: TextStyle(
               color: Colors.white,
               fontSize: 30,
@@ -306,19 +318,24 @@ class _CompletedView extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           Text(
-            error ?? 'Something went wrong while removing selected files.',
+            error ?? context.t.removal.removalFailedDetails,
             style: const TextStyle(color: Colors.white70),
           ),
           const Spacer(),
           Align(
             alignment: Alignment.centerRight,
-            child: FilledButton(onPressed: onClose, child: const Text('Close')),
+            child: FilledButton(
+              onPressed: onClose,
+              child: Text(context.t.buttons.close),
+            ),
           ),
         ],
       );
     }
 
-    final heading = data.stoppedByUser ? 'Removal stopped' : 'Removal complete';
+    final heading = data.stoppedByUser
+        ? context.t.removal.removalStopped
+        : context.t.removal.removalComplete;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -333,12 +350,17 @@ class _CompletedView extends StatelessWidget {
         ),
         const SizedBox(height: 10),
         Text(
-          '$title deleted ${data.deletedCount} item${data.deletedCount == 1 ? '' : 's'}',
+          context.t.removal.deletedSummary
+              .replaceAll('{title}', title)
+              .replaceAll('{count}', '${data.deletedCount}'),
           style: const TextStyle(color: Colors.white70, fontSize: 14),
         ),
         const SizedBox(height: 4),
         Text(
-          '${formatBytes(data.deletedBytes)} freed',
+          context.t.removal.freedSummary.replaceAll(
+            '{bytes}',
+            formatBytes(data.deletedBytes),
+          ),
           style: TextStyle(
             color: accentColor,
             fontSize: 18,
@@ -348,13 +370,16 @@ class _CompletedView extends StatelessWidget {
         if (data.errors.isNotEmpty) ...[
           const SizedBox(height: 8),
           Text(
-            '${data.errors.length} item${data.errors.length == 1 ? '' : 's'} failed to remove.',
+            context.t.removal.failedToRemoveSummary.replaceAll(
+              '{count}',
+              '${data.errors.length}',
+            ),
             style: const TextStyle(color: Colors.orangeAccent, fontSize: 13),
           ),
         ],
         const SizedBox(height: 16),
-        const Text(
-          'Deleted files',
+        Text(
+          context.t.removal.deletedFiles,
           style: TextStyle(
             color: Colors.white,
             fontSize: 15,
@@ -370,10 +395,10 @@ class _CompletedView extends StatelessWidget {
               border: Border.all(color: Colors.white12),
             ),
             child: data.deletedItems.isEmpty
-                ? const Center(
+                ? Center(
                     child: Text(
-                      'No files were deleted.',
-                      style: TextStyle(color: Colors.white54),
+                      context.t.removal.noFilesDeleted,
+                      style: const TextStyle(color: Colors.white54),
                     ),
                   )
                 : ListView.separated(
@@ -430,7 +455,7 @@ class _CompletedView extends StatelessWidget {
               backgroundColor: accentColor,
               foregroundColor: Colors.black,
             ),
-            child: const Text('Done'),
+            child: Text(context.t.buttons.done),
           ),
         ),
       ],

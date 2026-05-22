@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/models/nav_item.dart';
+import '../../../gen/strings.g.dart';
 import 'sidebar/sidebar_widget.dart';
 
 class ShellScreen extends StatelessWidget {
@@ -50,8 +51,8 @@ class ComingSoonScreen extends StatelessWidget {
               style: const TextStyle(color: Colors.white38, fontSize: 20),
             ),
             const SizedBox(height: 6),
-            const Text(
-              'Coming soon',
+            Text(
+              context.t.shell.comingSoon,
               style: TextStyle(color: Colors.white24, fontSize: 14),
             ),
           ],

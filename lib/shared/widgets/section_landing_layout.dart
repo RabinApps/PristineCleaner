@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../gen/strings.g.dart';
 import '../../core/theme/section_themes.dart';
 import 'glossy_icon_widget.dart';
 import 'scan_button.dart';
@@ -124,7 +125,9 @@ class SectionLandingLayout extends StatelessWidget {
             child: Center(
               child: ScanButton(
                 color: isScanning ? Colors.redAccent : theme.accentColor,
-                label: isScanning ? 'Stop' : 'Scan',
+                label: isScanning
+                    ? context.t.buttons.stop
+                    : context.t.buttons.scan,
                 isLoading: false,
                 onPressed: isScanning
                     ? (onStop == null
@@ -138,12 +141,12 @@ class SectionLandingLayout extends StatelessWidget {
                                         backgroundColor: const Color(
                                           0xFF191919,
                                         ),
-                                        title: const Text(
-                                          'Stop scanning?',
+                                        title: Text(
+                                          context.t.dialogs.stopScanningTitle,
                                           style: TextStyle(color: Colors.white),
                                         ),
-                                        content: const Text(
-                                          'This will cancel the current scan and discard any partial progress.',
+                                        content: Text(
+                                          context.t.dialogs.stopScanningMessage,
                                           style: TextStyle(
                                             color: Colors.white70,
                                           ),
@@ -153,7 +156,9 @@ class SectionLandingLayout extends StatelessWidget {
                                             onPressed: () => Navigator.of(
                                               dialogContext,
                                             ).pop(false),
-                                            child: const Text('Keep scanning'),
+                                            child: Text(
+                                              context.t.buttons.keepScanning,
+                                            ),
                                           ),
                                           ElevatedButton(
                                             onPressed: () => Navigator.of(
@@ -163,7 +168,7 @@ class SectionLandingLayout extends StatelessWidget {
                                               backgroundColor: Colors.redAccent,
                                               foregroundColor: Colors.white,
                                             ),
-                                            child: const Text('Stop'),
+                                            child: Text(context.t.buttons.stop),
                                           ),
                                         ],
                                       );

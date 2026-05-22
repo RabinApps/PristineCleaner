@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../core/models/file_item.dart';
 import '../../core/models/scan_result.dart';
+import '../../gen/strings.g.dart';
 import '../../core/theme/section_themes.dart';
 import '../../core/utils/format_utils.dart';
 import 'scan_results_view.dart';
@@ -81,7 +82,7 @@ class MyClutterResultsWorkspace extends StatelessWidget {
           child: TextButton.icon(
             onPressed: () => onViewChanged(MyClutterView.dashboard),
             icon: const Icon(Icons.arrow_back_rounded, size: 16),
-            label: const Text('Back to Categories'),
+            label: Text(context.t.myClutterDashboard.backToCategories),
             style: TextButton.styleFrom(
               foregroundColor: Colors.white,
               backgroundColor: Colors.black.withValues(alpha: 0.25),
@@ -115,13 +116,28 @@ class _MyClutterResultsDashboard extends StatelessWidget {
     final categories = _buildCategorySummaries(result.items);
     final duplicateSummary =
         categories['fresh_duplicates'] ??
-        _CategorySummary.empty('Fresh Duplicates Found');
+        _CategorySummary.empty(
+          context.t.myClutterDashboard.freshDuplicatesFound.replaceAll(
+            '{count}',
+            '0',
+          ),
+        );
     final similarSummary =
         categories['large_similar_images'] ??
-        _CategorySummary.empty('Large Similar Images Found');
+        _CategorySummary.empty(
+          context.t.myClutterDashboard.largeSimilarImagesFound.replaceAll(
+            '{count}',
+            '0',
+          ),
+        );
     final largeSummary =
         categories['large_files'] ??
-        _CategorySummary.empty('Large Files Found');
+        _CategorySummary.empty(
+          context.t.myClutterDashboard.largeFilesFound.replaceAll(
+            '{bytes}',
+            formatBytes(0),
+          ),
+        );
 
     return Container(
       decoration: BoxDecoration(
@@ -138,7 +154,10 @@ class _MyClutterResultsDashboard extends StatelessWidget {
           children: [
             const SizedBox(height: 28),
             Text(
-              'You have ${result.items.length} files to sort through.',
+              context.t.myClutterDashboard.filesToSort.replaceAll(
+                '{count}',
+                '${result.items.length}',
+              ),
               textAlign: TextAlign.center,
               style: const TextStyle(
                 color: Colors.white,
@@ -148,10 +167,10 @@ class _MyClutterResultsDashboard extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 8),
-            const Text(
-              'Use quick recommendations or review them by hand.',
+            Text(
+              context.t.myClutterDashboard.quickRecommendations,
               textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.white70, fontSize: 24),
+              style: const TextStyle(color: Colors.white70, fontSize: 24),
             ),
             const SizedBox(height: 20),
             FilledButton(
@@ -160,7 +179,7 @@ class _MyClutterResultsDashboard extends StatelessWidget {
                 backgroundColor: Colors.white.withValues(alpha: 0.18),
                 foregroundColor: Colors.white,
               ),
-              child: const Text('Review All Files'),
+              child: Text(context.t.myClutterDashboard.reviewAllFiles),
             ),
             const SizedBox(height: 32),
             Row(
@@ -168,10 +187,15 @@ class _MyClutterResultsDashboard extends StatelessWidget {
               children: [
                 Expanded(
                   child: _MyClutterSummaryCard(
-                    title: '${duplicateSummary.count} Fresh Duplicates Found',
+                    title: context.t.myClutterDashboard.freshDuplicatesFound
+                        .replaceAll('{count}', '${duplicateSummary.count}'),
                     subtitle: duplicateSummary.count == 0
-                        ? 'No duplicates found in this scan.'
-                        : 'Remove ${formatBytes(duplicateSummary.totalBytes)} of duplicate files.',
+                        ? context.t.myClutterDashboard.noDuplicates
+                        : context.t.myClutterDashboard.removeDuplicateBytes
+                              .replaceAll(
+                                '{bytes}',
+                                formatBytes(duplicateSummary.totalBytes),
+                              ),
                     onReview: duplicateSummary.count == 0
                         ? null
                         : onReviewDuplicates,
@@ -183,11 +207,18 @@ class _MyClutterResultsDashboard extends StatelessWidget {
                   child: Column(
                     children: [
                       _MyClutterSummaryCard(
-                        title:
-                            '${similarSummary.count} Large Similar Images Found',
+                        title: context
+                            .t
+                            .myClutterDashboard
+                            .largeSimilarImagesFound
+                            .replaceAll('{count}', '${similarSummary.count}'),
                         subtitle: similarSummary.count == 0
-                            ? 'No similar image groups found.'
-                            : 'There are ${formatBytes(similarSummary.totalBytes)} of nearly identical images.',
+                            ? context.t.myClutterDashboard.noSimilarGroups
+                            : context.t.myClutterDashboard.nearlyIdenticalImages
+                                  .replaceAll(
+                                    '{bytes}',
+                                    formatBytes(similarSummary.totalBytes),
+                                  ),
                         onReview: similarSummary.count == 0
                             ? null
                             : onReviewSimilarImages,
@@ -195,11 +226,18 @@ class _MyClutterResultsDashboard extends StatelessWidget {
                       ),
                       const SizedBox(height: 16),
                       _MyClutterSummaryCard(
-                        title:
-                            '${formatBytes(largeSummary.totalBytes)} of Large Files Found',
+                        title: context.t.myClutterDashboard.largeFilesFound
+                            .replaceAll(
+                              '{bytes}',
+                              formatBytes(largeSummary.totalBytes),
+                            ),
                         subtitle: largeSummary.count == 0
-                            ? 'No large files found.'
-                            : '${largeSummary.count} large files are ready for review.',
+                            ? context.t.myClutterDashboard.noLargeFiles
+                            : context.t.myClutterDashboard.largeFilesReady
+                                  .replaceAll(
+                                    '{count}',
+                                    '${largeSummary.count}',
+                                  ),
                         onReview: largeSummary.count == 0
                             ? null
                             : onReviewLargeFiles,
@@ -272,7 +310,7 @@ class _MyClutterSummaryCard extends StatelessWidget {
                 disabledBackgroundColor: Colors.white.withValues(alpha: 0.08),
                 disabledForegroundColor: Colors.white38,
               ),
-              child: const Text('Review'),
+              child: Text(context.t.myClutterDashboard.review),
             ),
           ),
         ],

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../gen/strings.g.dart';
 import '../core/models/file_item.dart';
 import '../core/models/removal_models.dart';
 import '../core/models/scan_result.dart';
@@ -31,7 +32,9 @@ class ToolScanSummary {
 
   String get subtitle {
     if (itemCount <= 0) return message;
-    return '$itemCount item${itemCount == 1 ? '' : 's'} • ${formatBytes(totalBytes)}';
+    return t.myToolsMessages.itemsWithSize
+        .replaceAll('{count}', '$itemCount')
+        .replaceAll('{size}', formatBytes(totalBytes));
   }
 }
 
@@ -163,7 +166,9 @@ class MyToolsNotifier extends Notifier<MyToolsState> {
         activeDetailResult: outcome.result,
       );
     } on ScanCancelledException {
-      state = state.copyWith(lastNotice: '${tool.title}: scan was cancelled.');
+      state = state.copyWith(
+        lastNotice: '${tool.title}: ${t.myToolsMessages.scanCancelled}',
+      );
     } catch (e) {
       state = state.copyWith(lastNotice: '${tool.title}: ${_prettyError(e)}');
     } finally {
@@ -224,7 +229,7 @@ class MyToolsNotifier extends Notifier<MyToolsState> {
 
     final selected = result.selectedItems;
     if (selected.isEmpty) {
-      state = state.copyWith(lastNotice: 'Select at least one item to clean.');
+      state = state.copyWith(lastNotice: t.myToolsMessages.selectAtLeastOne);
       return;
     }
 
@@ -234,7 +239,10 @@ class MyToolsNotifier extends Notifier<MyToolsState> {
       if (errors.isNotEmpty) {
         state = state.copyWith(
           isCleaningDetail: false,
-          lastNotice: 'Failed to clean ${errors.length} item(s).',
+          lastNotice: t.myToolsMessages.failedToClean.replaceAll(
+            '{count}',
+            '${errors.length}',
+          ),
         );
         return;
       }
@@ -257,8 +265,8 @@ class MyToolsNotifier extends Notifier<MyToolsState> {
         totalBytes: totalBytes,
         scannedAt: DateTime.now(),
         message: remaining.isEmpty
-            ? 'Everything selected was cleaned.'
-            : 'Cleanup updated.',
+            ? t.myToolsMessages.everythingSelectedCleaned
+            : t.myToolsMessages.cleanupUpdated,
       );
       final summaries = Map<String, ToolScanSummary>.from(state.summaries)
         ..[toolId] = updatedSummary;
@@ -267,7 +275,10 @@ class MyToolsNotifier extends Notifier<MyToolsState> {
         summaries: summaries,
         activeDetailResult: updatedResult,
         isCleaningDetail: false,
-        lastNotice: 'Cleaned ${selected.length} item(s).',
+        lastNotice: t.myToolsMessages.cleanedCount.replaceAll(
+          '{count}',
+          '${selected.length}',
+        ),
       );
     } catch (e) {
       state = state.copyWith(
@@ -301,21 +312,25 @@ class MyToolsNotifier extends Notifier<MyToolsState> {
       totalBytes: totalBytes,
       scannedAt: DateTime.now(),
       message: remaining.isEmpty
-          ? 'Everything selected was cleaned.'
-          : 'Cleanup updated.',
+          ? t.myToolsMessages.everythingSelectedCleaned
+          : t.myToolsMessages.cleanupUpdated,
     );
     final summaries = Map<String, ToolScanSummary>.from(state.summaries)
       ..[toolId] = updatedSummary;
 
     final failures = outcome.errors.length;
-    final stopPrefix = outcome.stoppedByUser ? 'Stopped. ' : '';
-    final failureSuffix = failures > 0 ? ' $failures failed.' : '';
+    final stopPrefix = outcome.stoppedByUser
+        ? t.myToolsMessages.stoppedPrefix
+        : '';
+    final failureSuffix = failures > 0
+        ? t.myToolsMessages.failedCountShort.replaceAll('{count}', '$failures')
+        : '';
     state = state.copyWith(
       summaries: summaries,
       activeDetailResult: updatedResult,
       isCleaningDetail: false,
       lastNotice:
-          '$stopPrefix Removed ${outcome.deletedCount} item(s).$failureSuffix'
+          ('$stopPrefix${t.myToolsMessages.removedCount.replaceAll('{count}', '${outcome.deletedCount}')}$failureSuffix')
               .trim(),
     );
   }
@@ -342,14 +357,17 @@ class MyToolsNotifier extends Notifier<MyToolsState> {
     switch (tool.scanType) {
       case MyToolScanType.downloads:
         final result = await fileService.scanDownloads();
-        return _outcomeFromResult(result, fallback: 'Downloads are tidy.');
+        return _outcomeFromResult(
+          result,
+          fallback: t.myToolsMessages.fallback.downloadsTidy,
+        );
       case MyToolScanType.largeAndOldFiles:
         final result = await fileService.scanLargeAndOldFiles(
           directoryForTool(tool),
         );
         return _outcomeFromResult(
           result,
-          fallback: 'No oversized stale files were found.',
+          fallback: t.myToolsMessages.fallback.noOversizedStale,
         );
       case MyToolScanType.duplicateFinder:
         final result = await fileService.scanFreshDuplicates(
@@ -357,7 +375,7 @@ class MyToolsNotifier extends Notifier<MyToolsState> {
         );
         return _outcomeFromResult(
           result,
-          fallback: 'No recent duplicates found.',
+          fallback: t.myToolsMessages.fallback.noRecentDuplicates,
         );
       case MyToolScanType.similarImages:
         final result = await fileService.scanLargeSimilarImages(
@@ -365,13 +383,13 @@ class MyToolsNotifier extends Notifier<MyToolsState> {
         );
         return _outcomeFromResult(
           result,
-          fallback: 'No similar large images found.',
+          fallback: t.myToolsMessages.fallback.noSimilarLargeImages,
         );
       case MyToolScanType.appLeftovers:
         final result = await fileService.scanApplications();
         return _outcomeFromResult(
           result,
-          fallback: 'No removable app leftovers found.',
+          fallback: t.myToolsMessages.fallback.noAppLeftovers,
         );
       case MyToolScanType.appUpdater:
         final result = await fileService.scanApplications();
@@ -389,8 +407,8 @@ class MyToolsNotifier extends Notifier<MyToolsState> {
             totalBytes: bytes,
             scannedAt: DateTime.now(),
             message: outdated.isEmpty
-                ? 'No stale applications were found.'
-                : 'Applications that may need review were found.',
+                ? t.myToolsMessages.fallback.noStaleApps
+                : t.myToolsMessages.fallback.appsNeedReview,
           ),
           result: ScanResult(
             items: outdated,
@@ -403,60 +421,63 @@ class MyToolsNotifier extends Notifier<MyToolsState> {
         return _outcomeFromFilteredResult(
           result,
           categories: const {'user_cache', 'user_logs', 'system_logs'},
-          fallback: 'No cleanup candidates in system junk.',
+          fallback: t.myToolsMessages.fallback.noSystemJunkCandidates,
         );
       case MyToolScanType.loginItems:
         final result = await fileService.scanCleanup();
         return _outcomeFromFilteredResult(
           result,
           categories: const {'broken_login_items'},
-          fallback: 'No broken startup/background entries found.',
+          fallback: t.myToolsMessages.fallback.noBrokenStartup,
         );
       case MyToolScanType.backgroundItems:
         final result = await toolsService.scanBackgroundItems();
         return _outcomeFromResult(
           result,
-          fallback: 'No background items were found.',
+          fallback: t.myToolsMessages.fallback.noBackgroundItems,
         );
       case MyToolScanType.privacyItems:
         final result = await fileService.scanCleanup();
         return _outcomeFromFilteredResult(
           result,
           categories: const {'user_logs', 'user_cache'},
-          fallback: 'No privacy traces found in known locations.',
+          fallback: t.myToolsMessages.fallback.noPrivacyTraces,
         );
       case MyToolScanType.trashBins:
         final result = await toolsService.scanTrashBins();
-        return _outcomeFromResult(result, fallback: 'Trash is already empty.');
+        return _outcomeFromResult(
+          result,
+          fallback: t.myToolsMessages.fallback.trashAlreadyEmpty,
+        );
       case MyToolScanType.applicationPermissions:
         final result = await toolsService.scanApplicationPermissions();
         return _outcomeFromResult(
           result,
-          fallback: 'No permission cache files were found.',
+          fallback: t.myToolsMessages.fallback.noPermissionCache,
         );
       case MyToolScanType.timeMachineSnapshots:
         final result = await toolsService.scanTimeMachineSnapshots();
         return _outcomeFromResult(
           result,
-          fallback: 'No local Time Machine snapshots were found.',
+          fallback: t.myToolsMessages.fallback.noTimeMachineSnapshots,
         );
       case MyToolScanType.maintenanceTasks:
         final result = await toolsService.scanMaintenanceTasks();
         return _outcomeFromResult(
           result,
-          fallback: 'No maintenance candidates were found.',
+          fallback: t.myToolsMessages.fallback.noMaintenanceCandidates,
         );
       case MyToolScanType.mailAttachments:
         final result = await toolsService.scanMailAttachments();
         return _outcomeFromResult(
           result,
-          fallback: 'No removable mail attachments were found.',
+          fallback: t.myToolsMessages.fallback.noMailAttachments,
         );
       case MyToolScanType.malwareFinder:
         final result = await toolsService.scanMalwareCandidates();
         return _outcomeFromResult(
           result,
-          fallback: 'No suspicious files were detected.',
+          fallback: t.myToolsMessages.fallback.noSuspiciousFiles,
         );
     }
   }
@@ -477,7 +498,9 @@ class MyToolsNotifier extends Notifier<MyToolsState> {
         itemCount: result.items.length,
         totalBytes: result.totalBytes,
         scannedAt: DateTime.now(),
-        message: result.items.isEmpty ? fallback : 'Scan complete.',
+        message: result.items.isEmpty
+            ? fallback
+            : t.myToolsMessages.scanComplete,
       ),
       result: result,
     );
@@ -505,7 +528,7 @@ class MyToolsNotifier extends Notifier<MyToolsState> {
         itemCount: matched.length,
         totalBytes: bytes,
         scannedAt: DateTime.now(),
-        message: matched.isEmpty ? fallback : 'Scan complete.',
+        message: matched.isEmpty ? fallback : t.myToolsMessages.scanComplete,
       ),
       result: filtered,
     );
@@ -555,7 +578,7 @@ class MyToolsNotifier extends Notifier<MyToolsState> {
 
   String _prettyError(Object error) {
     final raw = error.toString().trim();
-    if (raw.isEmpty) return 'Something went wrong.';
+    if (raw.isEmpty) return t.myToolsMessages.somethingWentWrong;
     if (raw.length > 170) {
       return '${raw.substring(0, 170)}...';
     }
@@ -564,38 +587,35 @@ class MyToolsNotifier extends Notifier<MyToolsState> {
 }
 
 List<MyTool> _defaultTools() {
-  return const [
+  return [
     MyTool(
       id: 'app_leftovers',
-      title: 'App Leftovers',
-      description:
-          'Locate and remove app leftovers even if the main app is already gone.',
+      title: t.myToolsCatalog.appLeftovers.title,
+      description: t.myToolsCatalog.appLeftovers.description,
       icon: Icons.extension_rounded,
       accentColor: Color(0xFF2EA2FF),
       scanType: MyToolScanType.appLeftovers,
     ),
     MyTool(
       id: 'background_items',
-      title: 'Background Items',
-      description: 'Manage background apps and processes running on your Mac.',
+      title: t.myToolsCatalog.backgroundItems.title,
+      description: t.myToolsCatalog.backgroundItems.description,
       icon: Icons.rocket_launch_rounded,
       accentColor: Color(0xFFFF9D2A),
       scanType: MyToolScanType.backgroundItems,
     ),
     MyTool(
       id: 'downloads',
-      title: 'Downloads',
-      description:
-          'Review and clean one-time use files from Downloads to keep folders tidy.',
+      title: t.myToolsCatalog.downloads.title,
+      description: t.myToolsCatalog.downloads.description,
       icon: Icons.download_for_offline_rounded,
       accentColor: Color(0xFF29CAD6),
       scanType: MyToolScanType.downloads,
     ),
     MyTool(
       id: 'large_old',
-      title: 'Large and Old Files',
-      description:
-          'Find and remove large, unused files that take up space on your Mac.',
+      title: t.myToolsCatalog.largeOld.title,
+      description: t.myToolsCatalog.largeOld.description,
       icon: Icons.folder_copy_rounded,
       accentColor: Color(0xFF30D7C0),
       locationLabel: 'Home',
@@ -603,17 +623,16 @@ List<MyTool> _defaultTools() {
     ),
     MyTool(
       id: 'app_updater',
-      title: 'App Updater',
-      description:
-          'Keep an eye on the latest and most reliable versions of your applications.',
+      title: t.myToolsCatalog.appUpdater.title,
+      description: t.myToolsCatalog.appUpdater.description,
       icon: Icons.upgrade_rounded,
       accentColor: Color(0xFF2EA2FF),
       scanType: MyToolScanType.appUpdater,
     ),
     MyTool(
       id: 'similar_images',
-      title: 'Similar Images',
-      description: 'Review similar photos and keep only the best ones.',
+      title: t.myToolsCatalog.similarImages.title,
+      description: t.myToolsCatalog.similarImages.description,
       icon: Icons.filter_tilt_shift_rounded,
       accentColor: Color(0xFF2ABCC5),
       locationLabel: 'Pictures',
@@ -621,17 +640,16 @@ List<MyTool> _defaultTools() {
     ),
     MyTool(
       id: 'privacy_items',
-      title: 'Privacy Items',
-      description:
-          'Remove browsing history and activity traces to protect your privacy.',
+      title: t.myToolsCatalog.privacyItems.title,
+      description: t.myToolsCatalog.privacyItems.description,
       icon: Icons.privacy_tip_rounded,
       accentColor: Color(0xFFFF52CB),
       scanType: MyToolScanType.privacyItems,
     ),
     MyTool(
       id: 'trash_bins',
-      title: 'Trash Bins',
-      description: 'Empty all of the available Trash Bins on your Mac.',
+      title: t.myToolsCatalog.trashBins.title,
+      description: t.myToolsCatalog.trashBins.description,
       icon: Icons.delete_outline_rounded,
       accentColor: Color(0xFF54D763),
       showStar: true,
@@ -639,9 +657,8 @@ List<MyTool> _defaultTools() {
     ),
     MyTool(
       id: 'duplicate_finder',
-      title: 'Duplicate Finder',
-      description:
-          'Remove duplicate files stored in different locations on your Mac.',
+      title: t.myToolsCatalog.duplicateFinder.title,
+      description: t.myToolsCatalog.duplicateFinder.description,
       icon: Icons.copy_all_rounded,
       accentColor: Color(0xFF2ABCC5),
       locationLabel: 'Home',
@@ -649,72 +666,64 @@ List<MyTool> _defaultTools() {
     ),
     MyTool(
       id: 'application_permissions',
-      title: 'Application Permissions',
-      description:
-          'Manage how apps access system features, devices, and functionality.',
+      title: t.myToolsCatalog.applicationPermissions.title,
+      description: t.myToolsCatalog.applicationPermissions.description,
       icon: Icons.lock_rounded,
       accentColor: Color(0xFFFF52CB),
       scanType: MyToolScanType.applicationPermissions,
     ),
     MyTool(
       id: 'system_junk',
-      title: 'System Junk',
-      description:
-          'Remove redundant files that clog up device storage and impede optimal performance.',
+      title: t.myToolsCatalog.systemJunk.title,
+      description: t.myToolsCatalog.systemJunk.description,
       icon: Icons.cleaning_services_rounded,
       accentColor: Color(0xFF58D948),
       scanType: MyToolScanType.systemJunk,
     ),
     MyTool(
       id: 'time_machine_snapshots',
-      title: 'Time Machine Snapshot',
-      description:
-          'Remove local Time Machine snapshots without affecting your backups.',
+      title: t.myToolsCatalog.timeMachineSnapshot.title,
+      description: t.myToolsCatalog.timeMachineSnapshot.description,
       icon: Icons.history_toggle_off_rounded,
       accentColor: Color(0xFFFFB341),
       scanType: MyToolScanType.timeMachineSnapshots,
     ),
     MyTool(
       id: 'maintenance_tasks',
-      title: 'Maintenance Tasks',
-      description:
-          'Run a set of recommended maintenance tasks to bring your Mac to its max.',
+      title: t.myToolsCatalog.maintenanceTasks.title,
+      description: t.myToolsCatalog.maintenanceTasks.description,
       icon: Icons.handyman_rounded,
       accentColor: Color(0xFFFF9D2A),
       scanType: MyToolScanType.maintenanceTasks,
     ),
     MyTool(
       id: 'login_items',
-      title: 'Login Items',
-      description:
-          'Manage apps that open automatically when you start your Mac.',
+      title: t.myToolsCatalog.loginItems.title,
+      description: t.myToolsCatalog.loginItems.description,
       icon: Icons.power_settings_new_rounded,
       accentColor: Color(0xFFFF9D2A),
       scanType: MyToolScanType.loginItems,
     ),
     MyTool(
       id: 'mail_attachments',
-      title: 'Mail Attachments',
-      description:
-          'Remove locally stored email attachments to free space while keeping modified files.',
+      title: t.myToolsCatalog.mailAttachments.title,
+      description: t.myToolsCatalog.mailAttachments.description,
       icon: Icons.mark_email_read_rounded,
       accentColor: Color(0xFF54D763),
       scanType: MyToolScanType.mailAttachments,
     ),
     MyTool(
       id: 'malware_finder',
-      title: 'Malware Finder',
-      description:
-          'Identify and remove malicious items to keep your Mac secure.',
+      title: t.myToolsCatalog.malwareFinder.title,
+      description: t.myToolsCatalog.malwareFinder.description,
       icon: Icons.security_rounded,
       accentColor: Color(0xFFFF52CB),
       scanType: MyToolScanType.malwareFinder,
     ),
     MyTool(
       id: 'uninstaller',
-      title: 'Uninstaller',
-      description:
-          'Correctly remove entire applications with all of the related files.',
+      title: t.myToolsCatalog.uninstaller.title,
+      description: t.myToolsCatalog.uninstaller.description,
       icon: Icons.build_circle_rounded,
       accentColor: Color(0xFF3AA6FF),
       scanType: MyToolScanType.appLeftovers,

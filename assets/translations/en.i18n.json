@@ -1,0 +1,343 @@
+{
+  "app": {
+    "title": "PristineCleaner"
+  },
+  "language": {
+    "label": "Language",
+    "english": "English",
+    "spanish": "Spanish",
+    "italian": "Italian"
+  },
+  "navigation": {
+    "smartCare": "Smart Care",
+    "cleanup": "Cleanup",
+    "myClutter": "My Clutter",
+    "spaceView": "Space View",
+    "applications": "Applications",
+    "myTools": "My Tools",
+    "myActivity": "My Activity"
+  },
+  "sections": {
+    "smartCare": {
+      "title": "Smart Care",
+      "subtitle": "Get a complete health overview\\nof your system in one click.",
+      "features": {
+        "systemStatus": "System Status",
+        "storageUsage": "Storage Usage",
+        "quickActions": "Quick Actions"
+      }
+    },
+    "cleanup": {
+      "title": "Junk Cleanup",
+      "subtitle": "Clean your system to achieve maximum\\nperformance and reclaim more free space.",
+      "features": {
+        "systemJunk": "System Junk",
+        "userCache": "User Cache",
+        "tempFiles": "Temp Files"
+      }
+    },
+    "myClutter": {
+      "title": "My Clutter",
+      "subtitle": "Sort through your files and reduce\\nthe mess in just a few clicks.",
+      "features": {
+        "largeFiles": "Large Files",
+        "duplicates": "Duplicates",
+        "largeSimilarImages": "Large Similar Images"
+      }
+    },
+    "spaceView": {
+      "title": "Space View",
+      "subtitle": "Visualize what's taking up the most\\ndisk space and clean up quickly.",
+      "features": {
+        "visualStorageMap": "Visual Storage Map",
+        "largeFoldersOverview": "Large Folders Overview",
+        "hiddenFilesUncovered": "Hidden Files Uncovered"
+      }
+    },
+    "applications": {
+      "title": "Applications",
+      "subtitle": "Take control of your applications.\\nUninstall or remove old leftovers.",
+      "features": {
+        "appUninstaller": "App Uninstaller",
+        "largeApps": "Large Apps",
+        "fileLeftovers": "File Leftovers"
+      }
+    },
+    "myTools": {
+      "title": "My Tools",
+      "subtitle": "Your go-to toolkit for system care and maintenance.",
+      "features": {
+        "targetedScanners": "Targeted Scanners",
+        "quickActions": "Quick Actions",
+        "liveFiltering": "Live Filtering"
+      }
+    }
+  },
+  "progress": {
+    "countingFiles": "Counting files...",
+    "countingApplications": "Counting applications...",
+    "countingFolders": "Counting folders..."
+  },
+  "errors": {
+    "itemsFailedToRemove": "{count} item(s) failed to remove."
+  },
+  "buttons": {
+    "scan": "Scan",
+    "stop": "Stop",
+    "done": "Done",
+    "clean": "Clean",
+    "cleanUp": "Clean Up",
+    "close": "Close",
+    "refresh": "Refresh",
+    "rescan": "Rescan",
+    "startOver": "Start Over",
+    "selectAll": "Select All",
+    "clearSelection": "Clear Selection",
+    "keepScanning": "Keep scanning",
+    "keepRemoving": "Keep removing"
+  },
+  "tooltips": {
+    "search": "Search",
+    "openInFinder": "Open in Finder"
+  },
+  "dialogs": {
+    "stopScanningTitle": "Stop scanning?",
+    "stopScanningMessage": "This will cancel the current scan and discard any partial progress.",
+    "stopRemovalTitle": "Stop removal?",
+    "stopRemovalMessage": "The current file will finish, then remaining files will be skipped."
+  },
+  "removal": {
+    "barrierLabel": "Removal progress",
+    "preparing": "Preparing...",
+    "removingFrom": "Removing from {title}",
+    "stoppingAfterCurrentFile": "Stopping after the current file...",
+    "keepWindowOpen": "Please keep this window open while removal runs.",
+    "processedSummary": "{processed} of {total} processed",
+    "deletedFreed": "{deleted} deleted • {bytes} freed",
+    "currentItem": "Current: {name}",
+    "stopping": "Stopping...",
+    "removalFailed": "Removal failed",
+    "removalFailedDetails": "Something went wrong while removing selected files.",
+    "removalStopped": "Removal stopped",
+    "removalComplete": "Removal complete",
+    "deletedSummary": "{title} deleted {count} item(s)",
+    "freedSummary": "{bytes} freed",
+    "failedToRemoveSummary": "{count} item(s) failed to remove.",
+    "deletedFiles": "Deleted files",
+    "noFilesDeleted": "No files were deleted."
+  },
+  "done": {
+    "allCleanedTitle": "All cleaned!",
+    "movedToTrashMessage": "Selected files have been moved to Trash.",
+    "applicationsRemovedTitle": "Applications removed!",
+    "appsMovedToTrashMessage": "Selected apps have been moved to Trash."
+  },
+  "cleanupManager": {
+    "title": "Cleanup Manager",
+    "systemJunkHeader": "System Junk",
+    "systemJunkDescription": "Redundant files that clog up device storage and impede optimal performance.",
+    "selectLabel": "Select",
+    "selectAllOption": "All",
+    "selectNoneOption": "None",
+    "noItems": "No items",
+    "noItemsFound": "No items found",
+    "itemsSelected": "{count} items selected"
+  },
+  "projectDirectory": {
+    "chooseFolder": "Choose Folder...",
+    "chooseProjectDirectory": "Choose project directory",
+    "chooseParentFolder": "Choose parent folder",
+    "noFolder": "No folder"
+  },
+  "searchAndSort": {
+    "searchHint": "Search...",
+    "sortBy": "Sort by",
+    "size": "Size",
+    "name": "Name",
+    "ascending": "Ascending",
+    "descending": "Descending"
+  },
+  "spaceView": {
+    "noFoldersFound": "No folders found for this level",
+    "noBubblesToRender": "No bubbles to render",
+    "otherItems": "Other items"
+  },
+  "smartCare": {
+    "refresh": "Refresh",
+    "unableToReadDiskInfo": "Unable to read disk info",
+    "totalStorage": "Total Storage",
+    "used": "Used",
+    "available": "Available",
+    "percentUsed": "{percent}% used"
+  },
+  "myToolsPage": {
+    "title": "My Tools",
+    "subtitle": "Your go-to tools for keeping your Mac clean, safe and running smoothly.",
+    "backToTools": "Back to tools"
+  },
+  "myToolsMessages": {
+    "itemsWithSize": "{count} item(s) • {size}",
+    "scanCancelled": "scan was cancelled.",
+    "selectAtLeastOne": "Select at least one item to clean.",
+    "failedToClean": "Failed to clean {count} item(s).",
+    "everythingSelectedCleaned": "Everything selected was cleaned.",
+    "cleanupUpdated": "Cleanup updated.",
+    "cleanedCount": "Cleaned {count} item(s).",
+    "stoppedPrefix": "Stopped. ",
+    "removedCount": "Removed {count} item(s).",
+    "failedCountShort": " {count} failed.",
+    "scanComplete": "Scan complete.",
+    "somethingWentWrong": "Something went wrong.",
+    "fallback": {
+      "downloadsTidy": "Downloads are tidy.",
+      "noOversizedStale": "No oversized stale files were found.",
+      "noRecentDuplicates": "No recent duplicates found.",
+      "noSimilarLargeImages": "No similar large images found.",
+      "noAppLeftovers": "No removable app leftovers found.",
+      "noStaleApps": "No stale applications were found.",
+      "appsNeedReview": "Applications that may need review were found.",
+      "noSystemJunkCandidates": "No cleanup candidates in system junk.",
+      "noBrokenStartup": "No broken startup/background entries found.",
+      "noBackgroundItems": "No background items were found.",
+      "noPrivacyTraces": "No privacy traces found in known locations.",
+      "trashAlreadyEmpty": "Trash is already empty.",
+      "noPermissionCache": "No permission cache files were found.",
+      "noTimeMachineSnapshots": "No local Time Machine snapshots were found.",
+      "noMaintenanceCandidates": "No maintenance candidates were found.",
+      "noMailAttachments": "No removable mail attachments were found.",
+      "noSuspiciousFiles": "No suspicious files were detected."
+    }
+  },
+  "myToolsCatalog": {
+    "appLeftovers": {
+      "title": "App Leftovers",
+      "description": "Locate and remove app leftovers even if the main app is already gone."
+    },
+    "backgroundItems": {
+      "title": "Background Items",
+      "description": "Manage background apps and processes running on your Mac."
+    },
+    "downloads": {
+      "title": "Downloads",
+      "description": "Review and clean one-time use files from Downloads to keep folders tidy."
+    },
+    "largeOld": {
+      "title": "Large and Old Files",
+      "description": "Find and remove large, unused files that take up space on your Mac."
+    },
+    "appUpdater": {
+      "title": "App Updater",
+      "description": "Keep an eye on the latest and most reliable versions of your applications."
+    },
+    "similarImages": {
+      "title": "Similar Images",
+      "description": "Review similar photos and keep only the best ones."
+    },
+    "privacyItems": {
+      "title": "Privacy Items",
+      "description": "Remove browsing history and activity traces to protect your privacy."
+    },
+    "trashBins": {
+      "title": "Trash Bins",
+      "description": "Empty all of the available Trash Bins on your Mac."
+    },
+    "duplicateFinder": {
+      "title": "Duplicate Finder",
+      "description": "Remove duplicate files stored in different locations on your Mac."
+    },
+    "applicationPermissions": {
+      "title": "Application Permissions",
+      "description": "Manage how apps access system features, devices, and functionality."
+    },
+    "systemJunk": {
+      "title": "System Junk",
+      "description": "Remove redundant files that clog up device storage and impede optimal performance."
+    },
+    "timeMachineSnapshot": {
+      "title": "Time Machine Snapshot",
+      "description": "Remove local Time Machine snapshots without affecting your backups."
+    },
+    "maintenanceTasks": {
+      "title": "Maintenance Tasks",
+      "description": "Run a set of recommended maintenance tasks to bring your Mac to its max."
+    },
+    "loginItems": {
+      "title": "Login Items",
+      "description": "Manage apps that open automatically when you start your Mac."
+    },
+    "mailAttachments": {
+      "title": "Mail Attachments",
+      "description": "Remove locally stored email attachments to free space while keeping modified files."
+    },
+    "malwareFinder": {
+      "title": "Malware Finder",
+      "description": "Identify and remove malicious items to keep your Mac secure."
+    },
+    "uninstaller": {
+      "title": "Uninstaller",
+      "description": "Correctly remove entire applications with all of the related files."
+    }
+  },
+  "cleanupCategories": {
+    "userCache": {
+      "name": "User Cache Files",
+      "description": "Originally intended to improve startup times, the cache files of your applications ultimately accumulate and result in improper functioning or an overall performance drop."
+    },
+    "userLogs": {
+      "name": "User Log Files",
+      "description": "Log files are created by macOS and its applications to record events and errors. Over time they can grow large and take up significant space."
+    },
+    "languageFiles": {
+      "name": "Language Files",
+      "description": "Unused localization resources bundled with apps. Removing languages you do not use frees up storage without affecting functionality."
+    },
+    "systemLogs": {
+      "name": "System Log Files",
+      "description": "System-wide log files written by macOS services and daemons. These files are safe to remove as the system re-creates them when needed."
+    },
+    "brokenLoginItems": {
+      "name": "Broken Login Items",
+      "description": "Login items that point to applications or files that no longer exist on your disk. Removing them speeds up login time."
+    }
+  },
+  "myClutterDashboard": {
+    "backToCategories": "Back to Categories",
+    "filesToSort": "You have {count} files to sort through.",
+    "quickRecommendations": "Use quick recommendations or review them by hand.",
+    "reviewAllFiles": "Review All Files",
+    "freshDuplicatesFound": "{count} Fresh Duplicates Found",
+    "noDuplicates": "No duplicates found in this scan.",
+    "removeDuplicateBytes": "Remove {bytes} of duplicate files.",
+    "largeSimilarImagesFound": "{count} Large Similar Images Found",
+    "noSimilarGroups": "No similar image groups found.",
+    "nearlyIdenticalImages": "There are {bytes} of nearly identical images.",
+    "largeFilesFound": "{bytes} of Large Files Found",
+    "noLargeFiles": "No large files found.",
+    "largeFilesReady": "{count} large files are ready for review.",
+    "review": "Review"
+  },
+  "scanResults": {
+    "itemsSummary": "{count} items  •  {size}",
+    "scannedInMs": "Scanned in {ms}ms",
+    "deselectAll": "Deselect All",
+    "selectAll": "Select All",
+    "noItemsMatchSearch": "No items match your search",
+    "noItemsFound": "No items found",
+    "itemsSelected": "{count} items selected",
+    "rescan": "Rescan"
+  },
+  "spaceViewStart": {
+    "subtitle": "Pick a parent folder, then scan to map what is taking up the most space.",
+    "defaultRootPath": "Default root path is your main hard drive",
+    "exploreBubbles": "Explore folder sizes through interactive bubbles",
+    "clickToDrillDown": "Click folders to drill down and inspect deeper"
+  },
+  "shell": {
+    "comingSoon": "Coming soon"
+  },
+  "myToolsService": {
+    "snapshotName": "Snapshot {id}",
+    "timeMachineGroup": "Time Machine",
+    "timeMachineMacOnly": "Time Machine snapshots are only available on macOS."
+  }
+}

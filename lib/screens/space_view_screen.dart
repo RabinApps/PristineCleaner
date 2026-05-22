@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:file_picker/file_picker.dart';
 
 import '../core/models/file_item.dart';
+import '../gen/strings.g.dart';
 import '../services/trash_service.dart';
 import '../core/theme/section_themes.dart';
 import '../core/models/scan_view_model.dart';
@@ -22,7 +23,7 @@ class SpaceViewScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final vm = ref.watch(spaceViewProvider);
     final notifier = ref.read(spaceViewProvider.notifier);
-    const theme = SectionThemes.spaceView;
+    final theme = SectionThemes.spaceViewLocalized(context);
 
     if (vm.isDone) {
       return _DoneScreen(theme: theme, onDismiss: notifier.reset);
@@ -113,18 +114,18 @@ class _SpaceViewStart extends StatelessWidget {
           builder: (dialogContext) {
             return AlertDialog(
               backgroundColor: const Color(0xFF191919),
-              title: const Text(
-                'Stop scanning?',
-                style: TextStyle(color: Colors.white),
+              title: Text(
+                context.t.dialogs.stopScanningTitle,
+                style: const TextStyle(color: Colors.white),
               ),
-              content: const Text(
-                'This will cancel the current scan and discard any partial progress.',
+              content: Text(
+                context.t.dialogs.stopScanningMessage,
                 style: TextStyle(color: Colors.white70),
               ),
               actions: [
                 TextButton(
                   onPressed: () => Navigator.of(dialogContext).pop(false),
-                  child: const Text('Keep scanning'),
+                  child: Text(context.t.buttons.keepScanning),
                 ),
                 ElevatedButton(
                   onPressed: () => Navigator.of(dialogContext).pop(true),
@@ -132,7 +133,7 @@ class _SpaceViewStart extends StatelessWidget {
                     foregroundColor: Colors.white,
                     backgroundColor: Colors.redAccent,
                   ),
-                  child: const Text('Stop'),
+                  child: Text(context.t.buttons.stop),
                 ),
               ],
             );
@@ -179,8 +180,8 @@ class _SpaceViewStart extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          'Space View',
+                        Text(
+                          theme.title,
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 42,
@@ -189,8 +190,8 @@ class _SpaceViewStart extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 10),
-                        const Text(
-                          'Pick a parent folder, then scan to map what is taking up the most space.',
+                        Text(
+                          context.t.spaceViewStart.subtitle,
                           style: TextStyle(
                             color: Color(0xFFBDB6DD),
                             fontSize: 15,
@@ -200,21 +201,19 @@ class _SpaceViewStart extends StatelessWidget {
                         const SizedBox(height: 22),
                         _FeatureTag(
                           icon: Icons.folder_open_rounded,
-                          text: 'Default root path is your main hard drive',
+                          text: context.t.spaceViewStart.defaultRootPath,
                           accentColor: theme.accentColor,
                         ),
                         const SizedBox(height: 10),
                         _FeatureTag(
                           icon: Icons.bubble_chart_rounded,
-                          text:
-                              'Explore folder sizes through interactive bubbles',
+                          text: context.t.spaceViewStart.exploreBubbles,
                           accentColor: theme.accentColor,
                         ),
                         const SizedBox(height: 10),
                         _FeatureTag(
                           icon: Icons.ads_click_rounded,
-                          text:
-                              'Click folders to drill down and inspect deeper',
+                          text: context.t.spaceViewStart.clickToDrillDown,
                           accentColor: theme.accentColor,
                         ),
                         const SizedBox(height: 10),
@@ -282,7 +281,9 @@ class _SpaceViewStart extends StatelessWidget {
                 const SizedBox(height: 14),
                 ScanButton(
                   color: vm.isScanning ? Colors.redAccent : theme.accentColor,
-                  label: vm.isScanning ? 'Stop' : 'Scan',
+                  label: vm.isScanning
+                      ? context.t.buttons.stop
+                      : context.t.buttons.scan,
                   isLoading: false,
                   onPressed: () => _handleScanTap(context),
                 ),
@@ -383,7 +384,7 @@ class _SpaceViewWorkspaceState extends State<_SpaceViewWorkspace> {
                     color: widget.theme.accentColor,
                   ),
                   label: Text(
-                    'Rescan',
+                    context.t.buttons.rescan,
                     style: TextStyle(
                       color: widget.theme.accentColor,
                       fontSize: 13,
@@ -455,8 +456,8 @@ class _SpaceViewWorkspaceState extends State<_SpaceViewWorkspace> {
                 const Spacer(),
                 TextButton(
                   onPressed: widget.onDeselectAll,
-                  child: const Text(
-                    'Clear Selection',
+                  child: Text(
+                    context.t.buttons.clearSelection,
                     style: TextStyle(color: Colors.white60),
                   ),
                 ),
@@ -464,14 +465,14 @@ class _SpaceViewWorkspaceState extends State<_SpaceViewWorkspace> {
                 TextButton(
                   onPressed: widget.onSelectAll,
                   child: Text(
-                    'Select All',
+                    context.t.buttons.selectAll,
                     style: TextStyle(color: widget.theme.accentColor),
                   ),
                 ),
                 const SizedBox(width: 12),
                 ScanButton(
                   color: widget.theme.accentColor,
-                  label: 'Clean',
+                  label: context.t.buttons.clean,
                   isLoading: widget.vm.isCleaning,
                   onPressed: (selectedCount == 0 || widget.vm.isCleaning)
                       ? null
@@ -516,9 +517,9 @@ class _FolderListPane extends StatelessWidget {
           borderRadius: BorderRadius.circular(14),
           border: Border.all(color: Colors.white.withOpacity(0.08)),
         ),
-        child: const Center(
+        child: Center(
           child: Text(
-            'No folders found for this level',
+            context.t.spaceView.noFoldersFound,
             style: TextStyle(color: Colors.white54),
           ),
         ),
@@ -600,9 +601,9 @@ class _BubbleCanvas extends StatelessWidget {
           borderRadius: BorderRadius.circular(14),
           border: Border.all(color: Colors.white.withOpacity(0.08)),
         ),
-        child: const Center(
+        child: Center(
           child: Text(
-            'No bubbles to render',
+            context.t.spaceView.noBubblesToRender,
             style: TextStyle(color: Colors.white54),
           ),
         ),
@@ -675,7 +676,7 @@ class _StaticBubbleChart extends StatelessWidget {
       );
       bubbles.add(
         _BubbleVisual(
-          title: 'Other items',
+          title: context.t.spaceView.otherItems,
           subtitle: _formatBytes(otherBytes),
           value: otherBytes <= 0 ? 1.0 : otherBytes.toDouble(),
         ),
@@ -1077,7 +1078,7 @@ class _FeatureTag extends StatelessWidget {
 
 Future<String?> _pickNativeDirectory({String? initialDirectory}) {
   return FilePicker.platform.getDirectoryPath(
-    dialogTitle: 'Choose parent folder',
+    dialogTitle: t.projectDirectory.chooseParentFolder,
     initialDirectory: initialDirectory,
     lockParentWindow: true,
   );

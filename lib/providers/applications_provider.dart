@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../gen/strings.g.dart';
 import '../core/models/removal_models.dart';
 import '../core/models/scan_result.dart';
 import '../services/file_service.dart';
@@ -16,10 +17,10 @@ class ApplicationsNotifier extends Notifier<ScanViewModel> {
   ScanViewModel build() => const ScanViewModel();
 
   Future<void> scan() async {
-    state = const ScanViewModel(
+    state = ScanViewModel(
       isScanning: true,
       progressPercent: 0,
-      progressLabel: 'Counting applications...',
+      progressLabel: t.progress.countingApplications,
     );
     try {
       final result = await ref
@@ -35,7 +36,7 @@ class ApplicationsNotifier extends Notifier<ScanViewModel> {
 
   void _onProgress(ScanProgress progress) {
     final label = progress.phase == ScanPhase.counting
-        ? 'Counting applications...'
+        ? t.progress.countingApplications
         : progress.percentLabel;
     state = state.copyWith(
       isScanning: true,
@@ -85,7 +86,10 @@ class ApplicationsNotifier extends Notifier<ScanViewModel> {
       isCleaning: false,
       error: outcome.errors.isEmpty
           ? null
-          : '${outcome.errors.length} item(s) failed to remove.',
+          : t.errors.itemsFailedToRemove.replaceAll(
+              '{count}',
+              '${outcome.errors.length}',
+            ),
       clearError: outcome.errors.isEmpty,
     );
   }

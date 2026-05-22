@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pristine_cleaner/gen/strings.g.dart';
 
 import '../core/models/scan_result.dart';
 import '../services/my_tools_service.dart';
@@ -58,7 +59,7 @@ class _MyToolsScreenState extends ConsumerState<MyToolsScreen> {
 
     final state = ref.watch(myToolsProvider);
     final notifier = ref.read(myToolsProvider.notifier);
-    const theme = SectionThemes.myTools;
+    final theme = SectionThemes.myToolsLocalized(context);
 
     final activeTool = _findActiveTool(state);
     final activeResult = state.activeDetailResult;
@@ -239,7 +240,7 @@ class _MyToolsScreenState extends ConsumerState<MyToolsScreen> {
 
 Future<String?> _pickDirectory({String? initialDirectory}) {
   return FilePicker.platform.getDirectoryPath(
-    dialogTitle: 'Choose folder',
+    dialogTitle: t.projectDirectory.chooseFolder,
     initialDirectory: initialDirectory,
     lockParentWindow: true,
   );
@@ -310,7 +311,7 @@ class _ToolDetailView extends StatelessWidget {
                   ),
                 ),
                 icon: const Icon(Icons.arrow_back_rounded, size: 18),
-                label: const Text('Back to tools'),
+                label: Text(context.t.myToolsPage.backToTools),
               ),
             ),
           ),
@@ -330,12 +331,12 @@ class _Header extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        const Expanded(
+        Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'My Tools',
+                context.t.myToolsPage.title,
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 40,
@@ -346,7 +347,7 @@ class _Header extends StatelessWidget {
               ),
               SizedBox(height: 9),
               Text(
-                'Your go-to tools for keeping your Mac clean, safe and running smoothly.',
+                context.t.myToolsPage.subtitle,
                 style: TextStyle(
                   color: Color(0xFFC4BBD9),
                   fontSize: 14,
@@ -383,7 +384,7 @@ class _SearchField extends StatelessWidget {
       onChanged: onChanged,
       style: const TextStyle(color: Colors.white, fontSize: 16),
       decoration: InputDecoration(
-        hintText: 'Search...',
+        hintText: context.t.searchAndSort.searchHint,
         hintStyle: TextStyle(color: Colors.white.withValues(alpha: 0.55)),
         prefixIcon: Icon(
           Icons.search_rounded,

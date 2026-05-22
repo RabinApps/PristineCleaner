@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../gen/strings.g.dart';
 import '../services/trash_service.dart';
 import '../core/theme/section_themes.dart';
 import '../shared/removal/removal_flow.dart';
@@ -18,7 +19,7 @@ class CleanupScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final vm = ref.watch(cleanupProvider);
     final notifier = ref.read(cleanupProvider.notifier);
-    const theme = SectionThemes.cleanup;
+    final theme = SectionThemes.cleanupLocalized(context);
 
     // Done state — show success then reset
     if (vm.isDone) {
@@ -107,8 +108,8 @@ class _DoneScreen extends StatelessWidget {
               color: theme.accentColor,
             ),
             const SizedBox(height: 20),
-            const Text(
-              'All cleaned!',
+            Text(
+              context.t.done.allCleanedTitle,
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 28,
@@ -116,8 +117,8 @@ class _DoneScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 8),
-            const Text(
-              'Selected files have been moved to Trash.',
+            Text(
+              context.t.done.movedToTrashMessage,
               style: TextStyle(color: Colors.white54, fontSize: 15),
             ),
             const SizedBox(height: 32),
@@ -134,7 +135,7 @@ class _DoneScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              child: const Text('Done'),
+              child: Text(context.t.buttons.done),
             ),
           ],
         ),

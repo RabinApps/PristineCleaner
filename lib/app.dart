@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'core/l10n/locale_provider.dart';
 import 'core/models/nav_item.dart';
 import 'core/theme/app_theme.dart';
+import 'gen/strings.g.dart';
 import 'screens/applications_screen.dart';
 import 'screens/cleanup_screen.dart';
 import 'screens/my_tools_screen.dart';
@@ -100,14 +104,23 @@ NavSection _sectionFromPath(String path) {
   }
 }
 
-class PristineCleanerApp extends StatelessWidget {
+class PristineCleanerApp extends ConsumerWidget {
   const PristineCleanerApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final appLocale = ref.watch(appLocaleProvider);
+
     return MaterialApp.router(
-      title: 'PristineCleaner',
+      title: t.app.title,
       debugShowCheckedModeBanner: false,
+      locale: appLocale.flutterLocale,
+      supportedLocales: AppLocaleUtils.supportedLocales,
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
       theme: AppTheme.darkTheme.copyWith(
         scaffoldBackgroundColor: const Color(0xFF111111),
         colorScheme: AppTheme.darkTheme.colorScheme.copyWith(

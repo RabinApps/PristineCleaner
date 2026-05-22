@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:window_manager/window_manager.dart';
 
+import '../../../../core/l10n/locale_provider.dart';
 import '../../../../core/models/nav_item.dart';
+import '../../../../gen/strings.g.dart';
 
-class SidebarWidget extends StatelessWidget {
+class SidebarWidget extends ConsumerWidget {
   final NavSection activeSection;
 
   const SidebarWidget({super.key, required this.activeSection});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final appLocale = ref.watch(appLocaleProvider);
+
     return Container(
       width: 218,
       color: const Color(0xFF1A1A1A),
@@ -24,7 +29,7 @@ class SidebarWidget extends StatelessWidget {
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  'PristineCleaner',
+                  t.app.title,
                   style: TextStyle(
                     color: Colors.white.withValues(alpha: 0.75),
                     fontSize: 13,
@@ -43,7 +48,7 @@ class SidebarWidget extends StatelessWidget {
             child: ListView(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
               children: [
-                ...NavItem.mainItems.map(
+                ...NavItem.mainItems().map(
                   (item) => _NavTile(
                     item: item,
                     isActive: item.section == activeSection,
@@ -56,7 +61,7 @@ class SidebarWidget extends StatelessWidget {
                   indent: 10,
                   endIndent: 10,
                 ),
-                ...NavItem.bottomItems.map(
+                ...NavItem.bottomItems().map(
                   (item) => _NavTile(
                     item: item,
                     isActive: item.section == activeSection,
@@ -69,6 +74,15 @@ class SidebarWidget extends StatelessWidget {
 
           // Version label
           Padding(
+            padding: const EdgeInsets.fromLTRB(10, 0, 10, 8),
+            child: _LanguageSelector(
+              currentLocale: appLocale,
+              onLocaleSelected: (locale) {
+                ref.read(appLocaleProvider.notifier).setLocale(locale);
+              },
+            ),
+          ),
+          Padding(
             padding: const EdgeInsets.only(bottom: 14),
             child: Text(
               'v1.0.0',
@@ -76,6 +90,76 @@ class SidebarWidget extends StatelessWidget {
                 color: Colors.white.withValues(alpha: 0.2),
                 fontSize: 11,
               ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _LanguageSelector extends StatelessWidget {
+  final AppLocale currentLocale;
+  final ValueChanged<AppLocale> onLocaleSelected;
+
+  const _LanguageSelector({
+    required this.currentLocale,
+    required this.onLocaleSelected,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.04),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+      ),
+      child: Row(
+        children: [
+          Icon(
+            Icons.language_rounded,
+            size: 15,
+            color: Colors.white.withValues(alpha: 0.62),
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              t.language.label,
+              style: TextStyle(
+                color: Colors.white.withValues(alpha: 0.72),
+                fontSize: 11,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+          DropdownButtonHideUnderline(
+            child: DropdownButton<AppLocale>(
+              value: currentLocale,
+              dropdownColor: const Color(0xFF252525),
+              style: const TextStyle(color: Colors.white, fontSize: 11),
+              iconEnabledColor: Colors.white70,
+              items: [
+                DropdownMenuItem(
+                  value: AppLocale.en,
+                  child: Text(t.language.english),
+                ),
+                DropdownMenuItem(
+                  value: AppLocale.es,
+                  child: Text(t.language.spanish),
+                ),
+                DropdownMenuItem(
+                  value: AppLocale.it,
+                  child: Text(t.language.italian),
+                ),
+              ],
+              onChanged: (value) {
+                if (value != null) {
+                  onLocaleSelected(value);
+                }
+              },
             ),
           ),
         ],

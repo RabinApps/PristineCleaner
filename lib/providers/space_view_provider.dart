@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../gen/strings.g.dart';
 import '../core/models/file_item.dart';
 import '../core/models/removal_models.dart';
 import '../core/models/scan_result.dart';
@@ -34,7 +35,7 @@ class SpaceViewNotifier extends Notifier<ScanViewModel> {
     state = state.copyWith(
       isScanning: true,
       progressPercent: 0,
-      progressLabel: 'Counting folders...',
+      progressLabel: t.progress.countingFolders,
       isDone: false,
       clearResult: true,
       clearError: true,
@@ -83,7 +84,7 @@ class SpaceViewNotifier extends Notifier<ScanViewModel> {
 
   void _onProgress(ScanProgress progress) {
     final label = progress.phase == ScanPhase.counting
-        ? 'Counting folders...'
+        ? t.progress.countingFolders
         : progress.percentLabel;
     state = state.copyWith(
       isScanning: true,
@@ -196,7 +197,10 @@ class SpaceViewNotifier extends Notifier<ScanViewModel> {
       isCleaning: false,
       error: outcome.errors.isEmpty
           ? null
-          : '${outcome.errors.length} item(s) failed to remove.',
+          : t.errors.itemsFailedToRemove.replaceAll(
+              '{count}',
+              '${outcome.errors.length}',
+            ),
       clearError: outcome.errors.isEmpty,
     );
 

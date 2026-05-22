@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
+import '../../gen/strings.g.dart';
+
 class ProjectDirectorySelector extends StatelessWidget {
   final String selectedPath;
   final Color accentColor;
   final Color menuColor;
   final VoidCallback onPickFolder;
-  final String chooseFolderLabel;
+  final String? chooseFolderLabel;
 
   const ProjectDirectorySelector({
     super.key,
@@ -13,12 +15,13 @@ class ProjectDirectorySelector extends StatelessWidget {
     required this.accentColor,
     this.menuColor = const Color(0xFF123A39),
     required this.onPickFolder,
-    this.chooseFolderLabel = 'Choose Folder...',
+    this.chooseFolderLabel,
   });
 
   @override
   Widget build(BuildContext context) {
     final shortLabel = pathLabel(selectedPath);
+    final label = chooseFolderLabel ?? context.t.projectDirectory.chooseFolder;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
@@ -58,7 +61,7 @@ class ProjectDirectorySelector extends StatelessWidget {
               children: [
                 const Icon(Icons.create_new_folder_outlined, size: 16),
                 const SizedBox(width: 8),
-                Text(chooseFolderLabel),
+                Text(label),
               ],
             ),
           ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pristine_cleaner/core/theme/section_themes.dart';
+import 'package:pristine_cleaner/gen/strings.g.dart';
 
 class DoneScreen extends StatelessWidget {
   final SectionTheme theme;
@@ -26,8 +27,8 @@ class DoneScreen extends StatelessWidget {
               color: theme.accentColor,
             ),
             const SizedBox(height: 20),
-            const Text(
-              'All cleaned!',
+            Text(
+              context.t.done.allCleanedTitle,
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 28,
@@ -35,8 +36,8 @@ class DoneScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 8),
-            const Text(
-              'Selected files have been moved to Trash.',
+            Text(
+              context.t.done.movedToTrashMessage,
               style: TextStyle(color: Colors.white54, fontSize: 15),
             ),
             const SizedBox(height: 32),
@@ -53,7 +54,7 @@ class DoneScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              child: const Text('Done'),
+              child: Text(context.t.buttons.done),
             ),
           ],
         ),

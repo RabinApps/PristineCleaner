@@ -9,6 +9,7 @@ import 'package:image/image.dart' as img;
 import '../core/models/file_item.dart';
 import '../core/models/scan_result.dart';
 import '../core/models/space_view_snapshot.dart';
+import '../gen/strings.g.dart';
 
 part 'applications_service.dart';
 part 'cleanup_service.dart';
@@ -79,7 +80,7 @@ class ScanCancelledException implements Exception {
   const ScanCancelledException();
 
   @override
-  String toString() => 'Scan cancelled';
+  String toString() => t.myToolsMessages.scanCancelled;
 }
 
 class _ActiveScanTask {

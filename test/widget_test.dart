@@ -9,10 +9,40 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pristine_cleaner/app.dart';
+import 'package:pristine_cleaner/core/models/scan_result.dart';
+import 'package:pristine_cleaner/gen/strings.g.dart';
+import 'package:pristine_cleaner/providers/smart_care_provider.dart';
+
+class _FakeSmartCareNotifier extends SmartCareNotifier {
+  @override
+  Future<DiskInfo> build() async {
+    return const DiskInfo(
+      mountPoint: '/',
+      totalBytes: 1024,
+      usedBytes: 512,
+      freeBytes: 512,
+    );
+  }
+}
 
 void main() {
   testWidgets('App smoke test', (WidgetTester tester) async {
-    await tester.pumpWidget(const ProviderScope(child: PristineCleanerApp()));
+    tester.view.physicalSize = const Size(1140, 740);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(
+      TranslationProvider(
+        child: ProviderScope(
+          overrides: [
+            smartCareProvider.overrideWith(_FakeSmartCareNotifier.new),
+          ],
+          child: const PristineCleanerApp(),
+        ),
+      ),
+    );
+
     expect(find.byType(MaterialApp), findsOneWidget);
   });
 }

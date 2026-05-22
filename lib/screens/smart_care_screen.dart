@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../core/models/scan_result.dart';
+import '../gen/strings.g.dart';
 import '../core/theme/section_themes.dart';
 import '../shared/widgets/glossy_icon_widget.dart';
 import '../shared/widgets/scan_button.dart';
@@ -14,7 +15,7 @@ class SmartCareScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final diskAsync = ref.watch(smartCareProvider);
-    const theme = SectionThemes.smartCare;
+    final theme = SectionThemes.smartCareLocalized(context);
 
     return Container(
       decoration: BoxDecoration(
@@ -68,8 +69,8 @@ class SmartCareScreen extends ConsumerWidget {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        'Smart Care',
+                      Text(
+                        theme.title,
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 36,
@@ -78,8 +79,8 @@ class SmartCareScreen extends ConsumerWidget {
                         ),
                       ),
                       const SizedBox(height: 8),
-                      const Text(
-                        'Get a complete health overview\nof your system in one click.',
+                      Text(
+                        theme.subtitle,
                         style: TextStyle(
                           color: Color(0xFFBBBBBB),
                           fontSize: 15,
@@ -96,7 +97,7 @@ class SmartCareScreen extends ConsumerWidget {
                           color: Color(0xFF66BB6A),
                         ),
                         error: (e, _) => Text(
-                          'Unable to read disk info',
+                          context.t.smartCare.unableToReadDiskInfo,
                           style: TextStyle(color: Colors.red.shade300),
                         ),
                       ),
@@ -115,7 +116,7 @@ class SmartCareScreen extends ConsumerWidget {
             child: Center(
               child: ScanButton(
                 color: theme.accentColor,
-                label: 'Refresh',
+                label: context.t.smartCare.refresh,
                 isLoading: diskAsync.isLoading,
                 onPressed: diskAsync.isLoading
                     ? null
@@ -140,19 +141,19 @@ class _DiskStats extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _StatRow(
-          label: 'Total Storage',
+          label: context.t.smartCare.totalStorage,
           value: info.formattedTotal,
           color: accentColor,
         ),
         const SizedBox(height: 12),
         _StatRow(
-          label: 'Used',
+          label: context.t.smartCare.used,
           value: info.formattedUsed,
           color: Colors.orangeAccent,
         ),
         const SizedBox(height: 12),
         _StatRow(
-          label: 'Available',
+          label: context.t.smartCare.available,
           value: info.formattedFree,
           color: Colors.white70,
         ),
@@ -174,7 +175,10 @@ class _DiskStats extends StatelessWidget {
               ),
               const SizedBox(height: 6),
               Text(
-                '${(info.usedPercent * 100).toStringAsFixed(1)}% used',
+                context.t.smartCare.percentUsed.replaceAll(
+                  '{percent}',
+                  (info.usedPercent * 100).toStringAsFixed(1),
+                ),
                 style: const TextStyle(color: Colors.white38, fontSize: 12),
               ),
             ],

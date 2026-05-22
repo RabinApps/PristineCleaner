@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../gen/strings.g.dart';
 import '../../core/models/file_item.dart';
 import '../../core/models/scan_result.dart';
 import '../../core/theme/section_themes.dart';
@@ -10,54 +11,51 @@ import '../../core/utils/file_launcher.dart';
 
 class _CleanupCategory {
   final String id;
-  final String name;
-  final String description;
   final IconData icon;
 
-  const _CleanupCategory({
-    required this.id,
-    required this.name,
-    required this.description,
-    required this.icon,
-  });
+  const _CleanupCategory({required this.id, required this.icon});
+
+  String name(BuildContext context) {
+    switch (id) {
+      case 'user_cache':
+        return context.t.cleanupCategories.userCache.name;
+      case 'user_logs':
+        return context.t.cleanupCategories.userLogs.name;
+      case 'language_files':
+        return context.t.cleanupCategories.languageFiles.name;
+      case 'system_logs':
+        return context.t.cleanupCategories.systemLogs.name;
+      case 'broken_login_items':
+        return context.t.cleanupCategories.brokenLoginItems.name;
+      default:
+        return id;
+    }
+  }
+
+  String description(BuildContext context) {
+    switch (id) {
+      case 'user_cache':
+        return context.t.cleanupCategories.userCache.description;
+      case 'user_logs':
+        return context.t.cleanupCategories.userLogs.description;
+      case 'language_files':
+        return context.t.cleanupCategories.languageFiles.description;
+      case 'system_logs':
+        return context.t.cleanupCategories.systemLogs.description;
+      case 'broken_login_items':
+        return context.t.cleanupCategories.brokenLoginItems.description;
+      default:
+        return '';
+    }
+  }
 }
 
 const _kCategories = [
-  _CleanupCategory(
-    id: 'user_cache',
-    name: 'User Cache Files',
-    description:
-        'Originally intended to improve startup times, the cache files of your applications ultimately accumulate and result in improper functioning or an overall performance drop.',
-    icon: Icons.cached_rounded,
-  ),
-  _CleanupCategory(
-    id: 'user_logs',
-    name: 'User Log Files',
-    description:
-        'Log files are created by macOS and its applications to record events and errors. Over time they can grow large and take up significant space.',
-    icon: Icons.article_outlined,
-  ),
-  _CleanupCategory(
-    id: 'language_files',
-    name: 'Language Files',
-    description:
-        'Unused localization resources bundled with apps. Removing languages you do not use frees up storage without affecting functionality.',
-    icon: Icons.language_rounded,
-  ),
-  _CleanupCategory(
-    id: 'system_logs',
-    name: 'System Log Files',
-    description:
-        'System-wide log files written by macOS services and daemons. These files are safe to remove as the system re-creates them when needed.',
-    icon: Icons.settings_outlined,
-  ),
-  _CleanupCategory(
-    id: 'broken_login_items',
-    name: 'Broken Login Items',
-    description:
-        'Login items that point to applications or files that no longer exist on your disk. Removing them speeds up login time.',
-    icon: Icons.link_off_rounded,
-  ),
+  _CleanupCategory(id: 'user_cache', icon: Icons.cached_rounded),
+  _CleanupCategory(id: 'user_logs', icon: Icons.article_outlined),
+  _CleanupCategory(id: 'language_files', icon: Icons.language_rounded),
+  _CleanupCategory(id: 'system_logs', icon: Icons.settings_outlined),
+  _CleanupCategory(id: 'broken_login_items', icon: Icons.link_off_rounded),
 ];
 
 // ─── Group model ──────────────────────────────────────────────────────────
@@ -341,14 +339,17 @@ class _TopBar extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 8),
             ),
             icon: const Icon(Icons.refresh, size: 20),
-            label: const Text('Start Over', style: TextStyle(fontSize: 13)),
+            label: Text(
+              context.t.buttons.startOver,
+              style: const TextStyle(fontSize: 13),
+            ),
           ),
 
           const Spacer(),
 
           // Title
-          const Text(
-            'Cleanup Manager',
+          Text(
+            context.t.cleanupManager.title,
             style: TextStyle(
               color: Colors.white,
               fontSize: 14,
@@ -369,7 +370,7 @@ class _TopBar extends StatelessWidget {
                 autofocus: true,
                 style: const TextStyle(color: Colors.white, fontSize: 13),
                 decoration: InputDecoration(
-                  hintText: 'Search...',
+                  hintText: context.t.searchAndSort.searchHint,
                   hintStyle: const TextStyle(
                     color: Colors.white38,
                     fontSize: 13,
@@ -403,7 +404,7 @@ class _TopBar extends StatelessWidget {
               size: 18,
               color: showSearch ? Colors.white : Colors.white60,
             ),
-            tooltip: 'Search',
+            tooltip: context.t.tooltips.search,
             padding: EdgeInsets.zero,
             constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
           ),
@@ -444,7 +445,7 @@ class _SortDropdown extends StatelessWidget {
         PopupMenuItem(
           value: _SortOrder.size,
           child: Text(
-            'Size',
+            context.t.searchAndSort.size,
             style: TextStyle(
               color: value == _SortOrder.size ? accentColor : Colors.white70,
               fontSize: 13,
@@ -454,7 +455,7 @@ class _SortDropdown extends StatelessWidget {
         PopupMenuItem(
           value: _SortOrder.name,
           child: Text(
-            'Name',
+            context.t.searchAndSort.name,
             style: TextStyle(
               color: value == _SortOrder.name ? accentColor : Colors.white70,
               fontSize: 13,
@@ -466,7 +467,7 @@ class _SortDropdown extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            'Sort by: ${value == _SortOrder.size ? "Size" : "Name"}',
+            '${context.t.searchAndSort.sortBy}: ${value == _SortOrder.size ? context.t.searchAndSort.size : context.t.searchAndSort.name}',
             style: TextStyle(
               color: accentColor,
               fontSize: 12,
@@ -514,7 +515,7 @@ class _CategorySidebar extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.fromLTRB(20, 20, 20, 4),
             child: Text(
-              'System Junk',
+              context.t.cleanupManager.systemJunkHeader,
               style: TextStyle(
                 color: theme.accentColor,
                 fontSize: 15,
@@ -525,7 +526,7 @@ class _CategorySidebar extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
             child: Text(
-              'Redundant files that clog up device storage and impede optimal performance.',
+              context.t.cleanupManager.systemJunkDescription,
               style: const TextStyle(color: Colors.white38, fontSize: 11),
             ),
           ),
@@ -640,7 +641,7 @@ class _CategoryTile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    category.name,
+                    category.name(context),
                     style: TextStyle(
                       color: isSelected ? Colors.white : Colors.white70,
                       fontSize: 12,
@@ -652,7 +653,9 @@ class _CategoryTile extends StatelessWidget {
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    bytes > 0 ? formatBytes(bytes) : 'No items',
+                    bytes > 0
+                        ? formatBytes(bytes)
+                        : context.t.cleanupManager.noItems,
                     style: TextStyle(
                       color: isSelected ? accentColor : Colors.white38,
                       fontSize: 11,
@@ -725,7 +728,7 @@ class _RightPanel extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                category.name,
+                category.name(context),
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 17,
@@ -734,16 +737,16 @@ class _RightPanel extends StatelessWidget {
               ),
               const SizedBox(height: 6),
               Text(
-                category.description,
+                category.description(context),
                 style: const TextStyle(color: Colors.white54, fontSize: 12),
               ),
               const SizedBox(height: 14),
               // Select row
               Row(
                 children: [
-                  const Text(
-                    'Select: ',
-                    style: TextStyle(color: Colors.white54, fontSize: 13),
+                  Text(
+                    '${context.t.cleanupManager.selectLabel}: ',
+                    style: const TextStyle(color: Colors.white54, fontSize: 13),
                   ),
                   GestureDetector(
                     onTap: () => onToggleAll(!allSelected),
@@ -751,7 +754,9 @@ class _RightPanel extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          allSelected ? 'None' : 'All',
+                          allSelected
+                              ? context.t.cleanupManager.selectNoneOption
+                              : context.t.cleanupManager.selectAllOption,
                           style: TextStyle(
                             color: theme.accentColor,
                             fontSize: 13,
@@ -780,7 +785,7 @@ class _RightPanel extends StatelessWidget {
           child: groups.isEmpty
               ? Center(
                   child: Text(
-                    'No items found',
+                    context.t.cleanupManager.noItemsFound,
                     style: const TextStyle(color: Colors.white38, fontSize: 14),
                   ),
                 )
@@ -1077,7 +1082,10 @@ class _Footer extends StatelessWidget {
               style: const TextStyle(fontSize: 13, color: Colors.white70),
               children: [
                 TextSpan(
-                  text: '$selectedCount Items Selected',
+                  text: context.t.cleanupManager.itemsSelected.replaceAll(
+                    '{count}',
+                    '$selectedCount',
+                  ),
                   style: const TextStyle(fontWeight: FontWeight.w500),
                 ),
                 const TextSpan(text: '  |  '),
@@ -1122,8 +1130,8 @@ class _Footer extends StatelessWidget {
                         color: Colors.white,
                       ),
                     )
-                  : const Text(
-                      'Clean Up',
+                  : Text(
+                      context.t.buttons.cleanUp,
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,

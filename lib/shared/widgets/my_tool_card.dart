@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../gen/strings.g.dart';
 import 'project_directory_selector.dart';
 import '../../core/models/my_tool.dart';
 import '../../providers/my_tools_provider.dart';
@@ -126,7 +127,8 @@ class _MyToolCardState extends State<MyToolCard> {
                           accentColor: widget.tool.accentColor,
                           menuColor: const Color(0xFF3C275B),
                           onPickFolder: widget.onPickDirectory!,
-                          chooseFolderLabel: 'Choose Folder...',
+                          chooseFolderLabel:
+                              context.t.projectDirectory.chooseFolder,
                         )
                       : _LocationPill(label: widget.tool.locationLabel),
                 ),
@@ -248,8 +250,8 @@ class _ScanButton extends StatelessWidget {
                     ),
                   ),
                 )
-              : const Text(
-                  'Scan',
+              : Text(
+                  context.t.buttons.scan,
                   style: TextStyle(
                     color: Color(0xFF2C2145),
                     fontSize: 16,

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+import '../../gen/strings.g.dart';
 import '../theme/section_themes.dart';
 
 enum NavSection {
@@ -24,49 +26,49 @@ class NavItem {
     this.theme,
   });
 
-  static const List<NavItem> mainItems = [
+  static List<NavItem> mainItems() => [
     NavItem(
       section: NavSection.smartCare,
-      label: 'Smart Care',
+      label: t.navigation.smartCare,
       icon: Icons.favorite_rounded,
       theme: SectionThemes.smartCare,
     ),
     NavItem(
       section: NavSection.cleanup,
-      label: 'Cleanup',
+      label: t.navigation.cleanup,
       icon: Icons.cleaning_services_rounded,
       theme: SectionThemes.cleanup,
     ),
     NavItem(
       section: NavSection.myClutter,
-      label: 'My Clutter',
+      label: t.navigation.myClutter,
       icon: Icons.folder_outlined,
       theme: SectionThemes.myClutter,
     ),
     NavItem(
       section: NavSection.spaceView,
-      label: 'Space View',
+      label: t.navigation.spaceView,
       icon: Icons.lens_blur_rounded,
       theme: SectionThemes.spaceView,
     ),
     NavItem(
       section: NavSection.applications,
-      label: 'Applications',
+      label: t.navigation.applications,
       icon: Icons.apps_rounded,
       theme: SectionThemes.applications,
     ),
   ];
 
-  static const List<NavItem> bottomItems = [
+  static List<NavItem> bottomItems() => [
     NavItem(
       section: NavSection.myTools,
-      label: 'My Tools',
+      label: t.navigation.myTools,
       icon: Icons.build_outlined,
       theme: SectionThemes.myTools,
     ),
     NavItem(
       section: NavSection.myActivity,
-      label: 'My Activity',
+      label: t.navigation.myActivity,
       icon: Icons.bar_chart_rounded,
     ),
   ];
