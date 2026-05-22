@@ -61,13 +61,13 @@ class _ScanButtonState extends State<ScanButton>
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: widget.onPressed == null
-                  ? widget.color.withOpacity(0.5)
+                  ? widget.color.withValues(alpha: 0.5)
                   : widget.color,
               boxShadow: widget.onPressed == null
                   ? []
                   : [
                       BoxShadow(
-                        color: widget.color.withOpacity(_hovered ? 0.65 : 0.35),
+                        color: widget.color.withValues(alpha: _hovered ? 0.65 : 0.35),
                         blurRadius: _hovered ? 32 : 20,
                         spreadRadius: _hovered ? 4 : 1,
                       ),

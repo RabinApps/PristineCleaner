@@ -28,12 +28,12 @@ class FileListTile extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 2),
       decoration: BoxDecoration(
         color: item.isSelected
-            ? accentColor.withOpacity(0.08)
-            : Colors.white.withOpacity(0.04),
+            ? accentColor.withValues(alpha: 0.08)
+            : Colors.white.withValues(alpha: 0.04),
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
           color: item.isSelected
-              ? accentColor.withOpacity(0.3)
+              ? accentColor.withValues(alpha: 0.3)
               : Colors.transparent,
           width: 1,
         ),

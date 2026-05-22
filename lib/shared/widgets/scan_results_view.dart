@@ -105,9 +105,9 @@ class _ScanResultsViewState extends State<ScanResultsView> {
           Container(
             height: 52,
             decoration: BoxDecoration(
-              color: Colors.black.withOpacity(0.2),
+              color: Colors.black.withValues(alpha: 0.2),
               border: Border(
-                bottom: BorderSide(color: Colors.white.withOpacity(0.07)),
+                bottom: BorderSide(color: Colors.white.withValues(alpha: 0.07)),
               ),
             ),
             padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -234,9 +234,9 @@ class _ScanResultsViewState extends State<ScanResultsView> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
             decoration: BoxDecoration(
-              color: Colors.black.withOpacity(0.2),
+              color: Colors.black.withValues(alpha: 0.2),
               border: Border(
-                top: BorderSide(color: Colors.white.withOpacity(0.06)),
+                top: BorderSide(color: Colors.white.withValues(alpha: 0.06)),
               ),
             ),
             child: Row(

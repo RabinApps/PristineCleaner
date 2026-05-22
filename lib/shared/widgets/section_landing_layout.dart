@@ -204,8 +204,8 @@ class _FeatureRow extends StatelessWidget {
           height: 32,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: accentColor.withOpacity(0.18),
-            border: Border.all(color: accentColor.withOpacity(0.35), width: 1),
+            color: accentColor.withValues(alpha: 0.18),
+            border: Border.all(color: accentColor.withValues(alpha: 0.35), width: 1),
           ),
           child: Icon(feature.icon, size: 15, color: accentColor),
         ),

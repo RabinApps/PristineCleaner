@@ -208,8 +208,8 @@ class _StatRow extends StatelessWidget {
           height: 32,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: color.withOpacity(0.15),
-            border: Border.all(color: color.withOpacity(0.3), width: 1),
+            color: color.withValues(alpha: 0.15),
+            border: Border.all(color: color.withValues(alpha: 0.3), width: 1),
           ),
           child: Icon(Icons.circle, size: 8, color: color),
         ),

@@ -35,7 +35,7 @@ class GlossyIconWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final light = _lighten(baseColor, 0.22);
     final dark = _darken(baseColor, 0.12);
-    final glow = baseColor.withOpacity(0.55);
+    final glow = baseColor.withValues(alpha: 0.55);
 
     final inner = Container(
       width: size,
@@ -52,12 +52,12 @@ class GlossyIconWidget extends StatelessWidget {
         boxShadow: [
           BoxShadow(color: glow, blurRadius: 70, spreadRadius: 12),
           BoxShadow(
-            color: glow.withOpacity(0.25),
+            color: glow.withValues(alpha: 0.25),
             blurRadius: 120,
             spreadRadius: 20,
           ),
           BoxShadow(
-            color: Colors.black.withOpacity(0.5),
+            color: Colors.black.withValues(alpha: 0.5),
             blurRadius: 30,
             offset: const Offset(0, 14),
           ),
@@ -78,8 +78,8 @@ class GlossyIconWidget extends StatelessWidget {
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
-                    Colors.white.withOpacity(0.32),
-                    Colors.white.withOpacity(0.0),
+                    Colors.white.withValues(alpha: 0.32),
+                    Colors.white.withValues(alpha: 0.0),
                   ],
                 ),
               ),
@@ -94,7 +94,7 @@ class GlossyIconWidget extends StatelessWidget {
               height: size * 0.06,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(size * 0.06),
-                color: Colors.white.withOpacity(0.08),
+                color: Colors.white.withValues(alpha: 0.08),
               ),
             ),
           ),
@@ -102,7 +102,7 @@ class GlossyIconWidget extends StatelessWidget {
             child: Icon(
               icon,
               size: size * 0.34,
-              color: Colors.white.withOpacity(0.93),
+              color: Colors.white.withValues(alpha: 0.93),
             ),
           ),
         ],

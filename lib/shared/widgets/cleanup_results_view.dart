@@ -243,7 +243,7 @@ class _CleanupResultsViewState extends State<CleanupResultsView> {
                 ),
 
                 // Divider
-                Container(width: 1, color: Colors.white.withOpacity(0.07)),
+                Container(width: 1, color: Colors.white.withValues(alpha: 0.07)),
 
                 // Right panel
                 Expanded(
@@ -323,9 +323,9 @@ class _TopBar extends StatelessWidget {
     return Container(
       height: 52,
       decoration: BoxDecoration(
-        color: Colors.black.withOpacity(0.2),
+        color: Colors.black.withValues(alpha: 0.2),
         border: Border(
-          bottom: BorderSide(color: Colors.white.withOpacity(0.07)),
+          bottom: BorderSide(color: Colors.white.withValues(alpha: 0.07)),
         ),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -376,7 +376,7 @@ class _TopBar extends StatelessWidget {
                     fontSize: 13,
                   ),
                   filled: true,
-                  fillColor: Colors.white.withOpacity(0.07),
+                  fillColor: Colors.white.withValues(alpha: 0.07),
                   contentPadding: const EdgeInsets.symmetric(
                     horizontal: 10,
                     vertical: 0,
@@ -595,12 +595,12 @@ class _CategoryTile extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         decoration: BoxDecoration(
           color: isSelected
-              ? accentColor.withOpacity(0.15)
+              ? accentColor.withValues(alpha: 0.15)
               : Colors.transparent,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
             color: isSelected
-                ? accentColor.withOpacity(0.35)
+                ? accentColor.withValues(alpha: 0.35)
                 : Colors.transparent,
           ),
         ),
@@ -624,8 +624,8 @@ class _CategoryTile extends StatelessWidget {
               height: 34,
               decoration: BoxDecoration(
                 color: isSelected
-                    ? accentColor.withOpacity(0.2)
-                    : Colors.white.withOpacity(0.07),
+                    ? accentColor.withValues(alpha: 0.2)
+                    : Colors.white.withValues(alpha: 0.07),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Icon(
@@ -672,7 +672,7 @@ class _CategoryTile extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: isSelected
                       ? accentColor
-                      : Colors.white.withOpacity(0.12),
+                      : Colors.white.withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: Text(
@@ -778,7 +778,7 @@ class _RightPanel extends StatelessWidget {
         ),
 
         const SizedBox(height: 12),
-        Divider(color: Colors.white.withOpacity(0.07), height: 1),
+        Divider(color: Colors.white.withValues(alpha: 0.07), height: 1),
 
         // Group list
         Expanded(
@@ -843,12 +843,12 @@ class _GroupTile extends StatelessWidget {
           margin: const EdgeInsets.symmetric(vertical: 2),
           decoration: BoxDecoration(
             color: group.anySelected
-                ? theme.accentColor.withOpacity(0.07)
-                : Colors.white.withOpacity(0.03),
+                ? theme.accentColor.withValues(alpha: 0.07)
+                : Colors.white.withValues(alpha: 0.03),
             borderRadius: BorderRadius.circular(10),
             border: Border.all(
               color: group.anySelected
-                  ? theme.accentColor.withOpacity(0.2)
+                  ? theme.accentColor.withValues(alpha: 0.2)
                   : Colors.transparent,
             ),
           ),
@@ -879,7 +879,7 @@ class _GroupTile extends StatelessWidget {
                     width: 32,
                     height: 32,
                     decoration: BoxDecoration(
-                      color: Colors.blue.withOpacity(0.15),
+                      color: Colors.blue.withValues(alpha: 0.15),
                       borderRadius: BorderRadius.circular(6),
                     ),
                     child: const Icon(
@@ -907,7 +907,7 @@ class _GroupTile extends StatelessWidget {
                   Icon(
                     Icons.auto_awesome_rounded,
                     size: 14,
-                    color: theme.accentColor.withOpacity(0.6),
+                    color: theme.accentColor.withValues(alpha: 0.6),
                   ),
                   const SizedBox(width: 8),
 
@@ -979,8 +979,8 @@ class _FileTile extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 1),
       decoration: BoxDecoration(
         color: item.isSelected
-            ? accentColor.withOpacity(0.06)
-            : Colors.white.withOpacity(0.02),
+            ? accentColor.withValues(alpha: 0.06)
+            : Colors.white.withValues(alpha: 0.02),
         borderRadius: BorderRadius.circular(8),
       ),
       child: InkWell(
@@ -1018,7 +1018,7 @@ class _FileTile extends StatelessWidget {
               Text(
                 item.formattedSize,
                 style: TextStyle(
-                  color: accentColor.withOpacity(0.8),
+                  color: accentColor.withValues(alpha: 0.8),
                   fontSize: 12,
                   fontWeight: FontWeight.w500,
                 ),
@@ -1070,8 +1070,8 @@ class _Footer extends StatelessWidget {
     return Container(
       height: 64,
       decoration: BoxDecoration(
-        color: Colors.black.withOpacity(0.25),
-        border: Border(top: BorderSide(color: Colors.white.withOpacity(0.07))),
+        color: Colors.black.withValues(alpha: 0.25),
+        border: Border(top: BorderSide(color: Colors.white.withValues(alpha: 0.07))),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Row(

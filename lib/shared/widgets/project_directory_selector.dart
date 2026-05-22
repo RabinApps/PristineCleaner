@@ -25,9 +25,9 @@ class ProjectDirectorySelector extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.06),
+        color: Colors.white.withValues(alpha: 0.06),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.white.withOpacity(0.12)),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
       ),
       child: PopupMenuButton<String>(
         onSelected: (value) {
@@ -86,7 +86,7 @@ class ProjectDirectorySelector extends StatelessWidget {
             const SizedBox(width: 8),
             Icon(
               Icons.keyboard_arrow_down_rounded,
-              color: Colors.white.withOpacity(0.75),
+              color: Colors.white.withValues(alpha: 0.75),
               size: 18,
             ),
           ],

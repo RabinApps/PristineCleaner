@@ -126,7 +126,7 @@ class _DoneScreen extends StatelessWidget {
               onPressed: onDismiss,
               style: OutlinedButton.styleFrom(
                 foregroundColor: theme.accentColor,
-                side: BorderSide(color: theme.accentColor.withOpacity(0.5)),
+                side: BorderSide(color: theme.accentColor.withValues(alpha: 0.5)),
                 padding: const EdgeInsets.symmetric(
                   horizontal: 32,
                   vertical: 14,

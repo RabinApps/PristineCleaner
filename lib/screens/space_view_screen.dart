@@ -369,9 +369,9 @@ class _SpaceViewWorkspaceState extends State<_SpaceViewWorkspace> {
           Container(
             padding: const EdgeInsets.fromLTRB(20, 14, 20, 14),
             decoration: BoxDecoration(
-              color: Colors.black.withOpacity(0.22),
+              color: Colors.black.withValues(alpha: 0.22),
               border: Border(
-                bottom: BorderSide(color: Colors.white.withOpacity(0.08)),
+                bottom: BorderSide(color: Colors.white.withValues(alpha: 0.08)),
               ),
             ),
             child: Column(
@@ -429,9 +429,9 @@ class _SpaceViewWorkspaceState extends State<_SpaceViewWorkspace> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
             decoration: BoxDecoration(
-              color: Colors.black.withOpacity(0.2),
+              color: Colors.black.withValues(alpha: 0.2),
               border: Border(
-                top: BorderSide(color: Colors.white.withOpacity(0.06)),
+                top: BorderSide(color: Colors.white.withValues(alpha: 0.06)),
               ),
             ),
             child: Row(
@@ -444,7 +444,7 @@ class _SpaceViewWorkspaceState extends State<_SpaceViewWorkspace> {
                 Text(
                   '|',
                   style: TextStyle(
-                    color: Colors.white.withOpacity(0.4),
+                    color: Colors.white.withValues(alpha: 0.4),
                     fontSize: 13,
                   ),
                 ),
@@ -513,9 +513,9 @@ class _FolderListPane extends StatelessWidget {
     if (items.isEmpty) {
       return Container(
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.05),
+          color: Colors.white.withValues(alpha: 0.05),
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: Colors.white.withOpacity(0.08)),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
         ),
         child: Center(
           child: Text(
@@ -528,15 +528,15 @@ class _FolderListPane extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.06),
+        color: Colors.white.withValues(alpha: 0.06),
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: Colors.white.withOpacity(0.08)),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
       ),
       child: ListView.separated(
         padding: const EdgeInsets.symmetric(vertical: 8),
         itemCount: items.length,
         separatorBuilder: (_, _) =>
-            Divider(height: 1, color: Colors.white.withOpacity(0.05)),
+            Divider(height: 1, color: Colors.white.withValues(alpha: 0.05)),
         itemBuilder: (context, idx) {
           final indexed = items[idx];
           final item = indexed.item;
@@ -597,9 +597,9 @@ class _BubbleCanvas extends StatelessWidget {
     if (items.isEmpty) {
       return Container(
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.04),
+          color: Colors.white.withValues(alpha: 0.04),
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: Colors.white.withOpacity(0.08)),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
         ),
         child: Center(
           child: Text(
@@ -612,9 +612,9 @@ class _BubbleCanvas extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.04),
+        color: Colors.white.withValues(alpha: 0.04),
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: Colors.white.withOpacity(0.08)),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
       ),
       child: Padding(
         padding: const EdgeInsets.all(18),
@@ -891,20 +891,20 @@ class _StaticBubbleNode extends StatelessWidget {
           shape: BoxShape.circle,
           gradient: RadialGradient(
             colors: [
-              accentColor.withOpacity(isSelected ? 0.58 : 0.44),
-              accentColor.withOpacity(isSelected ? 0.30 : 0.18),
+              accentColor.withValues(alpha: isSelected ? 0.58 : 0.44),
+              accentColor.withValues(alpha: isSelected ? 0.30 : 0.18),
               const Color(0x40101010),
             ],
             stops: const [0.0, 0.65, 1.0],
           ),
           border: Border.all(
             color: isSelected
-                ? accentColor.withOpacity(0.95)
-                : accentColor.withOpacity(0.45),
+                ? accentColor.withValues(alpha: 0.95)
+                : accentColor.withValues(alpha: 0.45),
             width: isSelected ? 2.6 : 1.2,
           ),
           boxShadow: [
-            BoxShadow(color: accentColor.withOpacity(0.30), blurRadius: 26),
+            BoxShadow(color: accentColor.withValues(alpha: 0.30), blurRadius: 26),
           ],
         ),
         child: Center(
@@ -918,7 +918,7 @@ class _StaticBubbleNode extends StatelessWidget {
                   bubble.item?.isDirectory == false
                       ? Icons.insert_drive_file_rounded
                       : Icons.folder_rounded,
-                  color: Colors.white.withOpacity(0.86),
+                  color: Colors.white.withValues(alpha: 0.86),
                   size: diameter > 140 ? 30 : 24,
                 ),
                 const SizedBox(height: 7),
@@ -940,7 +940,7 @@ class _StaticBubbleNode extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: Colors.white.withOpacity(0.82),
+                    color: Colors.white.withValues(alpha: 0.82),
                     fontSize: diameter > 140 ? 17 : 13,
                     fontWeight: FontWeight.w500,
                   ),
@@ -997,7 +997,7 @@ class _BreadcrumbBar extends StatelessWidget {
       width: double.infinity,
       height: 42,
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.04),
+        color: Colors.white.withValues(alpha: 0.04),
         borderRadius: BorderRadius.circular(11),
       ),
       child: SingleChildScrollView(
@@ -1024,7 +1024,7 @@ class _BreadcrumbBar extends StatelessWidget {
               if (i != paths.length - 1)
                 Icon(
                   Icons.chevron_right_rounded,
-                  color: accentColor.withOpacity(0.7),
+                  color: accentColor.withValues(alpha: 0.7),
                   size: 15,
                 ),
             ],
@@ -1055,8 +1055,8 @@ class _FeatureTag extends StatelessWidget {
           height: 30,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: accentColor.withOpacity(0.16),
-            border: Border.all(color: accentColor.withOpacity(0.32)),
+            color: accentColor.withValues(alpha: 0.16),
+            border: Border.all(color: accentColor.withValues(alpha: 0.32)),
           ),
           child: Icon(icon, size: 16, color: accentColor),
         ),
@@ -1154,7 +1154,7 @@ class _DoneScreen extends StatelessWidget {
               onPressed: onDismiss,
               style: OutlinedButton.styleFrom(
                 foregroundColor: theme.accentColor,
-                side: BorderSide(color: theme.accentColor.withOpacity(0.5)),
+                side: BorderSide(color: theme.accentColor.withValues(alpha: 0.5)),
                 padding: const EdgeInsets.symmetric(
                   horizontal: 32,
                   vertical: 14,
