@@ -1,0 +1,348 @@
+{
+  "app": {
+    "title": "PristineCleaner"
+  },
+  "language": {
+    "label": "语言",
+    "english": "英语",
+    "spanish": "西班牙语",
+    "italian": "意大利语",
+    "french": "法语",
+    "hebrew": "希伯来语",
+    "greek": "希腊语",
+    "portuguese": "葡萄牙语",
+    "mandarin": "Mandarin"
+  },
+  "navigation": {
+    "smartCare": "智能护理",
+    "cleanup": "清理",
+    "myClutter": "我的杂乱",
+    "spaceView": "空间景观",
+    "applications": "应用领域",
+    "myTools": "我的工具",
+    "myActivity": "我的活动"
+  },
+  "sections": {
+    "smartCare": {
+      "title": "智能护理",
+      "subtitle": "一键获取系统的完整运行状况概览。\\n",
+      "features": {
+        "systemStatus": "系统状态",
+        "storageUsage": "存储使用情况",
+        "quickActions": "快速行动"
+      }
+    },
+    "cleanup": {
+      "title": "垃圾清理",
+      "subtitle": "清理您的系统以实现\\n最佳性能并回收更多可用空间。",
+      "features": {
+        "systemJunk": "系统垃圾",
+        "userCache": "用户缓存",
+        "tempFiles": "临时文件"
+      }
+    },
+    "myClutter": {
+      "title": "我的杂乱",
+      "subtitle": "只需点击几下，即可对文件进行排序并\\n减少混乱。",
+      "features": {
+        "largeFiles": "大文件",
+        "duplicates": "重复项",
+        "largeSimilarImages": "大类似图像"
+      }
+    },
+    "spaceView": {
+      "title": "空间景观",
+      "subtitle": "可视化占用磁盘空间最多的\\n并快速清理。",
+      "features": {
+        "visualStorageMap": "视觉存储图",
+        "largeFoldersOverview": "大文件夹概述",
+        "hiddenFilesUncovered": "发现隐藏文件"
+      }
+    },
+    "applications": {
+      "title": "应用领域",
+      "subtitle": "控制您的应用程序。\\n卸载或删除旧的残留物。",
+      "features": {
+        "appUninstaller": "应用程序卸载程序",
+        "largeApps": "大型应用程序",
+        "fileLeftovers": "文件剩菜"
+      }
+    },
+    "myTools": {
+      "title": "我的工具",
+      "subtitle": "您的系统保养和维护首选工具包。",
+      "features": {
+        "targetedScanners": "目标扫描仪",
+        "quickActions": "快速行动",
+        "liveFiltering": "实时过滤"
+      }
+    }
+  },
+  "progress": {
+    "countingFiles": "正在计算文件...",
+    "countingApplications": "正在计算应用程序...",
+    "countingFolders": "正在计算文件夹..."
+  },
+  "errors": {
+    "itemsFailedToRemove": "{count} 项无法删除。"
+  },
+  "buttons": {
+    "scan": "扫描",
+    "stop": "停止",
+    "done": "完毕",
+    "clean": "干净的",
+    "cleanUp": "清理",
+    "close": "关闭",
+    "refresh": "刷新",
+    "rescan": "重新扫描",
+    "startOver": "重新开始",
+    "selectAll": "选择全部",
+    "clearSelection": "清除选择",
+    "keepScanning": "继续扫描",
+    "keepRemoving": "继续删除"
+  },
+  "tooltips": {
+    "search": "搜索",
+    "openInFinder": "在 Finder 中打开"
+  },
+  "dialogs": {
+    "stopScanningTitle": "停止扫描？",
+    "stopScanningMessage": "这将取消当前扫描并放弃任何部分进度。",
+    "stopRemovalTitle": "停止移除？",
+    "stopRemovalMessage": "当前文件将完成，然后剩余的文件将被跳过。"
+  },
+  "removal": {
+    "barrierLabel": "拆除进度",
+    "preparing": "正在准备...",
+    "removingFrom": "从 {title} 中删除",
+    "stoppingAfterCurrentFile": "在当前文件后停止...",
+    "keepWindowOpen": "删除运行时请保持此窗口打开。",
+    "processedSummary": "已处理 {total} 的 {processed}",
+    "deletedFreed": "{deleted} 已删除 • {bytes} 已释放",
+    "currentItem": "当前： {name}",
+    "stopping": "停止...",
+    "removalFailed": "删除失败",
+    "removalFailedDetails": "删除所选文件时出现问题。",
+    "removalStopped": "移除已停止",
+    "removalComplete": "拆除完成",
+    "deletedSummary": "{title} 删除了 {count} 项",
+    "freedSummary": "{bytes} 已释放",
+    "failedToRemoveSummary": "{count} 项无法删除。",
+    "deletedFiles": "已删除的文件",
+    "noFilesDeleted": "没有文件被删除。"
+  },
+  "done": {
+    "allCleanedTitle": "全部清理干净了！",
+    "movedToTrashMessage": "选定的文件已移至废纸篓。",
+    "applicationsRemovedTitle": "应用程序已删除！",
+    "appsMovedToTrashMessage": "选定的应用程序已移至垃圾箱。"
+  },
+  "cleanupManager": {
+    "title": "清理经理",
+    "systemJunkHeader": "系统垃圾",
+    "systemJunkDescription": "冗余文件会堵塞设备存储并妨碍最佳性能。",
+    "selectLabel": "选择",
+    "selectAllOption": "全部",
+    "selectNoneOption": "没有任何",
+    "noItems": "没有商品",
+    "noItemsFound": "没有找到物品",
+    "itemsSelected": "{count} 已选择项目"
+  },
+  "projectDirectory": {
+    "chooseFolder": "选择文件夹...",
+    "chooseProjectDirectory": "选择项目目录",
+    "chooseParentFolder": "选择父文件夹",
+    "noFolder": "无文件夹"
+  },
+  "searchAndSort": {
+    "searchHint": "搜索...",
+    "sortBy": "排序方式",
+    "size": "尺寸",
+    "name": "姓名",
+    "ascending": "升序",
+    "descending": "降序"
+  },
+  "spaceView": {
+    "noFoldersFound": "找不到该级别的文件夹",
+    "noBubblesToRender": "没有气泡可渲染",
+    "otherItems": "其他项目"
+  },
+  "smartCare": {
+    "refresh": "刷新",
+    "unableToReadDiskInfo": "无法读取磁盘信息",
+    "totalStorage": "总存储空间",
+    "used": "用过的",
+    "available": "可用的",
+    "percentUsed": "{percent}% 已使用"
+  },
+  "myToolsPage": {
+    "title": "我的工具",
+    "subtitle": "让您的 Mac 保持清洁、安全和平稳运行的首选工具。",
+    "backToTools": "返回工具"
+  },
+  "myToolsMessages": {
+    "itemsWithSize": "{count} 项目 • {size}",
+    "scanCancelled": "扫描被取消。",
+    "selectAtLeastOne": "至少选择一项要清洁的物品。",
+    "failedToClean": "无法清理 {count} 项。",
+    "everythingSelectedCleaned": "所有选择的东西都​​被清理干净了。",
+    "cleanupUpdated": "清理已更新。",
+    "cleanedCount": "已清洁 {count} 件物品。",
+    "stoppedPrefix": "停了。",
+    "removedCount": "删除了 {count} 项。",
+    "failedCountShort": "{count} 失败。",
+    "scanComplete": "扫描完成。",
+    "somethingWentWrong": "出了点问题。",
+    "fallback": {
+      "downloadsTidy": "下载很整齐。",
+      "noOversizedStale": "未发现过大的过时文件。",
+      "noRecentDuplicates": "没有发现最近的重复项。",
+      "noSimilarLargeImages": "未找到类似的大图像。",
+      "noAppLeftovers": "未发现可移动应用程序残留物。",
+      "noStaleApps": "未发现过时的应用程序。",
+      "appsNeedReview": "发现可能需要审查的应用程序。",
+      "noSystemJunkCandidates": "系统垃圾中没有清理候选者。",
+      "noBrokenStartup": "未找到损坏的启动/后台条目。",
+      "noBackgroundItems": "未找到背景项目。",
+      "noPrivacyTraces": "在已知地点未发现隐私痕迹。",
+      "trashAlreadyEmpty": "垃圾桶已经空了。",
+      "noPermissionCache": "未找到权限缓存文件。",
+      "noTimeMachineSnapshots": "未找到本地时间机器快照。",
+      "noMaintenanceCandidates": "未找到维护候选人。",
+      "noMailAttachments": "未找到可移动的邮件附件。",
+      "noSuspiciousFiles": "未检测到可疑文件。"
+    }
+  },
+  "myToolsCatalog": {
+    "appLeftovers": {
+      "title": "应用程序剩菜",
+      "description": "即使主应用程序已经消失，也可以找到并删除应用程序剩余部分。"
+    },
+    "backgroundItems": {
+      "title": "背景项目",
+      "description": "管理 Mac 上运行的后台应用程序和进程。"
+    },
+    "downloads": {
+      "title": "下载",
+      "description": "查看并清理下载中的一次性文件，以保持文件夹整洁。"
+    },
+    "largeOld": {
+      "title": "大文件和旧文件",
+      "description": "查找并删除占用 Mac 空间的大型未使用文件。"
+    },
+    "appUpdater": {
+      "title": "应用程序更新程序",
+      "description": "密切关注应用程序的最新、最可靠版本。"
+    },
+    "similarImages": {
+      "title": "类似图像",
+      "description": "查看类似的照片并只保留最好的照片。"
+    },
+    "privacyItems": {
+      "title": "隐私项目",
+      "description": "删除浏览历史记录和活动痕迹以保护您的隐私。"
+    },
+    "trashBins": {
+      "title": "垃圾桶",
+      "description": "清空 Mac 上所有可用的垃圾箱。"
+    },
+    "duplicateFinder": {
+      "title": "重复查找器",
+      "description": "删除存储在 Mac 上不同位置的重复文件。"
+    },
+    "applicationPermissions": {
+      "title": "应用程序权限",
+      "description": "管理应用程序访问系统特性、设备和功能的方式。"
+    },
+    "systemJunk": {
+      "title": "系统垃圾",
+      "description": "删除堵塞设备存储并妨碍最佳性能的冗余文件。"
+    },
+    "timeMachineSnapshot": {
+      "title": "时间机器快照",
+      "description": "删除本地 Time Machine 快照而不影响您的备份。"
+    },
+    "maintenanceTasks": {
+      "title": "维护任务",
+      "description": "运行一组建议的维护任务，让您的 Mac 发挥最大性能。"
+    },
+    "loginItems": {
+      "title": "登录项目",
+      "description": "管理启动 Mac 时自动打开的应用程序。"
+    },
+    "mailAttachments": {
+      "title": "邮件附件",
+      "description": "删除本地存储的电子邮件附件以释放空间，同时保留修改的文件。"
+    },
+    "malwareFinder": {
+      "title": "恶意软件查找器",
+      "description": "识别并删除恶意项目以确保您的 Mac 安全。"
+    },
+    "uninstaller": {
+      "title": "卸载程序",
+      "description": "正确删除整个应用程序及其所有相关文件。"
+    }
+  },
+  "cleanupCategories": {
+    "userCache": {
+      "name": "用户缓存文件",
+      "description": "最初的目的是缩短启动时间，但应用程序的缓存文件最终会累积并导致功能不正常或整体性能下降。"
+    },
+    "userLogs": {
+      "name": "用户日志文件",
+      "description": "日志文件由 macOS 及其应用程序创建，用于记录事件和错误。随着时间的推移，它们会变大并占据很大的空间。"
+    },
+    "languageFiles": {
+      "name": "语言文件",
+      "description": "与应用程序捆绑在一起的未使用的本地化资源。删除不使用的语言可以释放存储空间，而不会影响功能。"
+    },
+    "systemLogs": {
+      "name": "系统日志文件",
+      "description": "由 macOS 服务和守护程序写入的系统范围日志文件。这些文件可以安全删除，因为系统会在需要时重新创建它们。"
+    },
+    "brokenLoginItems": {
+      "name": "损坏的登录项目",
+      "description": "指向磁盘上不再存在的应用程序或文件的登录项。删除它们可以加快登录时间。"
+    }
+  },
+  "myClutterDashboard": {
+    "backToCategories": "返回类别",
+    "filesToSort": "您有 {count} 文件需要排序。",
+    "quickRecommendations": "使用快速建议或手动查看它们。",
+    "reviewAllFiles": "查看所有文件",
+    "freshDuplicatesFound": "{count} 发现新的重复项",
+    "noDuplicates": "本次扫描中未发现重复项。",
+    "removeDuplicateBytes": "删除 {bytes} 重复文件。",
+    "largeSimilarImagesFound": "{count} 找到大类似图像",
+    "noSimilarGroups": "未找到类似的图像组。",
+    "nearlyIdenticalImages": "有 {bytes} 个几乎相同的图像。",
+    "largeFilesFound": "找到 {bytes} 个大文件",
+    "noLargeFiles": "未找到大文件。",
+    "largeFilesReady": "{count} 大文件已准备好供审阅。",
+    "review": "审查"
+  },
+  "scanResults": {
+    "itemsSummary": "{count} 项目 • {size}",
+    "scannedInMs": "在 {ms} 毫秒内扫描",
+    "deselectAll": "取消全选",
+    "selectAll": "选择全部",
+    "noItemsMatchSearch": "没有符合您搜索条件的商品",
+    "noItemsFound": "没有找到物品",
+    "itemsSelected": "{count} 已选择项目",
+    "rescan": "重新扫描"
+  },
+  "spaceViewStart": {
+    "subtitle": "选择一个父文件夹，然后扫描以映射占用空间最多的文件夹。",
+    "defaultRootPath": "默认根路径是您的主硬盘驱动器",
+    "exploreBubbles": "通过交互式气泡探索文件夹大小",
+    "clickToDrillDown": "单击文件夹进行深入分析并进行更深入的检查"
+  },
+  "shell": {
+    "comingSoon": "即将推出"
+  },
+  "myToolsService": {
+    "snapshotName": "快照 {id}",
+    "timeMachineGroup": "时间机器",
+    "timeMachineMacOnly": "Time Machine 快照仅在 macOS 上可用。"
+  }
+}

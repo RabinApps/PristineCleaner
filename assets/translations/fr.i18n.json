@@ -1,0 +1,348 @@
+{
+  "app": {
+    "title": "PristineCleaner"
+  },
+  "language": {
+    "label": "Langue",
+    "english": "Anglais",
+    "spanish": "Espagnol",
+    "italian": "italien",
+    "french": "Français",
+    "hebrew": "hébreu",
+    "greek": "grec",
+    "portuguese": "portugais",
+    "mandarin": "mandarin"
+  },
+  "navigation": {
+    "smartCare": "Soins intelligents",
+    "cleanup": "Nettoyage",
+    "myClutter": "Mon désordre",
+    "spaceView": "Vue de l'espace",
+    "applications": "Applications",
+    "myTools": "Mes outils",
+    "myActivity": "Mon activité"
+  },
+  "sections": {
+    "smartCare": {
+      "title": "Soins intelligents",
+      "subtitle": "Obtenez un aperçu complet de l'état de santé de votre système en un seul clic.",
+      "features": {
+        "systemStatus": "État du système",
+        "storageUsage": "Storage Usage",
+        "quickActions": "Actions rapides"
+      }
+    },
+    "cleanup": {
+      "title": "Nettoyage indésirable",
+      "subtitle": "Nettoyez votre système pour obtenir\\ndes performances maximales et récupérer plus d'espace libre.",
+      "features": {
+        "systemJunk": "Indésirable du système",
+        "userCache": "User Cache",
+        "tempFiles": "Fichiers temporaires"
+      }
+    },
+    "myClutter": {
+      "title": "Mon désordre",
+      "subtitle": "Triez vos fichiers et réduisez\\nle désordre en quelques clics.",
+      "features": {
+        "largeFiles": "Fichiers volumineux",
+        "duplicates": "Doublons",
+        "largeSimilarImages": "Grandes images similaires"
+      }
+    },
+    "spaceView": {
+      "title": "Vue de l'espace",
+      "subtitle": "Visualisez ce qui occupe le plus d'espace\\ndisque et nettoyez rapidement.",
+      "features": {
+        "visualStorageMap": "Carte de stockage visuelle",
+        "largeFoldersOverview": "Présentation des grands dossiers",
+        "hiddenFilesUncovered": "Fichiers cachés découverts"
+      }
+    },
+    "applications": {
+      "title": "Applications",
+      "subtitle": "Prenez le contrôle de vos applications.\\nDésinstallez ou supprimez les anciens restes.",
+      "features": {
+        "appUninstaller": "Programme de désinstallation d'application",
+        "largeApps": "Applications volumineuses",
+        "fileLeftovers": "Restes de fichiers"
+      }
+    },
+    "myTools": {
+      "title": "Mes outils",
+      "subtitle": "Votre boîte à outils incontournable pour l’entretien et la maintenance du système.",
+      "features": {
+        "targetedScanners": "Scanners ciblés",
+        "quickActions": "Actions rapides",
+        "liveFiltering": "Filtrage en direct"
+      }
+    }
+  },
+  "progress": {
+    "countingFiles": "Compter les fichiers...",
+    "countingApplications": "On compte les candidatures...",
+    "countingFolders": "Compter les dossiers..."
+  },
+  "errors": {
+    "itemsFailedToRemove": "{count} élément(s) n'a pas pu être supprimé."
+  },
+  "buttons": {
+    "scan": "Balayage",
+    "stop": "Arrêt",
+    "done": "Fait",
+    "clean": "Faire le ménage",
+    "cleanUp": "Nettoyer",
+    "close": "Fermer",
+    "refresh": "Rafraîchir",
+    "rescan": "Nouvelle analyse",
+    "startOver": "Recommencer",
+    "selectAll": "Sélectionner tout",
+    "clearSelection": "Effacer la sélection",
+    "keepScanning": "Continuez à numériser",
+    "keepRemoving": "Continuez à supprimer"
+  },
+  "tooltips": {
+    "search": "Recherche",
+    "openInFinder": "Ouvrir dans le Finder"
+  },
+  "dialogs": {
+    "stopScanningTitle": "Arrêter la numérisation ?",
+    "stopScanningMessage": "Cela annulera l'analyse en cours et annulera toute progression partielle.",
+    "stopRemovalTitle": "Arrêter la suppression ?",
+    "stopRemovalMessage": "Le fichier en cours se terminera, puis les fichiers restants seront ignorés."
+  },
+  "removal": {
+    "barrierLabel": "Progression de la suppression",
+    "preparing": "Préparation...",
+    "removingFrom": "Suppression de {title}",
+    "stoppingAfterCurrentFile": "Arrêt après le fichier en cours...",
+    "keepWindowOpen": "Veuillez garder cette fenêtre ouverte pendant la suppression.",
+    "processedSummary": "{processed} sur {total} traités",
+    "deletedFreed": "{deleted} supprimé • {bytes} libéré",
+    "currentItem": "Actuel : {name}",
+    "stopping": "Arrêt...",
+    "removalFailed": "Échec de la suppression",
+    "removalFailedDetails": "Une erreur s'est produite lors de la suppression des fichiers sélectionnés.",
+    "removalStopped": "Suppression arrêtée",
+    "removalComplete": "Suppression terminée",
+    "deletedSummary": "{title} élément(s) {count} supprimé(s)",
+    "freedSummary": "{bytes} libéré",
+    "failedToRemoveSummary": "{count} élément(s) n'a pas pu être supprimé.",
+    "deletedFiles": "Fichiers supprimés",
+    "noFilesDeleted": "Aucun fichier n'a été supprimé."
+  },
+  "done": {
+    "allCleanedTitle": "Tout est nettoyé !",
+    "movedToTrashMessage": "Les fichiers sélectionnés ont été déplacés vers la corbeille.",
+    "applicationsRemovedTitle": "Applications supprimées !",
+    "appsMovedToTrashMessage": "Les applications sélectionnées ont été déplacées vers la corbeille."
+  },
+  "cleanupManager": {
+    "title": "Gestionnaire de nettoyage",
+    "systemJunkHeader": "Indésirable du système",
+    "systemJunkDescription": "Fichiers redondants qui obstruent le stockage de l'appareil et entravent les performances optimales.",
+    "selectLabel": "Sélectionner",
+    "selectAllOption": "Tous",
+    "selectNoneOption": "Aucun",
+    "noItems": "Aucun article",
+    "noItemsFound": "Aucun article trouvé",
+    "itemsSelected": "{count} éléments sélectionnés"
+  },
+  "projectDirectory": {
+    "chooseFolder": "Choisissez un dossier...",
+    "chooseProjectDirectory": "Choisir le répertoire du projet",
+    "chooseParentFolder": "Choisir le dossier parent",
+    "noFolder": "Aucun dossier"
+  },
+  "searchAndSort": {
+    "searchHint": "Recherche...",
+    "sortBy": "Trier par",
+    "size": "Taille",
+    "name": "Nom",
+    "ascending": "Ascendant",
+    "descending": "Descendant"
+  },
+  "spaceView": {
+    "noFoldersFound": "Aucun dossier trouvé pour ce niveau",
+    "noBubblesToRender": "Aucune bulle à restituer",
+    "otherItems": "Autres articles"
+  },
+  "smartCare": {
+    "refresh": "Rafraîchir",
+    "unableToReadDiskInfo": "Impossible de lire les informations sur le disque",
+    "totalStorage": "Stockage total",
+    "used": "Utilisé",
+    "available": "Disponible",
+    "percentUsed": "{percent}% utilisé"
+  },
+  "myToolsPage": {
+    "title": "Mes outils",
+    "subtitle": "Vos outils incontournables pour garder votre Mac propre, sûr et fonctionnel.",
+    "backToTools": "Retour aux outils"
+  },
+  "myToolsMessages": {
+    "itemsWithSize": "{count} article(s) • {size}",
+    "scanCancelled": "l'analyse a été annulée.",
+    "selectAtLeastOne": "Sélectionnez au moins un élément à nettoyer.",
+    "failedToClean": "Échec du nettoyage de {count} élément(s).",
+    "everythingSelectedCleaned": "Tout ce qui a été sélectionné a été nettoyé.",
+    "cleanupUpdated": "Nettoyage mis à jour.",
+    "cleanedCount": "Article(s) {count} nettoyé(s).",
+    "stoppedPrefix": "Arrêté.",
+    "removedCount": "Élément(s) {count} supprimé(s).",
+    "failedCountShort": "{count} a échoué.",
+    "scanComplete": "Scan terminé.",
+    "somethingWentWrong": "Quelque chose s'est mal passé.",
+    "fallback": {
+      "downloadsTidy": "Les téléchargements sont soignés.",
+      "noOversizedStale": "Aucun fichier périmé surdimensionné n’a été trouvé.",
+      "noRecentDuplicates": "Aucun doublon récent trouvé.",
+      "noSimilarLargeImages": "Aucune grande image similaire trouvée.",
+      "noAppLeftovers": "Aucun reste d'application amovible trouvé.",
+      "noStaleApps": "Aucune application obsolète n'a été trouvée.",
+      "appsNeedReview": "Des candidatures susceptibles de nécessiter un examen ont été trouvées.",
+      "noSystemJunkCandidates": "Aucun candidat au nettoyage dans les fichiers indésirables du système.",
+      "noBrokenStartup": "Aucune entrée de démarrage/arrière-plan cassée trouvée.",
+      "noBackgroundItems": "Aucun élément d'arrière-plan n'a été trouvé.",
+      "noPrivacyTraces": "Aucune trace de confidentialité trouvée dans des emplacements connus.",
+      "trashAlreadyEmpty": "La corbeille est déjà vide.",
+      "noPermissionCache": "Aucun fichier de cache d'autorisations n'a été trouvé.",
+      "noTimeMachineSnapshots": "Aucun instantané Time Machine local n'a été trouvé.",
+      "noMaintenanceCandidates": "Aucun candidat au maintien n'a été trouvé.",
+      "noMailAttachments": "Aucune pièce jointe amovible n'a été trouvée.",
+      "noSuspiciousFiles": "Aucun fichier suspect n'a été détecté."
+    }
+  },
+  "myToolsCatalog": {
+    "appLeftovers": {
+      "title": "Restes d'application",
+      "description": "Localisez et supprimez les restes d'application même si l'application principale a déjà disparu."
+    },
+    "backgroundItems": {
+      "title": "Éléments d'arrière-plan",
+      "description": "Gérez les applications et les processus en arrière-plan exécutés sur votre Mac."
+    },
+    "downloads": {
+      "title": "Téléchargements",
+      "description": "Examinez et nettoyez les fichiers à usage unique des téléchargements pour garder les dossiers bien rangés."
+    },
+    "largeOld": {
+      "title": "Fichiers volumineux et anciens",
+      "description": "Recherchez et supprimez les fichiers volumineux et inutilisés qui occupent de l'espace sur votre Mac."
+    },
+    "appUpdater": {
+      "title": "Programme de mise à jour de l'application",
+      "description": "Gardez un œil sur les versions les plus récentes et les plus fiables de vos applications."
+    },
+    "similarImages": {
+      "title": "Images similaires",
+      "description": "Examinez les photos similaires et ne conservez que les meilleures."
+    },
+    "privacyItems": {
+      "title": "Éléments de confidentialité",
+      "description": "Supprimez l'historique de navigation et les traces d'activité pour protéger votre vie privée."
+    },
+    "trashBins": {
+      "title": "Poubelles",
+      "description": "Videz toutes les corbeilles disponibles sur votre Mac."
+    },
+    "duplicateFinder": {
+      "title": "Recherche de doublons",
+      "description": "Supprimez les fichiers en double stockés à différents emplacements sur votre Mac."
+    },
+    "applicationPermissions": {
+      "title": "Autorisations d'application",
+      "description": "Gérez la façon dont les applications accèdent aux fonctionnalités, aux appareils et aux fonctionnalités du système."
+    },
+    "systemJunk": {
+      "title": "Indésirable du système",
+      "description": "Supprimez les fichiers redondants qui obstruent le stockage de l'appareil et entravent les performances optimales."
+    },
+    "timeMachineSnapshot": {
+      "title": "Instantané de Time Machine",
+      "description": "Supprimez les instantanés Time Machine locaux sans affecter vos sauvegardes."
+    },
+    "maintenanceTasks": {
+      "title": "Tâches de maintenance",
+      "description": "Exécutez un ensemble de tâches de maintenance recommandées pour amener votre Mac à son maximum."
+    },
+    "loginItems": {
+      "title": "Éléments de connexion",
+      "description": "Gérez les applications qui s'ouvrent automatiquement lorsque vous démarrez votre Mac."
+    },
+    "mailAttachments": {
+      "title": "Pièces jointes au courrier",
+      "description": "Supprimez les pièces jointes stockées localement pour libérer de l'espace tout en conservant les fichiers modifiés."
+    },
+    "malwareFinder": {
+      "title": "Recherche de logiciels malveillants",
+      "description": "Identifiez et supprimez les éléments malveillants pour assurer la sécurité de votre Mac."
+    },
+    "uninstaller": {
+      "title": "Désinstallateur",
+      "description": "Supprimez correctement des applications entières avec tous les fichiers associés."
+    }
+  },
+  "cleanupCategories": {
+    "userCache": {
+      "name": "User Cache Files",
+      "description": "Initialement destinés à améliorer les temps de démarrage, les fichiers cache de vos applications finissent par s'accumuler et entraînent un dysfonctionnement ou une baisse globale des performances."
+    },
+    "userLogs": {
+      "name": "Fichiers journaux utilisateur",
+      "description": "Les fichiers journaux sont créés par macOS et ses applications pour enregistrer les événements et les erreurs. Au fil du temps, ils peuvent devenir grands et occuper un espace important."
+    },
+    "languageFiles": {
+      "name": "Fichiers de langue",
+      "description": "Ressources de localisation inutilisées fournies avec les applications. La suppression des langues que vous n'utilisez pas libère de l'espace de stockage sans affecter les fonctionnalités."
+    },
+    "systemLogs": {
+      "name": "Fichiers journaux système",
+      "description": "Fichiers journaux à l'échelle du système écrits par les services et démons macOS. Ces fichiers peuvent être supprimés en toute sécurité car le système les recrée en cas de besoin."
+    },
+    "brokenLoginItems": {
+      "name": "Éléments de connexion cassés",
+      "description": "Éléments de connexion qui pointent vers des applications ou des fichiers qui n'existent plus sur votre disque. Les supprimer accélère le temps de connexion."
+    }
+  },
+  "myClutterDashboard": {
+    "backToCategories": "Retour aux catégories",
+    "filesToSort": "Vous avez {count} fichiers à trier.",
+    "quickRecommendations": "Utilisez des recommandations rapides ou examinez-les à la main.",
+    "reviewAllFiles": "Examiner tous les fichiers",
+    "freshDuplicatesFound": "{count} Nouveaux doublons trouvés",
+    "noDuplicates": "Aucun doublon trouvé dans cette analyse.",
+    "removeDuplicateBytes": "Supprimez {bytes} des fichiers en double.",
+    "largeSimilarImagesFound": "{count} Grandes images similaires trouvées",
+    "noSimilarGroups": "Aucun groupe d'images similaire trouvé.",
+    "nearlyIdenticalImages": "Il y a {bytes} d’images presque identiques.",
+    "largeFilesFound": "{bytes} de fichiers volumineux trouvés",
+    "noLargeFiles": "Aucun fichier volumineux trouvé.",
+    "largeFilesReady": "{count} les fichiers volumineux sont prêts à être examinés.",
+    "review": "Revoir"
+  },
+  "scanResults": {
+    "itemsSummary": "{count} articles • {size}",
+    "scannedInMs": "Numérisé en {ms}ms",
+    "deselectAll": "Désélectionner tout",
+    "selectAll": "Sélectionner tout",
+    "noItemsMatchSearch": "Aucun article ne correspond à votre recherche",
+    "noItemsFound": "Aucun article trouvé",
+    "itemsSelected": "{count} éléments sélectionnés",
+    "rescan": "Nouvelle analyse"
+  },
+  "spaceViewStart": {
+    "subtitle": "Choisissez un dossier parent, puis numérisez pour cartographier ce qui occupe le plus d'espace.",
+    "defaultRootPath": "Le chemin racine par défaut est votre disque dur principal",
+    "exploreBubbles": "Explorez la taille des dossiers grâce à des bulles interactives",
+    "clickToDrillDown": "Cliquez sur les dossiers pour explorer et inspecter plus en profondeur"
+  },
+  "shell": {
+    "comingSoon": "À venir"
+  },
+  "myToolsService": {
+    "snapshotName": "Instantané {id}",
+    "timeMachineGroup": "Machine à voyager dans le temps",
+    "timeMachineMacOnly": "Les instantanés Time Machine ne sont disponibles que sur macOS."
+  }
+}

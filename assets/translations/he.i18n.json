@@ -1,0 +1,348 @@
+{
+  "app": {
+    "title": "PristineCleaner"
+  },
+  "language": {
+    "label": "שָׂפָה",
+    "english": "אַנגְלִית",
+    "spanish": "סְפָרַדִית",
+    "italian": "אִיטַלְקִית",
+    "french": "צָרְפָתִית",
+    "hebrew": "עִברִית",
+    "greek": "יוונית",
+    "portuguese": "פורטוגזית",
+    "mandarin": "מַנדָרִין"
+  },
+  "navigation": {
+    "smartCare": "טיפול חכם",
+    "cleanup": "ניקיון",
+    "myClutter": "הבלגן שלי",
+    "spaceView": "תצוגת חלל",
+    "applications": "יישומים",
+    "myTools": "הכלים שלי",
+    "myActivity": "הפעילות שלי"
+  },
+  "sections": {
+    "smartCare": {
+      "title": "טיפול חכם",
+      "subtitle": "קבל סקירת בריאות מלאה\\nעל המערכת שלך בלחיצה אחת.",
+      "features": {
+        "systemStatus": "מצב מערכת",
+        "storageUsage": "שימוש באחסון",
+        "quickActions": "פעולות מהירות"
+      }
+    },
+    "cleanup": {
+      "title": "ניקוי זבל",
+      "subtitle": "נקה את המערכת שלך כדי להשיג\\n ביצועים מקסימליים ולהשיב עוד מקום פנוי.",
+      "features": {
+        "systemJunk": "זבל מערכת",
+        "userCache": "מטמון משתמש",
+        "tempFiles": "קבצי זמני"
+      }
+    },
+    "myClutter": {
+      "title": "הבלגן שלי",
+      "subtitle": "מיין את הקבצים שלך וצמצם\\n את הבלגן בכמה קליקים בלבד.",
+      "features": {
+        "largeFiles": "קבצים גדולים",
+        "duplicates": "כפילויות",
+        "largeSimilarImages": "תמונות דומות גדולות"
+      }
+    },
+    "spaceView": {
+      "title": "תצוגת חלל",
+      "subtitle": "דמיין מה תופס הכי הרבה שטח בדיסק ונקה במהירות.",
+      "features": {
+        "visualStorageMap": "מפת אחסון ויזואלית",
+        "largeFoldersOverview": "סקירה כללית של תיקיות גדולות",
+        "hiddenFilesUncovered": "קבצים נסתרים נחשפו"
+      }
+    },
+    "applications": {
+      "title": "יישומים",
+      "subtitle": "קח שליטה על האפליקציות שלך.\\nהסר את ההתקנה או הסר שאריות ישנות.",
+      "features": {
+        "appUninstaller": "מסיר התקנה של אפליקציה",
+        "largeApps": "אפליקציות גדולות",
+        "fileLeftovers": "קובץ שאריות"
+      }
+    },
+    "myTools": {
+      "title": "הכלים שלי",
+      "subtitle": "ערכת הכלים שלך לטיפול ותחזוקה של המערכת.",
+      "features": {
+        "targetedScanners": "סורקים ממוקדים",
+        "quickActions": "פעולות מהירות",
+        "liveFiltering": "סינון חי"
+      }
+    }
+  },
+  "progress": {
+    "countingFiles": "סופר קבצים...",
+    "countingApplications": "סופר יישומים...",
+    "countingFolders": "סופר תיקיות..."
+  },
+  "errors": {
+    "itemsFailedToRemove": "{count} פריטים נכשלו בהסרה."
+  },
+  "buttons": {
+    "scan": "לִסְרוֹק",
+    "stop": "לְהַפְסִיק",
+    "done": "נַעֲשָׂה",
+    "clean": "לְנַקוֹת",
+    "cleanUp": "לנקות",
+    "close": "לִסְגוֹר",
+    "refresh": "לְרַעֲנֵן",
+    "rescan": "סרוק מחדש",
+    "startOver": "התחל מחדש",
+    "selectAll": "בחר הכל",
+    "clearSelection": "נקה בחירה",
+    "keepScanning": "המשך לסרוק",
+    "keepRemoving": "תמשיך להסיר"
+  },
+  "tooltips": {
+    "search": "לְחַפֵּשׂ",
+    "openInFinder": "פתח ב-Finder"
+  },
+  "dialogs": {
+    "stopScanningTitle": "להפסיק לסרוק?",
+    "stopScanningMessage": "פעולה זו תבטל את הסריקה הנוכחית ותבטל כל התקדמות חלקית.",
+    "stopRemovalTitle": "להפסיק את ההסרה?",
+    "stopRemovalMessage": "הקובץ הנוכחי יסתיים, ואז ידלגו על הקבצים הנותרים."
+  },
+  "removal": {
+    "barrierLabel": "התקדמות ההסרה",
+    "preparing": "עֲרִיכָה...",
+    "removingFrom": "מסיר מ{title}",
+    "stoppingAfterCurrentFile": "מפסיק אחרי הקובץ הנוכחי...",
+    "keepWindowOpen": "אנא השאר חלון זה פתוח בזמן שההסרה פועלת.",
+    "processedSummary": "{processed} מתוך {total} עובד",
+    "deletedFreed": "{deleted} נמחק • {bytes} שוחרר",
+    "currentItem": "נוכחי: {name}",
+    "stopping": "סְתִימָה...",
+    "removalFailed": "ההסרה נכשלה",
+    "removalFailedDetails": "משהו השתבש במהלך הסרת הקבצים שנבחרו.",
+    "removalStopped": "ההסרה הופסקה",
+    "removalComplete": "ההסרה הושלמה",
+    "deletedSummary": "{title} נמחקו {count} פריטים",
+    "freedSummary": "{bytes} משוחרר",
+    "failedToRemoveSummary": "{count} פריטים נכשלו בהסרה.",
+    "deletedFiles": "קבצים שנמחקו",
+    "noFilesDeleted": "לא נמחקו קבצים."
+  },
+  "done": {
+    "allCleanedTitle": "הכל ניקה!",
+    "movedToTrashMessage": "הקבצים שנבחרו הועברו לאשפה.",
+    "applicationsRemovedTitle": "אפליקציות הוסרו!",
+    "appsMovedToTrashMessage": "אפליקציות נבחרות הועברו לאשפה."
+  },
+  "cleanupManager": {
+    "title": "מנהל ניקיון",
+    "systemJunkHeader": "זבל מערכת",
+    "systemJunkDescription": "קבצים מיותרים שסותמים את אחסון המכשיר ופוגעים בביצועים אופטימליים.",
+    "selectLabel": "לִבחוֹר",
+    "selectAllOption": "כֹּל",
+    "selectNoneOption": "אַף לֹא אֶחָד",
+    "noItems": "אין פריטים",
+    "noItemsFound": "לא נמצאו פריטים",
+    "itemsSelected": "נבחרו {count} פריטים"
+  },
+  "projectDirectory": {
+    "chooseFolder": "בחר תיקייה...",
+    "chooseProjectDirectory": "בחר את ספריית הפרויקט",
+    "chooseParentFolder": "בחר תיקיית אב",
+    "noFolder": "אין תיקיה"
+  },
+  "searchAndSort": {
+    "searchHint": "לְחַפֵּשׂ...",
+    "sortBy": "מיין לפי",
+    "size": "גוֹדֶל",
+    "name": "שֵׁם",
+    "ascending": "עוֹלֶה",
+    "descending": "יורד"
+  },
+  "spaceView": {
+    "noFoldersFound": "לא נמצאו תיקיות לרמה זו",
+    "noBubblesToRender": "אין בועות לעיבוד",
+    "otherItems": "פריטים אחרים"
+  },
+  "smartCare": {
+    "refresh": "לְרַעֲנֵן",
+    "unableToReadDiskInfo": "לא ניתן לקרוא מידע על הדיסק",
+    "totalStorage": "אחסון כולל",
+    "used": "מְשׁוּמָשׁ",
+    "available": "זָמִין",
+    "percentUsed": "{percent}% בשימוש"
+  },
+  "myToolsPage": {
+    "title": "הכלים שלי",
+    "subtitle": "הכלים שלך לשמירה על ה-Mac שלך נקי, בטוח ופועל בצורה חלקה.",
+    "backToTools": "חזרה לכלים"
+  },
+  "myToolsMessages": {
+    "itemsWithSize": "{count} פריטים • {size}",
+    "scanCancelled": "הסריקה בוטלה.",
+    "selectAtLeastOne": "בחר לפחות פריט אחד לניקוי.",
+    "failedToClean": "נכשל ניקוי {count} פריטים.",
+    "everythingSelectedCleaned": "כל מה שנבחר נוקה.",
+    "cleanupUpdated": "הניקוי עודכן.",
+    "cleanedCount": "ניקה {count} פריט(ים).",
+    "stoppedPrefix": "נֶעצָר.",
+    "removedCount": "הוסרו {count} פריטים.",
+    "failedCountShort": "{count} נכשל.",
+    "scanComplete": "הסריקה הושלמה.",
+    "somethingWentWrong": "משהו השתבש.",
+    "fallback": {
+      "downloadsTidy": "ההורדות מסודרות.",
+      "noOversizedStale": "לא נמצאו קבצים מיושנים גדולים מדי.",
+      "noRecentDuplicates": "לא נמצאו כפילויות אחרונות.",
+      "noSimilarLargeImages": "לא נמצאו תמונות גדולות דומות.",
+      "noAppLeftovers": "לא נמצאו שאריות אפליקציה שניתנות להסרה.",
+      "noStaleApps": "לא נמצאו יישומים מיושנים.",
+      "appsNeedReview": "נמצאו יישומים שעשויים להזדקק לבדיקה.",
+      "noSystemJunkCandidates": "אין מועמדים לניקוי בזבל של המערכת.",
+      "noBrokenStartup": "לא נמצאו ערכי הפעלה/רקע שבורים.",
+      "noBackgroundItems": "לא נמצאו פריטי רקע.",
+      "noPrivacyTraces": "לא נמצאו עקבות פרטיות במיקומים ידועים.",
+      "trashAlreadyEmpty": "האשפה כבר ריקה.",
+      "noPermissionCache": "לא נמצאו קבצי מטמון הרשאות.",
+      "noTimeMachineSnapshots": "לא נמצאו צילומי מצב מקומיים של Time Machine.",
+      "noMaintenanceCandidates": "לא נמצאו מועמדים לתחזוקה.",
+      "noMailAttachments": "לא נמצאו קבצי דואר ניתנים להסרה.",
+      "noSuspiciousFiles": "לא זוהו קבצים חשודים."
+    }
+  },
+  "myToolsCatalog": {
+    "appLeftovers": {
+      "title": "שאריות אפליקציה",
+      "description": "אתר והסר שאריות אפליקציה גם אם האפליקציה הראשית כבר נעלמה."
+    },
+    "backgroundItems": {
+      "title": "פריטי רקע",
+      "description": "נהל אפליקציות ותהליכים ברקע הפועלים ב-Mac שלך."
+    },
+    "downloads": {
+      "title": "הורדות",
+      "description": "סקור ונקה קבצי שימוש חד פעמי מהורדות כדי לשמור על תיקיות מסודרות."
+    },
+    "largeOld": {
+      "title": "קבצים גדולים וישנים",
+      "description": "מצא והסר קבצים גדולים שאינם בשימוש שתופסים מקום ב-Mac שלך."
+    },
+    "appUpdater": {
+      "title": "עדכון אפליקציות",
+      "description": "שים לב לגרסאות העדכניות והאמינות ביותר של היישומים שלך."
+    },
+    "similarImages": {
+      "title": "תמונות דומות",
+      "description": "סקור תמונות דומות ושמור רק את הטובות ביותר."
+    },
+    "privacyItems": {
+      "title": "פריטי פרטיות",
+      "description": "הסר היסטוריית גלישה ועקבות פעילות כדי להגן על הפרטיות שלך."
+    },
+    "trashBins": {
+      "title": "פחי אשפה",
+      "description": "רוקן את כל פחי האשפה הזמינים ב-Mac שלך."
+    },
+    "duplicateFinder": {
+      "title": "כפיל Finder",
+      "description": "הסר קבצים כפולים המאוחסנים במיקומים שונים ב-Mac שלך."
+    },
+    "applicationPermissions": {
+      "title": "הרשאות אפליקציה",
+      "description": "נהל כיצד יישומים ניגשים לתכונות המערכת, התקנים ופונקציונליות."
+    },
+    "systemJunk": {
+      "title": "זבל מערכת",
+      "description": "הסר קבצים מיותרים שסותמים את אחסון המכשיר ופוגעים בביצועים אופטימליים."
+    },
+    "timeMachineSnapshot": {
+      "title": "תמונת מצב של מכונת זמן",
+      "description": "הסר תמונות מקומיות של Time Machine מבלי להשפיע על הגיבויים שלך."
+    },
+    "maintenanceTasks": {
+      "title": "משימות תחזוקה",
+      "description": "הפעל קבוצה של משימות תחזוקה מומלצות כדי להביא את ה-Mac שלך למקסימום."
+    },
+    "loginItems": {
+      "title": "פריטי כניסה",
+      "description": "נהל אפליקציות שנפתחות אוטומטית כשאתה מפעיל את ה-Mac שלך."
+    },
+    "mailAttachments": {
+      "title": "קבצים מצורפים לדואר",
+      "description": "הסר קבצים מצורפים לאימייל המאוחסנים מקומית כדי לפנות מקום תוך שמירה על קבצים ששונו."
+    },
+    "malwareFinder": {
+      "title": "מאתר תוכנות זדוניות",
+      "description": "זהה והסר פריטים זדוניים כדי לשמור על אבטחת ה-Mac שלך."
+    },
+    "uninstaller": {
+      "title": "מסיר התקנה",
+      "description": "הסר כהלכה יישומים שלמים עם כל הקבצים הקשורים."
+    }
+  },
+  "cleanupCategories": {
+    "userCache": {
+      "name": "קבצי מטמון משתמש",
+      "description": "במקור נועדו לשפר את זמני האתחול, קבצי המטמון של היישומים שלך מצטברים בסופו של דבר וגורמים לתפקוד לא תקין או לירידה כללית בביצועים."
+    },
+    "userLogs": {
+      "name": "קבצי יומן משתמש",
+      "description": "קובצי יומן נוצרים על ידי macOS והיישומים שלה כדי להקליט אירועים ושגיאות. עם הזמן הם יכולים לגדול ולתפוס מקום משמעותי."
+    },
+    "languageFiles": {
+      "name": "קבצי שפה",
+      "description": "משאבי לוקליזציה שאינם בשימוש המצורפים לאפליקציות. הסרת שפות שאינך משתמש בהן מפנה שטח אחסון מבלי להשפיע על הפונקציונליות."
+    },
+    "systemLogs": {
+      "name": "קבצי יומן מערכת",
+      "description": "קובצי יומן כלל המערכת שנכתבו על ידי שירותי macOS ודמונים. קבצים אלה בטוחים להסרה מכיוון שהמערכת יוצרת אותם מחדש בעת הצורך."
+    },
+    "brokenLoginItems": {
+      "name": "פריטי כניסה שבורים",
+      "description": "פריטי כניסה המצביעים על יישומים או קבצים שאינם קיימים עוד בדיסק שלך. הסרתם מזרזת את זמן הכניסה."
+    }
+  },
+  "myClutterDashboard": {
+    "backToCategories": "חזרה לקטגוריות",
+    "filesToSort": "יש לך {count} קבצים למיין.",
+    "quickRecommendations": "השתמש בהמלצות מהירות או עיין בהן ביד.",
+    "reviewAllFiles": "סקור את כל הקבצים",
+    "freshDuplicatesFound": "{count} נמצאו כפילויות טריות",
+    "noDuplicates": "לא נמצאו כפילויות בסריקה זו.",
+    "removeDuplicateBytes": "הסר {bytes} של קבצים כפולים.",
+    "largeSimilarImagesFound": "{count} נמצאו תמונות דומות גדולות",
+    "noSimilarGroups": "לא נמצאו קבוצות תמונות דומות.",
+    "nearlyIdenticalImages": "יש {bytes} של תמונות כמעט זהות.",
+    "largeFilesFound": "נמצאו {bytes} של קבצים גדולים",
+    "noLargeFiles": "לא נמצאו קבצים גדולים.",
+    "largeFilesReady": "{count} קבצים גדולים מוכנים לבדיקה.",
+    "review": "סְקִירָה"
+  },
+  "scanResults": {
+    "itemsSummary": "{count} פריטים • {size}",
+    "scannedInMs": "נסרק תוך {ms}ms",
+    "deselectAll": "בטל את הבחירה בהכל",
+    "selectAll": "בחר הכל",
+    "noItemsMatchSearch": "אין פריטים שתואמים לחיפוש שלך",
+    "noItemsFound": "לא נמצאו פריטים",
+    "itemsSelected": "נבחרו {count} פריטים",
+    "rescan": "סרוק מחדש"
+  },
+  "spaceViewStart": {
+    "subtitle": "בחר תיקיית אב ולאחר מכן סרוק כדי למפות את מה שתופס הכי הרבה מקום.",
+    "defaultRootPath": "נתיב שורש ברירת המחדל הוא הכונן הקשיח הראשי שלך",
+    "exploreBubbles": "חקור גדלי תיקיות באמצעות בועות אינטראקטיביות",
+    "clickToDrillDown": "לחץ על תיקיות כדי להתעמק ולבדוק לעומק"
+  },
+  "shell": {
+    "comingSoon": "בקרוב"
+  },
+  "myToolsService": {
+    "snapshotName": "תמונת מצב {id}",
+    "timeMachineGroup": "מכונת זמן",
+    "timeMachineMacOnly": "צילומי מצב של Time Machine זמינים רק ב-macOS."
+  }
+}

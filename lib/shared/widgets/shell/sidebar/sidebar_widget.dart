@@ -154,6 +154,26 @@ class _LanguageSelector extends StatelessWidget {
                   value: AppLocale.it,
                   child: Text(t.language.italian),
                 ),
+                DropdownMenuItem(
+                  value: AppLocale.fr,
+                  child: Text(t.language.french),
+                ),
+                DropdownMenuItem(
+                  value: AppLocale.he,
+                  child: Text(t.language.hebrew),
+                ),
+                DropdownMenuItem(
+                  value: AppLocale.el,
+                  child: Text(t.language.greek),
+                ),
+                DropdownMenuItem(
+                  value: AppLocale.pt,
+                  child: Text(t.language.portuguese),
+                ),
+                DropdownMenuItem(
+                  value: AppLocale.zh,
+                  child: Text(t.language.mandarin),
+                ),
               ],
               onChanged: (value) {
                 if (value != null) {

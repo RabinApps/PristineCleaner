@@ -98,6 +98,21 @@ class TranslationsLanguageEn {
 
 	/// en: 'Italian'
 	String get italian => 'Italian';
+
+	/// en: 'French'
+	String get french => 'French';
+
+	/// en: 'Hebrew'
+	String get hebrew => 'Hebrew';
+
+	/// en: 'Greek'
+	String get greek => 'Greek';
+
+	/// en: 'Portuguese'
+	String get portuguese => 'Portuguese';
+
+	/// en: 'Mandarin'
+	String get mandarin => 'Mandarin';
 }
 
 // Path: navigation
@@ -1325,6 +1340,11 @@ extension on Translations {
 			'language.english' => 'English',
 			'language.spanish' => 'Spanish',
 			'language.italian' => 'Italian',
+			'language.french' => 'French',
+			'language.hebrew' => 'Hebrew',
+			'language.greek' => 'Greek',
+			'language.portuguese' => 'Portuguese',
+			'language.mandarin' => 'Mandarin',
 			'navigation.smartCare' => 'Smart Care',
 			'navigation.cleanup' => 'Cleanup',
 			'navigation.myClutter' => 'My Clutter',

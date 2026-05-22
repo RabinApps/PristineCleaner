@@ -6,7 +6,12 @@
     "label": "Lingua",
     "english": "Inglese",
     "spanish": "Spagnolo",
-    "italian": "Italiano"
+    "italian": "Italiano",
+    "french": "Francese",
+    "hebrew": "Ebraico",
+    "greek": "Greco",
+    "portuguese": "Portoghese",
+    "mandarin": "Mandarino"
   },
   "navigation": {
     "smartCare": "Cura Intelligente",

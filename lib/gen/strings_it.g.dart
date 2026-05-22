@@ -85,6 +85,11 @@ class _TranslationsLanguageIt implements TranslationsLanguageEn {
 	@override String get english => 'Inglese';
 	@override String get spanish => 'Spagnolo';
 	@override String get italian => 'Italiano';
+	@override String get french => 'Francese';
+	@override String get hebrew => 'Ebraico';
+	@override String get greek => 'Greco';
+	@override String get portuguese => 'Portoghese';
+	@override String get mandarin => 'Mandarino';
 }
 
 // Path: navigation
@@ -873,6 +878,11 @@ extension on TranslationsIt {
 			'language.english' => 'Inglese',
 			'language.spanish' => 'Spagnolo',
 			'language.italian' => 'Italiano',
+			'language.french' => 'Francese',
+			'language.hebrew' => 'Ebraico',
+			'language.greek' => 'Greco',
+			'language.portuguese' => 'Portoghese',
+			'language.mandarin' => 'Mandarino',
 			'navigation.smartCare' => 'Cura Intelligente',
 			'navigation.cleanup' => 'Pulizia',
 			'navigation.myClutter' => 'Il Mio Disordine',

@@ -174,6 +174,12 @@ flutter build windows
 flutter build linux
 ```
 
+## Update Translations
+
+```bash
+dart run build_runner build
+```
+
 ## Release and Distribution
 
 Desktop release packaging is configured in `distribute_options.yaml` and automated by `.github/workflows/release-desktop.yml`.
