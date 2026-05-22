@@ -144,6 +144,28 @@ flutter run -d windows
 flutter run -d linux
 ```
 
+## App Icon Generation
+
+The desktop app icon is generated with [`icons_launcher`](https://pub.dev/packages/icons_launcher) using the source image at `assets/images/PristineCleanerIcon.png`.
+
+1. Fetch dependencies if needed:
+
+```bash
+flutter pub get
+```
+
+2. Generate the launcher icons from `pubspec.yaml`:
+
+```bash
+dart run icons_launcher:create --path pubspec.yaml
+```
+
+This updates the platform-specific icon assets for the desktop targets configured in the package:
+
+- macOS: `macos/Runner/Assets.xcassets/AppIcon.appiconset`
+- Linux: `snap/gui/`
+- Windows: `windows/runner/resources/app_icon.ico`
+
 ## Build Commands
 
 ```bash
