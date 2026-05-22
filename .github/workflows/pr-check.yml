@@ -35,3 +35,29 @@ jobs:
 
       - name: Run test suite
         run: flutter test
+
+  e2e-macos-patrol:
+    name: Patrol e2e (macOS)
+    runs-on: macos-latest
+    needs: test
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Resolve dependencies
+        run: flutter pub get
+
+      - name: Install Patrol CLI
+        run: dart pub global activate patrol_cli
+
+      - name: Run Patrol macOS e2e
+        run: |
+          export PATH="$PATH:$HOME/.pub-cache/bin"
+          patrol test -d macos --target patrol_test/app_test.dart

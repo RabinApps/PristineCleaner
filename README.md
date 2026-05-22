@@ -223,7 +223,6 @@ Artifacts are written to `dist/`.
 
 ## Current Limitations
 
-- No automated integration tests for scan/clean flows yet.
 - Some sections are intentionally placeholders (`My Activity`).
 - Very large recursive scans can be time-consuming on slow disks.
 - CI release matrix currently builds Linux `x86_64` artifacts only (ARM64 definitions exist in `distribute_options.yaml` but are not included in the workflow matrix).
@@ -243,4 +242,32 @@ Artifacts are written to `dist/`.
 flutter doctor
 flutter analyze
 flutter test
+```
+
+## Patrol E2E Tests (macOS)
+
+This project includes a Patrol end-to-end smoke test at `patrol_test/app_test.dart`.
+
+1. Install Patrol CLI:
+
+```bash
+dart pub global activate patrol_cli
+```
+
+2. Ensure Dart global executables are on your shell `PATH` (zsh example):
+
+```bash
+export PATH="$PATH:$HOME/.pub-cache/bin"
+```
+
+3. Verify environment readiness:
+
+```bash
+patrol doctor
+```
+
+4. Run Patrol E2E on macOS:
+
+```bash
+patrol test -d macos --target patrol_test/app_test.dart
 ```
