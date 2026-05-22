@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:pristine_cleaner/gen/strings.g.dart';
 import 'package:pristine_cleaner/screens/my_clutter_screen.dart';
 
 void main() {
@@ -12,8 +13,10 @@ void main() {
     addTearDown(() => binding.setSurfaceSize(null));
 
     await tester.pumpWidget(
-      const ProviderScope(
-        child: MaterialApp(home: Scaffold(body: MyClutterScreen())),
+      TranslationProvider(
+        child: const ProviderScope(
+          child: MaterialApp(home: Scaffold(body: MyClutterScreen())),
+        ),
       ),
     );
 
