@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pristine_cleaner/screens/done_screen.dart';
 import 'package:pristine_cleaner/gen/strings.g.dart';
 
+import '../core/models/file_item.dart';
 import '../services/trash_service.dart';
 import '../core/theme/section_themes.dart';
 import '../shared/removal/removal_flow.dart';
@@ -45,8 +46,8 @@ class _MyClutterScreenState extends ConsumerState<MyClutterScreen> {
         onViewChanged: (next) => setState(() => _view = next),
         onToggleOriginalItem: notifier.toggleItem,
         onSetSelectionForIndexes: notifier.setSelectionForIndexes,
-        onClean: () {
-          unawaited(_handleClean(context));
+        onClean: (selectedItems) {
+          unawaited(_handleClean(context, selectedItems));
         },
         onRescan: () {
           setState(() => _view = MyClutterView.dashboard);
@@ -107,9 +108,10 @@ class _MyClutterScreenState extends ConsumerState<MyClutterScreen> {
     );
   }
 
-  Future<void> _handleClean(BuildContext context) async {
-    final vm = ref.read(myClutterProvider).vm;
-    final selected = vm.result?.selectedItems ?? const [];
+  Future<void> _handleClean(
+    BuildContext context,
+    List<FileItem> selected,
+  ) async {
     if (selected.isEmpty) return;
 
     final outcome = await runTrashRemovalFlow(

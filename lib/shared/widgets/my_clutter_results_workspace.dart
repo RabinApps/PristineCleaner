@@ -18,7 +18,7 @@ class MyClutterResultsWorkspace extends StatelessWidget {
   final ValueChanged<int> onToggleOriginalItem;
   final void Function(Iterable<int> indexes, bool isSelected)
   onSetSelectionForIndexes;
-  final VoidCallback onClean;
+  final ValueChanged<List<FileItem>> onClean;
   final VoidCallback onRescan;
 
   const MyClutterResultsWorkspace({
@@ -73,7 +73,7 @@ class MyClutterResultsWorkspace extends StatelessWidget {
           },
           onSelectAll: () => onSetSelectionForIndexes(filteredIndices, true),
           onDeselectAll: () => onSetSelectionForIndexes(filteredIndices, false),
-          onClean: onClean,
+          onClean: () => onClean(filteredResult.selectedItems),
           onRescan: onRescan,
         ),
         Positioned(
