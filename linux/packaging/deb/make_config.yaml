@@ -8,6 +8,7 @@ section: x11
 installed_size: 6604
 essential: false
 startup_notify: true
+icon: assets/images/PristineCleanerIcon.png
 keywords:
   - cleaner
   - utility
