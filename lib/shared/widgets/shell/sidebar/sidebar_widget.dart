@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:window_manager/window_manager.dart';
 
+import 'app_version_label.dart';
 import '../../../../core/l10n/locale_provider.dart';
 import '../../../../core/models/nav_item.dart';
 import '../../../../gen/strings.g.dart';
@@ -84,13 +85,7 @@ class SidebarWidget extends ConsumerWidget {
           ),
           Padding(
             padding: const EdgeInsets.only(bottom: 14),
-            child: Text(
-              'v1.0.0',
-              style: TextStyle(
-                color: Colors.white.withValues(alpha: 0.2),
-                fontSize: 11,
-              ),
-            ),
+            child: AppVersionLabel(),
           ),
         ],
       ),

@@ -29,7 +29,7 @@ Supported desktop targets:
 - Returns itemized results with size totals.
 - Supports select/deselect, rescan, and clean actions.
 
-### My Clutter
+### Clutter
 
 - Two scan modes:
   - Large Files (default threshold: 50 MB)
@@ -76,32 +76,10 @@ Supported desktop targets:
   - `C:\\Program Files`
   - `C:\\Program Files (x86)`
 
-### My Clutter scan roots
+### Clutter scan roots
 
 - Large Files: user home directory (`$HOME` or `%USERPROFILE%`)
 - Downloads: `~/Downloads` or `%USERPROFILE%\\Downloads`
-
-## Project Structure
-
-```text
-lib/
-	app.dart                     # MaterialApp setup
-	main.dart                    # app bootstrap + desktop window config
-	core/
-		models/                    # file/scan/nav data models
-		services/                  # disk scan + trash/delete services
-		theme/                     # app and section theme definitions
-		utils/                     # formatting helpers
-	features/
-		smart_care/
-		cleanup/
-		my_clutter/
-		space_view/
-		applications/
-		shell/                     # sidebar + section host screen
-		shared/                    # shared view model logic
-	shared/widgets/              # reusable UI widgets (lists, buttons, layouts)
-```
 
 ## Tech Stack
 
@@ -112,7 +90,7 @@ lib/
 - `window_manager` for custom desktop window behavior
 - `file_picker`, `path_provider`, `intl`, `image`
 - Fastforge (`distribute_options.yaml`) for desktop packaging
-- GitHub Actions + Cloudflare R2 for release artifact publishing
+- GitHub Actions + GitHub Releases for release artifact publishing
 
 ## Requirements
 
@@ -192,7 +170,7 @@ Desktop release packaging is configured in `distribute_options.yaml` and automat
   - macOS: DMG
   - Windows: EXE and MSIX
   - Linux x86_64: DEB and RPM
-- Uploads generated files from `dist/` to Cloudflare R2 using `ryand56/r2-upload-action@v1.4`.
+- Uploads generated files from `dist/` to GitHub Releases
 
 ### Required GitHub repository secrets
 
@@ -223,7 +201,6 @@ Artifacts are written to `dist/`.
 
 ## Current Limitations
 
-- Some sections are intentionally placeholders (`My Activity`).
 - Very large recursive scans can be time-consuming on slow disks.
 - CI release matrix currently builds Linux `x86_64` artifacts only (ARM64 definitions exist in `distribute_options.yaml` but are not included in the workflow matrix).
 - Need to code sign macos in the future https://federicoterzi.com/blog/automatic-code-signing-and-notarization-for-macos-apps-using-github-actions/
