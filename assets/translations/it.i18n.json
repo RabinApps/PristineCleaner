@@ -14,7 +14,7 @@
     "mandarin": "Mandarino"
   },
   "navigation": {
-    "smartCare": "Cura Intelligente",
+    "home": "Casa",
     "cleanup": "Pulizia",
     "myClutter": "Il Mio Disordine",
     "spaceView": "Vista Spazio",
@@ -23,13 +23,13 @@
     "myActivity": "La Mia Attivita"
   },
   "sections": {
-    "smartCare": {
-      "title": "Cura Intelligente",
-      "subtitle": "Ottieni una panoramica completa\\ndello stato del sistema in un clic.",
+    "home": {
+      "title": "Casa",
+      "subtitle": "Ottieni una panoramica completa dello stato del tuo sistema in un clic.",
       "features": {
-        "systemStatus": "Stato del Sistema",
-        "storageUsage": "Uso dello Spazio",
-        "quickActions": "Azioni Rapide"
+        "systemStatus": "Stato del sistema",
+        "storageUsage": "Utilizzo dello spazio di archiviazione",
+        "quickActions": "Azioni rapide"
       }
     },
     "cleanup": {
@@ -167,13 +167,17 @@
     "noBubblesToRender": "Nessuna bolla da mostrare",
     "otherItems": "Altri elementi"
   },
-  "smartCare": {
+  "home": {
     "refresh": "Aggiorna",
-    "unableToReadDiskInfo": "Impossibile leggere le informazioni del disco",
-    "totalStorage": "Spazio Totale",
+    "unableToReadDiskInfo": "Impossibile leggere le informazioni sul disco",
+    "totalStorage": "Spazio di archiviazione totale",
     "used": "Usato",
     "available": "Disponibile",
-    "percentUsed": "{percent}% usato"
+    "percentUsed": "{percent}% utilizzato",
+    "cpuUsage": "Utilizzo della CPU",
+    "ramUsage": "Utilizzo della RAM",
+    "memoryPercentUsed": "{percent}% RAM utilizzata",
+    "unableToReadSystemInfo": "Impossibile leggere le informazioni di sistema"
   },
   "myToolsPage": {
     "title": "I Miei Strumenti",

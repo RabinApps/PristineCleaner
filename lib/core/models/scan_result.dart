@@ -68,3 +68,46 @@ class DiskInfo {
   String get formattedUsed => formatBytes(usedBytes);
   String get formattedFree => formatBytes(freeBytes);
 }
+
+class SystemUsage {
+  final double cpuPercent;
+  final int totalMemoryBytes;
+  final int usedMemoryBytes;
+  final bool isAvailable;
+
+  const SystemUsage({
+    required this.cpuPercent,
+    required this.totalMemoryBytes,
+    required this.usedMemoryBytes,
+    this.isAvailable = true,
+  });
+
+  const SystemUsage.unavailable()
+    : cpuPercent = 0,
+      totalMemoryBytes = 0,
+      usedMemoryBytes = 0,
+      isAvailable = false;
+
+  double get cpuFraction => (cpuPercent / 100).clamp(0.0, 1.0);
+
+  double get memoryUsedPercent => totalMemoryBytes > 0
+      ? (usedMemoryBytes / totalMemoryBytes).clamp(0.0, 1.0)
+      : 0.0;
+
+  String get formattedUsedMemory => formatBytes(usedMemoryBytes);
+  String get formattedTotalMemory => formatBytes(totalMemoryBytes);
+}
+
+class HomeDashboardData {
+  final DiskInfo diskInfo;
+  final SystemUsage systemUsage;
+  final String? systemError;
+  final DateTime updatedAt;
+
+  const HomeDashboardData({
+    required this.diskInfo,
+    required this.systemUsage,
+    required this.updatedAt,
+    this.systemError,
+  });
+}

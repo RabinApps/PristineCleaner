@@ -52,7 +52,7 @@ class TranslationsZh with BaseTranslations<AppLocale, Translations> implements T
 	@override late final _TranslationsProjectDirectoryZh projectDirectory = _TranslationsProjectDirectoryZh._(_root);
 	@override late final _TranslationsSearchAndSortZh searchAndSort = _TranslationsSearchAndSortZh._(_root);
 	@override late final _TranslationsSpaceViewZh spaceView = _TranslationsSpaceViewZh._(_root);
-	@override late final _TranslationsSmartCareZh smartCare = _TranslationsSmartCareZh._(_root);
+	@override late final _TranslationsHomeZh home = _TranslationsHomeZh._(_root);
 	@override late final _TranslationsMyToolsPageZh myToolsPage = _TranslationsMyToolsPageZh._(_root);
 	@override late final _TranslationsMyToolsMessagesZh myToolsMessages = _TranslationsMyToolsMessagesZh._(_root);
 	@override late final _TranslationsMyToolsCatalogZh myToolsCatalog = _TranslationsMyToolsCatalogZh._(_root);
@@ -99,7 +99,7 @@ class _TranslationsNavigationZh implements TranslationsNavigationEn {
 	final TranslationsZh _root; // ignore: unused_field
 
 	// Translations
-	@override String get smartCare => '智能护理';
+	@override String get home => '首页';
 	@override String get cleanup => '清理';
 	@override String get myClutter => '我的杂乱';
 	@override String get spaceView => '空间景观';
@@ -115,7 +115,7 @@ class _TranslationsSectionsZh implements TranslationsSectionsEn {
 	final TranslationsZh _root; // ignore: unused_field
 
 	// Translations
-	@override late final _TranslationsSectionsSmartCareZh smartCare = _TranslationsSectionsSmartCareZh._(_root);
+	@override late final _TranslationsSectionsHomeZh home = _TranslationsSectionsHomeZh._(_root);
 	@override late final _TranslationsSectionsCleanupZh cleanup = _TranslationsSectionsCleanupZh._(_root);
 	@override late final _TranslationsSectionsMyClutterZh myClutter = _TranslationsSectionsMyClutterZh._(_root);
 	@override late final _TranslationsSectionsSpaceViewZh spaceView = _TranslationsSectionsSpaceViewZh._(_root);
@@ -289,9 +289,9 @@ class _TranslationsSpaceViewZh implements TranslationsSpaceViewEn {
 	@override String get otherItems => '其他项目';
 }
 
-// Path: smartCare
-class _TranslationsSmartCareZh implements TranslationsSmartCareEn {
-	_TranslationsSmartCareZh._(this._root);
+// Path: home
+class _TranslationsHomeZh implements TranslationsHomeEn {
+	_TranslationsHomeZh._(this._root);
 
 	final TranslationsZh _root; // ignore: unused_field
 
@@ -299,9 +299,13 @@ class _TranslationsSmartCareZh implements TranslationsSmartCareEn {
 	@override String get refresh => '刷新';
 	@override String get unableToReadDiskInfo => '无法读取磁盘信息';
 	@override String get totalStorage => '总存储空间';
-	@override String get used => '用过的';
-	@override String get available => '可用的';
+	@override String get used => '已使用';
+	@override String get available => '可用';
 	@override String get percentUsed => '{percent}% 已使用';
+	@override String get cpuUsage => 'CPU 使用率';
+	@override String get ramUsage => '内存使用率';
+	@override String get memoryPercentUsed => '内存已使用 {percent}%';
+	@override String get unableToReadSystemInfo => '无法读取系统信息';
 }
 
 // Path: myToolsPage
@@ -453,16 +457,16 @@ class _TranslationsMyToolsServiceZh implements TranslationsMyToolsServiceEn {
 	@override String get timeMachineMacOnly => 'Time Machine 快照仅在 macOS 上可用。';
 }
 
-// Path: sections.smartCare
-class _TranslationsSectionsSmartCareZh implements TranslationsSectionsSmartCareEn {
-	_TranslationsSectionsSmartCareZh._(this._root);
+// Path: sections.home
+class _TranslationsSectionsHomeZh implements TranslationsSectionsHomeEn {
+	_TranslationsSectionsHomeZh._(this._root);
 
 	final TranslationsZh _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => '智能护理';
-	@override String get subtitle => '一键获取系统的完整运行状况概览。\n';
-	@override late final _TranslationsSectionsSmartCareFeaturesZh features = _TranslationsSectionsSmartCareFeaturesZh._(_root);
+	@override String get title => '首页';
+	@override String get subtitle => '一键获取系统的完整运行状况概览。';
+	@override late final _TranslationsSectionsHomeFeaturesZh features = _TranslationsSectionsHomeFeaturesZh._(_root);
 }
 
 // Path: sections.cleanup
@@ -793,16 +797,16 @@ class _TranslationsCleanupCategoriesBrokenLoginItemsZh implements TranslationsCl
 	@override String get description => '指向磁盘上不再存在的应用程序或文件的登录项。删除它们可以加快登录时间。';
 }
 
-// Path: sections.smartCare.features
-class _TranslationsSectionsSmartCareFeaturesZh implements TranslationsSectionsSmartCareFeaturesEn {
-	_TranslationsSectionsSmartCareFeaturesZh._(this._root);
+// Path: sections.home.features
+class _TranslationsSectionsHomeFeaturesZh implements TranslationsSectionsHomeFeaturesEn {
+	_TranslationsSectionsHomeFeaturesZh._(this._root);
 
 	final TranslationsZh _root; // ignore: unused_field
 
 	// Translations
 	@override String get systemStatus => '系统状态';
 	@override String get storageUsage => '存储使用情况';
-	@override String get quickActions => '快速行动';
+	@override String get quickActions => '快速操作';
 }
 
 // Path: sections.cleanup.features
@@ -883,18 +887,18 @@ extension on TranslationsZh {
 			'language.greek' => '希腊语',
 			'language.portuguese' => '葡萄牙语',
 			'language.mandarin' => 'Mandarin',
-			'navigation.smartCare' => '智能护理',
+			'navigation.home' => '首页',
 			'navigation.cleanup' => '清理',
 			'navigation.myClutter' => '我的杂乱',
 			'navigation.spaceView' => '空间景观',
 			'navigation.applications' => '应用领域',
 			'navigation.myTools' => '我的工具',
 			'navigation.myActivity' => '我的活动',
-			'sections.smartCare.title' => '智能护理',
-			'sections.smartCare.subtitle' => '一键获取系统的完整运行状况概览。\n',
-			'sections.smartCare.features.systemStatus' => '系统状态',
-			'sections.smartCare.features.storageUsage' => '存储使用情况',
-			'sections.smartCare.features.quickActions' => '快速行动',
+			'sections.home.title' => '首页',
+			'sections.home.subtitle' => '一键获取系统的完整运行状况概览。',
+			'sections.home.features.systemStatus' => '系统状态',
+			'sections.home.features.storageUsage' => '存储使用情况',
+			'sections.home.features.quickActions' => '快速操作',
 			'sections.cleanup.title' => '垃圾清理',
 			'sections.cleanup.subtitle' => '清理您的系统以实现\n最佳性能并回收更多可用空间。',
 			'sections.cleanup.features.systemJunk' => '系统垃圾',
@@ -987,12 +991,16 @@ extension on TranslationsZh {
 			'spaceView.noFoldersFound' => '找不到该级别的文件夹',
 			'spaceView.noBubblesToRender' => '没有气泡可渲染',
 			'spaceView.otherItems' => '其他项目',
-			'smartCare.refresh' => '刷新',
-			'smartCare.unableToReadDiskInfo' => '无法读取磁盘信息',
-			'smartCare.totalStorage' => '总存储空间',
-			'smartCare.used' => '用过的',
-			'smartCare.available' => '可用的',
-			'smartCare.percentUsed' => '{percent}% 已使用',
+			'home.refresh' => '刷新',
+			'home.unableToReadDiskInfo' => '无法读取磁盘信息',
+			'home.totalStorage' => '总存储空间',
+			'home.used' => '已使用',
+			'home.available' => '可用',
+			'home.percentUsed' => '{percent}% 已使用',
+			'home.cpuUsage' => 'CPU 使用率',
+			'home.ramUsage' => '内存使用率',
+			'home.memoryPercentUsed' => '内存已使用 {percent}%',
+			'home.unableToReadSystemInfo' => '无法读取系统信息',
 			'myToolsPage.title' => '我的工具',
 			'myToolsPage.subtitle' => '让您的 Mac 保持清洁、安全和平稳运行的首选工具。',
 			'myToolsPage.backToTools' => '返回工具',

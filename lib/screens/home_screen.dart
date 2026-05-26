@@ -6,16 +6,15 @@ import '../core/models/scan_result.dart';
 import '../gen/strings.g.dart';
 import '../core/theme/section_themes.dart';
 import '../shared/widgets/glossy_icon_widget.dart';
-import '../shared/widgets/scan_button.dart';
-import '../providers/smart_care_provider.dart';
+import '../providers/home_provider.dart';
 
-class SmartCareScreen extends ConsumerWidget {
-  const SmartCareScreen({super.key});
+class HomeScreen extends ConsumerWidget {
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final diskAsync = ref.watch(smartCareProvider);
-    final theme = SectionThemes.smartCareLocalized(context);
+    final homeAsync = ref.watch(homeProvider);
+    final theme = SectionThemes.homeLocalized(context);
 
     return Container(
       decoration: BoxDecoration(
@@ -44,9 +43,9 @@ class SmartCareScreen extends ConsumerWidget {
                         size: 240,
                       ),
                       const SizedBox(height: 20),
-                      diskAsync.when(
-                        data: (info) => _DiskRing(
-                          info: info,
+                      homeAsync.when(
+                        data: (data) => _DiskRing(
+                          info: data.diskInfo,
                           accentColor: theme.accentColor,
                         ),
                         loading: () => const SizedBox(
@@ -57,7 +56,7 @@ class SmartCareScreen extends ConsumerWidget {
                             strokeWidth: 3,
                           ),
                         ),
-                        error: (_, __) => const SizedBox.shrink(),
+                        error: (error, stackTrace) => const SizedBox.shrink(),
                       ),
                     ],
                   ),
@@ -88,16 +87,16 @@ class SmartCareScreen extends ConsumerWidget {
                         ),
                       ),
                       const SizedBox(height: 28),
-                      diskAsync.when(
-                        data: (info) => _DiskStats(
-                          info: info,
+                      homeAsync.when(
+                        data: (data) => _SystemAndDiskStats(
+                          data: data,
                           accentColor: theme.accentColor,
                         ),
                         loading: () => const CircularProgressIndicator(
                           color: Color(0xFF66BB6A),
                         ),
                         error: (e, _) => Text(
-                          context.t.smartCare.unableToReadDiskInfo,
+                          context.t.home.unableToReadDiskInfo,
                           style: TextStyle(color: Colors.red.shade300),
                         ),
                       ),
@@ -107,53 +106,39 @@ class SmartCareScreen extends ConsumerWidget {
               ),
             ),
           ),
-
-          // Scan / Refresh button
-          Positioned(
-            bottom: 34,
-            left: 0,
-            right: 0,
-            child: Center(
-              child: ScanButton(
-                color: theme.accentColor,
-                label: context.t.smartCare.refresh,
-                isLoading: diskAsync.isLoading,
-                onPressed: diskAsync.isLoading
-                    ? null
-                    : () => ref.read(smartCareProvider.notifier).refresh(),
-              ),
-            ),
-          ),
         ],
       ),
     );
   }
 }
 
-class _DiskStats extends StatelessWidget {
-  final DiskInfo info;
+class _SystemAndDiskStats extends StatelessWidget {
+  final HomeDashboardData data;
   final Color accentColor;
-  const _DiskStats({required this.info, required this.accentColor});
+  const _SystemAndDiskStats({required this.data, required this.accentColor});
 
   @override
   Widget build(BuildContext context) {
+    final info = data.diskInfo;
+    final usage = data.systemUsage;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _StatRow(
-          label: context.t.smartCare.totalStorage,
+          label: context.t.home.totalStorage,
           value: info.formattedTotal,
           color: accentColor,
         ),
         const SizedBox(height: 12),
         _StatRow(
-          label: context.t.smartCare.used,
+          label: context.t.home.used,
           value: info.formattedUsed,
           color: Colors.orangeAccent,
         ),
         const SizedBox(height: 12),
         _StatRow(
-          label: context.t.smartCare.available,
+          label: context.t.home.available,
           value: info.formattedFree,
           color: Colors.white70,
         ),
@@ -175,7 +160,7 @@ class _DiskStats extends StatelessWidget {
               ),
               const SizedBox(height: 6),
               Text(
-                context.t.smartCare.percentUsed.replaceAll(
+                context.t.home.percentUsed.replaceAll(
                   '{percent}',
                   (info.usedPercent * 100).toStringAsFixed(1),
                 ),
@@ -184,6 +169,55 @@ class _DiskStats extends StatelessWidget {
             ],
           ),
         ),
+        if (usage.isAvailable) ...[
+          const SizedBox(height: 24),
+
+          _StatRow(
+            label: context.t.home.cpuUsage,
+            value: '${usage.cpuPercent.toStringAsFixed(1)}%',
+            color: Colors.lightBlueAccent,
+          ),
+          const SizedBox(height: 12),
+          _StatRow(
+            label: context.t.home.ramUsage,
+            value:
+                '${usage.formattedUsedMemory} / ${usage.formattedTotalMemory}',
+            color: Colors.purpleAccent,
+          ),
+          const SizedBox(height: 12),
+          SizedBox(
+            width: 260,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(4),
+                  child: LinearProgressIndicator(
+                    value: usage.memoryUsedPercent,
+                    backgroundColor: Colors.white12,
+                    valueColor: const AlwaysStoppedAnimation<Color>(
+                      Colors.purpleAccent,
+                    ),
+                    minHeight: 8,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  context.t.home.memoryPercentUsed.replaceAll(
+                    '{percent}',
+                    (usage.memoryUsedPercent * 100).toStringAsFixed(1),
+                  ),
+                  style: const TextStyle(color: Colors.white38, fontSize: 12),
+                ),
+              ],
+            ),
+          ),
+        ] else
+          Text(
+            data.systemError ?? context.t.home.unableToReadSystemInfo,
+            style: TextStyle(color: Colors.red.shade300, fontSize: 12),
+          ),
+        const SizedBox(height: 20),
       ],
     );
   }

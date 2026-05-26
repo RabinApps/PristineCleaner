@@ -14,17 +14,16 @@
     "mandarin": "Mandarin"
   },
   "navigation": {
-    "smartCare": "Smart Care",
+    "home": "Home",
     "cleanup": "Cleanup",
-    "myClutter": "My Clutter",
+    "myClutter": "Clutter",
     "spaceView": "Space View",
     "applications": "Applications",
-    "myTools": "My Tools",
-    "myActivity": "My Activity"
+    "myTools": "Tools"
   },
   "sections": {
-    "smartCare": {
-      "title": "Smart Care",
+    "home": {
+      "title": "Home",
       "subtitle": "Get a complete health overview\\nof your system in one click.",
       "features": {
         "systemStatus": "System Status",
@@ -42,7 +41,7 @@
       }
     },
     "myClutter": {
-      "title": "My Clutter",
+      "title": "Clutter",
       "subtitle": "Sort through your files and reduce\\nthe mess in just a few clicks.",
       "features": {
         "largeFiles": "Large Files",
@@ -69,7 +68,7 @@
       }
     },
     "myTools": {
-      "title": "My Tools",
+      "title": "Tools",
       "subtitle": "Your go-to toolkit for system care and maintenance.",
       "features": {
         "targetedScanners": "Targeted Scanners",
@@ -167,16 +166,20 @@
     "noBubblesToRender": "No bubbles to render",
     "otherItems": "Other items"
   },
-  "smartCare": {
+  "home": {
     "refresh": "Refresh",
     "unableToReadDiskInfo": "Unable to read disk info",
     "totalStorage": "Total Storage",
     "used": "Used",
     "available": "Available",
-    "percentUsed": "{percent}% used"
+    "percentUsed": "{percent}% used",
+    "cpuUsage": "CPU Usage",
+    "ramUsage": "RAM Usage",
+    "memoryPercentUsed": "{percent}% RAM used",
+    "unableToReadSystemInfo": "Unable to read system info"
   },
   "myToolsPage": {
-    "title": "My Tools",
+    "title": "Tools",
     "subtitle": "Your go-to tools for keeping your Mac clean, safe and running smoothly.",
     "backToTools": "Back to tools"
   },

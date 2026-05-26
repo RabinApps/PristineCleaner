@@ -14,7 +14,7 @@
     "mandarin": "Μανταρίνι"
   },
   "navigation": {
-    "smartCare": "Έξυπνη Φροντίδα",
+    "home": "Σπίτι",
     "cleanup": "Καθαρισμός",
     "myClutter": "Η ακαταστασία μου",
     "spaceView": "Θέα Διαστήματος",
@@ -23,8 +23,8 @@
     "myActivity": "Η δραστηριότητά μου"
   },
   "sections": {
-    "smartCare": {
-      "title": "Έξυπνη Φροντίδα",
+    "home": {
+      "title": "Σπίτι",
       "subtitle": "Αποκτήστε μια πλήρη επισκόπηση υγείας\\nτου συστήματός σας με ένα κλικ.",
       "features": {
         "systemStatus": "Κατάσταση συστήματος",
@@ -167,13 +167,17 @@
     "noBubblesToRender": "Δεν υπάρχουν φυσαλίδες για απόδοση",
     "otherItems": "Άλλα είδη"
   },
-  "smartCare": {
+  "home": {
     "refresh": "Φρεσκάρω",
     "unableToReadDiskInfo": "Δεν είναι δυνατή η ανάγνωση των πληροφοριών του δίσκου",
-    "totalStorage": "Συνολική αποθήκευση",
+    "totalStorage": "Συνολικός χώρος αποθήκευσης",
     "used": "Μεταχειρισμένος",
     "available": "Διαθέσιμος",
-    "percentUsed": "{percent}% χρησιμοποιείται"
+    "percentUsed": "{percent}% χρησιμοποιείται",
+    "cpuUsage": "Χρήση CPU",
+    "ramUsage": "Χρήση RAM",
+    "memoryPercentUsed": "{percent}% RAM που χρησιμοποιείται",
+    "unableToReadSystemInfo": "Δεν είναι δυνατή η ανάγνωση πληροφοριών συστήματος"
   },
   "myToolsPage": {
     "title": "Τα εργαλεία μου",

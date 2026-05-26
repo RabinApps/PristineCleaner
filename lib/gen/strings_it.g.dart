@@ -52,7 +52,7 @@ class TranslationsIt with BaseTranslations<AppLocale, Translations> implements T
 	@override late final _TranslationsProjectDirectoryIt projectDirectory = _TranslationsProjectDirectoryIt._(_root);
 	@override late final _TranslationsSearchAndSortIt searchAndSort = _TranslationsSearchAndSortIt._(_root);
 	@override late final _TranslationsSpaceViewIt spaceView = _TranslationsSpaceViewIt._(_root);
-	@override late final _TranslationsSmartCareIt smartCare = _TranslationsSmartCareIt._(_root);
+	@override late final _TranslationsHomeIt home = _TranslationsHomeIt._(_root);
 	@override late final _TranslationsMyToolsPageIt myToolsPage = _TranslationsMyToolsPageIt._(_root);
 	@override late final _TranslationsMyToolsMessagesIt myToolsMessages = _TranslationsMyToolsMessagesIt._(_root);
 	@override late final _TranslationsMyToolsCatalogIt myToolsCatalog = _TranslationsMyToolsCatalogIt._(_root);
@@ -99,7 +99,7 @@ class _TranslationsNavigationIt implements TranslationsNavigationEn {
 	final TranslationsIt _root; // ignore: unused_field
 
 	// Translations
-	@override String get smartCare => 'Cura Intelligente';
+	@override String get home => 'Casa';
 	@override String get cleanup => 'Pulizia';
 	@override String get myClutter => 'Il Mio Disordine';
 	@override String get spaceView => 'Vista Spazio';
@@ -115,7 +115,7 @@ class _TranslationsSectionsIt implements TranslationsSectionsEn {
 	final TranslationsIt _root; // ignore: unused_field
 
 	// Translations
-	@override late final _TranslationsSectionsSmartCareIt smartCare = _TranslationsSectionsSmartCareIt._(_root);
+	@override late final _TranslationsSectionsHomeIt home = _TranslationsSectionsHomeIt._(_root);
 	@override late final _TranslationsSectionsCleanupIt cleanup = _TranslationsSectionsCleanupIt._(_root);
 	@override late final _TranslationsSectionsMyClutterIt myClutter = _TranslationsSectionsMyClutterIt._(_root);
 	@override late final _TranslationsSectionsSpaceViewIt spaceView = _TranslationsSectionsSpaceViewIt._(_root);
@@ -289,19 +289,23 @@ class _TranslationsSpaceViewIt implements TranslationsSpaceViewEn {
 	@override String get otherItems => 'Altri elementi';
 }
 
-// Path: smartCare
-class _TranslationsSmartCareIt implements TranslationsSmartCareEn {
-	_TranslationsSmartCareIt._(this._root);
+// Path: home
+class _TranslationsHomeIt implements TranslationsHomeEn {
+	_TranslationsHomeIt._(this._root);
 
 	final TranslationsIt _root; // ignore: unused_field
 
 	// Translations
 	@override String get refresh => 'Aggiorna';
-	@override String get unableToReadDiskInfo => 'Impossibile leggere le informazioni del disco';
-	@override String get totalStorage => 'Spazio Totale';
+	@override String get unableToReadDiskInfo => 'Impossibile leggere le informazioni sul disco';
+	@override String get totalStorage => 'Spazio di archiviazione totale';
 	@override String get used => 'Usato';
 	@override String get available => 'Disponibile';
-	@override String get percentUsed => '{percent}% usato';
+	@override String get percentUsed => '{percent}% utilizzato';
+	@override String get cpuUsage => 'Utilizzo della CPU';
+	@override String get ramUsage => 'Utilizzo della RAM';
+	@override String get memoryPercentUsed => '{percent}% RAM utilizzata';
+	@override String get unableToReadSystemInfo => 'Impossibile leggere le informazioni di sistema';
 }
 
 // Path: myToolsPage
@@ -453,16 +457,16 @@ class _TranslationsMyToolsServiceIt implements TranslationsMyToolsServiceEn {
 	@override String get timeMachineMacOnly => 'Le istantanee Time Machine sono disponibili solo su macOS.';
 }
 
-// Path: sections.smartCare
-class _TranslationsSectionsSmartCareIt implements TranslationsSectionsSmartCareEn {
-	_TranslationsSectionsSmartCareIt._(this._root);
+// Path: sections.home
+class _TranslationsSectionsHomeIt implements TranslationsSectionsHomeEn {
+	_TranslationsSectionsHomeIt._(this._root);
 
 	final TranslationsIt _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'Cura Intelligente';
-	@override String get subtitle => 'Ottieni una panoramica completa\ndello stato del sistema in un clic.';
-	@override late final _TranslationsSectionsSmartCareFeaturesIt features = _TranslationsSectionsSmartCareFeaturesIt._(_root);
+	@override String get title => 'Casa';
+	@override String get subtitle => 'Ottieni una panoramica completa dello stato del tuo sistema in un clic.';
+	@override late final _TranslationsSectionsHomeFeaturesIt features = _TranslationsSectionsHomeFeaturesIt._(_root);
 }
 
 // Path: sections.cleanup
@@ -793,16 +797,16 @@ class _TranslationsCleanupCategoriesBrokenLoginItemsIt implements TranslationsCl
 	@override String get description => 'Elementi che puntano ad app o file inesistenti. Rimuoverli accelera l\'accesso.';
 }
 
-// Path: sections.smartCare.features
-class _TranslationsSectionsSmartCareFeaturesIt implements TranslationsSectionsSmartCareFeaturesEn {
-	_TranslationsSectionsSmartCareFeaturesIt._(this._root);
+// Path: sections.home.features
+class _TranslationsSectionsHomeFeaturesIt implements TranslationsSectionsHomeFeaturesEn {
+	_TranslationsSectionsHomeFeaturesIt._(this._root);
 
 	final TranslationsIt _root; // ignore: unused_field
 
 	// Translations
-	@override String get systemStatus => 'Stato del Sistema';
-	@override String get storageUsage => 'Uso dello Spazio';
-	@override String get quickActions => 'Azioni Rapide';
+	@override String get systemStatus => 'Stato del sistema';
+	@override String get storageUsage => 'Utilizzo dello spazio di archiviazione';
+	@override String get quickActions => 'Azioni rapide';
 }
 
 // Path: sections.cleanup.features
@@ -883,18 +887,18 @@ extension on TranslationsIt {
 			'language.greek' => 'Greco',
 			'language.portuguese' => 'Portoghese',
 			'language.mandarin' => 'Mandarino',
-			'navigation.smartCare' => 'Cura Intelligente',
+			'navigation.home' => 'Casa',
 			'navigation.cleanup' => 'Pulizia',
 			'navigation.myClutter' => 'Il Mio Disordine',
 			'navigation.spaceView' => 'Vista Spazio',
 			'navigation.applications' => 'Applicazioni',
 			'navigation.myTools' => 'I Miei Strumenti',
 			'navigation.myActivity' => 'La Mia Attivita',
-			'sections.smartCare.title' => 'Cura Intelligente',
-			'sections.smartCare.subtitle' => 'Ottieni una panoramica completa\ndello stato del sistema in un clic.',
-			'sections.smartCare.features.systemStatus' => 'Stato del Sistema',
-			'sections.smartCare.features.storageUsage' => 'Uso dello Spazio',
-			'sections.smartCare.features.quickActions' => 'Azioni Rapide',
+			'sections.home.title' => 'Casa',
+			'sections.home.subtitle' => 'Ottieni una panoramica completa dello stato del tuo sistema in un clic.',
+			'sections.home.features.systemStatus' => 'Stato del sistema',
+			'sections.home.features.storageUsage' => 'Utilizzo dello spazio di archiviazione',
+			'sections.home.features.quickActions' => 'Azioni rapide',
 			'sections.cleanup.title' => 'Pulizia File Inutili',
 			'sections.cleanup.subtitle' => 'Pulisci il sistema per ottenere\nprestazioni massime e recuperare spazio.',
 			'sections.cleanup.features.systemJunk' => 'File di Sistema Inutili',
@@ -987,12 +991,16 @@ extension on TranslationsIt {
 			'spaceView.noFoldersFound' => 'Nessuna cartella trovata a questo livello',
 			'spaceView.noBubblesToRender' => 'Nessuna bolla da mostrare',
 			'spaceView.otherItems' => 'Altri elementi',
-			'smartCare.refresh' => 'Aggiorna',
-			'smartCare.unableToReadDiskInfo' => 'Impossibile leggere le informazioni del disco',
-			'smartCare.totalStorage' => 'Spazio Totale',
-			'smartCare.used' => 'Usato',
-			'smartCare.available' => 'Disponibile',
-			'smartCare.percentUsed' => '{percent}% usato',
+			'home.refresh' => 'Aggiorna',
+			'home.unableToReadDiskInfo' => 'Impossibile leggere le informazioni sul disco',
+			'home.totalStorage' => 'Spazio di archiviazione totale',
+			'home.used' => 'Usato',
+			'home.available' => 'Disponibile',
+			'home.percentUsed' => '{percent}% utilizzato',
+			'home.cpuUsage' => 'Utilizzo della CPU',
+			'home.ramUsage' => 'Utilizzo della RAM',
+			'home.memoryPercentUsed' => '{percent}% RAM utilizzata',
+			'home.unableToReadSystemInfo' => 'Impossibile leggere le informazioni di sistema',
 			'myToolsPage.title' => 'I Miei Strumenti',
 			'myToolsPage.subtitle' => 'Gli strumenti essenziali per tenere il tuo Mac pulito, sicuro e veloce.',
 			'myToolsPage.backToTools' => 'Torna agli strumenti',

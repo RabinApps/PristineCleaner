@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
+
 /// Opens a file or folder in the system file manager
 /// - macOS: Uses `open` command
 /// - Linux: Uses `xdg-open` command
@@ -24,7 +26,7 @@ Future<void> openFileOrFolder(String path) async {
 
     await Process.run(command, args);
   } catch (e) {
-    print('Error opening file/folder: $e');
+    debugPrint('Error opening file/folder: $e');
     rethrow;
   }
 }
@@ -47,7 +49,7 @@ Future<void> revealFileOrFolder(String path) async {
       throw UnsupportedError('Platform not supported');
     }
   } catch (e) {
-    print('Error revealing file/folder: $e');
+    debugPrint('Error revealing file/folder: $e');
     rethrow;
   }
 }

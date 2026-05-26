@@ -14,7 +14,7 @@
     "mandarin": "Mandarin"
   },
   "navigation": {
-    "smartCare": "智能护理",
+    "home": "首页",
     "cleanup": "清理",
     "myClutter": "我的杂乱",
     "spaceView": "空间景观",
@@ -23,13 +23,13 @@
     "myActivity": "我的活动"
   },
   "sections": {
-    "smartCare": {
-      "title": "智能护理",
-      "subtitle": "一键获取系统的完整运行状况概览。\\n",
+    "home": {
+      "title": "首页",
+      "subtitle": "一键获取系统的完整运行状况概览。",
       "features": {
         "systemStatus": "系统状态",
         "storageUsage": "存储使用情况",
-        "quickActions": "快速行动"
+        "quickActions": "快速操作"
       }
     },
     "cleanup": {
@@ -167,13 +167,17 @@
     "noBubblesToRender": "没有气泡可渲染",
     "otherItems": "其他项目"
   },
-  "smartCare": {
+  "home": {
     "refresh": "刷新",
     "unableToReadDiskInfo": "无法读取磁盘信息",
     "totalStorage": "总存储空间",
-    "used": "用过的",
-    "available": "可用的",
-    "percentUsed": "{percent}% 已使用"
+    "used": "已使用",
+    "available": "可用",
+    "percentUsed": "{percent}% 已使用",
+    "cpuUsage": "CPU 使用率",
+    "ramUsage": "内存使用率",
+    "memoryPercentUsed": "内存已使用 {percent}%",
+    "unableToReadSystemInfo": "无法读取系统信息"
   },
   "myToolsPage": {
     "title": "我的工具",

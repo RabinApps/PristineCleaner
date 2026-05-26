@@ -14,7 +14,7 @@
     "mandarin": "מַנדָרִין"
   },
   "navigation": {
-    "smartCare": "טיפול חכם",
+    "home": "בַּיִת",
     "cleanup": "ניקיון",
     "myClutter": "הבלגן שלי",
     "spaceView": "תצוגת חלל",
@@ -23,8 +23,8 @@
     "myActivity": "הפעילות שלי"
   },
   "sections": {
-    "smartCare": {
-      "title": "טיפול חכם",
+    "home": {
+      "title": "בַּיִת",
       "subtitle": "קבל סקירת בריאות מלאה\\nעל המערכת שלך בלחיצה אחת.",
       "features": {
         "systemStatus": "מצב מערכת",
@@ -167,13 +167,17 @@
     "noBubblesToRender": "אין בועות לעיבוד",
     "otherItems": "פריטים אחרים"
   },
-  "smartCare": {
+  "home": {
     "refresh": "לְרַעֲנֵן",
     "unableToReadDiskInfo": "לא ניתן לקרוא מידע על הדיסק",
     "totalStorage": "אחסון כולל",
     "used": "מְשׁוּמָשׁ",
     "available": "זָמִין",
-    "percentUsed": "{percent}% בשימוש"
+    "percentUsed": "{percent}% בשימוש",
+    "cpuUsage": "שימוש במעבד",
+    "ramUsage": "שימוש בזיכרון RAM",
+    "memoryPercentUsed": "{percent}% RAM בשימוש",
+    "unableToReadSystemInfo": "לא ניתן לקרוא את פרטי המערכת"
   },
   "myToolsPage": {
     "title": "הכלים שלי",

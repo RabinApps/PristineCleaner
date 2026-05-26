@@ -52,7 +52,7 @@ class TranslationsEl with BaseTranslations<AppLocale, Translations> implements T
 	@override late final _TranslationsProjectDirectoryEl projectDirectory = _TranslationsProjectDirectoryEl._(_root);
 	@override late final _TranslationsSearchAndSortEl searchAndSort = _TranslationsSearchAndSortEl._(_root);
 	@override late final _TranslationsSpaceViewEl spaceView = _TranslationsSpaceViewEl._(_root);
-	@override late final _TranslationsSmartCareEl smartCare = _TranslationsSmartCareEl._(_root);
+	@override late final _TranslationsHomeEl home = _TranslationsHomeEl._(_root);
 	@override late final _TranslationsMyToolsPageEl myToolsPage = _TranslationsMyToolsPageEl._(_root);
 	@override late final _TranslationsMyToolsMessagesEl myToolsMessages = _TranslationsMyToolsMessagesEl._(_root);
 	@override late final _TranslationsMyToolsCatalogEl myToolsCatalog = _TranslationsMyToolsCatalogEl._(_root);
@@ -99,7 +99,7 @@ class _TranslationsNavigationEl implements TranslationsNavigationEn {
 	final TranslationsEl _root; // ignore: unused_field
 
 	// Translations
-	@override String get smartCare => 'Έξυπνη Φροντίδα';
+	@override String get home => 'Σπίτι';
 	@override String get cleanup => 'Καθαρισμός';
 	@override String get myClutter => 'Η ακαταστασία μου';
 	@override String get spaceView => 'Θέα Διαστήματος';
@@ -115,7 +115,7 @@ class _TranslationsSectionsEl implements TranslationsSectionsEn {
 	final TranslationsEl _root; // ignore: unused_field
 
 	// Translations
-	@override late final _TranslationsSectionsSmartCareEl smartCare = _TranslationsSectionsSmartCareEl._(_root);
+	@override late final _TranslationsSectionsHomeEl home = _TranslationsSectionsHomeEl._(_root);
 	@override late final _TranslationsSectionsCleanupEl cleanup = _TranslationsSectionsCleanupEl._(_root);
 	@override late final _TranslationsSectionsMyClutterEl myClutter = _TranslationsSectionsMyClutterEl._(_root);
 	@override late final _TranslationsSectionsSpaceViewEl spaceView = _TranslationsSectionsSpaceViewEl._(_root);
@@ -289,19 +289,23 @@ class _TranslationsSpaceViewEl implements TranslationsSpaceViewEn {
 	@override String get otherItems => 'Άλλα είδη';
 }
 
-// Path: smartCare
-class _TranslationsSmartCareEl implements TranslationsSmartCareEn {
-	_TranslationsSmartCareEl._(this._root);
+// Path: home
+class _TranslationsHomeEl implements TranslationsHomeEn {
+	_TranslationsHomeEl._(this._root);
 
 	final TranslationsEl _root; // ignore: unused_field
 
 	// Translations
 	@override String get refresh => 'Φρεσκάρω';
 	@override String get unableToReadDiskInfo => 'Δεν είναι δυνατή η ανάγνωση των πληροφοριών του δίσκου';
-	@override String get totalStorage => 'Συνολική αποθήκευση';
+	@override String get totalStorage => 'Συνολικός χώρος αποθήκευσης';
 	@override String get used => 'Μεταχειρισμένος';
 	@override String get available => 'Διαθέσιμος';
 	@override String get percentUsed => '{percent}% χρησιμοποιείται';
+	@override String get cpuUsage => 'Χρήση CPU';
+	@override String get ramUsage => 'Χρήση RAM';
+	@override String get memoryPercentUsed => '{percent}% RAM που χρησιμοποιείται';
+	@override String get unableToReadSystemInfo => 'Δεν είναι δυνατή η ανάγνωση πληροφοριών συστήματος';
 }
 
 // Path: myToolsPage
@@ -453,16 +457,16 @@ class _TranslationsMyToolsServiceEl implements TranslationsMyToolsServiceEn {
 	@override String get timeMachineMacOnly => 'Τα στιγμιότυπα Time Machine είναι διαθέσιμα μόνο στο macOS.';
 }
 
-// Path: sections.smartCare
-class _TranslationsSectionsSmartCareEl implements TranslationsSectionsSmartCareEn {
-	_TranslationsSectionsSmartCareEl._(this._root);
+// Path: sections.home
+class _TranslationsSectionsHomeEl implements TranslationsSectionsHomeEn {
+	_TranslationsSectionsHomeEl._(this._root);
 
 	final TranslationsEl _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'Έξυπνη Φροντίδα';
+	@override String get title => 'Σπίτι';
 	@override String get subtitle => 'Αποκτήστε μια πλήρη επισκόπηση υγείας\nτου συστήματός σας με ένα κλικ.';
-	@override late final _TranslationsSectionsSmartCareFeaturesEl features = _TranslationsSectionsSmartCareFeaturesEl._(_root);
+	@override late final _TranslationsSectionsHomeFeaturesEl features = _TranslationsSectionsHomeFeaturesEl._(_root);
 }
 
 // Path: sections.cleanup
@@ -793,9 +797,9 @@ class _TranslationsCleanupCategoriesBrokenLoginItemsEl implements TranslationsCl
 	@override String get description => 'Στοιχεία σύνδεσης που παραπέμπουν σε εφαρμογές ή αρχεία που δεν υπάρχουν πλέον στο δίσκο σας. Η κατάργησή τους επιταχύνει τον χρόνο σύνδεσης.';
 }
 
-// Path: sections.smartCare.features
-class _TranslationsSectionsSmartCareFeaturesEl implements TranslationsSectionsSmartCareFeaturesEn {
-	_TranslationsSectionsSmartCareFeaturesEl._(this._root);
+// Path: sections.home.features
+class _TranslationsSectionsHomeFeaturesEl implements TranslationsSectionsHomeFeaturesEn {
+	_TranslationsSectionsHomeFeaturesEl._(this._root);
 
 	final TranslationsEl _root; // ignore: unused_field
 
@@ -883,18 +887,18 @@ extension on TranslationsEl {
 			'language.greek' => 'ελληνικά',
 			'language.portuguese' => 'Πορτογάλος',
 			'language.mandarin' => 'Μανταρίνι',
-			'navigation.smartCare' => 'Έξυπνη Φροντίδα',
+			'navigation.home' => 'Σπίτι',
 			'navigation.cleanup' => 'Καθαρισμός',
 			'navigation.myClutter' => 'Η ακαταστασία μου',
 			'navigation.spaceView' => 'Θέα Διαστήματος',
 			'navigation.applications' => 'Εφαρμογές',
 			'navigation.myTools' => 'Τα εργαλεία μου',
 			'navigation.myActivity' => 'Η δραστηριότητά μου',
-			'sections.smartCare.title' => 'Έξυπνη Φροντίδα',
-			'sections.smartCare.subtitle' => 'Αποκτήστε μια πλήρη επισκόπηση υγείας\nτου συστήματός σας με ένα κλικ.',
-			'sections.smartCare.features.systemStatus' => 'Κατάσταση συστήματος',
-			'sections.smartCare.features.storageUsage' => 'Χρήση αποθήκευσης',
-			'sections.smartCare.features.quickActions' => 'Γρήγορες Ενέργειες',
+			'sections.home.title' => 'Σπίτι',
+			'sections.home.subtitle' => 'Αποκτήστε μια πλήρη επισκόπηση υγείας\nτου συστήματός σας με ένα κλικ.',
+			'sections.home.features.systemStatus' => 'Κατάσταση συστήματος',
+			'sections.home.features.storageUsage' => 'Χρήση αποθήκευσης',
+			'sections.home.features.quickActions' => 'Γρήγορες Ενέργειες',
 			'sections.cleanup.title' => 'Καθαρισμός σκουπιδιών',
 			'sections.cleanup.subtitle' => 'Καθαρίστε το σύστημά σας για να επιτύχετε τη μέγιστη\nαπόδοση και να αποκτήσετε ξανά περισσότερο ελεύθερο χώρο.',
 			'sections.cleanup.features.systemJunk' => 'Σκουπίδια συστήματος',
@@ -987,12 +991,16 @@ extension on TranslationsEl {
 			'spaceView.noFoldersFound' => 'Δεν βρέθηκαν φάκελοι για αυτό το επίπεδο',
 			'spaceView.noBubblesToRender' => 'Δεν υπάρχουν φυσαλίδες για απόδοση',
 			'spaceView.otherItems' => 'Άλλα είδη',
-			'smartCare.refresh' => 'Φρεσκάρω',
-			'smartCare.unableToReadDiskInfo' => 'Δεν είναι δυνατή η ανάγνωση των πληροφοριών του δίσκου',
-			'smartCare.totalStorage' => 'Συνολική αποθήκευση',
-			'smartCare.used' => 'Μεταχειρισμένος',
-			'smartCare.available' => 'Διαθέσιμος',
-			'smartCare.percentUsed' => '{percent}% χρησιμοποιείται',
+			'home.refresh' => 'Φρεσκάρω',
+			'home.unableToReadDiskInfo' => 'Δεν είναι δυνατή η ανάγνωση των πληροφοριών του δίσκου',
+			'home.totalStorage' => 'Συνολικός χώρος αποθήκευσης',
+			'home.used' => 'Μεταχειρισμένος',
+			'home.available' => 'Διαθέσιμος',
+			'home.percentUsed' => '{percent}% χρησιμοποιείται',
+			'home.cpuUsage' => 'Χρήση CPU',
+			'home.ramUsage' => 'Χρήση RAM',
+			'home.memoryPercentUsed' => '{percent}% RAM που χρησιμοποιείται',
+			'home.unableToReadSystemInfo' => 'Δεν είναι δυνατή η ανάγνωση πληροφοριών συστήματος',
 			'myToolsPage.title' => 'Τα εργαλεία μου',
 			'myToolsPage.subtitle' => 'Τα βασικά εργαλεία σας για να διατηρείτε το Mac σας καθαρό, ασφαλές και να λειτουργεί ομαλά.',
 			'myToolsPage.backToTools' => 'Επιστροφή στα εργαλεία',

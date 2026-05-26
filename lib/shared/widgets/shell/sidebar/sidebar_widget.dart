@@ -56,19 +56,6 @@ class SidebarWidget extends ConsumerWidget {
                     onTap: () => context.go(_pathForSection(item.section)),
                   ),
                 ),
-                Divider(
-                  color: Colors.white.withValues(alpha: 0.08),
-                  height: 24,
-                  indent: 10,
-                  endIndent: 10,
-                ),
-                ...NavItem.bottomItems().map(
-                  (item) => _NavTile(
-                    item: item,
-                    isActive: item.section == activeSection,
-                    onTap: () => context.go(_pathForSection(item.section)),
-                  ),
-                ),
               ],
             ),
           ),
@@ -185,8 +172,8 @@ class _LanguageSelector extends StatelessWidget {
 
 String _pathForSection(NavSection section) {
   switch (section) {
-    case NavSection.smartCare:
-      return '/smart-care';
+    case NavSection.home:
+      return '/home';
     case NavSection.cleanup:
       return '/cleanup';
     case NavSection.myClutter:
@@ -197,8 +184,6 @@ String _pathForSection(NavSection section) {
       return '/applications';
     case NavSection.myTools:
       return '/my-tools';
-    case NavSection.myActivity:
-      return '/my-activity';
   }
 }
 

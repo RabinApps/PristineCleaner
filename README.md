@@ -17,7 +17,7 @@ Supported desktop targets:
 
 ## What Is Implemented
 
-### Smart Care
+### Home
 
 - Reads disk capacity, used space, and free space.
 - Shows usage percentage and progress indicators.

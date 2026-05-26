@@ -11,12 +11,12 @@ import 'screens/applications_screen.dart';
 import 'screens/cleanup_screen.dart';
 import 'screens/my_tools_screen.dart';
 import 'screens/my_clutter_screen.dart';
-import 'screens/smart_care_screen.dart';
+import 'screens/home_screen.dart';
 import 'screens/space_view_screen.dart';
 import 'shared/widgets/shell/shell_screen.dart';
 
 final GoRouter _router = GoRouter(
-  initialLocation: '/smart-care',
+  initialLocation: '/home',
   routes: [
     ShellRoute(
       builder: (context, state, child) {
@@ -27,9 +27,9 @@ final GoRouter _router = GoRouter(
       },
       routes: [
         GoRoute(
-          path: '/smart-care',
+          path: '/home',
           pageBuilder: (context, state) =>
-              _fadePage(state: state, child: const SmartCareScreen()),
+              _fadePage(state: state, child: const HomeScreen()),
         ),
         GoRoute(
           path: '/cleanup',
@@ -56,13 +56,6 @@ final GoRouter _router = GoRouter(
           pageBuilder: (context, state) =>
               _fadePage(state: state, child: const MyToolsScreen()),
         ),
-        GoRoute(
-          path: '/my-activity',
-          pageBuilder: (context, state) => _fadePage(
-            state: state,
-            child: const ComingSoonScreen(section: NavSection.myActivity),
-          ),
-        ),
       ],
     ),
   ],
@@ -85,8 +78,8 @@ CustomTransitionPage<void> _fadePage({
 
 NavSection _sectionFromPath(String path) {
   switch (path) {
-    case '/smart-care':
-      return NavSection.smartCare;
+    case '/home':
+      return NavSection.home;
     case '/cleanup':
       return NavSection.cleanup;
     case '/my-clutter':
@@ -97,10 +90,8 @@ NavSection _sectionFromPath(String path) {
       return NavSection.applications;
     case '/my-tools':
       return NavSection.myTools;
-    case '/my-activity':
-      return NavSection.myActivity;
     default:
-      return NavSection.smartCare;
+      return NavSection.home;
   }
 }
 

@@ -3,15 +3,7 @@ import 'package:flutter/material.dart';
 import '../../gen/strings.g.dart';
 import '../theme/section_themes.dart';
 
-enum NavSection {
-  smartCare,
-  cleanup,
-  myClutter,
-  spaceView,
-  applications,
-  myTools,
-  myActivity,
-}
+enum NavSection { home, cleanup, myClutter, spaceView, applications, myTools }
 
 class NavItem {
   final NavSection section;
@@ -28,10 +20,10 @@ class NavItem {
 
   static List<NavItem> mainItems() => [
     NavItem(
-      section: NavSection.smartCare,
-      label: t.navigation.smartCare,
+      section: NavSection.home,
+      label: t.navigation.home,
       icon: Icons.favorite_rounded,
-      theme: SectionThemes.smartCare,
+      theme: SectionThemes.home,
     ),
     NavItem(
       section: NavSection.cleanup,
@@ -57,19 +49,11 @@ class NavItem {
       icon: Icons.apps_rounded,
       theme: SectionThemes.applications,
     ),
-  ];
-
-  static List<NavItem> bottomItems() => [
     NavItem(
       section: NavSection.myTools,
       label: t.navigation.myTools,
       icon: Icons.build_outlined,
       theme: SectionThemes.myTools,
-    ),
-    NavItem(
-      section: NavSection.myActivity,
-      label: t.navigation.myActivity,
-      icon: Icons.bar_chart_rounded,
     ),
   ];
 }

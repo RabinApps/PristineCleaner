@@ -7,7 +7,7 @@ import 'package:pristine_cleaner/screens/applications_screen.dart';
 import 'package:pristine_cleaner/screens/cleanup_screen.dart';
 import 'package:pristine_cleaner/screens/my_clutter_screen.dart';
 import 'package:pristine_cleaner/screens/my_tools_screen.dart';
-import 'package:pristine_cleaner/screens/smart_care_screen.dart';
+import 'package:pristine_cleaner/screens/home_screen.dart';
 import 'package:pristine_cleaner/screens/space_view_screen.dart';
 import 'package:pristine_cleaner/shared/widgets/scan_button.dart';
 import 'package:pristine_cleaner/shared/widgets/shell/shell_screen.dart';
@@ -18,7 +18,7 @@ void main() {
     await $.pumpAndSettle();
 
     expect($(ShellScreen), findsOneWidget);
-    expect($(SmartCareScreen), findsOneWidget);
+    expect($(HomeScreen), findsOneWidget);
 
     await $(Icons.cleaning_services_rounded).tap();
     await $.pumpAndSettle();
@@ -30,7 +30,7 @@ void main() {
     app.main();
     await $.pumpAndSettle();
 
-    expect($(SmartCareScreen), findsOneWidget);
+    expect($(HomeScreen), findsOneWidget);
 
     await $(Icons.cleaning_services_rounded).tap();
     await $.pumpAndSettle();
@@ -58,19 +58,19 @@ void main() {
 
     await $(Icons.favorite_rounded).tap();
     await $.pumpAndSettle();
-    expect($(SmartCareScreen), findsOneWidget);
+    expect($(HomeScreen), findsOneWidget);
   });
 
-  patrolTest('triggers Smart Care refresh action', ($) async {
+  patrolTest('triggers Home refresh action', ($) async {
     app.main();
     await $.pumpAndSettle();
 
-    expect($(SmartCareScreen), findsOneWidget);
+    expect($(HomeScreen), findsOneWidget);
     expect($(ScanButton), findsOneWidget);
 
     await $(ScanButton).tap();
     await $.pumpAndSettle();
 
-    expect($(SmartCareScreen), findsOneWidget);
+    expect($(HomeScreen), findsOneWidget);
   });
 }

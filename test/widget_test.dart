@@ -11,16 +11,24 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pristine_cleaner/app.dart';
 import 'package:pristine_cleaner/core/models/scan_result.dart';
 import 'package:pristine_cleaner/gen/strings.g.dart';
-import 'package:pristine_cleaner/providers/smart_care_provider.dart';
+import 'package:pristine_cleaner/providers/home_provider.dart';
 
-class _FakeSmartCareNotifier extends SmartCareNotifier {
+class _FakeHomeNotifier extends HomeNotifier {
   @override
-  Future<DiskInfo> build() async {
-    return const DiskInfo(
-      mountPoint: '/',
-      totalBytes: 1024,
-      usedBytes: 512,
-      freeBytes: 512,
+  Future<HomeDashboardData> build() async {
+    return HomeDashboardData(
+      diskInfo: const DiskInfo(
+        mountPoint: '/',
+        totalBytes: 1024,
+        usedBytes: 512,
+        freeBytes: 512,
+      ),
+      systemUsage: const SystemUsage(
+        cpuPercent: 8,
+        totalMemoryBytes: 16000000000,
+        usedMemoryBytes: 4000000000,
+      ),
+      updatedAt: DateTime.now(),
     );
   }
 }
@@ -35,9 +43,7 @@ void main() {
     await tester.pumpWidget(
       TranslationProvider(
         child: ProviderScope(
-          overrides: [
-            smartCareProvider.overrideWith(_FakeSmartCareNotifier.new),
-          ],
+          overrides: [homeProvider.overrideWith(_FakeHomeNotifier.new)],
           child: const PristineCleanerApp(),
         ),
       ),

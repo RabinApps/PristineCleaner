@@ -52,7 +52,7 @@ class TranslationsFr with BaseTranslations<AppLocale, Translations> implements T
 	@override late final _TranslationsProjectDirectoryFr projectDirectory = _TranslationsProjectDirectoryFr._(_root);
 	@override late final _TranslationsSearchAndSortFr searchAndSort = _TranslationsSearchAndSortFr._(_root);
 	@override late final _TranslationsSpaceViewFr spaceView = _TranslationsSpaceViewFr._(_root);
-	@override late final _TranslationsSmartCareFr smartCare = _TranslationsSmartCareFr._(_root);
+	@override late final _TranslationsHomeFr home = _TranslationsHomeFr._(_root);
 	@override late final _TranslationsMyToolsPageFr myToolsPage = _TranslationsMyToolsPageFr._(_root);
 	@override late final _TranslationsMyToolsMessagesFr myToolsMessages = _TranslationsMyToolsMessagesFr._(_root);
 	@override late final _TranslationsMyToolsCatalogFr myToolsCatalog = _TranslationsMyToolsCatalogFr._(_root);
@@ -99,7 +99,7 @@ class _TranslationsNavigationFr implements TranslationsNavigationEn {
 	final TranslationsFr _root; // ignore: unused_field
 
 	// Translations
-	@override String get smartCare => 'Soins intelligents';
+	@override String get home => 'Maison';
 	@override String get cleanup => 'Nettoyage';
 	@override String get myClutter => 'Mon désordre';
 	@override String get spaceView => 'Vue de l\'espace';
@@ -115,7 +115,7 @@ class _TranslationsSectionsFr implements TranslationsSectionsEn {
 	final TranslationsFr _root; // ignore: unused_field
 
 	// Translations
-	@override late final _TranslationsSectionsSmartCareFr smartCare = _TranslationsSectionsSmartCareFr._(_root);
+	@override late final _TranslationsSectionsHomeFr home = _TranslationsSectionsHomeFr._(_root);
 	@override late final _TranslationsSectionsCleanupFr cleanup = _TranslationsSectionsCleanupFr._(_root);
 	@override late final _TranslationsSectionsMyClutterFr myClutter = _TranslationsSectionsMyClutterFr._(_root);
 	@override late final _TranslationsSectionsSpaceViewFr spaceView = _TranslationsSectionsSpaceViewFr._(_root);
@@ -289,9 +289,9 @@ class _TranslationsSpaceViewFr implements TranslationsSpaceViewEn {
 	@override String get otherItems => 'Autres articles';
 }
 
-// Path: smartCare
-class _TranslationsSmartCareFr implements TranslationsSmartCareEn {
-	_TranslationsSmartCareFr._(this._root);
+// Path: home
+class _TranslationsHomeFr implements TranslationsHomeEn {
+	_TranslationsHomeFr._(this._root);
 
 	final TranslationsFr _root; // ignore: unused_field
 
@@ -302,6 +302,10 @@ class _TranslationsSmartCareFr implements TranslationsSmartCareEn {
 	@override String get used => 'Utilisé';
 	@override String get available => 'Disponible';
 	@override String get percentUsed => '{percent}% utilisé';
+	@override String get cpuUsage => 'Utilisation du CPU';
+	@override String get ramUsage => 'Utilisation de la RAM';
+	@override String get memoryPercentUsed => '{percent}% de RAM utilisee';
+	@override String get unableToReadSystemInfo => 'Impossible de lire les informations système';
 }
 
 // Path: myToolsPage
@@ -453,16 +457,16 @@ class _TranslationsMyToolsServiceFr implements TranslationsMyToolsServiceEn {
 	@override String get timeMachineMacOnly => 'Les instantanés Time Machine ne sont disponibles que sur macOS.';
 }
 
-// Path: sections.smartCare
-class _TranslationsSectionsSmartCareFr implements TranslationsSectionsSmartCareEn {
-	_TranslationsSectionsSmartCareFr._(this._root);
+// Path: sections.home
+class _TranslationsSectionsHomeFr implements TranslationsSectionsHomeEn {
+	_TranslationsSectionsHomeFr._(this._root);
 
 	final TranslationsFr _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'Soins intelligents';
+	@override String get title => 'Maison';
 	@override String get subtitle => 'Obtenez un aperçu complet de l\'état de santé de votre système en un seul clic.';
-	@override late final _TranslationsSectionsSmartCareFeaturesFr features = _TranslationsSectionsSmartCareFeaturesFr._(_root);
+	@override late final _TranslationsSectionsHomeFeaturesFr features = _TranslationsSectionsHomeFeaturesFr._(_root);
 }
 
 // Path: sections.cleanup
@@ -793,9 +797,9 @@ class _TranslationsCleanupCategoriesBrokenLoginItemsFr implements TranslationsCl
 	@override String get description => 'Éléments de connexion qui pointent vers des applications ou des fichiers qui n\'existent plus sur votre disque. Les supprimer accélère le temps de connexion.';
 }
 
-// Path: sections.smartCare.features
-class _TranslationsSectionsSmartCareFeaturesFr implements TranslationsSectionsSmartCareFeaturesEn {
-	_TranslationsSectionsSmartCareFeaturesFr._(this._root);
+// Path: sections.home.features
+class _TranslationsSectionsHomeFeaturesFr implements TranslationsSectionsHomeFeaturesEn {
+	_TranslationsSectionsHomeFeaturesFr._(this._root);
 
 	final TranslationsFr _root; // ignore: unused_field
 
@@ -883,18 +887,18 @@ extension on TranslationsFr {
 			'language.greek' => 'grec',
 			'language.portuguese' => 'portugais',
 			'language.mandarin' => 'mandarin',
-			'navigation.smartCare' => 'Soins intelligents',
+			'navigation.home' => 'Maison',
 			'navigation.cleanup' => 'Nettoyage',
 			'navigation.myClutter' => 'Mon désordre',
 			'navigation.spaceView' => 'Vue de l\'espace',
 			'navigation.applications' => 'Applications',
 			'navigation.myTools' => 'Mes outils',
 			'navigation.myActivity' => 'Mon activité',
-			'sections.smartCare.title' => 'Soins intelligents',
-			'sections.smartCare.subtitle' => 'Obtenez un aperçu complet de l\'état de santé de votre système en un seul clic.',
-			'sections.smartCare.features.systemStatus' => 'État du système',
-			'sections.smartCare.features.storageUsage' => 'Storage Usage',
-			'sections.smartCare.features.quickActions' => 'Actions rapides',
+			'sections.home.title' => 'Maison',
+			'sections.home.subtitle' => 'Obtenez un aperçu complet de l\'état de santé de votre système en un seul clic.',
+			'sections.home.features.systemStatus' => 'État du système',
+			'sections.home.features.storageUsage' => 'Storage Usage',
+			'sections.home.features.quickActions' => 'Actions rapides',
 			'sections.cleanup.title' => 'Nettoyage indésirable',
 			'sections.cleanup.subtitle' => 'Nettoyez votre système pour obtenir\ndes performances maximales et récupérer plus d\'espace libre.',
 			'sections.cleanup.features.systemJunk' => 'Indésirable du système',
@@ -987,12 +991,16 @@ extension on TranslationsFr {
 			'spaceView.noFoldersFound' => 'Aucun dossier trouvé pour ce niveau',
 			'spaceView.noBubblesToRender' => 'Aucune bulle à restituer',
 			'spaceView.otherItems' => 'Autres articles',
-			'smartCare.refresh' => 'Rafraîchir',
-			'smartCare.unableToReadDiskInfo' => 'Impossible de lire les informations sur le disque',
-			'smartCare.totalStorage' => 'Stockage total',
-			'smartCare.used' => 'Utilisé',
-			'smartCare.available' => 'Disponible',
-			'smartCare.percentUsed' => '{percent}% utilisé',
+			'home.refresh' => 'Rafraîchir',
+			'home.unableToReadDiskInfo' => 'Impossible de lire les informations sur le disque',
+			'home.totalStorage' => 'Stockage total',
+			'home.used' => 'Utilisé',
+			'home.available' => 'Disponible',
+			'home.percentUsed' => '{percent}% utilisé',
+			'home.cpuUsage' => 'Utilisation du CPU',
+			'home.ramUsage' => 'Utilisation de la RAM',
+			'home.memoryPercentUsed' => '{percent}% de RAM utilisee',
+			'home.unableToReadSystemInfo' => 'Impossible de lire les informations système',
 			'myToolsPage.title' => 'Mes outils',
 			'myToolsPage.subtitle' => 'Vos outils incontournables pour garder votre Mac propre, sûr et fonctionnel.',
 			'myToolsPage.backToTools' => 'Retour aux outils',

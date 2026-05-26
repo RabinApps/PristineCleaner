@@ -5,6 +5,7 @@ import 'dart:math' as math;
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image/image.dart' as img;
+import 'package:system_info2/system_info2.dart';
 
 import '../core/models/file_item.dart';
 import '../core/models/scan_result.dart';
@@ -186,6 +187,146 @@ class FileService {
       usedBytes: 0,
       freeBytes: 0,
     );
+  }
+
+  Future<SystemUsage> getSystemUsage() async {
+    try {
+      final cpuPercent = await _getCpuUsagePercent();
+      final memory = _getMemoryUsage();
+      return SystemUsage(
+        cpuPercent: cpuPercent,
+        totalMemoryBytes: memory.totalMemoryBytes,
+        usedMemoryBytes: memory.usedMemoryBytes,
+      );
+    } catch (_) {
+      // Fall through and return unavailable metrics.
+    }
+    return const SystemUsage.unavailable();
+  }
+
+  Future<double> _getCpuUsagePercent() async {
+    if (Platform.isMacOS) {
+      return _getMacCpuUsagePercent();
+    }
+    if (Platform.isLinux) {
+      return _getLinuxCpuUsagePercent();
+    }
+    if (Platform.isWindows) {
+      return _getWindowsCpuUsagePercent();
+    }
+    return 0;
+  }
+
+  _MemoryUsage _getMemoryUsage() {
+    if (Platform.isMacOS) {
+      return _getMacMemoryUsage();
+    }
+
+    final total = SysInfo.getTotalPhysicalMemory();
+    final available = SysInfo.getAvailablePhysicalMemory();
+    return _memoryUsageFromTotalAvailable(total, available);
+  }
+
+  _MemoryUsage _getMacMemoryUsage() {
+    try {
+      final totalResult = Process.runSync('sysctl', ['-n', 'hw.memsize']);
+      final total = int.tryParse((totalResult.stdout as String).trim()) ?? 0;
+
+      final vmStatResult = Process.runSync('vm_stat', const []);
+      final vmOutput = vmStatResult.stdout as String;
+      final pageSize = _extractMacPageSize(vmOutput);
+
+      // Count reclaimable memory as available for a more realistic "used" view.
+      final availablePages =
+          _extractVmStatPages(vmOutput, 'Pages free') +
+          _extractVmStatPages(vmOutput, 'Pages speculative') +
+          _extractVmStatPages(vmOutput, 'Pages inactive');
+      final available = availablePages * pageSize;
+
+      return _memoryUsageFromTotalAvailable(total, available);
+    } catch (_) {
+      return const _MemoryUsage(totalMemoryBytes: 0, usedMemoryBytes: 0);
+    }
+  }
+
+  _MemoryUsage _memoryUsageFromTotalAvailable(int total, int available) {
+    if (total <= 0) {
+      return const _MemoryUsage(totalMemoryBytes: 0, usedMemoryBytes: 0);
+    }
+
+    final safeAvailable = available.clamp(0, total);
+    final used = (total - safeAvailable).clamp(0, total);
+    return _MemoryUsage(totalMemoryBytes: total, usedMemoryBytes: used);
+  }
+
+  int _extractMacPageSize(String vmOutput) {
+    final match = RegExp(r'page size of (\d+) bytes').firstMatch(vmOutput);
+    return int.tryParse(match?.group(1) ?? '') ?? 4096;
+  }
+
+  int _extractVmStatPages(String vmOutput, String key) {
+    final escaped = RegExp.escape(key);
+    final match = RegExp('$escaped:\\s+(\\d+)\\.').firstMatch(vmOutput);
+    return int.tryParse(match?.group(1) ?? '') ?? 0;
+  }
+
+  Future<double> _getMacCpuUsagePercent() async {
+    final cpuResult = await Process.run('sh', [
+      '-c',
+      "ps -A -o %cpu= | awk '{s+=\$1} END {print s}'",
+    ]);
+    final cores = SysInfo.cores.isNotEmpty
+        ? SysInfo.cores.length
+        : Platform.numberOfProcessors.clamp(1, 256);
+    final totalCpu = double.tryParse((cpuResult.stdout as String).trim()) ?? 0;
+    return (totalCpu / cores).clamp(0.0, 100.0);
+  }
+
+  Future<double> _getLinuxCpuUsagePercent() async {
+    final first = await _readLinuxCpuSample();
+    await Future<void>.delayed(const Duration(milliseconds: 250));
+    final second = await _readLinuxCpuSample();
+
+    final idleDelta = second.idle - first.idle;
+    final totalDelta = second.total - first.total;
+    return totalDelta <= 0
+        ? 0.0
+        : ((1 - (idleDelta / totalDelta)) * 100).clamp(0.0, 100.0);
+  }
+
+  Future<double> _getWindowsCpuUsagePercent() async {
+    final result = await Process.run('powershell', [
+      '-NoProfile',
+      '-Command',
+      r"(Get-CimInstance Win32_Processor | Measure-Object -Property LoadPercentage -Average).Average",
+    ]);
+
+    if (result.exitCode != 0) {
+      return 0;
+    }
+    final value = double.tryParse((result.stdout as String).trim()) ?? 0;
+    return value.clamp(0.0, 100.0);
+  }
+
+  Future<_LinuxCpuSample> _readLinuxCpuSample() async {
+    final text = await File('/proc/stat').readAsString();
+    final firstLine = text
+        .split('\n')
+        .firstWhere(
+          (line) => line.startsWith('cpu '),
+          orElse: () => 'cpu 0 0 0 0 0 0 0 0',
+        );
+    final values = firstLine
+        .trim()
+        .split(RegExp(r'\s+'))
+        .skip(1)
+        .map((v) => int.tryParse(v) ?? 0)
+        .toList(growable: false);
+
+    final idle = values.length > 3 ? values[3] : 0;
+    final iowait = values.length > 4 ? values[4] : 0;
+    final total = values.fold<int>(0, (sum, value) => sum + value);
+    return _LinuxCpuSample(idle: idle + iowait, total: total);
   }
 
   // ─── Cleanup (cache / temp) ───────────────────────────────────────────────
@@ -415,6 +556,23 @@ class FileService {
       isolate.kill(priority: Isolate.immediate);
     }
   }
+}
+
+class _LinuxCpuSample {
+  final int idle;
+  final int total;
+
+  const _LinuxCpuSample({required this.idle, required this.total});
+}
+
+class _MemoryUsage {
+  final int totalMemoryBytes;
+  final int usedMemoryBytes;
+
+  const _MemoryUsage({
+    required this.totalMemoryBytes,
+    required this.usedMemoryBytes,
+  });
 }
 
 ScanPhase _scanPhaseFromName(String value) {

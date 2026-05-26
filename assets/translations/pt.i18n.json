@@ -14,7 +14,7 @@
     "mandarin": "Mandarim"
   },
   "navigation": {
-    "smartCare": "Cuidado Inteligente",
+    "home": "Lar",
     "cleanup": "Limpar",
     "myClutter": "Minha desordem",
     "spaceView": "Visualização do espaço",
@@ -23,8 +23,8 @@
     "myActivity": "Minha atividade"
   },
   "sections": {
-    "smartCare": {
-      "title": "Cuidado Inteligente",
+    "home": {
+      "title": "Lar",
       "subtitle": "Obtenha uma visão geral completa da integridade\\no seu sistema com um clique.",
       "features": {
         "systemStatus": "Status do sistema",
@@ -167,13 +167,17 @@
     "noBubblesToRender": "Sem bolhas para renderizar",
     "otherItems": "Outros itens"
   },
-  "smartCare": {
+  "home": {
     "refresh": "Atualizar",
     "unableToReadDiskInfo": "Não é possível ler as informações do disco",
     "totalStorage": "Armazenamento total",
     "used": "Usado",
     "available": "Disponível",
-    "percentUsed": "{percent}% usado"
+    "percentUsed": "{percent}% usado",
+    "cpuUsage": "Uso da CPU",
+    "ramUsage": "Uso de RAM",
+    "memoryPercentUsed": "{percent}% RAM usada",
+    "unableToReadSystemInfo": "Não é possível ler as informações do sistema"
   },
   "myToolsPage": {
     "title": "Minhas ferramentas",

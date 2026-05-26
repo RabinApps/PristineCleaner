@@ -55,7 +55,7 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	late final TranslationsProjectDirectoryEn projectDirectory = TranslationsProjectDirectoryEn._(_root);
 	late final TranslationsSearchAndSortEn searchAndSort = TranslationsSearchAndSortEn._(_root);
 	late final TranslationsSpaceViewEn spaceView = TranslationsSpaceViewEn._(_root);
-	late final TranslationsSmartCareEn smartCare = TranslationsSmartCareEn._(_root);
+	late final TranslationsHomeEn home = TranslationsHomeEn._(_root);
 	late final TranslationsMyToolsPageEn myToolsPage = TranslationsMyToolsPageEn._(_root);
 	late final TranslationsMyToolsMessagesEn myToolsMessages = TranslationsMyToolsMessagesEn._(_root);
 	late final TranslationsMyToolsCatalogEn myToolsCatalog = TranslationsMyToolsCatalogEn._(_root);
@@ -123,14 +123,14 @@ class TranslationsNavigationEn {
 
 	// Translations
 
-	/// en: 'Smart Care'
-	String get smartCare => 'Smart Care';
+	/// en: 'Home'
+	String get home => 'Home';
 
 	/// en: 'Cleanup'
 	String get cleanup => 'Cleanup';
 
-	/// en: 'My Clutter'
-	String get myClutter => 'My Clutter';
+	/// en: 'Clutter'
+	String get myClutter => 'Clutter';
 
 	/// en: 'Space View'
 	String get spaceView => 'Space View';
@@ -138,11 +138,8 @@ class TranslationsNavigationEn {
 	/// en: 'Applications'
 	String get applications => 'Applications';
 
-	/// en: 'My Tools'
-	String get myTools => 'My Tools';
-
-	/// en: 'My Activity'
-	String get myActivity => 'My Activity';
+	/// en: 'Tools'
+	String get myTools => 'Tools';
 }
 
 // Path: sections
@@ -152,7 +149,7 @@ class TranslationsSectionsEn {
 	final Translations _root; // ignore: unused_field
 
 	// Translations
-	late final TranslationsSectionsSmartCareEn smartCare = TranslationsSectionsSmartCareEn._(_root);
+	late final TranslationsSectionsHomeEn home = TranslationsSectionsHomeEn._(_root);
 	late final TranslationsSectionsCleanupEn cleanup = TranslationsSectionsCleanupEn._(_root);
 	late final TranslationsSectionsMyClutterEn myClutter = TranslationsSectionsMyClutterEn._(_root);
 	late final TranslationsSectionsSpaceViewEn spaceView = TranslationsSectionsSpaceViewEn._(_root);
@@ -460,9 +457,9 @@ class TranslationsSpaceViewEn {
 	String get otherItems => 'Other items';
 }
 
-// Path: smartCare
-class TranslationsSmartCareEn {
-	TranslationsSmartCareEn._(this._root);
+// Path: home
+class TranslationsHomeEn {
+	TranslationsHomeEn._(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -485,6 +482,18 @@ class TranslationsSmartCareEn {
 
 	/// en: '{percent}% used'
 	String get percentUsed => '{percent}% used';
+
+	/// en: 'CPU Usage'
+	String get cpuUsage => 'CPU Usage';
+
+	/// en: 'RAM Usage'
+	String get ramUsage => 'RAM Usage';
+
+	/// en: '{percent}% RAM used'
+	String get memoryPercentUsed => '{percent}% RAM used';
+
+	/// en: 'Unable to read system info'
+	String get unableToReadSystemInfo => 'Unable to read system info';
 }
 
 // Path: myToolsPage
@@ -495,8 +504,8 @@ class TranslationsMyToolsPageEn {
 
 	// Translations
 
-	/// en: 'My Tools'
-	String get title => 'My Tools';
+	/// en: 'Tools'
+	String get title => 'Tools';
 
 	/// en: 'Your go-to tools for keeping your Mac clean, safe and running smoothly.'
 	String get subtitle => 'Your go-to tools for keeping your Mac clean, safe and running smoothly.';
@@ -727,21 +736,21 @@ class TranslationsMyToolsServiceEn {
 	String get timeMachineMacOnly => 'Time Machine snapshots are only available on macOS.';
 }
 
-// Path: sections.smartCare
-class TranslationsSectionsSmartCareEn {
-	TranslationsSectionsSmartCareEn._(this._root);
+// Path: sections.home
+class TranslationsSectionsHomeEn {
+	TranslationsSectionsHomeEn._(this._root);
 
 	final Translations _root; // ignore: unused_field
 
 	// Translations
 
-	/// en: 'Smart Care'
-	String get title => 'Smart Care';
+	/// en: 'Home'
+	String get title => 'Home';
 
 	/// en: 'Get a complete health overview\nof your system in one click.'
 	String get subtitle => 'Get a complete health overview\nof your system in one click.';
 
-	late final TranslationsSectionsSmartCareFeaturesEn features = TranslationsSectionsSmartCareFeaturesEn._(_root);
+	late final TranslationsSectionsHomeFeaturesEn features = TranslationsSectionsHomeFeaturesEn._(_root);
 }
 
 // Path: sections.cleanup
@@ -769,8 +778,8 @@ class TranslationsSectionsMyClutterEn {
 
 	// Translations
 
-	/// en: 'My Clutter'
-	String get title => 'My Clutter';
+	/// en: 'Clutter'
+	String get title => 'Clutter';
 
 	/// en: 'Sort through your files and reduce\nthe mess in just a few clicks.'
 	String get subtitle => 'Sort through your files and reduce\nthe mess in just a few clicks.';
@@ -820,8 +829,8 @@ class TranslationsSectionsMyToolsEn {
 
 	// Translations
 
-	/// en: 'My Tools'
-	String get title => 'My Tools';
+	/// en: 'Tools'
+	String get title => 'Tools';
 
 	/// en: 'Your go-to toolkit for system care and maintenance.'
 	String get subtitle => 'Your go-to toolkit for system care and maintenance.';
@@ -1219,9 +1228,9 @@ class TranslationsCleanupCategoriesBrokenLoginItemsEn {
 	String get description => 'Login items that point to applications or files that no longer exist on your disk. Removing them speeds up login time.';
 }
 
-// Path: sections.smartCare.features
-class TranslationsSectionsSmartCareFeaturesEn {
-	TranslationsSectionsSmartCareFeaturesEn._(this._root);
+// Path: sections.home.features
+class TranslationsSectionsHomeFeaturesEn {
+	TranslationsSectionsHomeFeaturesEn._(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -1345,24 +1354,23 @@ extension on Translations {
 			'language.greek' => 'Greek',
 			'language.portuguese' => 'Portuguese',
 			'language.mandarin' => 'Mandarin',
-			'navigation.smartCare' => 'Smart Care',
+			'navigation.home' => 'Home',
 			'navigation.cleanup' => 'Cleanup',
-			'navigation.myClutter' => 'My Clutter',
+			'navigation.myClutter' => 'Clutter',
 			'navigation.spaceView' => 'Space View',
 			'navigation.applications' => 'Applications',
-			'navigation.myTools' => 'My Tools',
-			'navigation.myActivity' => 'My Activity',
-			'sections.smartCare.title' => 'Smart Care',
-			'sections.smartCare.subtitle' => 'Get a complete health overview\nof your system in one click.',
-			'sections.smartCare.features.systemStatus' => 'System Status',
-			'sections.smartCare.features.storageUsage' => 'Storage Usage',
-			'sections.smartCare.features.quickActions' => 'Quick Actions',
+			'navigation.myTools' => 'Tools',
+			'sections.home.title' => 'Home',
+			'sections.home.subtitle' => 'Get a complete health overview\nof your system in one click.',
+			'sections.home.features.systemStatus' => 'System Status',
+			'sections.home.features.storageUsage' => 'Storage Usage',
+			'sections.home.features.quickActions' => 'Quick Actions',
 			'sections.cleanup.title' => 'Junk Cleanup',
 			'sections.cleanup.subtitle' => 'Clean your system to achieve maximum\nperformance and reclaim more free space.',
 			'sections.cleanup.features.systemJunk' => 'System Junk',
 			'sections.cleanup.features.userCache' => 'User Cache',
 			'sections.cleanup.features.tempFiles' => 'Temp Files',
-			'sections.myClutter.title' => 'My Clutter',
+			'sections.myClutter.title' => 'Clutter',
 			'sections.myClutter.subtitle' => 'Sort through your files and reduce\nthe mess in just a few clicks.',
 			'sections.myClutter.features.largeFiles' => 'Large Files',
 			'sections.myClutter.features.duplicates' => 'Duplicates',
@@ -1377,7 +1385,7 @@ extension on Translations {
 			'sections.applications.features.appUninstaller' => 'App Uninstaller',
 			'sections.applications.features.largeApps' => 'Large Apps',
 			'sections.applications.features.fileLeftovers' => 'File Leftovers',
-			'sections.myTools.title' => 'My Tools',
+			'sections.myTools.title' => 'Tools',
 			'sections.myTools.subtitle' => 'Your go-to toolkit for system care and maintenance.',
 			'sections.myTools.features.targetedScanners' => 'Targeted Scanners',
 			'sections.myTools.features.quickActions' => 'Quick Actions',
@@ -1449,13 +1457,17 @@ extension on Translations {
 			'spaceView.noFoldersFound' => 'No folders found for this level',
 			'spaceView.noBubblesToRender' => 'No bubbles to render',
 			'spaceView.otherItems' => 'Other items',
-			'smartCare.refresh' => 'Refresh',
-			'smartCare.unableToReadDiskInfo' => 'Unable to read disk info',
-			'smartCare.totalStorage' => 'Total Storage',
-			'smartCare.used' => 'Used',
-			'smartCare.available' => 'Available',
-			'smartCare.percentUsed' => '{percent}% used',
-			'myToolsPage.title' => 'My Tools',
+			'home.refresh' => 'Refresh',
+			'home.unableToReadDiskInfo' => 'Unable to read disk info',
+			'home.totalStorage' => 'Total Storage',
+			'home.used' => 'Used',
+			'home.available' => 'Available',
+			'home.percentUsed' => '{percent}% used',
+			'home.cpuUsage' => 'CPU Usage',
+			'home.ramUsage' => 'RAM Usage',
+			'home.memoryPercentUsed' => '{percent}% RAM used',
+			'home.unableToReadSystemInfo' => 'Unable to read system info',
+			'myToolsPage.title' => 'Tools',
 			'myToolsPage.subtitle' => 'Your go-to tools for keeping your Mac clean, safe and running smoothly.',
 			'myToolsPage.backToTools' => 'Back to tools',
 			'myToolsMessages.itemsWithSize' => '{count} item(s) • {size}',

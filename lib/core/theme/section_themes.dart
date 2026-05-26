@@ -54,9 +54,9 @@ class SectionThemes {
     );
   }
 
-  static const smartCare = SectionTheme(
-    id: 'smart_care',
-    title: 'Smart Care',
+  static const home = SectionTheme(
+    id: 'home',
+    title: 'Home',
     subtitle: 'Get a complete health overview\nof your system in one click.',
     icon: Icons.favorite_rounded,
     features: [
@@ -98,7 +98,7 @@ class SectionThemes {
 
   static const myClutter = SectionTheme(
     id: 'my_clutter',
-    title: 'My Clutter',
+    title: 'Clutter',
     subtitle:
         'Sort through your files and reduce\nthe mess in just a few clicks.',
     icon: Icons.folder_outlined,
@@ -194,7 +194,7 @@ class SectionThemes {
   );
 
   static const all = [
-    smartCare,
+    home,
     cleanup,
     myClutter,
     spaceView,
@@ -202,10 +202,10 @@ class SectionThemes {
     myTools,
   ];
 
-  static SectionTheme smartCareLocalized(BuildContext context) {
-    final tx = context.t.sections.smartCare;
+  static SectionTheme homeLocalized(BuildContext context) {
+    final tx = context.t.sections.home;
     return _localized(
-      base: smartCare,
+      base: home,
       title: tx.title,
       subtitle: tx.subtitle,
       featureLabels: [

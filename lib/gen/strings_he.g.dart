@@ -52,7 +52,7 @@ class TranslationsHe with BaseTranslations<AppLocale, Translations> implements T
 	@override late final _TranslationsProjectDirectoryHe projectDirectory = _TranslationsProjectDirectoryHe._(_root);
 	@override late final _TranslationsSearchAndSortHe searchAndSort = _TranslationsSearchAndSortHe._(_root);
 	@override late final _TranslationsSpaceViewHe spaceView = _TranslationsSpaceViewHe._(_root);
-	@override late final _TranslationsSmartCareHe smartCare = _TranslationsSmartCareHe._(_root);
+	@override late final _TranslationsHomeHe home = _TranslationsHomeHe._(_root);
 	@override late final _TranslationsMyToolsPageHe myToolsPage = _TranslationsMyToolsPageHe._(_root);
 	@override late final _TranslationsMyToolsMessagesHe myToolsMessages = _TranslationsMyToolsMessagesHe._(_root);
 	@override late final _TranslationsMyToolsCatalogHe myToolsCatalog = _TranslationsMyToolsCatalogHe._(_root);
@@ -99,7 +99,7 @@ class _TranslationsNavigationHe implements TranslationsNavigationEn {
 	final TranslationsHe _root; // ignore: unused_field
 
 	// Translations
-	@override String get smartCare => 'טיפול חכם';
+	@override String get home => 'בַּיִת';
 	@override String get cleanup => 'ניקיון';
 	@override String get myClutter => 'הבלגן שלי';
 	@override String get spaceView => 'תצוגת חלל';
@@ -115,7 +115,7 @@ class _TranslationsSectionsHe implements TranslationsSectionsEn {
 	final TranslationsHe _root; // ignore: unused_field
 
 	// Translations
-	@override late final _TranslationsSectionsSmartCareHe smartCare = _TranslationsSectionsSmartCareHe._(_root);
+	@override late final _TranslationsSectionsHomeHe home = _TranslationsSectionsHomeHe._(_root);
 	@override late final _TranslationsSectionsCleanupHe cleanup = _TranslationsSectionsCleanupHe._(_root);
 	@override late final _TranslationsSectionsMyClutterHe myClutter = _TranslationsSectionsMyClutterHe._(_root);
 	@override late final _TranslationsSectionsSpaceViewHe spaceView = _TranslationsSectionsSpaceViewHe._(_root);
@@ -289,9 +289,9 @@ class _TranslationsSpaceViewHe implements TranslationsSpaceViewEn {
 	@override String get otherItems => 'פריטים אחרים';
 }
 
-// Path: smartCare
-class _TranslationsSmartCareHe implements TranslationsSmartCareEn {
-	_TranslationsSmartCareHe._(this._root);
+// Path: home
+class _TranslationsHomeHe implements TranslationsHomeEn {
+	_TranslationsHomeHe._(this._root);
 
 	final TranslationsHe _root; // ignore: unused_field
 
@@ -302,6 +302,10 @@ class _TranslationsSmartCareHe implements TranslationsSmartCareEn {
 	@override String get used => 'מְשׁוּמָשׁ';
 	@override String get available => 'זָמִין';
 	@override String get percentUsed => '{percent}% בשימוש';
+	@override String get cpuUsage => 'שימוש במעבד';
+	@override String get ramUsage => 'שימוש בזיכרון RAM';
+	@override String get memoryPercentUsed => '{percent}% RAM בשימוש';
+	@override String get unableToReadSystemInfo => 'לא ניתן לקרוא את פרטי המערכת';
 }
 
 // Path: myToolsPage
@@ -453,16 +457,16 @@ class _TranslationsMyToolsServiceHe implements TranslationsMyToolsServiceEn {
 	@override String get timeMachineMacOnly => 'צילומי מצב של Time Machine זמינים רק ב-macOS.';
 }
 
-// Path: sections.smartCare
-class _TranslationsSectionsSmartCareHe implements TranslationsSectionsSmartCareEn {
-	_TranslationsSectionsSmartCareHe._(this._root);
+// Path: sections.home
+class _TranslationsSectionsHomeHe implements TranslationsSectionsHomeEn {
+	_TranslationsSectionsHomeHe._(this._root);
 
 	final TranslationsHe _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'טיפול חכם';
+	@override String get title => 'בַּיִת';
 	@override String get subtitle => 'קבל סקירת בריאות מלאה\nעל המערכת שלך בלחיצה אחת.';
-	@override late final _TranslationsSectionsSmartCareFeaturesHe features = _TranslationsSectionsSmartCareFeaturesHe._(_root);
+	@override late final _TranslationsSectionsHomeFeaturesHe features = _TranslationsSectionsHomeFeaturesHe._(_root);
 }
 
 // Path: sections.cleanup
@@ -793,9 +797,9 @@ class _TranslationsCleanupCategoriesBrokenLoginItemsHe implements TranslationsCl
 	@override String get description => 'פריטי כניסה המצביעים על יישומים או קבצים שאינם קיימים עוד בדיסק שלך. הסרתם מזרזת את זמן הכניסה.';
 }
 
-// Path: sections.smartCare.features
-class _TranslationsSectionsSmartCareFeaturesHe implements TranslationsSectionsSmartCareFeaturesEn {
-	_TranslationsSectionsSmartCareFeaturesHe._(this._root);
+// Path: sections.home.features
+class _TranslationsSectionsHomeFeaturesHe implements TranslationsSectionsHomeFeaturesEn {
+	_TranslationsSectionsHomeFeaturesHe._(this._root);
 
 	final TranslationsHe _root; // ignore: unused_field
 
@@ -883,18 +887,18 @@ extension on TranslationsHe {
 			'language.greek' => 'יוונית',
 			'language.portuguese' => 'פורטוגזית',
 			'language.mandarin' => 'מַנדָרִין',
-			'navigation.smartCare' => 'טיפול חכם',
+			'navigation.home' => 'בַּיִת',
 			'navigation.cleanup' => 'ניקיון',
 			'navigation.myClutter' => 'הבלגן שלי',
 			'navigation.spaceView' => 'תצוגת חלל',
 			'navigation.applications' => 'יישומים',
 			'navigation.myTools' => 'הכלים שלי',
 			'navigation.myActivity' => 'הפעילות שלי',
-			'sections.smartCare.title' => 'טיפול חכם',
-			'sections.smartCare.subtitle' => 'קבל סקירת בריאות מלאה\nעל המערכת שלך בלחיצה אחת.',
-			'sections.smartCare.features.systemStatus' => 'מצב מערכת',
-			'sections.smartCare.features.storageUsage' => 'שימוש באחסון',
-			'sections.smartCare.features.quickActions' => 'פעולות מהירות',
+			'sections.home.title' => 'בַּיִת',
+			'sections.home.subtitle' => 'קבל סקירת בריאות מלאה\nעל המערכת שלך בלחיצה אחת.',
+			'sections.home.features.systemStatus' => 'מצב מערכת',
+			'sections.home.features.storageUsage' => 'שימוש באחסון',
+			'sections.home.features.quickActions' => 'פעולות מהירות',
 			'sections.cleanup.title' => 'ניקוי זבל',
 			'sections.cleanup.subtitle' => 'נקה את המערכת שלך כדי להשיג\n ביצועים מקסימליים ולהשיב עוד מקום פנוי.',
 			'sections.cleanup.features.systemJunk' => 'זבל מערכת',
@@ -987,12 +991,16 @@ extension on TranslationsHe {
 			'spaceView.noFoldersFound' => 'לא נמצאו תיקיות לרמה זו',
 			'spaceView.noBubblesToRender' => 'אין בועות לעיבוד',
 			'spaceView.otherItems' => 'פריטים אחרים',
-			'smartCare.refresh' => 'לְרַעֲנֵן',
-			'smartCare.unableToReadDiskInfo' => 'לא ניתן לקרוא מידע על הדיסק',
-			'smartCare.totalStorage' => 'אחסון כולל',
-			'smartCare.used' => 'מְשׁוּמָשׁ',
-			'smartCare.available' => 'זָמִין',
-			'smartCare.percentUsed' => '{percent}% בשימוש',
+			'home.refresh' => 'לְרַעֲנֵן',
+			'home.unableToReadDiskInfo' => 'לא ניתן לקרוא מידע על הדיסק',
+			'home.totalStorage' => 'אחסון כולל',
+			'home.used' => 'מְשׁוּמָשׁ',
+			'home.available' => 'זָמִין',
+			'home.percentUsed' => '{percent}% בשימוש',
+			'home.cpuUsage' => 'שימוש במעבד',
+			'home.ramUsage' => 'שימוש בזיכרון RAM',
+			'home.memoryPercentUsed' => '{percent}% RAM בשימוש',
+			'home.unableToReadSystemInfo' => 'לא ניתן לקרוא את פרטי המערכת',
 			'myToolsPage.title' => 'הכלים שלי',
 			'myToolsPage.subtitle' => 'הכלים שלך לשמירה על ה-Mac שלך נקי, בטוח ופועל בצורה חלקה.',
 			'myToolsPage.backToTools' => 'חזרה לכלים',
