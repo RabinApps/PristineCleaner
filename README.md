@@ -1,5 +1,13 @@
 # Pristine Cleaner
 
+<p align="center">
+ <a href="https://www.paypal.com/donate/?hosted_button_id=YEJ37WF4Q3HP">
+    <img alt="Donate" src="https://img.shields.io/badge/Donate-PayPal-blue.svg">
+  </a>
+ <a href="https://www.buymeacoffee.com/rabinapps">
+    <img alt="Buy me a coffee" src="https://img.shields.io/badge/Donate-Buy%20Me%20A%20Coffee-yellow.svg">
+  </a>
+
 Pristine Cleaner is a desktop file cleaning utility built with Flutter.
 
 It provides a modern sidebar-driven interface to:

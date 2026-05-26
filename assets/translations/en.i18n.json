@@ -19,7 +19,8 @@
     "myClutter": "Clutter",
     "spaceView": "Space View",
     "applications": "Applications",
-    "myTools": "Tools"
+    "myTools": "Tools",
+    "donate": "Donate"
   },
   "sections": {
     "home": {
@@ -135,6 +136,13 @@
     "movedToTrashMessage": "Selected files have been moved to Trash.",
     "applicationsRemovedTitle": "Applications removed!",
     "appsMovedToTrashMessage": "Selected apps have been moved to Trash."
+  },
+  "donate": {
+    "title": "Support PristineCleaner",
+    "subtitle": "If PristineCleaner helps you keep your system clean, you can support development with a small donation.",
+    "buyMeACoffee": "Buy Me a Coffee",
+    "paypalDonate": "Donate with PayPal",
+    "openLinkFailed": "Unable to open the donation link."
   },
   "cleanupManager": {
     "title": "Cleanup Manager",

@@ -20,7 +20,8 @@
     "spaceView": "Θέα Διαστήματος",
     "applications": "Εφαρμογές",
     "myTools": "Τα εργαλεία μου",
-    "myActivity": "Η δραστηριότητά μου"
+    "myActivity": "Η δραστηριότητά μου",
+    "donate": "Δωρεά"
   },
   "sections": {
     "home": {
@@ -136,6 +137,13 @@
     "movedToTrashMessage": "Τα επιλεγμένα αρχεία έχουν μετακινηθεί στον Κάδο απορριμμάτων.",
     "applicationsRemovedTitle": "Οι αιτήσεις καταργήθηκαν!",
     "appsMovedToTrashMessage": "Οι επιλεγμένες εφαρμογές έχουν μετακινηθεί στον Κάδο απορριμμάτων."
+  },
+  "donate": {
+    "title": "Υποστηριξτε το PristineCleaner",
+    "subtitle": "Αν το PristineCleaner σας βοηθα να κρατατε το συστημα καθαρο, μπορειτε να υποστηριξετε την αναπτυξη με μια μικρη δωρεα.",
+    "buyMeACoffee": "Buy Me a Coffee",
+    "paypalDonate": "Δωρεα με PayPal",
+    "openLinkFailed": "Δεν ηταν δυνατο το ανοιγμα του συνδεσμου δωρεας."
   },
   "cleanupManager": {
     "title": "Υπεύθυνος καθαρισμού",

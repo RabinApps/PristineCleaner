@@ -60,6 +60,15 @@ class SidebarWidget extends ConsumerWidget {
             ),
           ),
 
+          Padding(
+            padding: const EdgeInsets.fromLTRB(10, 0, 10, 8),
+            child: _NavTile(
+              item: NavItem.donateItem(),
+              isActive: activeSection == NavSection.donate,
+              onTap: () => context.go('/donate'),
+            ),
+          ),
+
           // Version label
           Padding(
             padding: const EdgeInsets.fromLTRB(10, 0, 10, 8),
@@ -184,6 +193,8 @@ String _pathForSection(NavSection section) {
       return '/applications';
     case NavSection.myTools:
       return '/my-tools';
+    case NavSection.donate:
+      return '/donate';
   }
 }
 

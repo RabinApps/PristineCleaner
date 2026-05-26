@@ -48,6 +48,7 @@ class TranslationsEl with BaseTranslations<AppLocale, Translations> implements T
 	@override late final _TranslationsDialogsEl dialogs = _TranslationsDialogsEl._(_root);
 	@override late final _TranslationsRemovalEl removal = _TranslationsRemovalEl._(_root);
 	@override late final _TranslationsDoneEl done = _TranslationsDoneEl._(_root);
+	@override late final _TranslationsDonateEl donate = _TranslationsDonateEl._(_root);
 	@override late final _TranslationsCleanupManagerEl cleanupManager = _TranslationsCleanupManagerEl._(_root);
 	@override late final _TranslationsProjectDirectoryEl projectDirectory = _TranslationsProjectDirectoryEl._(_root);
 	@override late final _TranslationsSearchAndSortEl searchAndSort = _TranslationsSearchAndSortEl._(_root);
@@ -106,6 +107,7 @@ class _TranslationsNavigationEl implements TranslationsNavigationEn {
 	@override String get applications => 'Εφαρμογές';
 	@override String get myTools => 'Τα εργαλεία μου';
 	@override String get myActivity => 'Η δραστηριότητά μου';
+	@override String get donate => 'Δωρεά';
 }
 
 // Path: sections
@@ -229,6 +231,20 @@ class _TranslationsDoneEl implements TranslationsDoneEn {
 	@override String get movedToTrashMessage => 'Τα επιλεγμένα αρχεία έχουν μετακινηθεί στον Κάδο απορριμμάτων.';
 	@override String get applicationsRemovedTitle => 'Οι αιτήσεις καταργήθηκαν!';
 	@override String get appsMovedToTrashMessage => 'Οι επιλεγμένες εφαρμογές έχουν μετακινηθεί στον Κάδο απορριμμάτων.';
+}
+
+// Path: donate
+class _TranslationsDonateEl implements TranslationsDonateEn {
+	_TranslationsDonateEl._(this._root);
+
+	final TranslationsEl _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Υποστηριξτε το PristineCleaner';
+	@override String get subtitle => 'Αν το PristineCleaner σας βοηθα να κρατατε το συστημα καθαρο, μπορειτε να υποστηριξετε την αναπτυξη με μια μικρη δωρεα.';
+	@override String get buyMeACoffee => 'Buy Me a Coffee';
+	@override String get paypalDonate => 'Δωρεα με PayPal';
+	@override String get openLinkFailed => 'Δεν ηταν δυνατο το ανοιγμα του συνδεσμου δωρεας.';
 }
 
 // Path: cleanupManager
@@ -894,6 +910,7 @@ extension on TranslationsEl {
 			'navigation.applications' => 'Εφαρμογές',
 			'navigation.myTools' => 'Τα εργαλεία μου',
 			'navigation.myActivity' => 'Η δραστηριότητά μου',
+			'navigation.donate' => 'Δωρεά',
 			'sections.home.title' => 'Σπίτι',
 			'sections.home.subtitle' => 'Αποκτήστε μια πλήρη επισκόπηση υγείας\nτου συστήματός σας με ένα κλικ.',
 			'sections.home.features.systemStatus' => 'Κατάσταση συστήματος',
@@ -969,6 +986,11 @@ extension on TranslationsEl {
 			'done.movedToTrashMessage' => 'Τα επιλεγμένα αρχεία έχουν μετακινηθεί στον Κάδο απορριμμάτων.',
 			'done.applicationsRemovedTitle' => 'Οι αιτήσεις καταργήθηκαν!',
 			'done.appsMovedToTrashMessage' => 'Οι επιλεγμένες εφαρμογές έχουν μετακινηθεί στον Κάδο απορριμμάτων.',
+			'donate.title' => 'Υποστηριξτε το PristineCleaner',
+			'donate.subtitle' => 'Αν το PristineCleaner σας βοηθα να κρατατε το συστημα καθαρο, μπορειτε να υποστηριξετε την αναπτυξη με μια μικρη δωρεα.',
+			'donate.buyMeACoffee' => 'Buy Me a Coffee',
+			'donate.paypalDonate' => 'Δωρεα με PayPal',
+			'donate.openLinkFailed' => 'Δεν ηταν δυνατο το ανοιγμα του συνδεσμου δωρεας.',
 			'cleanupManager.title' => 'Υπεύθυνος καθαρισμού',
 			'cleanupManager.systemJunkHeader' => 'Σκουπίδια συστήματος',
 			'cleanupManager.systemJunkDescription' => 'Περιττά αρχεία που φράζουν την αποθήκευση της συσκευής και εμποδίζουν τη βέλτιστη απόδοση.',

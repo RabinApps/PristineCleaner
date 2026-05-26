@@ -20,7 +20,8 @@
     "spaceView": "תצוגת חלל",
     "applications": "יישומים",
     "myTools": "הכלים שלי",
-    "myActivity": "הפעילות שלי"
+    "myActivity": "הפעילות שלי",
+    "donate": "תרומה"
   },
   "sections": {
     "home": {
@@ -136,6 +137,13 @@
     "movedToTrashMessage": "הקבצים שנבחרו הועברו לאשפה.",
     "applicationsRemovedTitle": "אפליקציות הוסרו!",
     "appsMovedToTrashMessage": "אפליקציות נבחרות הועברו לאשפה."
+  },
+  "donate": {
+    "title": "תמכו ב-PristineCleaner",
+    "subtitle": "אם PristineCleaner עוזר לכם לשמור על המערכת נקיה, אפשר לתמוך בפיתוח עם תרומה קטנה.",
+    "buyMeACoffee": "Buy Me a Coffee",
+    "paypalDonate": "תרומה באמצעות PayPal",
+    "openLinkFailed": "לא ניתן לפתוח את קישור התרומה."
   },
   "cleanupManager": {
     "title": "מנהל ניקיון",

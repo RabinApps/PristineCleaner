@@ -20,7 +20,8 @@
     "spaceView": "Visualização do espaço",
     "applications": "Aplicações",
     "myTools": "Minhas ferramentas",
-    "myActivity": "Minha atividade"
+    "myActivity": "Minha atividade",
+    "donate": "Doar"
   },
   "sections": {
     "home": {
@@ -136,6 +137,13 @@
     "movedToTrashMessage": "Os arquivos selecionados foram movidos para a Lixeira.",
     "applicationsRemovedTitle": "Aplicativos removidos!",
     "appsMovedToTrashMessage": "Os aplicativos selecionados foram movidos para a Lixeira."
+  },
+  "donate": {
+    "title": "Apoie o PristineCleaner",
+    "subtitle": "Se o PristineCleaner ajuda voce a manter seu sistema limpo, voce pode apoiar o desenvolvimento com uma pequena doacao.",
+    "buyMeACoffee": "Buy Me a Coffee",
+    "paypalDonate": "Doar com PayPal",
+    "openLinkFailed": "Nao foi possivel abrir o link de doacao."
   },
   "cleanupManager": {
     "title": "Gerenciador de limpeza",

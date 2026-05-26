@@ -9,6 +9,7 @@ import 'core/theme/app_theme.dart';
 import 'gen/strings.g.dart';
 import 'screens/applications_screen.dart';
 import 'screens/cleanup_screen.dart';
+import 'screens/donate_screen.dart';
 import 'screens/my_tools_screen.dart';
 import 'screens/my_clutter_screen.dart';
 import 'screens/home_screen.dart';
@@ -56,6 +57,11 @@ final GoRouter _router = GoRouter(
           pageBuilder: (context, state) =>
               _fadePage(state: state, child: const MyToolsScreen()),
         ),
+        GoRoute(
+          path: '/donate',
+          pageBuilder: (context, state) =>
+              _fadePage(state: state, child: const DonateScreen()),
+        ),
       ],
     ),
   ],
@@ -90,6 +96,8 @@ NavSection _sectionFromPath(String path) {
       return NavSection.applications;
     case '/my-tools':
       return NavSection.myTools;
+    case '/donate':
+      return NavSection.donate;
     default:
       return NavSection.home;
   }

@@ -48,6 +48,7 @@ class TranslationsHe with BaseTranslations<AppLocale, Translations> implements T
 	@override late final _TranslationsDialogsHe dialogs = _TranslationsDialogsHe._(_root);
 	@override late final _TranslationsRemovalHe removal = _TranslationsRemovalHe._(_root);
 	@override late final _TranslationsDoneHe done = _TranslationsDoneHe._(_root);
+	@override late final _TranslationsDonateHe donate = _TranslationsDonateHe._(_root);
 	@override late final _TranslationsCleanupManagerHe cleanupManager = _TranslationsCleanupManagerHe._(_root);
 	@override late final _TranslationsProjectDirectoryHe projectDirectory = _TranslationsProjectDirectoryHe._(_root);
 	@override late final _TranslationsSearchAndSortHe searchAndSort = _TranslationsSearchAndSortHe._(_root);
@@ -106,6 +107,7 @@ class _TranslationsNavigationHe implements TranslationsNavigationEn {
 	@override String get applications => 'יישומים';
 	@override String get myTools => 'הכלים שלי';
 	@override String get myActivity => 'הפעילות שלי';
+	@override String get donate => 'תרומה';
 }
 
 // Path: sections
@@ -229,6 +231,20 @@ class _TranslationsDoneHe implements TranslationsDoneEn {
 	@override String get movedToTrashMessage => 'הקבצים שנבחרו הועברו לאשפה.';
 	@override String get applicationsRemovedTitle => 'אפליקציות הוסרו!';
 	@override String get appsMovedToTrashMessage => 'אפליקציות נבחרות הועברו לאשפה.';
+}
+
+// Path: donate
+class _TranslationsDonateHe implements TranslationsDonateEn {
+	_TranslationsDonateHe._(this._root);
+
+	final TranslationsHe _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'תמכו ב-PristineCleaner';
+	@override String get subtitle => 'אם PristineCleaner עוזר לכם לשמור על המערכת נקיה, אפשר לתמוך בפיתוח עם תרומה קטנה.';
+	@override String get buyMeACoffee => 'Buy Me a Coffee';
+	@override String get paypalDonate => 'תרומה באמצעות PayPal';
+	@override String get openLinkFailed => 'לא ניתן לפתוח את קישור התרומה.';
 }
 
 // Path: cleanupManager
@@ -894,6 +910,7 @@ extension on TranslationsHe {
 			'navigation.applications' => 'יישומים',
 			'navigation.myTools' => 'הכלים שלי',
 			'navigation.myActivity' => 'הפעילות שלי',
+			'navigation.donate' => 'תרומה',
 			'sections.home.title' => 'בַּיִת',
 			'sections.home.subtitle' => 'קבל סקירת בריאות מלאה\nעל המערכת שלך בלחיצה אחת.',
 			'sections.home.features.systemStatus' => 'מצב מערכת',
@@ -969,6 +986,11 @@ extension on TranslationsHe {
 			'done.movedToTrashMessage' => 'הקבצים שנבחרו הועברו לאשפה.',
 			'done.applicationsRemovedTitle' => 'אפליקציות הוסרו!',
 			'done.appsMovedToTrashMessage' => 'אפליקציות נבחרות הועברו לאשפה.',
+			'donate.title' => 'תמכו ב-PristineCleaner',
+			'donate.subtitle' => 'אם PristineCleaner עוזר לכם לשמור על המערכת נקיה, אפשר לתמוך בפיתוח עם תרומה קטנה.',
+			'donate.buyMeACoffee' => 'Buy Me a Coffee',
+			'donate.paypalDonate' => 'תרומה באמצעות PayPal',
+			'donate.openLinkFailed' => 'לא ניתן לפתוח את קישור התרומה.',
 			'cleanupManager.title' => 'מנהל ניקיון',
 			'cleanupManager.systemJunkHeader' => 'זבל מערכת',
 			'cleanupManager.systemJunkDescription' => 'קבצים מיותרים שסותמים את אחסון המכשיר ופוגעים בביצועים אופטימליים.',

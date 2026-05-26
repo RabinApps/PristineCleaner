@@ -48,6 +48,7 @@ class TranslationsZh with BaseTranslations<AppLocale, Translations> implements T
 	@override late final _TranslationsDialogsZh dialogs = _TranslationsDialogsZh._(_root);
 	@override late final _TranslationsRemovalZh removal = _TranslationsRemovalZh._(_root);
 	@override late final _TranslationsDoneZh done = _TranslationsDoneZh._(_root);
+	@override late final _TranslationsDonateZh donate = _TranslationsDonateZh._(_root);
 	@override late final _TranslationsCleanupManagerZh cleanupManager = _TranslationsCleanupManagerZh._(_root);
 	@override late final _TranslationsProjectDirectoryZh projectDirectory = _TranslationsProjectDirectoryZh._(_root);
 	@override late final _TranslationsSearchAndSortZh searchAndSort = _TranslationsSearchAndSortZh._(_root);
@@ -106,6 +107,7 @@ class _TranslationsNavigationZh implements TranslationsNavigationEn {
 	@override String get applications => '应用领域';
 	@override String get myTools => '我的工具';
 	@override String get myActivity => '我的活动';
+	@override String get donate => '捐赠';
 }
 
 // Path: sections
@@ -229,6 +231,20 @@ class _TranslationsDoneZh implements TranslationsDoneEn {
 	@override String get movedToTrashMessage => '选定的文件已移至废纸篓。';
 	@override String get applicationsRemovedTitle => '应用程序已删除！';
 	@override String get appsMovedToTrashMessage => '选定的应用程序已移至垃圾箱。';
+}
+
+// Path: donate
+class _TranslationsDonateZh implements TranslationsDonateEn {
+	_TranslationsDonateZh._(this._root);
+
+	final TranslationsZh _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => '支持 PristineCleaner';
+	@override String get subtitle => '如果 PristineCleaner 能帮助您保持系统整洁，欢迎通过小额捐赠支持开发。';
+	@override String get buyMeACoffee => 'Buy Me a Coffee';
+	@override String get paypalDonate => '通过 PayPal 捐赠';
+	@override String get openLinkFailed => '无法打开捐赠链接。';
 }
 
 // Path: cleanupManager
@@ -894,6 +910,7 @@ extension on TranslationsZh {
 			'navigation.applications' => '应用领域',
 			'navigation.myTools' => '我的工具',
 			'navigation.myActivity' => '我的活动',
+			'navigation.donate' => '捐赠',
 			'sections.home.title' => '首页',
 			'sections.home.subtitle' => '一键获取系统的完整运行状况概览。',
 			'sections.home.features.systemStatus' => '系统状态',
@@ -969,6 +986,11 @@ extension on TranslationsZh {
 			'done.movedToTrashMessage' => '选定的文件已移至废纸篓。',
 			'done.applicationsRemovedTitle' => '应用程序已删除！',
 			'done.appsMovedToTrashMessage' => '选定的应用程序已移至垃圾箱。',
+			'donate.title' => '支持 PristineCleaner',
+			'donate.subtitle' => '如果 PristineCleaner 能帮助您保持系统整洁，欢迎通过小额捐赠支持开发。',
+			'donate.buyMeACoffee' => 'Buy Me a Coffee',
+			'donate.paypalDonate' => '通过 PayPal 捐赠',
+			'donate.openLinkFailed' => '无法打开捐赠链接。',
 			'cleanupManager.title' => '清理经理',
 			'cleanupManager.systemJunkHeader' => '系统垃圾',
 			'cleanupManager.systemJunkDescription' => '冗余文件会堵塞设备存储并妨碍最佳性能。',

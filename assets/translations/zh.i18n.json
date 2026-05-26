@@ -20,7 +20,8 @@
     "spaceView": "空间景观",
     "applications": "应用领域",
     "myTools": "我的工具",
-    "myActivity": "我的活动"
+    "myActivity": "我的活动",
+    "donate": "捐赠"
   },
   "sections": {
     "home": {
@@ -136,6 +137,13 @@
     "movedToTrashMessage": "选定的文件已移至废纸篓。",
     "applicationsRemovedTitle": "应用程序已删除！",
     "appsMovedToTrashMessage": "选定的应用程序已移至垃圾箱。"
+  },
+  "donate": {
+    "title": "支持 PristineCleaner",
+    "subtitle": "如果 PristineCleaner 能帮助您保持系统整洁，欢迎通过小额捐赠支持开发。",
+    "buyMeACoffee": "Buy Me a Coffee",
+    "paypalDonate": "通过 PayPal 捐赠",
+    "openLinkFailed": "无法打开捐赠链接。"
   },
   "cleanupManager": {
     "title": "清理经理",

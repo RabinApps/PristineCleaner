@@ -48,6 +48,7 @@ class TranslationsEs with BaseTranslations<AppLocale, Translations> implements T
 	@override late final _TranslationsDialogsEs dialogs = _TranslationsDialogsEs._(_root);
 	@override late final _TranslationsRemovalEs removal = _TranslationsRemovalEs._(_root);
 	@override late final _TranslationsDoneEs done = _TranslationsDoneEs._(_root);
+	@override late final _TranslationsDonateEs donate = _TranslationsDonateEs._(_root);
 	@override late final _TranslationsCleanupManagerEs cleanupManager = _TranslationsCleanupManagerEs._(_root);
 	@override late final _TranslationsProjectDirectoryEs projectDirectory = _TranslationsProjectDirectoryEs._(_root);
 	@override late final _TranslationsSearchAndSortEs searchAndSort = _TranslationsSearchAndSortEs._(_root);
@@ -106,6 +107,7 @@ class _TranslationsNavigationEs implements TranslationsNavigationEn {
 	@override String get applications => 'Aplicaciones';
 	@override String get myTools => 'Mis Herramientas';
 	@override String get myActivity => 'Mi Actividad';
+	@override String get donate => 'Donar';
 }
 
 // Path: sections
@@ -229,6 +231,20 @@ class _TranslationsDoneEs implements TranslationsDoneEn {
 	@override String get movedToTrashMessage => 'Los archivos seleccionados se movieron a la papelera.';
 	@override String get applicationsRemovedTitle => 'Aplicaciones eliminadas!';
 	@override String get appsMovedToTrashMessage => 'Las apps seleccionadas se movieron a la papelera.';
+}
+
+// Path: donate
+class _TranslationsDonateEs implements TranslationsDonateEn {
+	_TranslationsDonateEs._(this._root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Apoya PristineCleaner';
+	@override String get subtitle => 'Si PristineCleaner te ayuda a mantener tu sistema limpio, puedes apoyar su desarrollo con una pequena donacion.';
+	@override String get buyMeACoffee => 'Buy Me a Coffee';
+	@override String get paypalDonate => 'Donar con PayPal';
+	@override String get openLinkFailed => 'No se pudo abrir el enlace de donacion.';
 }
 
 // Path: cleanupManager
@@ -894,6 +910,7 @@ extension on TranslationsEs {
 			'navigation.applications' => 'Aplicaciones',
 			'navigation.myTools' => 'Mis Herramientas',
 			'navigation.myActivity' => 'Mi Actividad',
+			'navigation.donate' => 'Donar',
 			'sections.home.title' => 'Hogar',
 			'sections.home.subtitle' => 'Obtenga una descripción general completa del estado de su sistema con un solo clic.',
 			'sections.home.features.systemStatus' => 'Estado del sistema',
@@ -969,6 +986,11 @@ extension on TranslationsEs {
 			'done.movedToTrashMessage' => 'Los archivos seleccionados se movieron a la papelera.',
 			'done.applicationsRemovedTitle' => 'Aplicaciones eliminadas!',
 			'done.appsMovedToTrashMessage' => 'Las apps seleccionadas se movieron a la papelera.',
+			'donate.title' => 'Apoya PristineCleaner',
+			'donate.subtitle' => 'Si PristineCleaner te ayuda a mantener tu sistema limpio, puedes apoyar su desarrollo con una pequena donacion.',
+			'donate.buyMeACoffee' => 'Buy Me a Coffee',
+			'donate.paypalDonate' => 'Donar con PayPal',
+			'donate.openLinkFailed' => 'No se pudo abrir el enlace de donacion.',
 			'cleanupManager.title' => 'Administrador de Limpieza',
 			'cleanupManager.systemJunkHeader' => 'Basura del Sistema',
 			'cleanupManager.systemJunkDescription' => 'Archivos redundantes que saturan el almacenamiento y reducen el rendimiento.',

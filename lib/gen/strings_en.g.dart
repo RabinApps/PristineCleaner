@@ -51,6 +51,7 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	late final TranslationsDialogsEn dialogs = TranslationsDialogsEn._(_root);
 	late final TranslationsRemovalEn removal = TranslationsRemovalEn._(_root);
 	late final TranslationsDoneEn done = TranslationsDoneEn._(_root);
+	late final TranslationsDonateEn donate = TranslationsDonateEn._(_root);
 	late final TranslationsCleanupManagerEn cleanupManager = TranslationsCleanupManagerEn._(_root);
 	late final TranslationsProjectDirectoryEn projectDirectory = TranslationsProjectDirectoryEn._(_root);
 	late final TranslationsSearchAndSortEn searchAndSort = TranslationsSearchAndSortEn._(_root);
@@ -140,6 +141,9 @@ class TranslationsNavigationEn {
 
 	/// en: 'Tools'
 	String get myTools => 'Tools';
+
+	/// en: 'Donate'
+	String get donate => 'Donate';
 }
 
 // Path: sections
@@ -353,6 +357,30 @@ class TranslationsDoneEn {
 
 	/// en: 'Selected apps have been moved to Trash.'
 	String get appsMovedToTrashMessage => 'Selected apps have been moved to Trash.';
+}
+
+// Path: donate
+class TranslationsDonateEn {
+	TranslationsDonateEn._(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Support PristineCleaner'
+	String get title => 'Support PristineCleaner';
+
+	/// en: 'If PristineCleaner helps you keep your system clean, you can support development with a small donation.'
+	String get subtitle => 'If PristineCleaner helps you keep your system clean, you can support development with a small donation.';
+
+	/// en: 'Buy Me a Coffee'
+	String get buyMeACoffee => 'Buy Me a Coffee';
+
+	/// en: 'Donate with PayPal'
+	String get paypalDonate => 'Donate with PayPal';
+
+	/// en: 'Unable to open the donation link.'
+	String get openLinkFailed => 'Unable to open the donation link.';
 }
 
 // Path: cleanupManager
@@ -1360,6 +1388,7 @@ extension on Translations {
 			'navigation.spaceView' => 'Space View',
 			'navigation.applications' => 'Applications',
 			'navigation.myTools' => 'Tools',
+			'navigation.donate' => 'Donate',
 			'sections.home.title' => 'Home',
 			'sections.home.subtitle' => 'Get a complete health overview\nof your system in one click.',
 			'sections.home.features.systemStatus' => 'System Status',
@@ -1435,6 +1464,11 @@ extension on Translations {
 			'done.movedToTrashMessage' => 'Selected files have been moved to Trash.',
 			'done.applicationsRemovedTitle' => 'Applications removed!',
 			'done.appsMovedToTrashMessage' => 'Selected apps have been moved to Trash.',
+			'donate.title' => 'Support PristineCleaner',
+			'donate.subtitle' => 'If PristineCleaner helps you keep your system clean, you can support development with a small donation.',
+			'donate.buyMeACoffee' => 'Buy Me a Coffee',
+			'donate.paypalDonate' => 'Donate with PayPal',
+			'donate.openLinkFailed' => 'Unable to open the donation link.',
 			'cleanupManager.title' => 'Cleanup Manager',
 			'cleanupManager.systemJunkHeader' => 'System Junk',
 			'cleanupManager.systemJunkDescription' => 'Redundant files that clog up device storage and impede optimal performance.',

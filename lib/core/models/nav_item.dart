@@ -3,7 +3,15 @@ import 'package:flutter/material.dart';
 import '../../gen/strings.g.dart';
 import '../theme/section_themes.dart';
 
-enum NavSection { home, cleanup, myClutter, spaceView, applications, myTools }
+enum NavSection {
+  home,
+  cleanup,
+  myClutter,
+  spaceView,
+  applications,
+  myTools,
+  donate,
+}
 
 class NavItem {
   final NavSection section;
@@ -56,4 +64,11 @@ class NavItem {
       theme: SectionThemes.myTools,
     ),
   ];
+
+  static NavItem donateItem() => NavItem(
+    section: NavSection.donate,
+    label: t.navigation.donate,
+    icon: Icons.volunteer_activism_rounded,
+    theme: SectionThemes.home,
+  );
 }
