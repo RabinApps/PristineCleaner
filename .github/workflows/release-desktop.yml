@@ -101,6 +101,15 @@ jobs:
       - name: Build release assets
         run: fastforge release --name ${{ matrix.release_name }} --skip-clean
 
+      - name: Append x86_64 suffix to Linux artifact names
+        if: runner.os == 'Linux' && matrix.release_name == 'desktop-linux-x64'
+        shell: bash
+        run: |
+          find dist -type f \( -name '*.deb' -o -name '*.rpm' \) -print0 |
+            while IFS= read -r -d '' file; do
+              mv "$file" "${file%.*}-x86_64.${file##*.}"
+            done
+
       - name: Upload artifacts to GitHub Release
         uses: softprops/action-gh-release@v2
         with:

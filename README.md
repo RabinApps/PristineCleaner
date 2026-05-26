@@ -172,13 +172,6 @@ Desktop release packaging is configured in `distribute_options.yaml` and automat
   - Linux x86_64: DEB and RPM
 - Uploads generated files from `dist/` to GitHub Releases
 
-### Required GitHub repository secrets
-
-- `R2_ACCOUNT_ID`
-- `R2_ACCESS_KEY_ID`
-- `R2_SECRET_ACCESS_KEY`
-- `R2_BUCKET`
-
 ### Local packaging command (without upload)
 
 ```bash
