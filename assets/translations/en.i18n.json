@@ -241,17 +241,9 @@
       "title": "Large and Old Files",
       "description": "Find and remove large, unused files that take up space on your Mac."
     },
-    "appUpdater": {
-      "title": "App Updater",
-      "description": "Keep an eye on the latest and most reliable versions of your applications."
-    },
     "similarImages": {
       "title": "Similar Images",
       "description": "Review similar photos and keep only the best ones."
-    },
-    "privacyItems": {
-      "title": "Privacy Items",
-      "description": "Remove browsing history and activity traces to protect your privacy."
     },
     "trashBins": {
       "title": "Trash Bins",
@@ -272,10 +264,6 @@
     "timeMachineSnapshot": {
       "title": "Time Machine Snapshot",
       "description": "Remove local Time Machine snapshots without affecting your backups."
-    },
-    "maintenanceTasks": {
-      "title": "Maintenance Tasks",
-      "description": "Run a set of recommended maintenance tasks to bring your Mac to its max."
     },
     "loginItems": {
       "title": "Login Items",

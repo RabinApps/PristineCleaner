@@ -103,6 +103,30 @@ void main() {
     expect(afterRemoval.lastNotice, isNotNull);
     expect(afterRemoval.summaries[tool.id], isNotNull);
   });
+
+  test('app leftovers tool uses leftovers scan path', () async {
+    final fileService = _AppLeftoversFileService();
+    final container = ProviderContainer(
+      overrides: [fileServiceProvider.overrideWithValue(fileService)],
+    );
+    addTearDown(container.dispose);
+
+    final notifier = container.read(myToolsProvider.notifier);
+    final tool = container
+        .read(myToolsProvider)
+        .tools
+        .firstWhere((entry) => entry.scanType == MyToolScanType.appLeftovers);
+
+    await notifier.runTool(tool);
+
+    expect(fileService.scanAppLeftoversCalled, isTrue);
+    expect(fileService.scanApplicationsCalled, isFalse);
+    expect(container.read(myToolsProvider).activeDetailResult, isNotNull);
+    expect(
+      container.read(myToolsProvider).activeDetailResult!.items.single.name,
+      'Old Tool',
+    );
+  });
 }
 
 class _BlockingDownloadsFileService extends FileService {
@@ -123,5 +147,51 @@ class _BlockingDownloadsFileService extends FileService {
     if (!_completer.isCompleted) {
       _completer.complete(result);
     }
+  }
+}
+
+class _AppLeftoversFileService extends FileService {
+  bool scanApplicationsCalled = false;
+  bool scanAppLeftoversCalled = false;
+
+  @override
+  Future<ScanResult> scanApplications({
+    ScanProgressCallback? onProgress,
+  }) async {
+    scanApplicationsCalled = true;
+    return ScanResult(
+      items: [
+        FileItem(
+          path: '/Applications/Installed.app',
+          name: 'Installed',
+          sizeBytes: 100,
+          modified: DateTime(2024),
+          isDirectory: true,
+        ),
+      ],
+      totalBytes: 100,
+      scanDuration: const Duration(milliseconds: 1),
+    );
+  }
+
+  @override
+  Future<ScanResult> scanAppLeftovers({
+    ScanProgressCallback? onProgress,
+  }) async {
+    scanAppLeftoversCalled = true;
+    return ScanResult(
+      items: [
+        FileItem(
+          path: '/Users/user/Library/Caches/OldTool',
+          name: 'Old Tool',
+          sizeBytes: 60,
+          modified: DateTime(2024),
+          isDirectory: true,
+          category: 'app_leftover',
+        ),
+      ],
+      totalBytes: 60,
+      scanDuration: const Duration(milliseconds: 1),
+    );
   }
 }

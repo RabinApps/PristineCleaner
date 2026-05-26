@@ -90,6 +90,16 @@ void main() {
       expect(result.items.single.name, 'Preview');
     });
 
+    test('scanAppLeftovers delegates to ApplicationsService', () async {
+      final fake = _FakeApplicationsService();
+      final service = FileService(applicationsService: fake);
+
+      final result = await service.scanAppLeftovers();
+
+      expect(fake.leftoversCalled, isTrue);
+      expect(result.items.single.name, 'Old Tool');
+    });
+
     test('scanFreshDuplicates delegates to DuplicatesService', () async {
       final fake = _FakeDuplicatesService();
       final service = FileService(duplicatesService: fake);
@@ -158,6 +168,7 @@ class _FakeCleanupService extends CleanupService {
 
 class _FakeApplicationsService extends ApplicationsService {
   bool called = false;
+  bool leftoversCalled = false;
 
   @override
   Future<ScanResult> scanApplications(
@@ -176,6 +187,28 @@ class _FakeApplicationsService extends ApplicationsService {
         ),
       ],
       totalBytes: 55,
+      scanDuration: const Duration(milliseconds: 1),
+    );
+  }
+
+  @override
+  Future<ScanResult> scanAppLeftovers(
+    FileService fileService, {
+    ScanProgressCallback? onProgress,
+  }) async {
+    leftoversCalled = true;
+    return ScanResult(
+      items: [
+        FileItem(
+          path: '/Users/user/Library/Caches/OldTool',
+          name: 'Old Tool',
+          sizeBytes: 77,
+          modified: DateTime(2024),
+          isDirectory: true,
+          category: 'app_leftover',
+        ),
+      ],
+      totalBytes: 77,
       scanDuration: const Duration(milliseconds: 1),
     );
   }

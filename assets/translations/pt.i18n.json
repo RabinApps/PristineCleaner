@@ -242,17 +242,9 @@
       "title": "Arquivos grandes e antigos",
       "description": "Encontre e remova arquivos grandes e não utilizados que ocupam espaço no seu Mac."
     },
-    "appUpdater": {
-      "title": "Atualizador de aplicativos",
-      "description": "Fique de olho nas versões mais recentes e confiáveis ​​de seus aplicativos."
-    },
     "similarImages": {
       "title": "Imagens semelhantes",
       "description": "Revise fotos semelhantes e guarde apenas as melhores."
-    },
-    "privacyItems": {
-      "title": "Itens de privacidade",
-      "description": "Remova o histórico de navegação e rastros de atividades para proteger sua privacidade."
     },
     "trashBins": {
       "title": "Lixeiras",
@@ -273,10 +265,6 @@
     "timeMachineSnapshot": {
       "title": "Instantâneo da máquina do tempo",
       "description": "Remova snapshots locais do Time Machine sem afetar seus backups."
-    },
-    "maintenanceTasks": {
-      "title": "Tarefas de Manutenção",
-      "description": "Execute um conjunto de tarefas de manutenção recomendadas para levar o seu Mac ao máximo."
     },
     "loginItems": {
       "title": "Itens de login",

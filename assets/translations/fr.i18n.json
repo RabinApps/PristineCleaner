@@ -242,17 +242,9 @@
       "title": "Fichiers volumineux et anciens",
       "description": "Recherchez et supprimez les fichiers volumineux et inutilisés qui occupent de l'espace sur votre Mac."
     },
-    "appUpdater": {
-      "title": "Programme de mise à jour de l'application",
-      "description": "Gardez un œil sur les versions les plus récentes et les plus fiables de vos applications."
-    },
     "similarImages": {
       "title": "Images similaires",
       "description": "Examinez les photos similaires et ne conservez que les meilleures."
-    },
-    "privacyItems": {
-      "title": "Éléments de confidentialité",
-      "description": "Supprimez l'historique de navigation et les traces d'activité pour protéger votre vie privée."
     },
     "trashBins": {
       "title": "Poubelles",
@@ -273,10 +265,6 @@
     "timeMachineSnapshot": {
       "title": "Instantané de Time Machine",
       "description": "Supprimez les instantanés Time Machine locaux sans affecter vos sauvegardes."
-    },
-    "maintenanceTasks": {
-      "title": "Tâches de maintenance",
-      "description": "Exécutez un ensemble de tâches de maintenance recommandées pour amener votre Mac à son maximum."
     },
     "loginItems": {
       "title": "Éléments de connexion",

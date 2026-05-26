@@ -386,35 +386,10 @@ class MyToolsNotifier extends Notifier<MyToolsState> {
           fallback: t.myToolsMessages.fallback.noSimilarLargeImages,
         );
       case MyToolScanType.appLeftovers:
-        final result = await fileService.scanApplications();
+        final result = await fileService.scanAppLeftovers();
         return _outcomeFromResult(
           result,
           fallback: t.myToolsMessages.fallback.noAppLeftovers,
-        );
-      case MyToolScanType.appUpdater:
-        final result = await fileService.scanApplications();
-        final cutoff = DateTime.now().subtract(const Duration(days: 180));
-        final outdated = result.items
-            .where((item) => item.modified.isBefore(cutoff))
-            .toList(growable: false);
-        final bytes = outdated.fold<int>(
-          0,
-          (sum, item) => sum + item.sizeBytes,
-        );
-        return ToolRunOutcome(
-          summary: ToolScanSummary(
-            itemCount: outdated.length,
-            totalBytes: bytes,
-            scannedAt: DateTime.now(),
-            message: outdated.isEmpty
-                ? t.myToolsMessages.fallback.noStaleApps
-                : t.myToolsMessages.fallback.appsNeedReview,
-          ),
-          result: ScanResult(
-            items: outdated,
-            totalBytes: bytes,
-            scanDuration: result.scanDuration,
-          ),
         );
       case MyToolScanType.systemJunk:
         final result = await fileService.scanCleanup();
@@ -436,13 +411,6 @@ class MyToolsNotifier extends Notifier<MyToolsState> {
           result,
           fallback: t.myToolsMessages.fallback.noBackgroundItems,
         );
-      case MyToolScanType.privacyItems:
-        final result = await fileService.scanCleanup();
-        return _outcomeFromFilteredResult(
-          result,
-          categories: const {'user_logs', 'user_cache'},
-          fallback: t.myToolsMessages.fallback.noPrivacyTraces,
-        );
       case MyToolScanType.trashBins:
         final result = await toolsService.scanTrashBins();
         return _outcomeFromResult(
@@ -460,12 +428,6 @@ class MyToolsNotifier extends Notifier<MyToolsState> {
         return _outcomeFromResult(
           result,
           fallback: t.myToolsMessages.fallback.noTimeMachineSnapshots,
-        );
-      case MyToolScanType.maintenanceTasks:
-        final result = await toolsService.scanMaintenanceTasks();
-        return _outcomeFromResult(
-          result,
-          fallback: t.myToolsMessages.fallback.noMaintenanceCandidates,
         );
       case MyToolScanType.mailAttachments:
         final result = await toolsService.scanMailAttachments();
@@ -622,14 +584,6 @@ List<MyTool> _defaultTools() {
       scanType: MyToolScanType.largeAndOldFiles,
     ),
     MyTool(
-      id: 'app_updater',
-      title: t.myToolsCatalog.appUpdater.title,
-      description: t.myToolsCatalog.appUpdater.description,
-      icon: Icons.upgrade_rounded,
-      accentColor: Color(0xFF2EA2FF),
-      scanType: MyToolScanType.appUpdater,
-    ),
-    MyTool(
       id: 'similar_images',
       title: t.myToolsCatalog.similarImages.title,
       description: t.myToolsCatalog.similarImages.description,
@@ -637,14 +591,6 @@ List<MyTool> _defaultTools() {
       accentColor: Color(0xFF2ABCC5),
       locationLabel: 'Pictures',
       scanType: MyToolScanType.similarImages,
-    ),
-    MyTool(
-      id: 'privacy_items',
-      title: t.myToolsCatalog.privacyItems.title,
-      description: t.myToolsCatalog.privacyItems.description,
-      icon: Icons.privacy_tip_rounded,
-      accentColor: Color(0xFFFF52CB),
-      scanType: MyToolScanType.privacyItems,
     ),
     MyTool(
       id: 'trash_bins',
@@ -687,14 +633,6 @@ List<MyTool> _defaultTools() {
       icon: Icons.history_toggle_off_rounded,
       accentColor: Color(0xFFFFB341),
       scanType: MyToolScanType.timeMachineSnapshots,
-    ),
-    MyTool(
-      id: 'maintenance_tasks',
-      title: t.myToolsCatalog.maintenanceTasks.title,
-      description: t.myToolsCatalog.maintenanceTasks.description,
-      icon: Icons.handyman_rounded,
-      accentColor: Color(0xFFFF9D2A),
-      scanType: MyToolScanType.maintenanceTasks,
     ),
     MyTool(
       id: 'login_items',

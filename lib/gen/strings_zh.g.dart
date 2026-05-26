@@ -369,15 +369,12 @@ class _TranslationsMyToolsCatalogZh implements TranslationsMyToolsCatalogEn {
 	@override late final _TranslationsMyToolsCatalogBackgroundItemsZh backgroundItems = _TranslationsMyToolsCatalogBackgroundItemsZh._(_root);
 	@override late final _TranslationsMyToolsCatalogDownloadsZh downloads = _TranslationsMyToolsCatalogDownloadsZh._(_root);
 	@override late final _TranslationsMyToolsCatalogLargeOldZh largeOld = _TranslationsMyToolsCatalogLargeOldZh._(_root);
-	@override late final _TranslationsMyToolsCatalogAppUpdaterZh appUpdater = _TranslationsMyToolsCatalogAppUpdaterZh._(_root);
 	@override late final _TranslationsMyToolsCatalogSimilarImagesZh similarImages = _TranslationsMyToolsCatalogSimilarImagesZh._(_root);
-	@override late final _TranslationsMyToolsCatalogPrivacyItemsZh privacyItems = _TranslationsMyToolsCatalogPrivacyItemsZh._(_root);
 	@override late final _TranslationsMyToolsCatalogTrashBinsZh trashBins = _TranslationsMyToolsCatalogTrashBinsZh._(_root);
 	@override late final _TranslationsMyToolsCatalogDuplicateFinderZh duplicateFinder = _TranslationsMyToolsCatalogDuplicateFinderZh._(_root);
 	@override late final _TranslationsMyToolsCatalogApplicationPermissionsZh applicationPermissions = _TranslationsMyToolsCatalogApplicationPermissionsZh._(_root);
 	@override late final _TranslationsMyToolsCatalogSystemJunkZh systemJunk = _TranslationsMyToolsCatalogSystemJunkZh._(_root);
 	@override late final _TranslationsMyToolsCatalogTimeMachineSnapshotZh timeMachineSnapshot = _TranslationsMyToolsCatalogTimeMachineSnapshotZh._(_root);
-	@override late final _TranslationsMyToolsCatalogMaintenanceTasksZh maintenanceTasks = _TranslationsMyToolsCatalogMaintenanceTasksZh._(_root);
 	@override late final _TranslationsMyToolsCatalogLoginItemsZh loginItems = _TranslationsMyToolsCatalogLoginItemsZh._(_root);
 	@override late final _TranslationsMyToolsCatalogMailAttachmentsZh mailAttachments = _TranslationsMyToolsCatalogMailAttachmentsZh._(_root);
 	@override late final _TranslationsMyToolsCatalogMalwareFinderZh malwareFinder = _TranslationsMyToolsCatalogMalwareFinderZh._(_root);
@@ -615,17 +612,6 @@ class _TranslationsMyToolsCatalogLargeOldZh implements TranslationsMyToolsCatalo
 	@override String get description => '查找并删除占用 Mac 空间的大型未使用文件。';
 }
 
-// Path: myToolsCatalog.appUpdater
-class _TranslationsMyToolsCatalogAppUpdaterZh implements TranslationsMyToolsCatalogAppUpdaterEn {
-	_TranslationsMyToolsCatalogAppUpdaterZh._(this._root);
-
-	final TranslationsZh _root; // ignore: unused_field
-
-	// Translations
-	@override String get title => '应用程序更新程序';
-	@override String get description => '密切关注应用程序的最新、最可靠版本。';
-}
-
 // Path: myToolsCatalog.similarImages
 class _TranslationsMyToolsCatalogSimilarImagesZh implements TranslationsMyToolsCatalogSimilarImagesEn {
 	_TranslationsMyToolsCatalogSimilarImagesZh._(this._root);
@@ -635,17 +621,6 @@ class _TranslationsMyToolsCatalogSimilarImagesZh implements TranslationsMyToolsC
 	// Translations
 	@override String get title => '类似图像';
 	@override String get description => '查看类似的照片并只保留最好的照片。';
-}
-
-// Path: myToolsCatalog.privacyItems
-class _TranslationsMyToolsCatalogPrivacyItemsZh implements TranslationsMyToolsCatalogPrivacyItemsEn {
-	_TranslationsMyToolsCatalogPrivacyItemsZh._(this._root);
-
-	final TranslationsZh _root; // ignore: unused_field
-
-	// Translations
-	@override String get title => '隐私项目';
-	@override String get description => '删除浏览历史记录和活动痕迹以保护您的隐私。';
 }
 
 // Path: myToolsCatalog.trashBins
@@ -701,17 +676,6 @@ class _TranslationsMyToolsCatalogTimeMachineSnapshotZh implements TranslationsMy
 	// Translations
 	@override String get title => '时间机器快照';
 	@override String get description => '删除本地 Time Machine 快照而不影响您的备份。';
-}
-
-// Path: myToolsCatalog.maintenanceTasks
-class _TranslationsMyToolsCatalogMaintenanceTasksZh implements TranslationsMyToolsCatalogMaintenanceTasksEn {
-	_TranslationsMyToolsCatalogMaintenanceTasksZh._(this._root);
-
-	final TranslationsZh _root; // ignore: unused_field
-
-	// Translations
-	@override String get title => '维护任务';
-	@override String get description => '运行一组建议的维护任务，让您的 Mac 发挥最大性能。';
 }
 
 // Path: myToolsCatalog.loginItems
@@ -1063,12 +1027,8 @@ extension on TranslationsZh {
 			'myToolsCatalog.downloads.description' => '查看并清理下载中的一次性文件，以保持文件夹整洁。',
 			'myToolsCatalog.largeOld.title' => '大文件和旧文件',
 			'myToolsCatalog.largeOld.description' => '查找并删除占用 Mac 空间的大型未使用文件。',
-			'myToolsCatalog.appUpdater.title' => '应用程序更新程序',
-			'myToolsCatalog.appUpdater.description' => '密切关注应用程序的最新、最可靠版本。',
 			'myToolsCatalog.similarImages.title' => '类似图像',
 			'myToolsCatalog.similarImages.description' => '查看类似的照片并只保留最好的照片。',
-			'myToolsCatalog.privacyItems.title' => '隐私项目',
-			'myToolsCatalog.privacyItems.description' => '删除浏览历史记录和活动痕迹以保护您的隐私。',
 			'myToolsCatalog.trashBins.title' => '垃圾桶',
 			'myToolsCatalog.trashBins.description' => '清空 Mac 上所有可用的垃圾箱。',
 			'myToolsCatalog.duplicateFinder.title' => '重复查找器',
@@ -1079,8 +1039,6 @@ extension on TranslationsZh {
 			'myToolsCatalog.systemJunk.description' => '删除堵塞设备存储并妨碍最佳性能的冗余文件。',
 			'myToolsCatalog.timeMachineSnapshot.title' => '时间机器快照',
 			'myToolsCatalog.timeMachineSnapshot.description' => '删除本地 Time Machine 快照而不影响您的备份。',
-			'myToolsCatalog.maintenanceTasks.title' => '维护任务',
-			'myToolsCatalog.maintenanceTasks.description' => '运行一组建议的维护任务，让您的 Mac 发挥最大性能。',
 			'myToolsCatalog.loginItems.title' => '登录项目',
 			'myToolsCatalog.loginItems.description' => '管理启动 Mac 时自动打开的应用程序。',
 			'myToolsCatalog.mailAttachments.title' => '邮件附件',

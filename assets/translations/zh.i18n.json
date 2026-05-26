@@ -242,17 +242,9 @@
       "title": "大文件和旧文件",
       "description": "查找并删除占用 Mac 空间的大型未使用文件。"
     },
-    "appUpdater": {
-      "title": "应用程序更新程序",
-      "description": "密切关注应用程序的最新、最可靠版本。"
-    },
     "similarImages": {
       "title": "类似图像",
       "description": "查看类似的照片并只保留最好的照片。"
-    },
-    "privacyItems": {
-      "title": "隐私项目",
-      "description": "删除浏览历史记录和活动痕迹以保护您的隐私。"
     },
     "trashBins": {
       "title": "垃圾桶",
@@ -273,10 +265,6 @@
     "timeMachineSnapshot": {
       "title": "时间机器快照",
       "description": "删除本地 Time Machine 快照而不影响您的备份。"
-    },
-    "maintenanceTasks": {
-      "title": "维护任务",
-      "description": "运行一组建议的维护任务，让您的 Mac 发挥最大性能。"
     },
     "loginItems": {
       "title": "登录项目",

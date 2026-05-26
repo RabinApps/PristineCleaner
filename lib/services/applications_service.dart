@@ -14,6 +14,68 @@ class ApplicationsService {
     );
     return _scanResultFromPayload(payload);
   }
+
+  Future<ScanResult> scanAppLeftovers(
+    FileService fileService, {
+    ScanProgressCallback? onProgress,
+  }) async {
+    final payload = await fileService._runScanPayloadTask(
+      task: 'scanAppLeftovers',
+      args: const {},
+      onProgress: onProgress,
+    );
+    return _scanResultFromPayload(payload);
+  }
+}
+
+class _LeftoverAggregate {
+  final String key;
+  String displayName;
+  String representativePath;
+  int representativeBytes;
+  DateTime modified;
+  bool isDirectory;
+  int totalBytes;
+
+  _LeftoverAggregate({
+    required this.key,
+    required this.displayName,
+    required this.representativePath,
+    required this.representativeBytes,
+    required this.modified,
+    required this.isDirectory,
+    required this.totalBytes,
+  });
+
+  void absorb(_LeftoverCandidate candidate) {
+    totalBytes += candidate.sizeBytes;
+    if (candidate.sizeBytes > representativeBytes) {
+      representativeBytes = candidate.sizeBytes;
+      representativePath = candidate.path;
+      isDirectory = candidate.isDirectory;
+    }
+    if (candidate.modified.isAfter(modified)) {
+      modified = candidate.modified;
+    }
+  }
+}
+
+class _LeftoverCandidate {
+  final String key;
+  final String displayName;
+  final String path;
+  final DateTime modified;
+  final bool isDirectory;
+  final int sizeBytes;
+
+  const _LeftoverCandidate({
+    required this.key,
+    required this.displayName,
+    required this.path,
+    required this.modified,
+    required this.isDirectory,
+    required this.sizeBytes,
+  });
 }
 
 Future<Map<String, dynamic>> _scanApplicationsPayload(
@@ -89,11 +151,355 @@ Future<Map<String, dynamic>> _scanApplicationsPayload(
   };
 }
 
+Future<Map<String, dynamic>> _scanAppLeftoversPayload(
+  void Function(ScanProgress progress) onProgress,
+  bool Function() isCancelled,
+) async {
+  final sw = Stopwatch()..start();
+
+  if (isCancelled()) throw const ScanCancelledException();
+  onProgress(
+    const ScanProgress(phase: ScanPhase.counting, processed: 0, total: 0),
+  );
+
+  if (isCancelled()) throw const ScanCancelledException();
+  final roots = _appLeftoverRootsForCurrentPlatform();
+  final installedIds =
+      await _collectInstalledApplicationIdentifiersForLeftovers();
+  final totalEntries = await _countTopLevelEntriesAcrossDirs(roots);
+
+  if (isCancelled()) throw const ScanCancelledException();
+  final emitter = _ProgressEmitter(emit: onProgress);
+  emitter.push(ScanPhase.scanning, 0, totalEntries, force: true);
+
+  final aggregates = <String, _LeftoverAggregate>{};
+  int processed = 0;
+  int processedBytes = 0;
+
+  for (final rootPath in roots) {
+    final root = Directory(rootPath);
+    if (!await root.exists()) continue;
+
+    try {
+      await for (final entity in root.list(
+        recursive: false,
+        followLinks: false,
+      )) {
+        if (isCancelled()) throw const ScanCancelledException();
+        processed++;
+
+        final candidate = await _buildLeftoverCandidate(
+          entity,
+          installedIds: installedIds,
+        );
+        if (candidate != null) {
+          processedBytes += candidate.sizeBytes;
+          final existing = aggregates[candidate.key];
+          if (existing == null) {
+            aggregates[candidate.key] = _LeftoverAggregate(
+              key: candidate.key,
+              displayName: candidate.displayName,
+              representativePath: candidate.path,
+              representativeBytes: candidate.sizeBytes,
+              modified: candidate.modified,
+              isDirectory: candidate.isDirectory,
+              totalBytes: candidate.sizeBytes,
+            );
+          } else {
+            existing.absorb(candidate);
+          }
+        }
+
+        emitter.push(
+          ScanPhase.scanning,
+          processed,
+          totalEntries,
+          processedBytes: processedBytes,
+        );
+      }
+    } catch (_) {}
+  }
+
+  emitter.push(
+    ScanPhase.scanning,
+    totalEntries,
+    totalEntries,
+    processedBytes: processedBytes,
+    force: true,
+  );
+
+  final items =
+      aggregates.values
+          .map(
+            (entry) => _fileItemToPayload(
+              FileItem(
+                path: entry.representativePath,
+                name: entry.displayName,
+                sizeBytes: entry.totalBytes,
+                modified: entry.modified,
+                isDirectory: entry.isDirectory,
+                category: 'app_leftover',
+              ),
+            ),
+          )
+          .toList(growable: false)
+        ..sort(
+          (a, b) => (b['sizeBytes'] as int).compareTo(a['sizeBytes'] as int),
+        );
+
+  sw.stop();
+  final total = items.fold<int>(
+    0,
+    (sum, item) => sum + (item['sizeBytes'] as int),
+  );
+  return {
+    'items': items,
+    'totalBytes': total,
+    'scanDurationMs': sw.elapsedMilliseconds,
+  };
+}
+
+Future<int> _countTopLevelEntriesAcrossDirs(List<String> dirs) async {
+  int total = 0;
+  for (final path in dirs) {
+    final dir = Directory(path);
+    if (!await dir.exists()) continue;
+    try {
+      await for (final _ in dir.list(recursive: false, followLinks: false)) {
+        total++;
+      }
+    } catch (_) {}
+  }
+  return total;
+}
+
+List<String> _appLeftoverRootsForCurrentPlatform() {
+  final home =
+      Platform.environment[Platform.isWindows ? 'USERPROFILE' : 'HOME'] ?? '';
+  if (Platform.isMacOS) {
+    return [
+      '$home/Library/Application Support',
+      '$home/Library/Caches',
+      '$home/Library/Preferences',
+      '$home/Library/Logs',
+      '/Library/Application Support',
+      '/Library/Caches',
+      '/Library/Preferences',
+      '/Library/Logs',
+    ];
+  }
+
+  if (Platform.isWindows) {
+    final local = Platform.environment['LOCALAPPDATA'] ?? '';
+    final roaming = Platform.environment['APPDATA'] ?? '';
+    return [if (local.isNotEmpty) local, if (roaming.isNotEmpty) roaming];
+  }
+
+  if (Platform.isLinux) {
+    return ['$home/.config', '$home/.cache', '$home/.local/share/applications'];
+  }
+
+  return const [];
+}
+
+Future<Set<String>> _collectInstalledApplicationIdentifiers() async {
+  final set = <String>{};
+  final candidates = await _collectApplicationCandidates();
+  for (final app in candidates) {
+    final normalized = normalizeAppNameForMatching(_basename(app.path));
+    if (normalized.isNotEmpty) {
+      set.add(normalized);
+    }
+  }
+  return set;
+}
+
+Future<Set<String>>
+_collectInstalledApplicationIdentifiersForLeftovers() async {
+  if (!Platform.isMacOS) {
+    return _collectInstalledApplicationIdentifiers();
+  }
+
+  final set = <String>{};
+  final appsDir = Directory('/Applications');
+  if (!await appsDir.exists()) {
+    return set;
+  }
+
+  try {
+    await for (final entity in appsDir.list(followLinks: false)) {
+      if (entity is! Directory || !entity.path.endsWith('.app')) {
+        continue;
+      }
+      final normalized = normalizeAppNameForMatching(_basename(entity.path));
+      if (normalized.isEmpty) {
+        continue;
+      }
+
+      set.add(normalized);
+      final words = normalized.split(' ');
+      final tail = words.isEmpty ? '' : words.last;
+      if (tail.length >= 5) {
+        set.add(tail);
+      }
+    }
+  } catch (_) {}
+
+  return set;
+}
+
+Future<_LeftoverCandidate?> _buildLeftoverCandidate(
+  FileSystemEntity entity, {
+  required Set<String> installedIds,
+}) async {
+  final rawName = _basename(entity.path);
+  if (!_isLeftoverRelevantEntry(entity, rawName)) {
+    return null;
+  }
+
+  final key = normalizeAppNameForMatching(rawName);
+  if (key.isEmpty ||
+      _matchesInstalledApplicationIdentifier(key, installedIds)) {
+    return null;
+  }
+
+  try {
+    final stat = await entity.stat();
+    final isDirectory = entity is Directory;
+    final size = isDirectory ? await _dirSizePayload(entity.path) : stat.size;
+    if (size <= 0) {
+      return null;
+    }
+
+    return _LeftoverCandidate(
+      key: key,
+      displayName: appDisplayNameFromRaw(rawName),
+      path: entity.path,
+      modified: stat.modified,
+      isDirectory: isDirectory,
+      sizeBytes: size,
+    );
+  } catch (_) {
+    return null;
+  }
+}
+
+bool _matchesInstalledApplicationIdentifier(
+  String key,
+  Set<String> installedIds,
+) {
+  if (installedIds.contains(key)) {
+    return true;
+  }
+
+  if (!Platform.isMacOS || key.length < 5) {
+    return false;
+  }
+
+  for (final installed in installedIds) {
+    if (installed.length < 5) {
+      continue;
+    }
+    if (installed.contains(key) || key.contains(installed)) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+bool _isLeftoverRelevantEntry(FileSystemEntity entity, String rawName) {
+  if (entity is Directory) {
+    return true;
+  }
+  if (entity is! File) {
+    return false;
+  }
+
+  final lower = rawName.toLowerCase();
+  return lower.endsWith('.plist') ||
+      lower.endsWith('.desktop') ||
+      lower.endsWith('.ini') ||
+      lower.endsWith('.conf') ||
+      lower.endsWith('.cfg') ||
+      lower.endsWith('.json') ||
+      lower.endsWith('.xml');
+}
+
+String normalizeAppNameForMatching(String value) {
+  var text = _basename(value).trim();
+  if (text.isEmpty) return '';
+
+  const removableSuffixes = [
+    '.app',
+    '.plist',
+    '.desktop',
+    '.lnk',
+    '.json',
+    '.xml',
+    '.ini',
+    '.conf',
+    '.cfg',
+    '.log',
+    '.cache',
+  ];
+  final lower = text.toLowerCase();
+  for (final suffix in removableSuffixes) {
+    if (!lower.endsWith(suffix)) continue;
+    text = text.substring(0, text.length - suffix.length);
+    break;
+  }
+
+  final segments = text.split('.');
+  final bundleLike =
+      segments.length >= 3 &&
+      segments.every(
+        (segment) =>
+            segment.isNotEmpty && RegExp(r'^[A-Za-z0-9_-]+$').hasMatch(segment),
+      );
+  if (bundleLike) {
+    text = segments.last;
+  }
+
+  text = text
+      .replaceAll(RegExp(r'[._-]+'), ' ')
+      .replaceAll(RegExp(r'[^A-Za-z0-9 ]+'), ' ')
+      .replaceAll(RegExp(r'\s+'), ' ')
+      .trim()
+      .toLowerCase();
+
+  if (text.isEmpty) return '';
+
+  const ignored = {
+    'cache',
+    'caches',
+    'logs',
+    'log',
+    'preferences',
+    'preference',
+    'application support',
+    'applications',
+    'application',
+  };
+  return ignored.contains(text) ? '' : text;
+}
+
+String appDisplayNameFromRaw(String value) {
+  final normalized = normalizeAppNameForMatching(value);
+  if (normalized.isEmpty) return value;
+  final words = normalized.split(' ');
+  return words
+      .where((part) => part.isNotEmpty)
+      .map((part) => '${part[0].toUpperCase()}${part.substring(1)}')
+      .join(' ');
+}
+
 Future<List<Directory>> _collectApplicationCandidates() async {
   final dirs = <Directory>[];
   if (Platform.isMacOS) {
-    final appsDir = Directory('/Applications');
-    if (await appsDir.exists()) {
+    for (final path in ['/Applications', '/System/Applications']) {
+      final appsDir = Directory(path);
+      if (!await appsDir.exists()) continue;
       await for (final entity in appsDir.list(followLinks: false)) {
         if (entity is Directory && entity.path.endsWith('.app')) {
           dirs.add(entity);

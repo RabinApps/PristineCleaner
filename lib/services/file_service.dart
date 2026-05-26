@@ -470,6 +470,12 @@ class FileService {
     return _applicationsService.scanApplications(this, onProgress: onProgress);
   }
 
+  Future<ScanResult> scanAppLeftovers({
+    ScanProgressCallback? onProgress,
+  }) async {
+    return _applicationsService.scanAppLeftovers(this, onProgress: onProgress);
+  }
+
   // ─── Helpers ──────────────────────────────────────────────────────────────
 
   String get _home =>
@@ -675,6 +681,8 @@ void _scanTaskIsolateEntry(_ScanTaskMessage message) async {
       );
     } else if (task == 'scanApplications') {
       payload = await _scanApplicationsPayload(emitProgress, () => cancelled);
+    } else if (task == 'scanAppLeftovers') {
+      payload = await _scanAppLeftoversPayload(emitProgress, () => cancelled);
     } else {
       throw StateError('Unknown scan task: $task');
     }

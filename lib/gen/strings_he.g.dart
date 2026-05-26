@@ -369,15 +369,12 @@ class _TranslationsMyToolsCatalogHe implements TranslationsMyToolsCatalogEn {
 	@override late final _TranslationsMyToolsCatalogBackgroundItemsHe backgroundItems = _TranslationsMyToolsCatalogBackgroundItemsHe._(_root);
 	@override late final _TranslationsMyToolsCatalogDownloadsHe downloads = _TranslationsMyToolsCatalogDownloadsHe._(_root);
 	@override late final _TranslationsMyToolsCatalogLargeOldHe largeOld = _TranslationsMyToolsCatalogLargeOldHe._(_root);
-	@override late final _TranslationsMyToolsCatalogAppUpdaterHe appUpdater = _TranslationsMyToolsCatalogAppUpdaterHe._(_root);
 	@override late final _TranslationsMyToolsCatalogSimilarImagesHe similarImages = _TranslationsMyToolsCatalogSimilarImagesHe._(_root);
-	@override late final _TranslationsMyToolsCatalogPrivacyItemsHe privacyItems = _TranslationsMyToolsCatalogPrivacyItemsHe._(_root);
 	@override late final _TranslationsMyToolsCatalogTrashBinsHe trashBins = _TranslationsMyToolsCatalogTrashBinsHe._(_root);
 	@override late final _TranslationsMyToolsCatalogDuplicateFinderHe duplicateFinder = _TranslationsMyToolsCatalogDuplicateFinderHe._(_root);
 	@override late final _TranslationsMyToolsCatalogApplicationPermissionsHe applicationPermissions = _TranslationsMyToolsCatalogApplicationPermissionsHe._(_root);
 	@override late final _TranslationsMyToolsCatalogSystemJunkHe systemJunk = _TranslationsMyToolsCatalogSystemJunkHe._(_root);
 	@override late final _TranslationsMyToolsCatalogTimeMachineSnapshotHe timeMachineSnapshot = _TranslationsMyToolsCatalogTimeMachineSnapshotHe._(_root);
-	@override late final _TranslationsMyToolsCatalogMaintenanceTasksHe maintenanceTasks = _TranslationsMyToolsCatalogMaintenanceTasksHe._(_root);
 	@override late final _TranslationsMyToolsCatalogLoginItemsHe loginItems = _TranslationsMyToolsCatalogLoginItemsHe._(_root);
 	@override late final _TranslationsMyToolsCatalogMailAttachmentsHe mailAttachments = _TranslationsMyToolsCatalogMailAttachmentsHe._(_root);
 	@override late final _TranslationsMyToolsCatalogMalwareFinderHe malwareFinder = _TranslationsMyToolsCatalogMalwareFinderHe._(_root);
@@ -615,17 +612,6 @@ class _TranslationsMyToolsCatalogLargeOldHe implements TranslationsMyToolsCatalo
 	@override String get description => 'מצא והסר קבצים גדולים שאינם בשימוש שתופסים מקום ב-Mac שלך.';
 }
 
-// Path: myToolsCatalog.appUpdater
-class _TranslationsMyToolsCatalogAppUpdaterHe implements TranslationsMyToolsCatalogAppUpdaterEn {
-	_TranslationsMyToolsCatalogAppUpdaterHe._(this._root);
-
-	final TranslationsHe _root; // ignore: unused_field
-
-	// Translations
-	@override String get title => 'עדכון אפליקציות';
-	@override String get description => 'שים לב לגרסאות העדכניות והאמינות ביותר של היישומים שלך.';
-}
-
 // Path: myToolsCatalog.similarImages
 class _TranslationsMyToolsCatalogSimilarImagesHe implements TranslationsMyToolsCatalogSimilarImagesEn {
 	_TranslationsMyToolsCatalogSimilarImagesHe._(this._root);
@@ -635,17 +621,6 @@ class _TranslationsMyToolsCatalogSimilarImagesHe implements TranslationsMyToolsC
 	// Translations
 	@override String get title => 'תמונות דומות';
 	@override String get description => 'סקור תמונות דומות ושמור רק את הטובות ביותר.';
-}
-
-// Path: myToolsCatalog.privacyItems
-class _TranslationsMyToolsCatalogPrivacyItemsHe implements TranslationsMyToolsCatalogPrivacyItemsEn {
-	_TranslationsMyToolsCatalogPrivacyItemsHe._(this._root);
-
-	final TranslationsHe _root; // ignore: unused_field
-
-	// Translations
-	@override String get title => 'פריטי פרטיות';
-	@override String get description => 'הסר היסטוריית גלישה ועקבות פעילות כדי להגן על הפרטיות שלך.';
 }
 
 // Path: myToolsCatalog.trashBins
@@ -701,17 +676,6 @@ class _TranslationsMyToolsCatalogTimeMachineSnapshotHe implements TranslationsMy
 	// Translations
 	@override String get title => 'תמונת מצב של מכונת זמן';
 	@override String get description => 'הסר תמונות מקומיות של Time Machine מבלי להשפיע על הגיבויים שלך.';
-}
-
-// Path: myToolsCatalog.maintenanceTasks
-class _TranslationsMyToolsCatalogMaintenanceTasksHe implements TranslationsMyToolsCatalogMaintenanceTasksEn {
-	_TranslationsMyToolsCatalogMaintenanceTasksHe._(this._root);
-
-	final TranslationsHe _root; // ignore: unused_field
-
-	// Translations
-	@override String get title => 'משימות תחזוקה';
-	@override String get description => 'הפעל קבוצה של משימות תחזוקה מומלצות כדי להביא את ה-Mac שלך למקסימום.';
 }
 
 // Path: myToolsCatalog.loginItems
@@ -1063,12 +1027,8 @@ extension on TranslationsHe {
 			'myToolsCatalog.downloads.description' => 'סקור ונקה קבצי שימוש חד פעמי מהורדות כדי לשמור על תיקיות מסודרות.',
 			'myToolsCatalog.largeOld.title' => 'קבצים גדולים וישנים',
 			'myToolsCatalog.largeOld.description' => 'מצא והסר קבצים גדולים שאינם בשימוש שתופסים מקום ב-Mac שלך.',
-			'myToolsCatalog.appUpdater.title' => 'עדכון אפליקציות',
-			'myToolsCatalog.appUpdater.description' => 'שים לב לגרסאות העדכניות והאמינות ביותר של היישומים שלך.',
 			'myToolsCatalog.similarImages.title' => 'תמונות דומות',
 			'myToolsCatalog.similarImages.description' => 'סקור תמונות דומות ושמור רק את הטובות ביותר.',
-			'myToolsCatalog.privacyItems.title' => 'פריטי פרטיות',
-			'myToolsCatalog.privacyItems.description' => 'הסר היסטוריית גלישה ועקבות פעילות כדי להגן על הפרטיות שלך.',
 			'myToolsCatalog.trashBins.title' => 'פחי אשפה',
 			'myToolsCatalog.trashBins.description' => 'רוקן את כל פחי האשפה הזמינים ב-Mac שלך.',
 			'myToolsCatalog.duplicateFinder.title' => 'כפיל Finder',
@@ -1079,8 +1039,6 @@ extension on TranslationsHe {
 			'myToolsCatalog.systemJunk.description' => 'הסר קבצים מיותרים שסותמים את אחסון המכשיר ופוגעים בביצועים אופטימליים.',
 			'myToolsCatalog.timeMachineSnapshot.title' => 'תמונת מצב של מכונת זמן',
 			'myToolsCatalog.timeMachineSnapshot.description' => 'הסר תמונות מקומיות של Time Machine מבלי להשפיע על הגיבויים שלך.',
-			'myToolsCatalog.maintenanceTasks.title' => 'משימות תחזוקה',
-			'myToolsCatalog.maintenanceTasks.description' => 'הפעל קבוצה של משימות תחזוקה מומלצות כדי להביא את ה-Mac שלך למקסימום.',
 			'myToolsCatalog.loginItems.title' => 'פריטי כניסה',
 			'myToolsCatalog.loginItems.description' => 'נהל אפליקציות שנפתחות אוטומטית כשאתה מפעיל את ה-Mac שלך.',
 			'myToolsCatalog.mailAttachments.title' => 'קבצים מצורפים לדואר',

@@ -369,15 +369,12 @@ class _TranslationsMyToolsCatalogIt implements TranslationsMyToolsCatalogEn {
 	@override late final _TranslationsMyToolsCatalogBackgroundItemsIt backgroundItems = _TranslationsMyToolsCatalogBackgroundItemsIt._(_root);
 	@override late final _TranslationsMyToolsCatalogDownloadsIt downloads = _TranslationsMyToolsCatalogDownloadsIt._(_root);
 	@override late final _TranslationsMyToolsCatalogLargeOldIt largeOld = _TranslationsMyToolsCatalogLargeOldIt._(_root);
-	@override late final _TranslationsMyToolsCatalogAppUpdaterIt appUpdater = _TranslationsMyToolsCatalogAppUpdaterIt._(_root);
 	@override late final _TranslationsMyToolsCatalogSimilarImagesIt similarImages = _TranslationsMyToolsCatalogSimilarImagesIt._(_root);
-	@override late final _TranslationsMyToolsCatalogPrivacyItemsIt privacyItems = _TranslationsMyToolsCatalogPrivacyItemsIt._(_root);
 	@override late final _TranslationsMyToolsCatalogTrashBinsIt trashBins = _TranslationsMyToolsCatalogTrashBinsIt._(_root);
 	@override late final _TranslationsMyToolsCatalogDuplicateFinderIt duplicateFinder = _TranslationsMyToolsCatalogDuplicateFinderIt._(_root);
 	@override late final _TranslationsMyToolsCatalogApplicationPermissionsIt applicationPermissions = _TranslationsMyToolsCatalogApplicationPermissionsIt._(_root);
 	@override late final _TranslationsMyToolsCatalogSystemJunkIt systemJunk = _TranslationsMyToolsCatalogSystemJunkIt._(_root);
 	@override late final _TranslationsMyToolsCatalogTimeMachineSnapshotIt timeMachineSnapshot = _TranslationsMyToolsCatalogTimeMachineSnapshotIt._(_root);
-	@override late final _TranslationsMyToolsCatalogMaintenanceTasksIt maintenanceTasks = _TranslationsMyToolsCatalogMaintenanceTasksIt._(_root);
 	@override late final _TranslationsMyToolsCatalogLoginItemsIt loginItems = _TranslationsMyToolsCatalogLoginItemsIt._(_root);
 	@override late final _TranslationsMyToolsCatalogMailAttachmentsIt mailAttachments = _TranslationsMyToolsCatalogMailAttachmentsIt._(_root);
 	@override late final _TranslationsMyToolsCatalogMalwareFinderIt malwareFinder = _TranslationsMyToolsCatalogMalwareFinderIt._(_root);
@@ -615,17 +612,6 @@ class _TranslationsMyToolsCatalogLargeOldIt implements TranslationsMyToolsCatalo
 	@override String get description => 'Trova e rimuovi file grandi inutilizzati che occupano spazio.';
 }
 
-// Path: myToolsCatalog.appUpdater
-class _TranslationsMyToolsCatalogAppUpdaterIt implements TranslationsMyToolsCatalogAppUpdaterEn {
-	_TranslationsMyToolsCatalogAppUpdaterIt._(this._root);
-
-	final TranslationsIt _root; // ignore: unused_field
-
-	// Translations
-	@override String get title => 'Aggiornatore App';
-	@override String get description => 'Tieni sotto controllo versioni recenti e affidabili delle applicazioni.';
-}
-
 // Path: myToolsCatalog.similarImages
 class _TranslationsMyToolsCatalogSimilarImagesIt implements TranslationsMyToolsCatalogSimilarImagesEn {
 	_TranslationsMyToolsCatalogSimilarImagesIt._(this._root);
@@ -635,17 +621,6 @@ class _TranslationsMyToolsCatalogSimilarImagesIt implements TranslationsMyToolsC
 	// Translations
 	@override String get title => 'Immagini Simili';
 	@override String get description => 'Rivedi foto simili e conserva solo le migliori.';
-}
-
-// Path: myToolsCatalog.privacyItems
-class _TranslationsMyToolsCatalogPrivacyItemsIt implements TranslationsMyToolsCatalogPrivacyItemsEn {
-	_TranslationsMyToolsCatalogPrivacyItemsIt._(this._root);
-
-	final TranslationsIt _root; // ignore: unused_field
-
-	// Translations
-	@override String get title => 'Elementi Privacy';
-	@override String get description => 'Rimuovi cronologia e tracce attivita per proteggere la privacy.';
 }
 
 // Path: myToolsCatalog.trashBins
@@ -701,17 +676,6 @@ class _TranslationsMyToolsCatalogTimeMachineSnapshotIt implements TranslationsMy
 	// Translations
 	@override String get title => 'Istantanea Time Machine';
 	@override String get description => 'Rimuovi istantanee locali Time Machine senza influire sui backup.';
-}
-
-// Path: myToolsCatalog.maintenanceTasks
-class _TranslationsMyToolsCatalogMaintenanceTasksIt implements TranslationsMyToolsCatalogMaintenanceTasksEn {
-	_TranslationsMyToolsCatalogMaintenanceTasksIt._(this._root);
-
-	final TranslationsIt _root; // ignore: unused_field
-
-	// Translations
-	@override String get title => 'Attivita di Manutenzione';
-	@override String get description => 'Esegui attivita consigliate per portare il Mac al massimo.';
 }
 
 // Path: myToolsCatalog.loginItems
@@ -1063,12 +1027,8 @@ extension on TranslationsIt {
 			'myToolsCatalog.downloads.description' => 'Rivedi e pulisci file monouso dalla cartella Download.',
 			'myToolsCatalog.largeOld.title' => 'File Grandi e Vecchi',
 			'myToolsCatalog.largeOld.description' => 'Trova e rimuovi file grandi inutilizzati che occupano spazio.',
-			'myToolsCatalog.appUpdater.title' => 'Aggiornatore App',
-			'myToolsCatalog.appUpdater.description' => 'Tieni sotto controllo versioni recenti e affidabili delle applicazioni.',
 			'myToolsCatalog.similarImages.title' => 'Immagini Simili',
 			'myToolsCatalog.similarImages.description' => 'Rivedi foto simili e conserva solo le migliori.',
-			'myToolsCatalog.privacyItems.title' => 'Elementi Privacy',
-			'myToolsCatalog.privacyItems.description' => 'Rimuovi cronologia e tracce attivita per proteggere la privacy.',
 			'myToolsCatalog.trashBins.title' => 'Cestini',
 			'myToolsCatalog.trashBins.description' => 'Svuota tutti i cestini disponibili sul tuo Mac.',
 			'myToolsCatalog.duplicateFinder.title' => 'Trova Duplicati',
@@ -1079,8 +1039,6 @@ extension on TranslationsIt {
 			'myToolsCatalog.systemJunk.description' => 'Rimuovi file ridondanti che rallentano e occupano spazio.',
 			'myToolsCatalog.timeMachineSnapshot.title' => 'Istantanea Time Machine',
 			'myToolsCatalog.timeMachineSnapshot.description' => 'Rimuovi istantanee locali Time Machine senza influire sui backup.',
-			'myToolsCatalog.maintenanceTasks.title' => 'Attivita di Manutenzione',
-			'myToolsCatalog.maintenanceTasks.description' => 'Esegui attivita consigliate per portare il Mac al massimo.',
 			'myToolsCatalog.loginItems.title' => 'Elementi di Accesso',
 			'myToolsCatalog.loginItems.description' => 'Gestisci app che si aprono automaticamente all\'avvio del Mac.',
 			'myToolsCatalog.mailAttachments.title' => 'Allegati Mail',

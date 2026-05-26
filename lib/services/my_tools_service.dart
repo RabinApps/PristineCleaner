@@ -257,31 +257,6 @@ class MyToolsService {
     );
   }
 
-  Future<ScanResult> scanMaintenanceTasks() async {
-    final home = _homePath;
-    final roots = <String>[];
-
-    if (Platform.isMacOS) {
-      roots.addAll([
-        '$home/Library/Caches',
-        '$home/Library/Logs',
-        '/Library/Logs',
-      ]);
-    } else if (Platform.isLinux) {
-      roots.addAll(['$home/.cache', '/tmp']);
-    } else if (Platform.isWindows) {
-      roots.addAll(['$home\\AppData\\Local\\Temp']);
-    }
-
-    final cutoff = DateTime.now().subtract(const Duration(days: 30));
-    return _scanFileRoots(
-      roots,
-      recursive: true,
-      includeFile: (_, stat) => stat.modified.isBefore(cutoff),
-      maxItems: 600,
-    );
-  }
-
   Future<ScanResult> scanTimeMachineSnapshots() async {
     if (!Platform.isMacOS) {
       return const ScanResult(

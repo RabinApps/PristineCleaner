@@ -369,15 +369,12 @@ class _TranslationsMyToolsCatalogPt implements TranslationsMyToolsCatalogEn {
 	@override late final _TranslationsMyToolsCatalogBackgroundItemsPt backgroundItems = _TranslationsMyToolsCatalogBackgroundItemsPt._(_root);
 	@override late final _TranslationsMyToolsCatalogDownloadsPt downloads = _TranslationsMyToolsCatalogDownloadsPt._(_root);
 	@override late final _TranslationsMyToolsCatalogLargeOldPt largeOld = _TranslationsMyToolsCatalogLargeOldPt._(_root);
-	@override late final _TranslationsMyToolsCatalogAppUpdaterPt appUpdater = _TranslationsMyToolsCatalogAppUpdaterPt._(_root);
 	@override late final _TranslationsMyToolsCatalogSimilarImagesPt similarImages = _TranslationsMyToolsCatalogSimilarImagesPt._(_root);
-	@override late final _TranslationsMyToolsCatalogPrivacyItemsPt privacyItems = _TranslationsMyToolsCatalogPrivacyItemsPt._(_root);
 	@override late final _TranslationsMyToolsCatalogTrashBinsPt trashBins = _TranslationsMyToolsCatalogTrashBinsPt._(_root);
 	@override late final _TranslationsMyToolsCatalogDuplicateFinderPt duplicateFinder = _TranslationsMyToolsCatalogDuplicateFinderPt._(_root);
 	@override late final _TranslationsMyToolsCatalogApplicationPermissionsPt applicationPermissions = _TranslationsMyToolsCatalogApplicationPermissionsPt._(_root);
 	@override late final _TranslationsMyToolsCatalogSystemJunkPt systemJunk = _TranslationsMyToolsCatalogSystemJunkPt._(_root);
 	@override late final _TranslationsMyToolsCatalogTimeMachineSnapshotPt timeMachineSnapshot = _TranslationsMyToolsCatalogTimeMachineSnapshotPt._(_root);
-	@override late final _TranslationsMyToolsCatalogMaintenanceTasksPt maintenanceTasks = _TranslationsMyToolsCatalogMaintenanceTasksPt._(_root);
 	@override late final _TranslationsMyToolsCatalogLoginItemsPt loginItems = _TranslationsMyToolsCatalogLoginItemsPt._(_root);
 	@override late final _TranslationsMyToolsCatalogMailAttachmentsPt mailAttachments = _TranslationsMyToolsCatalogMailAttachmentsPt._(_root);
 	@override late final _TranslationsMyToolsCatalogMalwareFinderPt malwareFinder = _TranslationsMyToolsCatalogMalwareFinderPt._(_root);
@@ -615,17 +612,6 @@ class _TranslationsMyToolsCatalogLargeOldPt implements TranslationsMyToolsCatalo
 	@override String get description => 'Encontre e remova arquivos grandes e não utilizados que ocupam espaço no seu Mac.';
 }
 
-// Path: myToolsCatalog.appUpdater
-class _TranslationsMyToolsCatalogAppUpdaterPt implements TranslationsMyToolsCatalogAppUpdaterEn {
-	_TranslationsMyToolsCatalogAppUpdaterPt._(this._root);
-
-	final TranslationsPt _root; // ignore: unused_field
-
-	// Translations
-	@override String get title => 'Atualizador de aplicativos';
-	@override String get description => 'Fique de olho nas versões mais recentes e confiáveis ​​de seus aplicativos.';
-}
-
 // Path: myToolsCatalog.similarImages
 class _TranslationsMyToolsCatalogSimilarImagesPt implements TranslationsMyToolsCatalogSimilarImagesEn {
 	_TranslationsMyToolsCatalogSimilarImagesPt._(this._root);
@@ -635,17 +621,6 @@ class _TranslationsMyToolsCatalogSimilarImagesPt implements TranslationsMyToolsC
 	// Translations
 	@override String get title => 'Imagens semelhantes';
 	@override String get description => 'Revise fotos semelhantes e guarde apenas as melhores.';
-}
-
-// Path: myToolsCatalog.privacyItems
-class _TranslationsMyToolsCatalogPrivacyItemsPt implements TranslationsMyToolsCatalogPrivacyItemsEn {
-	_TranslationsMyToolsCatalogPrivacyItemsPt._(this._root);
-
-	final TranslationsPt _root; // ignore: unused_field
-
-	// Translations
-	@override String get title => 'Itens de privacidade';
-	@override String get description => 'Remova o histórico de navegação e rastros de atividades para proteger sua privacidade.';
 }
 
 // Path: myToolsCatalog.trashBins
@@ -701,17 +676,6 @@ class _TranslationsMyToolsCatalogTimeMachineSnapshotPt implements TranslationsMy
 	// Translations
 	@override String get title => 'Instantâneo da máquina do tempo';
 	@override String get description => 'Remova snapshots locais do Time Machine sem afetar seus backups.';
-}
-
-// Path: myToolsCatalog.maintenanceTasks
-class _TranslationsMyToolsCatalogMaintenanceTasksPt implements TranslationsMyToolsCatalogMaintenanceTasksEn {
-	_TranslationsMyToolsCatalogMaintenanceTasksPt._(this._root);
-
-	final TranslationsPt _root; // ignore: unused_field
-
-	// Translations
-	@override String get title => 'Tarefas de Manutenção';
-	@override String get description => 'Execute um conjunto de tarefas de manutenção recomendadas para levar o seu Mac ao máximo.';
 }
 
 // Path: myToolsCatalog.loginItems
@@ -1063,12 +1027,8 @@ extension on TranslationsPt {
 			'myToolsCatalog.downloads.description' => 'Revise e limpe arquivos de uso único em Downloads para manter as pastas organizadas.',
 			'myToolsCatalog.largeOld.title' => 'Arquivos grandes e antigos',
 			'myToolsCatalog.largeOld.description' => 'Encontre e remova arquivos grandes e não utilizados que ocupam espaço no seu Mac.',
-			'myToolsCatalog.appUpdater.title' => 'Atualizador de aplicativos',
-			'myToolsCatalog.appUpdater.description' => 'Fique de olho nas versões mais recentes e confiáveis ​​de seus aplicativos.',
 			'myToolsCatalog.similarImages.title' => 'Imagens semelhantes',
 			'myToolsCatalog.similarImages.description' => 'Revise fotos semelhantes e guarde apenas as melhores.',
-			'myToolsCatalog.privacyItems.title' => 'Itens de privacidade',
-			'myToolsCatalog.privacyItems.description' => 'Remova o histórico de navegação e rastros de atividades para proteger sua privacidade.',
 			'myToolsCatalog.trashBins.title' => 'Lixeiras',
 			'myToolsCatalog.trashBins.description' => 'Esvazie todas as lixeiras disponíveis no seu Mac.',
 			'myToolsCatalog.duplicateFinder.title' => 'Localizador de duplicatas',
@@ -1079,8 +1039,6 @@ extension on TranslationsPt {
 			'myToolsCatalog.systemJunk.description' => 'Remova arquivos redundantes que obstruem o armazenamento do dispositivo e impedem o desempenho ideal.',
 			'myToolsCatalog.timeMachineSnapshot.title' => 'Instantâneo da máquina do tempo',
 			'myToolsCatalog.timeMachineSnapshot.description' => 'Remova snapshots locais do Time Machine sem afetar seus backups.',
-			'myToolsCatalog.maintenanceTasks.title' => 'Tarefas de Manutenção',
-			'myToolsCatalog.maintenanceTasks.description' => 'Execute um conjunto de tarefas de manutenção recomendadas para levar o seu Mac ao máximo.',
 			'myToolsCatalog.loginItems.title' => 'Itens de login',
 			'myToolsCatalog.loginItems.description' => 'Gerencie aplicativos que abrem automaticamente quando você inicia o Mac.',
 			'myToolsCatalog.mailAttachments.title' => 'Anexos de correio',

@@ -369,15 +369,12 @@ class _TranslationsMyToolsCatalogEl implements TranslationsMyToolsCatalogEn {
 	@override late final _TranslationsMyToolsCatalogBackgroundItemsEl backgroundItems = _TranslationsMyToolsCatalogBackgroundItemsEl._(_root);
 	@override late final _TranslationsMyToolsCatalogDownloadsEl downloads = _TranslationsMyToolsCatalogDownloadsEl._(_root);
 	@override late final _TranslationsMyToolsCatalogLargeOldEl largeOld = _TranslationsMyToolsCatalogLargeOldEl._(_root);
-	@override late final _TranslationsMyToolsCatalogAppUpdaterEl appUpdater = _TranslationsMyToolsCatalogAppUpdaterEl._(_root);
 	@override late final _TranslationsMyToolsCatalogSimilarImagesEl similarImages = _TranslationsMyToolsCatalogSimilarImagesEl._(_root);
-	@override late final _TranslationsMyToolsCatalogPrivacyItemsEl privacyItems = _TranslationsMyToolsCatalogPrivacyItemsEl._(_root);
 	@override late final _TranslationsMyToolsCatalogTrashBinsEl trashBins = _TranslationsMyToolsCatalogTrashBinsEl._(_root);
 	@override late final _TranslationsMyToolsCatalogDuplicateFinderEl duplicateFinder = _TranslationsMyToolsCatalogDuplicateFinderEl._(_root);
 	@override late final _TranslationsMyToolsCatalogApplicationPermissionsEl applicationPermissions = _TranslationsMyToolsCatalogApplicationPermissionsEl._(_root);
 	@override late final _TranslationsMyToolsCatalogSystemJunkEl systemJunk = _TranslationsMyToolsCatalogSystemJunkEl._(_root);
 	@override late final _TranslationsMyToolsCatalogTimeMachineSnapshotEl timeMachineSnapshot = _TranslationsMyToolsCatalogTimeMachineSnapshotEl._(_root);
-	@override late final _TranslationsMyToolsCatalogMaintenanceTasksEl maintenanceTasks = _TranslationsMyToolsCatalogMaintenanceTasksEl._(_root);
 	@override late final _TranslationsMyToolsCatalogLoginItemsEl loginItems = _TranslationsMyToolsCatalogLoginItemsEl._(_root);
 	@override late final _TranslationsMyToolsCatalogMailAttachmentsEl mailAttachments = _TranslationsMyToolsCatalogMailAttachmentsEl._(_root);
 	@override late final _TranslationsMyToolsCatalogMalwareFinderEl malwareFinder = _TranslationsMyToolsCatalogMalwareFinderEl._(_root);
@@ -615,17 +612,6 @@ class _TranslationsMyToolsCatalogLargeOldEl implements TranslationsMyToolsCatalo
 	@override String get description => 'Βρείτε και αφαιρέστε μεγάλα, αχρησιμοποίητα αρχεία που καταλαμβάνουν χώρο στο Mac σας.';
 }
 
-// Path: myToolsCatalog.appUpdater
-class _TranslationsMyToolsCatalogAppUpdaterEl implements TranslationsMyToolsCatalogAppUpdaterEn {
-	_TranslationsMyToolsCatalogAppUpdaterEl._(this._root);
-
-	final TranslationsEl _root; // ignore: unused_field
-
-	// Translations
-	@override String get title => 'Ενημέρωση εφαρμογών';
-	@override String get description => 'Παρακολουθήστε τις πιο πρόσφατες και πιο αξιόπιστες εκδόσεις των εφαρμογών σας.';
-}
-
 // Path: myToolsCatalog.similarImages
 class _TranslationsMyToolsCatalogSimilarImagesEl implements TranslationsMyToolsCatalogSimilarImagesEn {
 	_TranslationsMyToolsCatalogSimilarImagesEl._(this._root);
@@ -635,17 +621,6 @@ class _TranslationsMyToolsCatalogSimilarImagesEl implements TranslationsMyToolsC
 	// Translations
 	@override String get title => 'Παρόμοιες Εικόνες';
 	@override String get description => 'Ελέγξτε παρόμοιες φωτογραφίες και κρατήστε μόνο τις καλύτερες.';
-}
-
-// Path: myToolsCatalog.privacyItems
-class _TranslationsMyToolsCatalogPrivacyItemsEl implements TranslationsMyToolsCatalogPrivacyItemsEn {
-	_TranslationsMyToolsCatalogPrivacyItemsEl._(this._root);
-
-	final TranslationsEl _root; // ignore: unused_field
-
-	// Translations
-	@override String get title => 'Αντικείμενα απορρήτου';
-	@override String get description => 'Καταργήστε το ιστορικό περιήγησης και τα ίχνη δραστηριότητας για να προστατεύσετε το απόρρητό σας.';
 }
 
 // Path: myToolsCatalog.trashBins
@@ -701,17 +676,6 @@ class _TranslationsMyToolsCatalogTimeMachineSnapshotEl implements TranslationsMy
 	// Translations
 	@override String get title => 'Στιγμιότυπο από τη μηχανή του χρόνου';
 	@override String get description => 'Καταργήστε τα τοπικά στιγμιότυπα του Time Machine χωρίς να επηρεάσετε τα αντίγραφα ασφαλείας σας.';
-}
-
-// Path: myToolsCatalog.maintenanceTasks
-class _TranslationsMyToolsCatalogMaintenanceTasksEl implements TranslationsMyToolsCatalogMaintenanceTasksEn {
-	_TranslationsMyToolsCatalogMaintenanceTasksEl._(this._root);
-
-	final TranslationsEl _root; // ignore: unused_field
-
-	// Translations
-	@override String get title => 'Εργασίες Συντήρησης';
-	@override String get description => 'Εκτελέστε ένα σύνολο συνιστώμενων εργασιών συντήρησης για να φέρετε το Mac σας στο μέγιστο.';
 }
 
 // Path: myToolsCatalog.loginItems
@@ -1063,12 +1027,8 @@ extension on TranslationsEl {
 			'myToolsCatalog.downloads.description' => 'Ελέγξτε και καθαρίστε τα αρχεία μίας χρήσης από τις Λήψεις για να διατηρείτε τους φακέλους τακτοποιημένους.',
 			'myToolsCatalog.largeOld.title' => 'Μεγάλα και παλιά αρχεία',
 			'myToolsCatalog.largeOld.description' => 'Βρείτε και αφαιρέστε μεγάλα, αχρησιμοποίητα αρχεία που καταλαμβάνουν χώρο στο Mac σας.',
-			'myToolsCatalog.appUpdater.title' => 'Ενημέρωση εφαρμογών',
-			'myToolsCatalog.appUpdater.description' => 'Παρακολουθήστε τις πιο πρόσφατες και πιο αξιόπιστες εκδόσεις των εφαρμογών σας.',
 			'myToolsCatalog.similarImages.title' => 'Παρόμοιες Εικόνες',
 			'myToolsCatalog.similarImages.description' => 'Ελέγξτε παρόμοιες φωτογραφίες και κρατήστε μόνο τις καλύτερες.',
-			'myToolsCatalog.privacyItems.title' => 'Αντικείμενα απορρήτου',
-			'myToolsCatalog.privacyItems.description' => 'Καταργήστε το ιστορικό περιήγησης και τα ίχνη δραστηριότητας για να προστατεύσετε το απόρρητό σας.',
 			'myToolsCatalog.trashBins.title' => 'Κάδοι απορριμμάτων',
 			'myToolsCatalog.trashBins.description' => 'Αδειάστε όλους τους διαθέσιμους κάδους απορριμμάτων στο Mac σας.',
 			'myToolsCatalog.duplicateFinder.title' => 'Διπλότυπο Finder',
@@ -1079,8 +1039,6 @@ extension on TranslationsEl {
 			'myToolsCatalog.systemJunk.description' => 'Καταργήστε τα περιττά αρχεία που φράζουν την αποθήκευση της συσκευής και εμποδίζουν τη βέλτιστη απόδοση.',
 			'myToolsCatalog.timeMachineSnapshot.title' => 'Στιγμιότυπο από τη μηχανή του χρόνου',
 			'myToolsCatalog.timeMachineSnapshot.description' => 'Καταργήστε τα τοπικά στιγμιότυπα του Time Machine χωρίς να επηρεάσετε τα αντίγραφα ασφαλείας σας.',
-			'myToolsCatalog.maintenanceTasks.title' => 'Εργασίες Συντήρησης',
-			'myToolsCatalog.maintenanceTasks.description' => 'Εκτελέστε ένα σύνολο συνιστώμενων εργασιών συντήρησης για να φέρετε το Mac σας στο μέγιστο.',
 			'myToolsCatalog.loginItems.title' => 'Στοιχεία σύνδεσης',
 			'myToolsCatalog.loginItems.description' => 'Διαχειριστείτε τις εφαρμογές που ανοίγουν αυτόματα κατά την εκκίνηση του Mac σας.',
 			'myToolsCatalog.mailAttachments.title' => 'Συνημμένα αλληλογραφίας',

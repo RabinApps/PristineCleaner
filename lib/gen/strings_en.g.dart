@@ -600,15 +600,12 @@ class TranslationsMyToolsCatalogEn {
 	late final TranslationsMyToolsCatalogBackgroundItemsEn backgroundItems = TranslationsMyToolsCatalogBackgroundItemsEn._(_root);
 	late final TranslationsMyToolsCatalogDownloadsEn downloads = TranslationsMyToolsCatalogDownloadsEn._(_root);
 	late final TranslationsMyToolsCatalogLargeOldEn largeOld = TranslationsMyToolsCatalogLargeOldEn._(_root);
-	late final TranslationsMyToolsCatalogAppUpdaterEn appUpdater = TranslationsMyToolsCatalogAppUpdaterEn._(_root);
 	late final TranslationsMyToolsCatalogSimilarImagesEn similarImages = TranslationsMyToolsCatalogSimilarImagesEn._(_root);
-	late final TranslationsMyToolsCatalogPrivacyItemsEn privacyItems = TranslationsMyToolsCatalogPrivacyItemsEn._(_root);
 	late final TranslationsMyToolsCatalogTrashBinsEn trashBins = TranslationsMyToolsCatalogTrashBinsEn._(_root);
 	late final TranslationsMyToolsCatalogDuplicateFinderEn duplicateFinder = TranslationsMyToolsCatalogDuplicateFinderEn._(_root);
 	late final TranslationsMyToolsCatalogApplicationPermissionsEn applicationPermissions = TranslationsMyToolsCatalogApplicationPermissionsEn._(_root);
 	late final TranslationsMyToolsCatalogSystemJunkEn systemJunk = TranslationsMyToolsCatalogSystemJunkEn._(_root);
 	late final TranslationsMyToolsCatalogTimeMachineSnapshotEn timeMachineSnapshot = TranslationsMyToolsCatalogTimeMachineSnapshotEn._(_root);
-	late final TranslationsMyToolsCatalogMaintenanceTasksEn maintenanceTasks = TranslationsMyToolsCatalogMaintenanceTasksEn._(_root);
 	late final TranslationsMyToolsCatalogLoginItemsEn loginItems = TranslationsMyToolsCatalogLoginItemsEn._(_root);
 	late final TranslationsMyToolsCatalogMailAttachmentsEn mailAttachments = TranslationsMyToolsCatalogMailAttachmentsEn._(_root);
 	late final TranslationsMyToolsCatalogMalwareFinderEn malwareFinder = TranslationsMyToolsCatalogMalwareFinderEn._(_root);
@@ -986,21 +983,6 @@ class TranslationsMyToolsCatalogLargeOldEn {
 	String get description => 'Find and remove large, unused files that take up space on your Mac.';
 }
 
-// Path: myToolsCatalog.appUpdater
-class TranslationsMyToolsCatalogAppUpdaterEn {
-	TranslationsMyToolsCatalogAppUpdaterEn._(this._root);
-
-	final Translations _root; // ignore: unused_field
-
-	// Translations
-
-	/// en: 'App Updater'
-	String get title => 'App Updater';
-
-	/// en: 'Keep an eye on the latest and most reliable versions of your applications.'
-	String get description => 'Keep an eye on the latest and most reliable versions of your applications.';
-}
-
 // Path: myToolsCatalog.similarImages
 class TranslationsMyToolsCatalogSimilarImagesEn {
 	TranslationsMyToolsCatalogSimilarImagesEn._(this._root);
@@ -1014,21 +996,6 @@ class TranslationsMyToolsCatalogSimilarImagesEn {
 
 	/// en: 'Review similar photos and keep only the best ones.'
 	String get description => 'Review similar photos and keep only the best ones.';
-}
-
-// Path: myToolsCatalog.privacyItems
-class TranslationsMyToolsCatalogPrivacyItemsEn {
-	TranslationsMyToolsCatalogPrivacyItemsEn._(this._root);
-
-	final Translations _root; // ignore: unused_field
-
-	// Translations
-
-	/// en: 'Privacy Items'
-	String get title => 'Privacy Items';
-
-	/// en: 'Remove browsing history and activity traces to protect your privacy.'
-	String get description => 'Remove browsing history and activity traces to protect your privacy.';
 }
 
 // Path: myToolsCatalog.trashBins
@@ -1104,21 +1071,6 @@ class TranslationsMyToolsCatalogTimeMachineSnapshotEn {
 
 	/// en: 'Remove local Time Machine snapshots without affecting your backups.'
 	String get description => 'Remove local Time Machine snapshots without affecting your backups.';
-}
-
-// Path: myToolsCatalog.maintenanceTasks
-class TranslationsMyToolsCatalogMaintenanceTasksEn {
-	TranslationsMyToolsCatalogMaintenanceTasksEn._(this._root);
-
-	final Translations _root; // ignore: unused_field
-
-	// Translations
-
-	/// en: 'Maintenance Tasks'
-	String get title => 'Maintenance Tasks';
-
-	/// en: 'Run a set of recommended maintenance tasks to bring your Mac to its max.'
-	String get description => 'Run a set of recommended maintenance tasks to bring your Mac to its max.';
 }
 
 // Path: myToolsCatalog.loginItems
@@ -1541,12 +1493,8 @@ extension on Translations {
 			'myToolsCatalog.downloads.description' => 'Review and clean one-time use files from Downloads to keep folders tidy.',
 			'myToolsCatalog.largeOld.title' => 'Large and Old Files',
 			'myToolsCatalog.largeOld.description' => 'Find and remove large, unused files that take up space on your Mac.',
-			'myToolsCatalog.appUpdater.title' => 'App Updater',
-			'myToolsCatalog.appUpdater.description' => 'Keep an eye on the latest and most reliable versions of your applications.',
 			'myToolsCatalog.similarImages.title' => 'Similar Images',
 			'myToolsCatalog.similarImages.description' => 'Review similar photos and keep only the best ones.',
-			'myToolsCatalog.privacyItems.title' => 'Privacy Items',
-			'myToolsCatalog.privacyItems.description' => 'Remove browsing history and activity traces to protect your privacy.',
 			'myToolsCatalog.trashBins.title' => 'Trash Bins',
 			'myToolsCatalog.trashBins.description' => 'Empty all of the available Trash Bins on your Mac.',
 			'myToolsCatalog.duplicateFinder.title' => 'Duplicate Finder',
@@ -1557,8 +1505,6 @@ extension on Translations {
 			'myToolsCatalog.systemJunk.description' => 'Remove redundant files that clog up device storage and impede optimal performance.',
 			'myToolsCatalog.timeMachineSnapshot.title' => 'Time Machine Snapshot',
 			'myToolsCatalog.timeMachineSnapshot.description' => 'Remove local Time Machine snapshots without affecting your backups.',
-			'myToolsCatalog.maintenanceTasks.title' => 'Maintenance Tasks',
-			'myToolsCatalog.maintenanceTasks.description' => 'Run a set of recommended maintenance tasks to bring your Mac to its max.',
 			'myToolsCatalog.loginItems.title' => 'Login Items',
 			'myToolsCatalog.loginItems.description' => 'Manage apps that open automatically when you start your Mac.',
 			'myToolsCatalog.mailAttachments.title' => 'Mail Attachments',
