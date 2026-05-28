@@ -98,120 +98,51 @@ jobs:
 
           echo "RELEASE_TAG=$release_tag" >> "$GITHUB_ENV"
 
-      - name: Build macOS app
+      - name: Import macOS codesign certificate
         if: runner.os == 'macOS' && matrix.release_name == 'desktop-macos'
-        run: flutter build macos --release
+        uses: apple-actions/import-codesign-certs@v3
+        with:
+          p12-file-base64: ${{ secrets.PROD_MACOS_CERTIFICATE }}
+          p12-password: ${{ secrets.PROD_MACOS_CERTIFICATE_PWD }}
+          keychain-password: ${{ secrets.PROD_MACOS_CI_KEYCHAIN_PWD }}
 
       - name: Build release assets
-        if: runner.os != 'macOS' || matrix.release_name != 'desktop-macos'
         run: fastforge release --name ${{ matrix.release_name }} --skip-clean
 
-      - name: Sign, notarize, and package macOS release
+      - name: Notarize macOS DMG
         if: runner.os == 'macOS' && matrix.release_name == 'desktop-macos'
         shell: bash
         env:
-          MACOS_CERTIFICATE: ${{ secrets.PROD_MACOS_CERTIFICATE }}
-          MACOS_CERTIFICATE_PWD: ${{ secrets.PROD_MACOS_CERTIFICATE_PWD }}
           MACOS_CERTIFICATE_NAME: ${{ secrets.PROD_MACOS_CERTIFICATE_NAME }}
-          MACOS_CI_KEYCHAIN_PWD: ${{ secrets.PROD_MACOS_CI_KEYCHAIN_PWD }}
           MACOS_NOTARY_APPLE_ID: ${{ secrets.PROD_MACOS_NOTARIZATION_APPLE_ID }}
           MACOS_NOTARY_TEAM_ID: ${{ secrets.PROD_MACOS_NOTARIZATION_TEAM_ID }}
           MACOS_NOTARY_APP_PASSWORD: ${{ secrets.PROD_MACOS_NOTARIZATION_PWD }}
         run: |
           set -euo pipefail
 
-          # Recreate the certificate file from base64 secret.
-          echo "$MACOS_CERTIFICATE" | base64 --decode > certificate.p12
+          DMG_PATH="$(find dist -type f -name '*.dmg' | head -n 1 || true)"
 
-          # Use a temporary keychain to avoid interactive prompts in CI.
-          KEYCHAIN_PATH="$RUNNER_TEMP/build.keychain-db"
-          PACKAGING_DIR=""
-          APP_NOTARY_ZIP_PATH=""
-          cleanup() {
-            rm -f certificate.p12
-            if [[ -n "$APP_NOTARY_ZIP_PATH" ]]; then
-              rm -f "$APP_NOTARY_ZIP_PATH"
-            fi
-            if [[ -n "$PACKAGING_DIR" ]]; then
-              rm -rf "$PACKAGING_DIR"
-            fi
-            security delete-keychain "$KEYCHAIN_PATH" >/dev/null 2>&1 || true
-          }
-          trap cleanup EXIT
-
-          security create-keychain -p "$MACOS_CI_KEYCHAIN_PWD" "$KEYCHAIN_PATH"
-          security default-keychain -s "$KEYCHAIN_PATH"
-          security unlock-keychain -p "$MACOS_CI_KEYCHAIN_PWD" "$KEYCHAIN_PATH"
-          security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
-          security import certificate.p12 -k "$KEYCHAIN_PATH" -P "$MACOS_CERTIFICATE_PWD" -T /usr/bin/codesign
-          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$MACOS_CI_KEYCHAIN_PWD" "$KEYCHAIN_PATH"
-
-          APP_VERSION="$(awk '/^version:/ { print $2; exit }' pubspec.yaml)"
-          APP_BUNDLE_PATH="build/macos/Build/Products/Release/PristineCleaner.app"
-          APP_NOTARY_ZIP_PATH="$RUNNER_TEMP/PristineCleaner-notarization.zip"
-          DIST_DIR="dist/$APP_VERSION"
-          DMG_ABS_PATH="$GITHUB_WORKSPACE/$DIST_DIR/pristine_cleaner-$APP_VERSION-macos.dmg"
-
-          if [[ -z "$APP_VERSION" ]]; then
-            echo "Could not determine app version from pubspec.yaml"
+          if [[ -z "$DMG_PATH" ]]; then
+            echo "Could not find DMG artifact in dist/ to notarize"
             exit 1
           fi
-
-          if [[ ! -d "$APP_BUNDLE_PATH" ]]; then
-            echo "Could not find PristineCleaner.app to sign"
-            exit 1
-          fi
-
-          /usr/bin/codesign \
-            --force \
-            --deep \
-            --sign "$MACOS_CERTIFICATE_NAME" \
-            --options runtime \
-            --entitlements macos/Runner/Release.entitlements \
-            --verbose \
-            "$APP_BUNDLE_PATH"
-
-          /usr/bin/codesign --verify --deep --strict --verbose=2 "$APP_BUNDLE_PATH"
-
-          # Notarize and staple the app bundle before packaging it into a DMG.
-          ditto -c -k --keepParent "$APP_BUNDLE_PATH" "$APP_NOTARY_ZIP_PATH"
-          xcrun notarytool submit \
-            "$APP_NOTARY_ZIP_PATH" \
-            --apple-id "$MACOS_NOTARY_APPLE_ID" \
-            --team-id "$MACOS_NOTARY_TEAM_ID" \
-            --password "$MACOS_NOTARY_APP_PASSWORD" \
-            --wait
-
-          xcrun stapler staple "$APP_BUNDLE_PATH"
-          xcrun stapler validate "$APP_BUNDLE_PATH"
-
-          PACKAGING_DIR="$(mktemp -d)"
-          mkdir -p "$DIST_DIR"
-
-          ditto "$APP_BUNDLE_PATH" "$PACKAGING_DIR/PristineCleaner.app"
-          cp macos/packaging/dmg/make_config.yaml "$PACKAGING_DIR/make_config.yaml"
-          rm -f "$DMG_ABS_PATH"
-          (
-            cd "$PACKAGING_DIR"
-            appdmg make_config.yaml "$DMG_ABS_PATH"
-          )
 
           /usr/bin/codesign \
             --force \
             --sign "$MACOS_CERTIFICATE_NAME" \
             --options runtime \
             --verbose \
-            "$DMG_ABS_PATH"
+            "$DMG_PATH"
 
           xcrun notarytool submit \
-            "$DMG_ABS_PATH" \
+            "$DMG_PATH" \
             --apple-id "$MACOS_NOTARY_APPLE_ID" \
             --team-id "$MACOS_NOTARY_TEAM_ID" \
             --password "$MACOS_NOTARY_APP_PASSWORD" \
             --wait
 
-          xcrun stapler staple "$DMG_ABS_PATH"
-          xcrun stapler validate "$DMG_ABS_PATH"
+          xcrun stapler staple "$DMG_PATH"
+          xcrun stapler validate "$DMG_PATH"
 
       - name: Append x86_64 suffix to Linux artifact names
         if: runner.os == 'Linux' && matrix.release_name == 'desktop-linux-x64'
