@@ -101,6 +101,46 @@ jobs:
       - name: Build release assets
         run: fastforge release --name ${{ matrix.release_name }} --skip-clean
 
+      - name: Codesign macOS app bundle
+        if: runner.os == 'macOS' && matrix.release_name == 'desktop-macos'
+        shell: bash
+        env:
+          MACOS_CERTIFICATE: ${{ secrets.PROD_MACOS_CERTIFICATE }}
+          MACOS_CERTIFICATE_PWD: ${{ secrets.PROD_MACOS_CERTIFICATE_PWD }}
+          MACOS_CERTIFICATE_NAME: ${{ secrets.PROD_MACOS_CERTIFICATE_NAME }}
+          MACOS_CI_KEYCHAIN_PWD: ${{ secrets.PROD_MACOS_CI_KEYCHAIN_PWD }}
+        run: |
+          set -euo pipefail
+
+          # Recreate the certificate file from base64 secret.
+          echo "$MACOS_CERTIFICATE" | base64 --decode > certificate.p12
+
+          # Use a temporary keychain to avoid interactive prompts in CI.
+          KEYCHAIN_PATH="$RUNNER_TEMP/build.keychain-db"
+          security create-keychain -p "$MACOS_CI_KEYCHAIN_PWD" "$KEYCHAIN_PATH"
+          security default-keychain -s "$KEYCHAIN_PATH"
+          security unlock-keychain -p "$MACOS_CI_KEYCHAIN_PWD" "$KEYCHAIN_PATH"
+          security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
+          security import certificate.p12 -k "$KEYCHAIN_PATH" -P "$MACOS_CERTIFICATE_PWD" -T /usr/bin/codesign
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$MACOS_CI_KEYCHAIN_PWD" "$KEYCHAIN_PATH"
+
+          # Fastforge produces a Flutter release app bundle in build/macos/Build/Products/Release.
+          APP_BUNDLE_PATH="$(find build/macos/Build/Products/Release -maxdepth 1 -type d -name 'PristineCleaner.app' | head -n 1 || true)"
+
+          if [[ -z "$APP_BUNDLE_PATH" ]]; then
+            # Fallback in case output layout changes.
+            APP_BUNDLE_PATH="$(find build/macos -type d -name 'PristineCleaner.app' | head -n 1 || true)"
+          fi
+
+          if [[ -z "$APP_BUNDLE_PATH" ]]; then
+            echo "Could not find PristineCleaner.app to sign"
+            exit 1
+          fi
+
+          /usr/bin/codesign --force --sign "$MACOS_CERTIFICATE_NAME" --options runtime --verbose "$APP_BUNDLE_PATH"
+
+          rm -f certificate.p12
+
       - name: Append x86_64 suffix to Linux artifact names
         if: runner.os == 'Linux' && matrix.release_name == 'desktop-linux-x64'
         shell: bash
