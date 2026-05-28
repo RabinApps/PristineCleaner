@@ -119,6 +119,7 @@ jobs:
 
       - name: Notarize macOS DMG
         if: runner.os == 'macOS' && matrix.release_name == 'desktop-macos'
+        timeout-minutes: 60
         shell: bash
         env:
           MACOS_CERTIFICATE_NAME: ${{ secrets.PROD_MACOS_CERTIFICATE_NAME }}
@@ -190,7 +191,7 @@ jobs:
             exit 1
           fi
 
-          APP_ENTITLEMENTS="$(/usr/bin/codesign -d --entitlements :- "$APP_EXECUTABLE" 2>&1 || true)"
+          APP_ENTITLEMENTS="$(/usr/bin/codesign -d --entitlements - "$APP_EXECUTABLE" 2>&1 || true)"
           echo "$APP_ENTITLEMENTS"
 
           if echo "$APP_ENTITLEMENTS" | grep -q 'com.apple.security.get-task-allow'; then
@@ -218,18 +219,53 @@ jobs:
             --verbose \
             "$DMG_PATH"
 
-          NOTARY_RESULT_JSON="$(xcrun notarytool submit \
+          NOTARY_SUBMISSION_JSON="$(xcrun notarytool submit \
             "$DMG_PATH" \
             --apple-id "$MACOS_NOTARY_APPLE_ID" \
             --team-id "$MACOS_NOTARY_TEAM_ID" \
             --password "$MACOS_NOTARY_APP_PASSWORD" \
-            --wait \
+            --no-wait \
             --output-format json)"
 
-          echo "$NOTARY_RESULT_JSON"
+          echo "$NOTARY_SUBMISSION_JSON"
 
-          NOTARY_SUBMISSION_ID="$(echo "$NOTARY_RESULT_JSON" | /usr/bin/python3 -c 'import json,sys; print(json.load(sys.stdin).get("id", ""))')"
-          NOTARY_STATUS="$(echo "$NOTARY_RESULT_JSON" | /usr/bin/python3 -c 'import json,sys; print(json.load(sys.stdin).get("status", ""))')"
+          NOTARY_SUBMISSION_ID="$(echo "$NOTARY_SUBMISSION_JSON" | /usr/bin/python3 -c 'import json,sys; print(json.load(sys.stdin).get("id", ""))')"
+
+          if [[ -z "$NOTARY_SUBMISSION_ID" ]]; then
+            echo "Unable to read notarization submission id"
+            exit 1
+          fi
+
+          echo "Notary submission id: $NOTARY_SUBMISSION_ID"
+          echo "Polling notarization status every 30 seconds..."
+
+          max_attempts=120
+          attempt=1
+          NOTARY_STATUS=""
+
+          while (( attempt <= max_attempts )); do
+            NOTARY_INFO_JSON="$(xcrun notarytool info \
+              "$NOTARY_SUBMISSION_ID" \
+              --apple-id "$MACOS_NOTARY_APPLE_ID" \
+              --team-id "$MACOS_NOTARY_TEAM_ID" \
+              --password "$MACOS_NOTARY_APP_PASSWORD" \
+              --output-format json)"
+
+            NOTARY_STATUS="$(echo "$NOTARY_INFO_JSON" | /usr/bin/python3 -c 'import json,sys; print(json.load(sys.stdin).get("status", ""))')"
+            echo "Attempt $attempt/$max_attempts: notarization status = $NOTARY_STATUS"
+
+            if [[ "$NOTARY_STATUS" == "Accepted" || "$NOTARY_STATUS" == "Invalid" || "$NOTARY_STATUS" == "Rejected" ]]; then
+              break
+            fi
+
+            attempt=$((attempt + 1))
+            sleep 30
+          done
+
+          if [[ "$NOTARY_STATUS" != "Accepted" && "$NOTARY_STATUS" != "Invalid" && "$NOTARY_STATUS" != "Rejected" ]]; then
+            echo "Timed out waiting for notarization to finish"
+            NOTARY_STATUS="Timeout"
+          fi
 
           if [[ "$NOTARY_STATUS" != "Accepted" ]]; then
             echo "Notarization failed with status: $NOTARY_STATUS"
