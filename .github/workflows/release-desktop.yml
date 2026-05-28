@@ -135,10 +135,86 @@ jobs:
             exit 1
           fi
 
+          TEMP_DIR="$(mktemp -d)"
+          MOUNT_DIR="$TEMP_DIR/mount"
+          EXTRACT_DIR="$TEMP_DIR/extracted"
+          mkdir -p "$MOUNT_DIR" "$EXTRACT_DIR"
+
+          cleanup() {
+            hdiutil detach "$MOUNT_DIR" -quiet >/dev/null 2>&1 || true
+            rm -rf "$TEMP_DIR"
+          }
+          trap cleanup EXIT
+
+          hdiutil attach "$DMG_PATH" -mountpoint "$MOUNT_DIR" -nobrowse -quiet
+          APP_PATH="$(find "$MOUNT_DIR" -maxdepth 1 -type d -name '*.app' | head -n 1 || true)"
+
+          if [[ -z "$APP_PATH" ]]; then
+            echo "Could not find .app bundle inside DMG"
+            exit 1
+          fi
+
+          cp -R "$APP_PATH" "$EXTRACT_DIR/"
+          hdiutil detach "$MOUNT_DIR" -quiet
+
+          APP_PATH="$(find "$EXTRACT_DIR" -maxdepth 1 -type d -name '*.app' | head -n 1 || true)"
+          APP_EXECUTABLE="$(find "$APP_PATH/Contents/MacOS" -maxdepth 1 -type f | head -n 1 || true)"
+
+          if [[ -z "$APP_EXECUTABLE" ]]; then
+            echo "Could not find app executable in $APP_PATH"
+            exit 1
+          fi
+
+          /usr/bin/codesign \
+            --force \
+            --deep \
+            --sign "$MACOS_CERTIFICATE_NAME" \
+            --options runtime \
+            --timestamp \
+            --entitlements "macos/Runner/Release.entitlements" \
+            --verbose \
+            "$APP_PATH"
+
+          /usr/bin/codesign --verify --deep --strict --verbose=2 "$APP_PATH"
+
+          APP_SIGNATURE_INFO="$(/usr/bin/codesign -dv --verbose=4 "$APP_EXECUTABLE" 2>&1)"
+          echo "$APP_SIGNATURE_INFO"
+
+          if ! echo "$APP_SIGNATURE_INFO" | grep -Eq 'flags=.*runtime'; then
+            echo "Hardened runtime flag missing from app executable signature"
+            exit 1
+          fi
+
+          if ! echo "$APP_SIGNATURE_INFO" | grep -q 'Timestamp='; then
+            echo "Secure timestamp missing from app executable signature"
+            exit 1
+          fi
+
+          APP_ENTITLEMENTS="$(/usr/bin/codesign -d --entitlements :- "$APP_EXECUTABLE" 2>&1 || true)"
+          echo "$APP_ENTITLEMENTS"
+
+          if echo "$APP_ENTITLEMENTS" | grep -q 'com.apple.security.get-task-allow'; then
+            echo "Debug entitlement com.apple.security.get-task-allow must not be present in release app"
+            exit 1
+          fi
+
+          APP_BASENAME="$(basename "$APP_PATH" .app)"
+          REPACKED_DMG_PATH="$TEMP_DIR/${APP_BASENAME}.dmg"
+
+          rm -f "$DMG_PATH"
+          hdiutil create \
+            -volname "$APP_BASENAME" \
+            -srcfolder "$APP_PATH" \
+            -ov \
+            -format UDZO \
+            "$REPACKED_DMG_PATH"
+
+          mv "$REPACKED_DMG_PATH" "$DMG_PATH"
+
           /usr/bin/codesign \
             --force \
             --sign "$MACOS_CERTIFICATE_NAME" \
-            --options runtime \
+            --timestamp \
             --verbose \
             "$DMG_PATH"
 
