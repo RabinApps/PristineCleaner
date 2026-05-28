@@ -101,7 +101,7 @@ jobs:
       - name: Build release assets
         run: fastforge release --name ${{ matrix.release_name }} --skip-clean
 
-      - name: Codesign macOS DMG
+      - name: Sign and notarize macOS release
         if: runner.os == 'macOS' && matrix.release_name == 'desktop-macos'
         shell: bash
         env:
@@ -109,6 +109,9 @@ jobs:
           MACOS_CERTIFICATE_PWD: ${{ secrets.PROD_MACOS_CERTIFICATE_PWD }}
           MACOS_CERTIFICATE_NAME: ${{ secrets.PROD_MACOS_CERTIFICATE_NAME }}
           MACOS_CI_KEYCHAIN_PWD: ${{ secrets.PROD_MACOS_CI_KEYCHAIN_PWD }}
+          MACOS_NOTARY_APPLE_ID: ${{ secrets.PROD_MACOS_NOTARIZATION_APPLE_ID }}
+          MACOS_NOTARY_TEAM_ID: ${{ secrets.PROD_MACOS_NOTARIZATION_TEAM_ID }}
+          MACOS_NOTARY_APP_PASSWORD: ${{ secrets.PROD_MACOS_NOTARIZATION_PWD }}
         run: |
           set -euo pipefail
 
@@ -117,6 +120,16 @@ jobs:
 
           # Use a temporary keychain to avoid interactive prompts in CI.
           KEYCHAIN_PATH="$RUNNER_TEMP/build.keychain-db"
+          PACKAGING_DIR=""
+          cleanup() {
+            rm -f certificate.p12
+            if [[ -n "$PACKAGING_DIR" ]]; then
+              rm -rf "$PACKAGING_DIR"
+            fi
+            security delete-keychain "$KEYCHAIN_PATH" >/dev/null 2>&1 || true
+          }
+          trap cleanup EXIT
+
           security create-keychain -p "$MACOS_CI_KEYCHAIN_PWD" "$KEYCHAIN_PATH"
           security default-keychain -s "$KEYCHAIN_PATH"
           security unlock-keychain -p "$MACOS_CI_KEYCHAIN_PWD" "$KEYCHAIN_PATH"
@@ -124,7 +137,29 @@ jobs:
           security import certificate.p12 -k "$KEYCHAIN_PATH" -P "$MACOS_CERTIFICATE_PWD" -T /usr/bin/codesign
           security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$MACOS_CI_KEYCHAIN_PWD" "$KEYCHAIN_PATH"
 
-          # Fastforge outputs a DMG artifact into dist/ for the macOS release.
+          APP_BUNDLE_PATH="$(find build/macos/Build/Products/Release -maxdepth 1 -type d -name 'PristineCleaner.app' | head -n 1 || true)"
+
+          if [[ -z "$APP_BUNDLE_PATH" ]]; then
+            APP_BUNDLE_PATH="$(find build/macos -type d -name 'PristineCleaner.app' | head -n 1 || true)"
+          fi
+
+          if [[ -z "$APP_BUNDLE_PATH" ]]; then
+            echo "Could not find PristineCleaner.app to sign"
+            exit 1
+          fi
+
+          /usr/bin/codesign \
+            --force \
+            --deep \
+            --sign "$MACOS_CERTIFICATE_NAME" \
+            --options runtime \
+            --entitlements macos/Runner/Release.entitlements \
+            --verbose \
+            "$APP_BUNDLE_PATH"
+
+          /usr/bin/codesign --verify --deep --strict --verbose=2 "$APP_BUNDLE_PATH"
+
+          # Rebuild the DMG from the signed app so the packaged artifact contains notarizable contents.
           DMG_PATH="$(find dist -type f -name '*.dmg' | head -n 1 || true)"
 
           if [[ -z "$DMG_PATH" ]]; then
@@ -132,9 +167,33 @@ jobs:
             exit 1
           fi
 
-          /usr/bin/codesign --force --sign "$MACOS_CERTIFICATE_NAME" --options runtime --verbose "$DMG_PATH"
+          DMG_ABS_PATH="$GITHUB_WORKSPACE/$DMG_PATH"
+          PACKAGING_DIR="$(mktemp -d)"
 
-          rm -f certificate.p12
+          ditto "$APP_BUNDLE_PATH" "$PACKAGING_DIR/PristineCleaner.app"
+          cp macos/packaging/dmg/make_config.yaml "$PACKAGING_DIR/make_config.yaml"
+          rm -f "$DMG_ABS_PATH"
+          (
+            cd "$PACKAGING_DIR"
+            appdmg make_config.yaml "$DMG_ABS_PATH"
+          )
+
+          /usr/bin/codesign \
+            --force \
+            --sign "$MACOS_CERTIFICATE_NAME" \
+            --options runtime \
+            --verbose \
+            "$DMG_ABS_PATH"
+
+          xcrun notarytool submit \
+            "$DMG_ABS_PATH" \
+            --apple-id "$MACOS_NOTARY_APPLE_ID" \
+            --team-id "$MACOS_NOTARY_TEAM_ID" \
+            --password "$MACOS_NOTARY_APP_PASSWORD" \
+            --wait
+
+          xcrun stapler staple "$DMG_ABS_PATH"
+          xcrun stapler validate "$DMG_ABS_PATH"
 
       - name: Append x86_64 suffix to Linux artifact names
         if: runner.os == 'Linux' && matrix.release_name == 'desktop-linux-x64'
