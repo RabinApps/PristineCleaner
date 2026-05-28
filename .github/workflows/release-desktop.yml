@@ -101,7 +101,7 @@ jobs:
       - name: Build release assets
         run: fastforge release --name ${{ matrix.release_name }} --skip-clean
 
-      - name: Codesign macOS app bundle
+      - name: Codesign macOS DMG
         if: runner.os == 'macOS' && matrix.release_name == 'desktop-macos'
         shell: bash
         env:
@@ -124,20 +124,15 @@ jobs:
           security import certificate.p12 -k "$KEYCHAIN_PATH" -P "$MACOS_CERTIFICATE_PWD" -T /usr/bin/codesign
           security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$MACOS_CI_KEYCHAIN_PWD" "$KEYCHAIN_PATH"
 
-          # Fastforge produces a Flutter release app bundle in build/macos/Build/Products/Release.
-          APP_BUNDLE_PATH="$(find build/macos/Build/Products/Release -maxdepth 1 -type d -name 'PristineCleaner.app' | head -n 1 || true)"
+          # Fastforge outputs a DMG artifact into dist/ for the macOS release.
+          DMG_PATH="$(find dist -type f -name '*.dmg' | head -n 1 || true)"
 
-          if [[ -z "$APP_BUNDLE_PATH" ]]; then
-            # Fallback in case output layout changes.
-            APP_BUNDLE_PATH="$(find build/macos -type d -name 'PristineCleaner.app' | head -n 1 || true)"
-          fi
-
-          if [[ -z "$APP_BUNDLE_PATH" ]]; then
-            echo "Could not find PristineCleaner.app to sign"
+          if [[ -z "$DMG_PATH" ]]; then
+            echo "Could not find DMG artifact in dist/ to sign"
             exit 1
           fi
 
-          /usr/bin/codesign --force --sign "$MACOS_CERTIFICATE_NAME" --options runtime --verbose "$APP_BUNDLE_PATH"
+          /usr/bin/codesign --force --sign "$MACOS_CERTIFICATE_NAME" --options runtime --verbose "$DMG_PATH"
 
           rm -f certificate.p12
 
