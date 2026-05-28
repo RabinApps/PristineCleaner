@@ -106,6 +106,14 @@ jobs:
           p12-password: ${{ secrets.PROD_MACOS_CERTIFICATE_PWD }}
           keychain-password: ${{ secrets.PROD_MACOS_CI_KEYCHAIN_PWD }}
 
+      - name: Install Provisioning Profile
+        if: runner.os == 'macOS' && matrix.release_name == 'desktop-macos'
+        shell: bash
+        run: |
+          PP_FOLDER="$HOME/Library/MobileDevice/Provisioning Profiles"
+          mkdir -p "$PP_FOLDER"
+          echo "${{ secrets.MACOS_PROVISION_PROFILE_BASE64 }}" | base64 --decode > "$PP_FOLDER/macos_profile.provisionprofile"
+
       - name: Build release assets
         run: fastforge release --name ${{ matrix.release_name }} --skip-clean
 
