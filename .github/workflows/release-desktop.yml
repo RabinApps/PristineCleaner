@@ -98,10 +98,15 @@ jobs:
 
           echo "RELEASE_TAG=$release_tag" >> "$GITHUB_ENV"
 
+      - name: Build macOS app
+        if: runner.os == 'macOS' && matrix.release_name == 'desktop-macos'
+        run: flutter build macos --release
+
       - name: Build release assets
+        if: runner.os != 'macOS' || matrix.release_name != 'desktop-macos'
         run: fastforge release --name ${{ matrix.release_name }} --skip-clean
 
-      - name: Sign and notarize macOS release
+      - name: Sign, notarize, and package macOS release
         if: runner.os == 'macOS' && matrix.release_name == 'desktop-macos'
         shell: bash
         env:
@@ -121,8 +126,12 @@ jobs:
           # Use a temporary keychain to avoid interactive prompts in CI.
           KEYCHAIN_PATH="$RUNNER_TEMP/build.keychain-db"
           PACKAGING_DIR=""
+          APP_NOTARY_ZIP_PATH=""
           cleanup() {
             rm -f certificate.p12
+            if [[ -n "$APP_NOTARY_ZIP_PATH" ]]; then
+              rm -f "$APP_NOTARY_ZIP_PATH"
+            fi
             if [[ -n "$PACKAGING_DIR" ]]; then
               rm -rf "$PACKAGING_DIR"
             fi
@@ -137,13 +146,18 @@ jobs:
           security import certificate.p12 -k "$KEYCHAIN_PATH" -P "$MACOS_CERTIFICATE_PWD" -T /usr/bin/codesign
           security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$MACOS_CI_KEYCHAIN_PWD" "$KEYCHAIN_PATH"
 
-          APP_BUNDLE_PATH="$(find build/macos/Build/Products/Release -maxdepth 1 -type d -name 'PristineCleaner.app' | head -n 1 || true)"
+          APP_VERSION="$(awk '/^version:/ { print $2; exit }' pubspec.yaml)"
+          APP_BUNDLE_PATH="build/macos/Build/Products/Release/PristineCleaner.app"
+          APP_NOTARY_ZIP_PATH="$RUNNER_TEMP/PristineCleaner-notarization.zip"
+          DIST_DIR="dist/$APP_VERSION"
+          DMG_ABS_PATH="$GITHUB_WORKSPACE/$DIST_DIR/pristine_cleaner-$APP_VERSION-macos.dmg"
 
-          if [[ -z "$APP_BUNDLE_PATH" ]]; then
-            APP_BUNDLE_PATH="$(find build/macos -type d -name 'PristineCleaner.app' | head -n 1 || true)"
+          if [[ -z "$APP_VERSION" ]]; then
+            echo "Could not determine app version from pubspec.yaml"
+            exit 1
           fi
 
-          if [[ -z "$APP_BUNDLE_PATH" ]]; then
+          if [[ ! -d "$APP_BUNDLE_PATH" ]]; then
             echo "Could not find PristineCleaner.app to sign"
             exit 1
           fi
@@ -159,16 +173,20 @@ jobs:
 
           /usr/bin/codesign --verify --deep --strict --verbose=2 "$APP_BUNDLE_PATH"
 
-          # Rebuild the DMG from the signed app so the packaged artifact contains notarizable contents.
-          DMG_PATH="$(find dist -type f -name '*.dmg' | head -n 1 || true)"
+          # Notarize and staple the app bundle before packaging it into a DMG.
+          ditto -c -k --keepParent "$APP_BUNDLE_PATH" "$APP_NOTARY_ZIP_PATH"
+          xcrun notarytool submit \
+            "$APP_NOTARY_ZIP_PATH" \
+            --apple-id "$MACOS_NOTARY_APPLE_ID" \
+            --team-id "$MACOS_NOTARY_TEAM_ID" \
+            --password "$MACOS_NOTARY_APP_PASSWORD" \
+            --wait
 
-          if [[ -z "$DMG_PATH" ]]; then
-            echo "Could not find DMG artifact in dist/ to sign"
-            exit 1
-          fi
+          xcrun stapler staple "$APP_BUNDLE_PATH"
+          xcrun stapler validate "$APP_BUNDLE_PATH"
 
-          DMG_ABS_PATH="$GITHUB_WORKSPACE/$DMG_PATH"
           PACKAGING_DIR="$(mktemp -d)"
+          mkdir -p "$DIST_DIR"
 
           ditto "$APP_BUNDLE_PATH" "$PACKAGING_DIR/PristineCleaner.app"
           cp macos/packaging/dmg/make_config.yaml "$PACKAGING_DIR/make_config.yaml"
