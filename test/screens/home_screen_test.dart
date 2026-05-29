@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pristine_cleaner/core/models/scan_result.dart';
 import 'package:pristine_cleaner/providers/home_provider.dart';
@@ -26,14 +27,14 @@ class _FakeHomeNotifier extends HomeNotifier {
 }
 
 void main() {
-  testWidgets('HomeScreen renders stats and refresh control', (tester) async {
+  testWidgets('HomeScreen renders dashboard stats', (tester) async {
     await pumpLocalizedApp(
       tester,
       child: const HomeScreen(),
       overrides: [homeProvider.overrideWith(_FakeHomeNotifier.new)],
     );
 
-    expect(find.text('50%'), findsOneWidget);
-    expect(find.textContaining('Refresh'), findsOneWidget);
+    expect(find.byType(LinearProgressIndicator), findsNWidgets(2));
+    expect(find.textContaining('%'), findsWidgets);
   });
 }

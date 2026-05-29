@@ -37,37 +37,37 @@ class TranslationsEl with BaseTranslations<AppLocale, Translations> implements T
 	TranslationsEl $copyWith({TranslationMetadata<AppLocale, Translations>? meta}) => TranslationsEl(meta: meta ?? this.$meta);
 
 	// Translations
-	@override late final _TranslationsAppEl app = _TranslationsAppEl._(_root);
-	@override late final _TranslationsLanguageEl language = _TranslationsLanguageEl._(_root);
-	@override late final _TranslationsNavigationEl navigation = _TranslationsNavigationEl._(_root);
-	@override late final _TranslationsSectionsEl sections = _TranslationsSectionsEl._(_root);
-	@override late final _TranslationsProgressEl progress = _TranslationsProgressEl._(_root);
-	@override late final _TranslationsErrorsEl errors = _TranslationsErrorsEl._(_root);
-	@override late final _TranslationsButtonsEl buttons = _TranslationsButtonsEl._(_root);
-	@override late final _TranslationsTooltipsEl tooltips = _TranslationsTooltipsEl._(_root);
-	@override late final _TranslationsDialogsEl dialogs = _TranslationsDialogsEl._(_root);
-	@override late final _TranslationsRemovalEl removal = _TranslationsRemovalEl._(_root);
-	@override late final _TranslationsDoneEl done = _TranslationsDoneEl._(_root);
-	@override late final _TranslationsDonateEl donate = _TranslationsDonateEl._(_root);
-	@override late final _TranslationsCleanupManagerEl cleanupManager = _TranslationsCleanupManagerEl._(_root);
-	@override late final _TranslationsProjectDirectoryEl projectDirectory = _TranslationsProjectDirectoryEl._(_root);
-	@override late final _TranslationsSearchAndSortEl searchAndSort = _TranslationsSearchAndSortEl._(_root);
-	@override late final _TranslationsSpaceViewEl spaceView = _TranslationsSpaceViewEl._(_root);
-	@override late final _TranslationsHomeEl home = _TranslationsHomeEl._(_root);
-	@override late final _TranslationsMyToolsPageEl myToolsPage = _TranslationsMyToolsPageEl._(_root);
-	@override late final _TranslationsMyToolsMessagesEl myToolsMessages = _TranslationsMyToolsMessagesEl._(_root);
-	@override late final _TranslationsMyToolsCatalogEl myToolsCatalog = _TranslationsMyToolsCatalogEl._(_root);
-	@override late final _TranslationsCleanupCategoriesEl cleanupCategories = _TranslationsCleanupCategoriesEl._(_root);
-	@override late final _TranslationsMyClutterDashboardEl myClutterDashboard = _TranslationsMyClutterDashboardEl._(_root);
-	@override late final _TranslationsScanResultsEl scanResults = _TranslationsScanResultsEl._(_root);
-	@override late final _TranslationsSpaceViewStartEl spaceViewStart = _TranslationsSpaceViewStartEl._(_root);
-	@override late final _TranslationsShellEl shell = _TranslationsShellEl._(_root);
-	@override late final _TranslationsMyToolsServiceEl myToolsService = _TranslationsMyToolsServiceEl._(_root);
+	@override late final _Translations$app$el app = _Translations$app$el._(_root);
+	@override late final _Translations$language$el language = _Translations$language$el._(_root);
+	@override late final _Translations$navigation$el navigation = _Translations$navigation$el._(_root);
+	@override late final _Translations$sections$el sections = _Translations$sections$el._(_root);
+	@override late final _Translations$progress$el progress = _Translations$progress$el._(_root);
+	@override late final _Translations$errors$el errors = _Translations$errors$el._(_root);
+	@override late final _Translations$buttons$el buttons = _Translations$buttons$el._(_root);
+	@override late final _Translations$tooltips$el tooltips = _Translations$tooltips$el._(_root);
+	@override late final _Translations$dialogs$el dialogs = _Translations$dialogs$el._(_root);
+	@override late final _Translations$removal$el removal = _Translations$removal$el._(_root);
+	@override late final _Translations$done$el done = _Translations$done$el._(_root);
+	@override late final _Translations$donate$el donate = _Translations$donate$el._(_root);
+	@override late final _Translations$cleanupManager$el cleanupManager = _Translations$cleanupManager$el._(_root);
+	@override late final _Translations$projectDirectory$el projectDirectory = _Translations$projectDirectory$el._(_root);
+	@override late final _Translations$searchAndSort$el searchAndSort = _Translations$searchAndSort$el._(_root);
+	@override late final _Translations$spaceView$el spaceView = _Translations$spaceView$el._(_root);
+	@override late final _Translations$home$el home = _Translations$home$el._(_root);
+	@override late final _Translations$myToolsPage$el myToolsPage = _Translations$myToolsPage$el._(_root);
+	@override late final _Translations$myToolsMessages$el myToolsMessages = _Translations$myToolsMessages$el._(_root);
+	@override late final _Translations$myToolsCatalog$el myToolsCatalog = _Translations$myToolsCatalog$el._(_root);
+	@override late final _Translations$cleanupCategories$el cleanupCategories = _Translations$cleanupCategories$el._(_root);
+	@override late final _Translations$myClutterDashboard$el myClutterDashboard = _Translations$myClutterDashboard$el._(_root);
+	@override late final _Translations$scanResults$el scanResults = _Translations$scanResults$el._(_root);
+	@override late final _Translations$spaceViewStart$el spaceViewStart = _Translations$spaceViewStart$el._(_root);
+	@override late final _Translations$shell$el shell = _Translations$shell$el._(_root);
+	@override late final _Translations$myToolsService$el myToolsService = _Translations$myToolsService$el._(_root);
 }
 
 // Path: app
-class _TranslationsAppEl implements TranslationsAppEn {
-	_TranslationsAppEl._(this._root);
+class _Translations$app$el implements Translations$app$en {
+	_Translations$app$el._(this._root);
 
 	final TranslationsEl _root; // ignore: unused_field
 
@@ -76,8 +76,8 @@ class _TranslationsAppEl implements TranslationsAppEn {
 }
 
 // Path: language
-class _TranslationsLanguageEl implements TranslationsLanguageEn {
-	_TranslationsLanguageEl._(this._root);
+class _Translations$language$el implements Translations$language$en {
+	_Translations$language$el._(this._root);
 
 	final TranslationsEl _root; // ignore: unused_field
 
@@ -94,8 +94,8 @@ class _TranslationsLanguageEl implements TranslationsLanguageEn {
 }
 
 // Path: navigation
-class _TranslationsNavigationEl implements TranslationsNavigationEn {
-	_TranslationsNavigationEl._(this._root);
+class _Translations$navigation$el implements Translations$navigation$en {
+	_Translations$navigation$el._(this._root);
 
 	final TranslationsEl _root; // ignore: unused_field
 
@@ -110,23 +110,23 @@ class _TranslationsNavigationEl implements TranslationsNavigationEn {
 }
 
 // Path: sections
-class _TranslationsSectionsEl implements TranslationsSectionsEn {
-	_TranslationsSectionsEl._(this._root);
+class _Translations$sections$el implements Translations$sections$en {
+	_Translations$sections$el._(this._root);
 
 	final TranslationsEl _root; // ignore: unused_field
 
 	// Translations
-	@override late final _TranslationsSectionsHomeEl home = _TranslationsSectionsHomeEl._(_root);
-	@override late final _TranslationsSectionsCleanupEl cleanup = _TranslationsSectionsCleanupEl._(_root);
-	@override late final _TranslationsSectionsMyClutterEl myClutter = _TranslationsSectionsMyClutterEl._(_root);
-	@override late final _TranslationsSectionsSpaceViewEl spaceView = _TranslationsSectionsSpaceViewEl._(_root);
-	@override late final _TranslationsSectionsApplicationsEl applications = _TranslationsSectionsApplicationsEl._(_root);
-	@override late final _TranslationsSectionsMyToolsEl myTools = _TranslationsSectionsMyToolsEl._(_root);
+	@override late final _Translations$sections$home$el home = _Translations$sections$home$el._(_root);
+	@override late final _Translations$sections$cleanup$el cleanup = _Translations$sections$cleanup$el._(_root);
+	@override late final _Translations$sections$myClutter$el myClutter = _Translations$sections$myClutter$el._(_root);
+	@override late final _Translations$sections$spaceView$el spaceView = _Translations$sections$spaceView$el._(_root);
+	@override late final _Translations$sections$applications$el applications = _Translations$sections$applications$el._(_root);
+	@override late final _Translations$sections$myTools$el myTools = _Translations$sections$myTools$el._(_root);
 }
 
 // Path: progress
-class _TranslationsProgressEl implements TranslationsProgressEn {
-	_TranslationsProgressEl._(this._root);
+class _Translations$progress$el implements Translations$progress$en {
+	_Translations$progress$el._(this._root);
 
 	final TranslationsEl _root; // ignore: unused_field
 
@@ -137,8 +137,8 @@ class _TranslationsProgressEl implements TranslationsProgressEn {
 }
 
 // Path: errors
-class _TranslationsErrorsEl implements TranslationsErrorsEn {
-	_TranslationsErrorsEl._(this._root);
+class _Translations$errors$el implements Translations$errors$en {
+	_Translations$errors$el._(this._root);
 
 	final TranslationsEl _root; // ignore: unused_field
 
@@ -147,8 +147,8 @@ class _TranslationsErrorsEl implements TranslationsErrorsEn {
 }
 
 // Path: buttons
-class _TranslationsButtonsEl implements TranslationsButtonsEn {
-	_TranslationsButtonsEl._(this._root);
+class _Translations$buttons$el implements Translations$buttons$en {
+	_Translations$buttons$el._(this._root);
 
 	final TranslationsEl _root; // ignore: unused_field
 
@@ -169,8 +169,8 @@ class _TranslationsButtonsEl implements TranslationsButtonsEn {
 }
 
 // Path: tooltips
-class _TranslationsTooltipsEl implements TranslationsTooltipsEn {
-	_TranslationsTooltipsEl._(this._root);
+class _Translations$tooltips$el implements Translations$tooltips$en {
+	_Translations$tooltips$el._(this._root);
 
 	final TranslationsEl _root; // ignore: unused_field
 
@@ -180,8 +180,8 @@ class _TranslationsTooltipsEl implements TranslationsTooltipsEn {
 }
 
 // Path: dialogs
-class _TranslationsDialogsEl implements TranslationsDialogsEn {
-	_TranslationsDialogsEl._(this._root);
+class _Translations$dialogs$el implements Translations$dialogs$en {
+	_Translations$dialogs$el._(this._root);
 
 	final TranslationsEl _root; // ignore: unused_field
 
@@ -193,8 +193,8 @@ class _TranslationsDialogsEl implements TranslationsDialogsEn {
 }
 
 // Path: removal
-class _TranslationsRemovalEl implements TranslationsRemovalEn {
-	_TranslationsRemovalEl._(this._root);
+class _Translations$removal$el implements Translations$removal$en {
+	_Translations$removal$el._(this._root);
 
 	final TranslationsEl _root; // ignore: unused_field
 
@@ -220,8 +220,8 @@ class _TranslationsRemovalEl implements TranslationsRemovalEn {
 }
 
 // Path: done
-class _TranslationsDoneEl implements TranslationsDoneEn {
-	_TranslationsDoneEl._(this._root);
+class _Translations$done$el implements Translations$done$en {
+	_Translations$done$el._(this._root);
 
 	final TranslationsEl _root; // ignore: unused_field
 
@@ -233,8 +233,8 @@ class _TranslationsDoneEl implements TranslationsDoneEn {
 }
 
 // Path: donate
-class _TranslationsDonateEl implements TranslationsDonateEn {
-	_TranslationsDonateEl._(this._root);
+class _Translations$donate$el implements Translations$donate$en {
+	_Translations$donate$el._(this._root);
 
 	final TranslationsEl _root; // ignore: unused_field
 
@@ -247,8 +247,8 @@ class _TranslationsDonateEl implements TranslationsDonateEn {
 }
 
 // Path: cleanupManager
-class _TranslationsCleanupManagerEl implements TranslationsCleanupManagerEn {
-	_TranslationsCleanupManagerEl._(this._root);
+class _Translations$cleanupManager$el implements Translations$cleanupManager$en {
+	_Translations$cleanupManager$el._(this._root);
 
 	final TranslationsEl _root; // ignore: unused_field
 
@@ -265,8 +265,8 @@ class _TranslationsCleanupManagerEl implements TranslationsCleanupManagerEn {
 }
 
 // Path: projectDirectory
-class _TranslationsProjectDirectoryEl implements TranslationsProjectDirectoryEn {
-	_TranslationsProjectDirectoryEl._(this._root);
+class _Translations$projectDirectory$el implements Translations$projectDirectory$en {
+	_Translations$projectDirectory$el._(this._root);
 
 	final TranslationsEl _root; // ignore: unused_field
 
@@ -278,8 +278,8 @@ class _TranslationsProjectDirectoryEl implements TranslationsProjectDirectoryEn 
 }
 
 // Path: searchAndSort
-class _TranslationsSearchAndSortEl implements TranslationsSearchAndSortEn {
-	_TranslationsSearchAndSortEl._(this._root);
+class _Translations$searchAndSort$el implements Translations$searchAndSort$en {
+	_Translations$searchAndSort$el._(this._root);
 
 	final TranslationsEl _root; // ignore: unused_field
 
@@ -293,8 +293,8 @@ class _TranslationsSearchAndSortEl implements TranslationsSearchAndSortEn {
 }
 
 // Path: spaceView
-class _TranslationsSpaceViewEl implements TranslationsSpaceViewEn {
-	_TranslationsSpaceViewEl._(this._root);
+class _Translations$spaceView$el implements Translations$spaceView$en {
+	_Translations$spaceView$el._(this._root);
 
 	final TranslationsEl _root; // ignore: unused_field
 
@@ -305,8 +305,8 @@ class _TranslationsSpaceViewEl implements TranslationsSpaceViewEn {
 }
 
 // Path: home
-class _TranslationsHomeEl implements TranslationsHomeEn {
-	_TranslationsHomeEl._(this._root);
+class _Translations$home$el implements Translations$home$en {
+	_Translations$home$el._(this._root);
 
 	final TranslationsEl _root; // ignore: unused_field
 
@@ -324,8 +324,8 @@ class _TranslationsHomeEl implements TranslationsHomeEn {
 }
 
 // Path: myToolsPage
-class _TranslationsMyToolsPageEl implements TranslationsMyToolsPageEn {
-	_TranslationsMyToolsPageEl._(this._root);
+class _Translations$myToolsPage$el implements Translations$myToolsPage$en {
+	_Translations$myToolsPage$el._(this._root);
 
 	final TranslationsEl _root; // ignore: unused_field
 
@@ -336,8 +336,8 @@ class _TranslationsMyToolsPageEl implements TranslationsMyToolsPageEn {
 }
 
 // Path: myToolsMessages
-class _TranslationsMyToolsMessagesEl implements TranslationsMyToolsMessagesEn {
-	_TranslationsMyToolsMessagesEl._(this._root);
+class _Translations$myToolsMessages$el implements Translations$myToolsMessages$en {
+	_Translations$myToolsMessages$el._(this._root);
 
 	final TranslationsEl _root; // ignore: unused_field
 
@@ -354,49 +354,49 @@ class _TranslationsMyToolsMessagesEl implements TranslationsMyToolsMessagesEn {
 	@override String get failedCountShort => '{count} απέτυχε.';
 	@override String get scanComplete => 'Η σάρωση ολοκληρώθηκε.';
 	@override String get somethingWentWrong => 'Κάτι πήγε στραβά.';
-	@override late final _TranslationsMyToolsMessagesFallbackEl fallback = _TranslationsMyToolsMessagesFallbackEl._(_root);
+	@override late final _Translations$myToolsMessages$fallback$el fallback = _Translations$myToolsMessages$fallback$el._(_root);
 }
 
 // Path: myToolsCatalog
-class _TranslationsMyToolsCatalogEl implements TranslationsMyToolsCatalogEn {
-	_TranslationsMyToolsCatalogEl._(this._root);
+class _Translations$myToolsCatalog$el implements Translations$myToolsCatalog$en {
+	_Translations$myToolsCatalog$el._(this._root);
 
 	final TranslationsEl _root; // ignore: unused_field
 
 	// Translations
-	@override late final _TranslationsMyToolsCatalogAppLeftoversEl appLeftovers = _TranslationsMyToolsCatalogAppLeftoversEl._(_root);
-	@override late final _TranslationsMyToolsCatalogBackgroundItemsEl backgroundItems = _TranslationsMyToolsCatalogBackgroundItemsEl._(_root);
-	@override late final _TranslationsMyToolsCatalogDownloadsEl downloads = _TranslationsMyToolsCatalogDownloadsEl._(_root);
-	@override late final _TranslationsMyToolsCatalogLargeOldEl largeOld = _TranslationsMyToolsCatalogLargeOldEl._(_root);
-	@override late final _TranslationsMyToolsCatalogSimilarImagesEl similarImages = _TranslationsMyToolsCatalogSimilarImagesEl._(_root);
-	@override late final _TranslationsMyToolsCatalogTrashBinsEl trashBins = _TranslationsMyToolsCatalogTrashBinsEl._(_root);
-	@override late final _TranslationsMyToolsCatalogDuplicateFinderEl duplicateFinder = _TranslationsMyToolsCatalogDuplicateFinderEl._(_root);
-	@override late final _TranslationsMyToolsCatalogApplicationPermissionsEl applicationPermissions = _TranslationsMyToolsCatalogApplicationPermissionsEl._(_root);
-	@override late final _TranslationsMyToolsCatalogSystemJunkEl systemJunk = _TranslationsMyToolsCatalogSystemJunkEl._(_root);
-	@override late final _TranslationsMyToolsCatalogTimeMachineSnapshotEl timeMachineSnapshot = _TranslationsMyToolsCatalogTimeMachineSnapshotEl._(_root);
-	@override late final _TranslationsMyToolsCatalogLoginItemsEl loginItems = _TranslationsMyToolsCatalogLoginItemsEl._(_root);
-	@override late final _TranslationsMyToolsCatalogMailAttachmentsEl mailAttachments = _TranslationsMyToolsCatalogMailAttachmentsEl._(_root);
-	@override late final _TranslationsMyToolsCatalogMalwareFinderEl malwareFinder = _TranslationsMyToolsCatalogMalwareFinderEl._(_root);
-	@override late final _TranslationsMyToolsCatalogUninstallerEl uninstaller = _TranslationsMyToolsCatalogUninstallerEl._(_root);
+	@override late final _Translations$myToolsCatalog$appLeftovers$el appLeftovers = _Translations$myToolsCatalog$appLeftovers$el._(_root);
+	@override late final _Translations$myToolsCatalog$backgroundItems$el backgroundItems = _Translations$myToolsCatalog$backgroundItems$el._(_root);
+	@override late final _Translations$myToolsCatalog$downloads$el downloads = _Translations$myToolsCatalog$downloads$el._(_root);
+	@override late final _Translations$myToolsCatalog$largeOld$el largeOld = _Translations$myToolsCatalog$largeOld$el._(_root);
+	@override late final _Translations$myToolsCatalog$similarImages$el similarImages = _Translations$myToolsCatalog$similarImages$el._(_root);
+	@override late final _Translations$myToolsCatalog$trashBins$el trashBins = _Translations$myToolsCatalog$trashBins$el._(_root);
+	@override late final _Translations$myToolsCatalog$duplicateFinder$el duplicateFinder = _Translations$myToolsCatalog$duplicateFinder$el._(_root);
+	@override late final _Translations$myToolsCatalog$applicationPermissions$el applicationPermissions = _Translations$myToolsCatalog$applicationPermissions$el._(_root);
+	@override late final _Translations$myToolsCatalog$systemJunk$el systemJunk = _Translations$myToolsCatalog$systemJunk$el._(_root);
+	@override late final _Translations$myToolsCatalog$timeMachineSnapshot$el timeMachineSnapshot = _Translations$myToolsCatalog$timeMachineSnapshot$el._(_root);
+	@override late final _Translations$myToolsCatalog$loginItems$el loginItems = _Translations$myToolsCatalog$loginItems$el._(_root);
+	@override late final _Translations$myToolsCatalog$mailAttachments$el mailAttachments = _Translations$myToolsCatalog$mailAttachments$el._(_root);
+	@override late final _Translations$myToolsCatalog$malwareFinder$el malwareFinder = _Translations$myToolsCatalog$malwareFinder$el._(_root);
+	@override late final _Translations$myToolsCatalog$uninstaller$el uninstaller = _Translations$myToolsCatalog$uninstaller$el._(_root);
 }
 
 // Path: cleanupCategories
-class _TranslationsCleanupCategoriesEl implements TranslationsCleanupCategoriesEn {
-	_TranslationsCleanupCategoriesEl._(this._root);
+class _Translations$cleanupCategories$el implements Translations$cleanupCategories$en {
+	_Translations$cleanupCategories$el._(this._root);
 
 	final TranslationsEl _root; // ignore: unused_field
 
 	// Translations
-	@override late final _TranslationsCleanupCategoriesUserCacheEl userCache = _TranslationsCleanupCategoriesUserCacheEl._(_root);
-	@override late final _TranslationsCleanupCategoriesUserLogsEl userLogs = _TranslationsCleanupCategoriesUserLogsEl._(_root);
-	@override late final _TranslationsCleanupCategoriesLanguageFilesEl languageFiles = _TranslationsCleanupCategoriesLanguageFilesEl._(_root);
-	@override late final _TranslationsCleanupCategoriesSystemLogsEl systemLogs = _TranslationsCleanupCategoriesSystemLogsEl._(_root);
-	@override late final _TranslationsCleanupCategoriesBrokenLoginItemsEl brokenLoginItems = _TranslationsCleanupCategoriesBrokenLoginItemsEl._(_root);
+	@override late final _Translations$cleanupCategories$userCache$el userCache = _Translations$cleanupCategories$userCache$el._(_root);
+	@override late final _Translations$cleanupCategories$userLogs$el userLogs = _Translations$cleanupCategories$userLogs$el._(_root);
+	@override late final _Translations$cleanupCategories$languageFiles$el languageFiles = _Translations$cleanupCategories$languageFiles$el._(_root);
+	@override late final _Translations$cleanupCategories$systemLogs$el systemLogs = _Translations$cleanupCategories$systemLogs$el._(_root);
+	@override late final _Translations$cleanupCategories$brokenLoginItems$el brokenLoginItems = _Translations$cleanupCategories$brokenLoginItems$el._(_root);
 }
 
 // Path: myClutterDashboard
-class _TranslationsMyClutterDashboardEl implements TranslationsMyClutterDashboardEn {
-	_TranslationsMyClutterDashboardEl._(this._root);
+class _Translations$myClutterDashboard$el implements Translations$myClutterDashboard$en {
+	_Translations$myClutterDashboard$el._(this._root);
 
 	final TranslationsEl _root; // ignore: unused_field
 
@@ -418,8 +418,8 @@ class _TranslationsMyClutterDashboardEl implements TranslationsMyClutterDashboar
 }
 
 // Path: scanResults
-class _TranslationsScanResultsEl implements TranslationsScanResultsEn {
-	_TranslationsScanResultsEl._(this._root);
+class _Translations$scanResults$el implements Translations$scanResults$en {
+	_Translations$scanResults$el._(this._root);
 
 	final TranslationsEl _root; // ignore: unused_field
 
@@ -435,8 +435,8 @@ class _TranslationsScanResultsEl implements TranslationsScanResultsEn {
 }
 
 // Path: spaceViewStart
-class _TranslationsSpaceViewStartEl implements TranslationsSpaceViewStartEn {
-	_TranslationsSpaceViewStartEl._(this._root);
+class _Translations$spaceViewStart$el implements Translations$spaceViewStart$en {
+	_Translations$spaceViewStart$el._(this._root);
 
 	final TranslationsEl _root; // ignore: unused_field
 
@@ -448,8 +448,8 @@ class _TranslationsSpaceViewStartEl implements TranslationsSpaceViewStartEn {
 }
 
 // Path: shell
-class _TranslationsShellEl implements TranslationsShellEn {
-	_TranslationsShellEl._(this._root);
+class _Translations$shell$el implements Translations$shell$en {
+	_Translations$shell$el._(this._root);
 
 	final TranslationsEl _root; // ignore: unused_field
 
@@ -458,8 +458,8 @@ class _TranslationsShellEl implements TranslationsShellEn {
 }
 
 // Path: myToolsService
-class _TranslationsMyToolsServiceEl implements TranslationsMyToolsServiceEn {
-	_TranslationsMyToolsServiceEl._(this._root);
+class _Translations$myToolsService$el implements Translations$myToolsService$en {
+	_Translations$myToolsService$el._(this._root);
 
 	final TranslationsEl _root; // ignore: unused_field
 
@@ -470,80 +470,80 @@ class _TranslationsMyToolsServiceEl implements TranslationsMyToolsServiceEn {
 }
 
 // Path: sections.home
-class _TranslationsSectionsHomeEl implements TranslationsSectionsHomeEn {
-	_TranslationsSectionsHomeEl._(this._root);
+class _Translations$sections$home$el implements Translations$sections$home$en {
+	_Translations$sections$home$el._(this._root);
 
 	final TranslationsEl _root; // ignore: unused_field
 
 	// Translations
 	@override String get title => 'Σπίτι';
 	@override String get subtitle => 'Αποκτήστε μια πλήρη επισκόπηση υγείας\nτου συστήματός σας με ένα κλικ.';
-	@override late final _TranslationsSectionsHomeFeaturesEl features = _TranslationsSectionsHomeFeaturesEl._(_root);
+	@override late final _Translations$sections$home$features$el features = _Translations$sections$home$features$el._(_root);
 }
 
 // Path: sections.cleanup
-class _TranslationsSectionsCleanupEl implements TranslationsSectionsCleanupEn {
-	_TranslationsSectionsCleanupEl._(this._root);
+class _Translations$sections$cleanup$el implements Translations$sections$cleanup$en {
+	_Translations$sections$cleanup$el._(this._root);
 
 	final TranslationsEl _root; // ignore: unused_field
 
 	// Translations
 	@override String get title => 'Καθαρισμός σκουπιδιών';
 	@override String get subtitle => 'Καθαρίστε το σύστημά σας για να επιτύχετε τη μέγιστη\nαπόδοση και να αποκτήσετε ξανά περισσότερο ελεύθερο χώρο.';
-	@override late final _TranslationsSectionsCleanupFeaturesEl features = _TranslationsSectionsCleanupFeaturesEl._(_root);
+	@override late final _Translations$sections$cleanup$features$el features = _Translations$sections$cleanup$features$el._(_root);
 }
 
 // Path: sections.myClutter
-class _TranslationsSectionsMyClutterEl implements TranslationsSectionsMyClutterEn {
-	_TranslationsSectionsMyClutterEl._(this._root);
+class _Translations$sections$myClutter$el implements Translations$sections$myClutter$en {
+	_Translations$sections$myClutter$el._(this._root);
 
 	final TranslationsEl _root; // ignore: unused_field
 
 	// Translations
 	@override String get title => 'Η ακαταστασία μου';
 	@override String get subtitle => 'Ταξινομήστε τα αρχεία σας και μειώστε\nτο χάος με λίγα μόνο κλικ.';
-	@override late final _TranslationsSectionsMyClutterFeaturesEl features = _TranslationsSectionsMyClutterFeaturesEl._(_root);
+	@override late final _Translations$sections$myClutter$features$el features = _Translations$sections$myClutter$features$el._(_root);
 }
 
 // Path: sections.spaceView
-class _TranslationsSectionsSpaceViewEl implements TranslationsSectionsSpaceViewEn {
-	_TranslationsSectionsSpaceViewEl._(this._root);
+class _Translations$sections$spaceView$el implements Translations$sections$spaceView$en {
+	_Translations$sections$spaceView$el._(this._root);
 
 	final TranslationsEl _root; // ignore: unused_field
 
 	// Translations
 	@override String get title => 'Θέα Διαστήματος';
 	@override String get subtitle => 'Οραματιστείτε τι καταλαμβάνει τον περισσότερο χώρο στον δίσκο και καθαρίστε γρήγορα.';
-	@override late final _TranslationsSectionsSpaceViewFeaturesEl features = _TranslationsSectionsSpaceViewFeaturesEl._(_root);
+	@override late final _Translations$sections$spaceView$features$el features = _Translations$sections$spaceView$features$el._(_root);
 }
 
 // Path: sections.applications
-class _TranslationsSectionsApplicationsEl implements TranslationsSectionsApplicationsEn {
-	_TranslationsSectionsApplicationsEl._(this._root);
+class _Translations$sections$applications$el implements Translations$sections$applications$en {
+	_Translations$sections$applications$el._(this._root);
 
 	final TranslationsEl _root; // ignore: unused_field
 
 	// Translations
 	@override String get title => 'Εφαρμογές';
 	@override String get subtitle => 'Πάρτε τον έλεγχο των εφαρμογών σας.\nΑπεγκαταστήστε ή αφαιρέστε παλιά υπολείμματα.';
-	@override late final _TranslationsSectionsApplicationsFeaturesEl features = _TranslationsSectionsApplicationsFeaturesEl._(_root);
+	@override late final _Translations$sections$applications$features$el features = _Translations$sections$applications$features$el._(_root);
 }
 
 // Path: sections.myTools
-class _TranslationsSectionsMyToolsEl implements TranslationsSectionsMyToolsEn {
-	_TranslationsSectionsMyToolsEl._(this._root);
+class _Translations$sections$myTools$el implements Translations$sections$myTools$en {
+	_Translations$sections$myTools$el._(this._root);
 
 	final TranslationsEl _root; // ignore: unused_field
 
 	// Translations
 	@override String get title => 'Τα εργαλεία μου';
 	@override String get subtitle => 'Το βασικό σας εργαλείο για τη φροντίδα και τη συντήρηση του συστήματος.';
-	@override late final _TranslationsSectionsMyToolsFeaturesEl features = _TranslationsSectionsMyToolsFeaturesEl._(_root);
+	@override late final _Translations$sections$myTools$features$el features = _Translations$sections$myTools$features$el._(_root);
 }
 
 // Path: myToolsMessages.fallback
-class _TranslationsMyToolsMessagesFallbackEl implements TranslationsMyToolsMessagesFallbackEn {
-	_TranslationsMyToolsMessagesFallbackEl._(this._root);
+class _Translations$myToolsMessages$fallback$el implements Translations$myToolsMessages$fallback$en {
+	_Translations$myToolsMessages$fallback$el._(this._root);
 
 	final TranslationsEl _root; // ignore: unused_field
 
@@ -568,8 +568,8 @@ class _TranslationsMyToolsMessagesFallbackEl implements TranslationsMyToolsMessa
 }
 
 // Path: myToolsCatalog.appLeftovers
-class _TranslationsMyToolsCatalogAppLeftoversEl implements TranslationsMyToolsCatalogAppLeftoversEn {
-	_TranslationsMyToolsCatalogAppLeftoversEl._(this._root);
+class _Translations$myToolsCatalog$appLeftovers$el implements Translations$myToolsCatalog$appLeftovers$en {
+	_Translations$myToolsCatalog$appLeftovers$el._(this._root);
 
 	final TranslationsEl _root; // ignore: unused_field
 
@@ -579,8 +579,8 @@ class _TranslationsMyToolsCatalogAppLeftoversEl implements TranslationsMyToolsCa
 }
 
 // Path: myToolsCatalog.backgroundItems
-class _TranslationsMyToolsCatalogBackgroundItemsEl implements TranslationsMyToolsCatalogBackgroundItemsEn {
-	_TranslationsMyToolsCatalogBackgroundItemsEl._(this._root);
+class _Translations$myToolsCatalog$backgroundItems$el implements Translations$myToolsCatalog$backgroundItems$en {
+	_Translations$myToolsCatalog$backgroundItems$el._(this._root);
 
 	final TranslationsEl _root; // ignore: unused_field
 
@@ -590,8 +590,8 @@ class _TranslationsMyToolsCatalogBackgroundItemsEl implements TranslationsMyTool
 }
 
 // Path: myToolsCatalog.downloads
-class _TranslationsMyToolsCatalogDownloadsEl implements TranslationsMyToolsCatalogDownloadsEn {
-	_TranslationsMyToolsCatalogDownloadsEl._(this._root);
+class _Translations$myToolsCatalog$downloads$el implements Translations$myToolsCatalog$downloads$en {
+	_Translations$myToolsCatalog$downloads$el._(this._root);
 
 	final TranslationsEl _root; // ignore: unused_field
 
@@ -601,8 +601,8 @@ class _TranslationsMyToolsCatalogDownloadsEl implements TranslationsMyToolsCatal
 }
 
 // Path: myToolsCatalog.largeOld
-class _TranslationsMyToolsCatalogLargeOldEl implements TranslationsMyToolsCatalogLargeOldEn {
-	_TranslationsMyToolsCatalogLargeOldEl._(this._root);
+class _Translations$myToolsCatalog$largeOld$el implements Translations$myToolsCatalog$largeOld$en {
+	_Translations$myToolsCatalog$largeOld$el._(this._root);
 
 	final TranslationsEl _root; // ignore: unused_field
 
@@ -612,8 +612,8 @@ class _TranslationsMyToolsCatalogLargeOldEl implements TranslationsMyToolsCatalo
 }
 
 // Path: myToolsCatalog.similarImages
-class _TranslationsMyToolsCatalogSimilarImagesEl implements TranslationsMyToolsCatalogSimilarImagesEn {
-	_TranslationsMyToolsCatalogSimilarImagesEl._(this._root);
+class _Translations$myToolsCatalog$similarImages$el implements Translations$myToolsCatalog$similarImages$en {
+	_Translations$myToolsCatalog$similarImages$el._(this._root);
 
 	final TranslationsEl _root; // ignore: unused_field
 
@@ -623,8 +623,8 @@ class _TranslationsMyToolsCatalogSimilarImagesEl implements TranslationsMyToolsC
 }
 
 // Path: myToolsCatalog.trashBins
-class _TranslationsMyToolsCatalogTrashBinsEl implements TranslationsMyToolsCatalogTrashBinsEn {
-	_TranslationsMyToolsCatalogTrashBinsEl._(this._root);
+class _Translations$myToolsCatalog$trashBins$el implements Translations$myToolsCatalog$trashBins$en {
+	_Translations$myToolsCatalog$trashBins$el._(this._root);
 
 	final TranslationsEl _root; // ignore: unused_field
 
@@ -634,8 +634,8 @@ class _TranslationsMyToolsCatalogTrashBinsEl implements TranslationsMyToolsCatal
 }
 
 // Path: myToolsCatalog.duplicateFinder
-class _TranslationsMyToolsCatalogDuplicateFinderEl implements TranslationsMyToolsCatalogDuplicateFinderEn {
-	_TranslationsMyToolsCatalogDuplicateFinderEl._(this._root);
+class _Translations$myToolsCatalog$duplicateFinder$el implements Translations$myToolsCatalog$duplicateFinder$en {
+	_Translations$myToolsCatalog$duplicateFinder$el._(this._root);
 
 	final TranslationsEl _root; // ignore: unused_field
 
@@ -645,8 +645,8 @@ class _TranslationsMyToolsCatalogDuplicateFinderEl implements TranslationsMyTool
 }
 
 // Path: myToolsCatalog.applicationPermissions
-class _TranslationsMyToolsCatalogApplicationPermissionsEl implements TranslationsMyToolsCatalogApplicationPermissionsEn {
-	_TranslationsMyToolsCatalogApplicationPermissionsEl._(this._root);
+class _Translations$myToolsCatalog$applicationPermissions$el implements Translations$myToolsCatalog$applicationPermissions$en {
+	_Translations$myToolsCatalog$applicationPermissions$el._(this._root);
 
 	final TranslationsEl _root; // ignore: unused_field
 
@@ -656,8 +656,8 @@ class _TranslationsMyToolsCatalogApplicationPermissionsEl implements Translation
 }
 
 // Path: myToolsCatalog.systemJunk
-class _TranslationsMyToolsCatalogSystemJunkEl implements TranslationsMyToolsCatalogSystemJunkEn {
-	_TranslationsMyToolsCatalogSystemJunkEl._(this._root);
+class _Translations$myToolsCatalog$systemJunk$el implements Translations$myToolsCatalog$systemJunk$en {
+	_Translations$myToolsCatalog$systemJunk$el._(this._root);
 
 	final TranslationsEl _root; // ignore: unused_field
 
@@ -667,8 +667,8 @@ class _TranslationsMyToolsCatalogSystemJunkEl implements TranslationsMyToolsCata
 }
 
 // Path: myToolsCatalog.timeMachineSnapshot
-class _TranslationsMyToolsCatalogTimeMachineSnapshotEl implements TranslationsMyToolsCatalogTimeMachineSnapshotEn {
-	_TranslationsMyToolsCatalogTimeMachineSnapshotEl._(this._root);
+class _Translations$myToolsCatalog$timeMachineSnapshot$el implements Translations$myToolsCatalog$timeMachineSnapshot$en {
+	_Translations$myToolsCatalog$timeMachineSnapshot$el._(this._root);
 
 	final TranslationsEl _root; // ignore: unused_field
 
@@ -678,8 +678,8 @@ class _TranslationsMyToolsCatalogTimeMachineSnapshotEl implements TranslationsMy
 }
 
 // Path: myToolsCatalog.loginItems
-class _TranslationsMyToolsCatalogLoginItemsEl implements TranslationsMyToolsCatalogLoginItemsEn {
-	_TranslationsMyToolsCatalogLoginItemsEl._(this._root);
+class _Translations$myToolsCatalog$loginItems$el implements Translations$myToolsCatalog$loginItems$en {
+	_Translations$myToolsCatalog$loginItems$el._(this._root);
 
 	final TranslationsEl _root; // ignore: unused_field
 
@@ -689,8 +689,8 @@ class _TranslationsMyToolsCatalogLoginItemsEl implements TranslationsMyToolsCata
 }
 
 // Path: myToolsCatalog.mailAttachments
-class _TranslationsMyToolsCatalogMailAttachmentsEl implements TranslationsMyToolsCatalogMailAttachmentsEn {
-	_TranslationsMyToolsCatalogMailAttachmentsEl._(this._root);
+class _Translations$myToolsCatalog$mailAttachments$el implements Translations$myToolsCatalog$mailAttachments$en {
+	_Translations$myToolsCatalog$mailAttachments$el._(this._root);
 
 	final TranslationsEl _root; // ignore: unused_field
 
@@ -700,8 +700,8 @@ class _TranslationsMyToolsCatalogMailAttachmentsEl implements TranslationsMyTool
 }
 
 // Path: myToolsCatalog.malwareFinder
-class _TranslationsMyToolsCatalogMalwareFinderEl implements TranslationsMyToolsCatalogMalwareFinderEn {
-	_TranslationsMyToolsCatalogMalwareFinderEl._(this._root);
+class _Translations$myToolsCatalog$malwareFinder$el implements Translations$myToolsCatalog$malwareFinder$en {
+	_Translations$myToolsCatalog$malwareFinder$el._(this._root);
 
 	final TranslationsEl _root; // ignore: unused_field
 
@@ -711,8 +711,8 @@ class _TranslationsMyToolsCatalogMalwareFinderEl implements TranslationsMyToolsC
 }
 
 // Path: myToolsCatalog.uninstaller
-class _TranslationsMyToolsCatalogUninstallerEl implements TranslationsMyToolsCatalogUninstallerEn {
-	_TranslationsMyToolsCatalogUninstallerEl._(this._root);
+class _Translations$myToolsCatalog$uninstaller$el implements Translations$myToolsCatalog$uninstaller$en {
+	_Translations$myToolsCatalog$uninstaller$el._(this._root);
 
 	final TranslationsEl _root; // ignore: unused_field
 
@@ -722,8 +722,8 @@ class _TranslationsMyToolsCatalogUninstallerEl implements TranslationsMyToolsCat
 }
 
 // Path: cleanupCategories.userCache
-class _TranslationsCleanupCategoriesUserCacheEl implements TranslationsCleanupCategoriesUserCacheEn {
-	_TranslationsCleanupCategoriesUserCacheEl._(this._root);
+class _Translations$cleanupCategories$userCache$el implements Translations$cleanupCategories$userCache$en {
+	_Translations$cleanupCategories$userCache$el._(this._root);
 
 	final TranslationsEl _root; // ignore: unused_field
 
@@ -733,8 +733,8 @@ class _TranslationsCleanupCategoriesUserCacheEl implements TranslationsCleanupCa
 }
 
 // Path: cleanupCategories.userLogs
-class _TranslationsCleanupCategoriesUserLogsEl implements TranslationsCleanupCategoriesUserLogsEn {
-	_TranslationsCleanupCategoriesUserLogsEl._(this._root);
+class _Translations$cleanupCategories$userLogs$el implements Translations$cleanupCategories$userLogs$en {
+	_Translations$cleanupCategories$userLogs$el._(this._root);
 
 	final TranslationsEl _root; // ignore: unused_field
 
@@ -744,8 +744,8 @@ class _TranslationsCleanupCategoriesUserLogsEl implements TranslationsCleanupCat
 }
 
 // Path: cleanupCategories.languageFiles
-class _TranslationsCleanupCategoriesLanguageFilesEl implements TranslationsCleanupCategoriesLanguageFilesEn {
-	_TranslationsCleanupCategoriesLanguageFilesEl._(this._root);
+class _Translations$cleanupCategories$languageFiles$el implements Translations$cleanupCategories$languageFiles$en {
+	_Translations$cleanupCategories$languageFiles$el._(this._root);
 
 	final TranslationsEl _root; // ignore: unused_field
 
@@ -755,8 +755,8 @@ class _TranslationsCleanupCategoriesLanguageFilesEl implements TranslationsClean
 }
 
 // Path: cleanupCategories.systemLogs
-class _TranslationsCleanupCategoriesSystemLogsEl implements TranslationsCleanupCategoriesSystemLogsEn {
-	_TranslationsCleanupCategoriesSystemLogsEl._(this._root);
+class _Translations$cleanupCategories$systemLogs$el implements Translations$cleanupCategories$systemLogs$en {
+	_Translations$cleanupCategories$systemLogs$el._(this._root);
 
 	final TranslationsEl _root; // ignore: unused_field
 
@@ -766,8 +766,8 @@ class _TranslationsCleanupCategoriesSystemLogsEl implements TranslationsCleanupC
 }
 
 // Path: cleanupCategories.brokenLoginItems
-class _TranslationsCleanupCategoriesBrokenLoginItemsEl implements TranslationsCleanupCategoriesBrokenLoginItemsEn {
-	_TranslationsCleanupCategoriesBrokenLoginItemsEl._(this._root);
+class _Translations$cleanupCategories$brokenLoginItems$el implements Translations$cleanupCategories$brokenLoginItems$en {
+	_Translations$cleanupCategories$brokenLoginItems$el._(this._root);
 
 	final TranslationsEl _root; // ignore: unused_field
 
@@ -777,8 +777,8 @@ class _TranslationsCleanupCategoriesBrokenLoginItemsEl implements TranslationsCl
 }
 
 // Path: sections.home.features
-class _TranslationsSectionsHomeFeaturesEl implements TranslationsSectionsHomeFeaturesEn {
-	_TranslationsSectionsHomeFeaturesEl._(this._root);
+class _Translations$sections$home$features$el implements Translations$sections$home$features$en {
+	_Translations$sections$home$features$el._(this._root);
 
 	final TranslationsEl _root; // ignore: unused_field
 
@@ -789,8 +789,8 @@ class _TranslationsSectionsHomeFeaturesEl implements TranslationsSectionsHomeFea
 }
 
 // Path: sections.cleanup.features
-class _TranslationsSectionsCleanupFeaturesEl implements TranslationsSectionsCleanupFeaturesEn {
-	_TranslationsSectionsCleanupFeaturesEl._(this._root);
+class _Translations$sections$cleanup$features$el implements Translations$sections$cleanup$features$en {
+	_Translations$sections$cleanup$features$el._(this._root);
 
 	final TranslationsEl _root; // ignore: unused_field
 
@@ -801,8 +801,8 @@ class _TranslationsSectionsCleanupFeaturesEl implements TranslationsSectionsClea
 }
 
 // Path: sections.myClutter.features
-class _TranslationsSectionsMyClutterFeaturesEl implements TranslationsSectionsMyClutterFeaturesEn {
-	_TranslationsSectionsMyClutterFeaturesEl._(this._root);
+class _Translations$sections$myClutter$features$el implements Translations$sections$myClutter$features$en {
+	_Translations$sections$myClutter$features$el._(this._root);
 
 	final TranslationsEl _root; // ignore: unused_field
 
@@ -813,8 +813,8 @@ class _TranslationsSectionsMyClutterFeaturesEl implements TranslationsSectionsMy
 }
 
 // Path: sections.spaceView.features
-class _TranslationsSectionsSpaceViewFeaturesEl implements TranslationsSectionsSpaceViewFeaturesEn {
-	_TranslationsSectionsSpaceViewFeaturesEl._(this._root);
+class _Translations$sections$spaceView$features$el implements Translations$sections$spaceView$features$en {
+	_Translations$sections$spaceView$features$el._(this._root);
 
 	final TranslationsEl _root; // ignore: unused_field
 
@@ -825,8 +825,8 @@ class _TranslationsSectionsSpaceViewFeaturesEl implements TranslationsSectionsSp
 }
 
 // Path: sections.applications.features
-class _TranslationsSectionsApplicationsFeaturesEl implements TranslationsSectionsApplicationsFeaturesEn {
-	_TranslationsSectionsApplicationsFeaturesEl._(this._root);
+class _Translations$sections$applications$features$el implements Translations$sections$applications$features$en {
+	_Translations$sections$applications$features$el._(this._root);
 
 	final TranslationsEl _root; // ignore: unused_field
 
@@ -837,8 +837,8 @@ class _TranslationsSectionsApplicationsFeaturesEl implements TranslationsSection
 }
 
 // Path: sections.myTools.features
-class _TranslationsSectionsMyToolsFeaturesEl implements TranslationsSectionsMyToolsFeaturesEn {
-	_TranslationsSectionsMyToolsFeaturesEl._(this._root);
+class _Translations$sections$myTools$features$el implements Translations$sections$myTools$features$en {
+	_Translations$sections$myTools$features$el._(this._root);
 
 	final TranslationsEl _root; // ignore: unused_field
 
