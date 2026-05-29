@@ -106,7 +106,6 @@ class _TranslationsNavigationFr implements TranslationsNavigationEn {
 	@override String get spaceView => 'Vue de l\'espace';
 	@override String get applications => 'Applications';
 	@override String get myTools => 'Mes outils';
-	@override String get myActivity => 'Mon activité';
 	@override String get donate => 'Faire un don';
 }
 
@@ -873,7 +872,6 @@ extension on TranslationsFr {
 			'navigation.spaceView' => 'Vue de l\'espace',
 			'navigation.applications' => 'Applications',
 			'navigation.myTools' => 'Mes outils',
-			'navigation.myActivity' => 'Mon activité',
 			'navigation.donate' => 'Faire un don',
 			'sections.home.title' => 'Maison',
 			'sections.home.subtitle' => 'Obtenez un aperçu complet de l\'état de santé de votre système en un seul clic.',

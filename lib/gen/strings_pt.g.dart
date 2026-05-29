@@ -106,7 +106,6 @@ class _TranslationsNavigationPt implements TranslationsNavigationEn {
 	@override String get spaceView => 'Visualização do espaço';
 	@override String get applications => 'Aplicações';
 	@override String get myTools => 'Minhas ferramentas';
-	@override String get myActivity => 'Minha atividade';
 	@override String get donate => 'Doar';
 }
 
@@ -873,7 +872,6 @@ extension on TranslationsPt {
 			'navigation.spaceView' => 'Visualização do espaço',
 			'navigation.applications' => 'Aplicações',
 			'navigation.myTools' => 'Minhas ferramentas',
-			'navigation.myActivity' => 'Minha atividade',
 			'navigation.donate' => 'Doar',
 			'sections.home.title' => 'Lar',
 			'sections.home.subtitle' => 'Obtenha uma visão geral completa da integridade\no seu sistema com um clique.',

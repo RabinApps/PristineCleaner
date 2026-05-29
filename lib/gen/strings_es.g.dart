@@ -106,7 +106,6 @@ class _TranslationsNavigationEs implements TranslationsNavigationEn {
 	@override String get spaceView => 'Vista de Espacio';
 	@override String get applications => 'Aplicaciones';
 	@override String get myTools => 'Mis Herramientas';
-	@override String get myActivity => 'Mi Actividad';
 	@override String get donate => 'Donar';
 }
 
@@ -873,7 +872,6 @@ extension on TranslationsEs {
 			'navigation.spaceView' => 'Vista de Espacio',
 			'navigation.applications' => 'Aplicaciones',
 			'navigation.myTools' => 'Mis Herramientas',
-			'navigation.myActivity' => 'Mi Actividad',
 			'navigation.donate' => 'Donar',
 			'sections.home.title' => 'Hogar',
 			'sections.home.subtitle' => 'Obtenga una descripción general completa del estado de su sistema con un solo clic.',

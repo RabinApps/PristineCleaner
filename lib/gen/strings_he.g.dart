@@ -106,7 +106,6 @@ class _TranslationsNavigationHe implements TranslationsNavigationEn {
 	@override String get spaceView => 'תצוגת חלל';
 	@override String get applications => 'יישומים';
 	@override String get myTools => 'הכלים שלי';
-	@override String get myActivity => 'הפעילות שלי';
 	@override String get donate => 'תרומה';
 }
 
@@ -873,7 +872,6 @@ extension on TranslationsHe {
 			'navigation.spaceView' => 'תצוגת חלל',
 			'navigation.applications' => 'יישומים',
 			'navigation.myTools' => 'הכלים שלי',
-			'navigation.myActivity' => 'הפעילות שלי',
 			'navigation.donate' => 'תרומה',
 			'sections.home.title' => 'בַּיִת',
 			'sections.home.subtitle' => 'קבל סקירת בריאות מלאה\nעל המערכת שלך בלחיצה אחת.',

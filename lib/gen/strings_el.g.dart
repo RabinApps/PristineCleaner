@@ -106,7 +106,6 @@ class _TranslationsNavigationEl implements TranslationsNavigationEn {
 	@override String get spaceView => 'Θέα Διαστήματος';
 	@override String get applications => 'Εφαρμογές';
 	@override String get myTools => 'Τα εργαλεία μου';
-	@override String get myActivity => 'Η δραστηριότητά μου';
 	@override String get donate => 'Δωρεά';
 }
 
@@ -873,7 +872,6 @@ extension on TranslationsEl {
 			'navigation.spaceView' => 'Θέα Διαστήματος',
 			'navigation.applications' => 'Εφαρμογές',
 			'navigation.myTools' => 'Τα εργαλεία μου',
-			'navigation.myActivity' => 'Η δραστηριότητά μου',
 			'navigation.donate' => 'Δωρεά',
 			'sections.home.title' => 'Σπίτι',
 			'sections.home.subtitle' => 'Αποκτήστε μια πλήρη επισκόπηση υγείας\nτου συστήματός σας με ένα κλικ.',

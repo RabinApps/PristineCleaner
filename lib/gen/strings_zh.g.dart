@@ -106,7 +106,6 @@ class _TranslationsNavigationZh implements TranslationsNavigationEn {
 	@override String get spaceView => '空间景观';
 	@override String get applications => '应用领域';
 	@override String get myTools => '我的工具';
-	@override String get myActivity => '我的活动';
 	@override String get donate => '捐赠';
 }
 
@@ -873,7 +872,6 @@ extension on TranslationsZh {
 			'navigation.spaceView' => '空间景观',
 			'navigation.applications' => '应用领域',
 			'navigation.myTools' => '我的工具',
-			'navigation.myActivity' => '我的活动',
 			'navigation.donate' => '捐赠',
 			'sections.home.title' => '首页',
 			'sections.home.subtitle' => '一键获取系统的完整运行状况概览。',
