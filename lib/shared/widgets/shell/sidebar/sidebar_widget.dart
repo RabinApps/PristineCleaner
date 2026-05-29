@@ -7,6 +7,11 @@ import 'app_version_label.dart';
 import '../../../../core/l10n/locale_provider.dart';
 import '../../../../core/models/nav_item.dart';
 import '../../../../gen/strings.g.dart';
+import '../../../../providers/applications_provider.dart';
+import '../../../../providers/cleanup_provider.dart';
+import '../../../../providers/my_clutter_provider.dart';
+import '../../../../providers/my_tools_provider.dart';
+import '../../../../providers/space_view_provider.dart';
 
 class SidebarWidget extends ConsumerWidget {
   final NavSection activeSection;
@@ -16,6 +21,49 @@ class SidebarWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final appLocale = ref.watch(appLocaleProvider);
+    final cleanupStatus = ref.watch(
+      cleanupProvider.select(
+        (vm) => _SidebarScanStatus(
+          isScanning: vm.isScanning,
+          progress: _normalizedProgress(vm.progressPercent),
+        ),
+      ),
+    );
+    final clutterStatus = ref.watch(
+      myClutterProvider.select(
+        (state) => _SidebarScanStatus(
+          isScanning: state.vm.isScanning,
+          progress: _normalizedProgress(state.vm.progressPercent),
+        ),
+      ),
+    );
+    final spaceViewStatus = ref.watch(
+      spaceViewProvider.select(
+        (vm) => _SidebarScanStatus(
+          isScanning: vm.isScanning,
+          progress: _normalizedProgress(vm.progressPercent),
+        ),
+      ),
+    );
+    final applicationsStatus = ref.watch(
+      applicationsProvider.select(
+        (vm) => _SidebarScanStatus(
+          isScanning: vm.isScanning,
+          progress: _normalizedProgress(vm.progressPercent),
+        ),
+      ),
+    );
+    final toolsRunning = ref.watch(
+      myToolsProvider.select((state) => state.runningToolIds.isNotEmpty),
+    );
+
+    final scanStatuses = <NavSection, _SidebarScanStatus>{
+      NavSection.cleanup: cleanupStatus,
+      NavSection.myClutter: clutterStatus,
+      NavSection.spaceView: spaceViewStatus,
+      NavSection.applications: applicationsStatus,
+      NavSection.myTools: _SidebarScanStatus(isScanning: toolsRunning),
+    };
 
     return Container(
       width: 218,
@@ -53,6 +101,9 @@ class SidebarWidget extends ConsumerWidget {
                   (item) => _NavTile(
                     item: item,
                     isActive: item.section == activeSection,
+                    scanStatus:
+                        scanStatuses[item.section] ??
+                        const _SidebarScanStatus(isScanning: false),
                     onTap: () => context.go(_pathForSection(item.section)),
                   ),
                 ),
@@ -65,6 +116,7 @@ class SidebarWidget extends ConsumerWidget {
             child: _NavTile(
               item: NavItem.donateItem(),
               isActive: activeSection == NavSection.donate,
+              scanStatus: const _SidebarScanStatus(isScanning: false),
               onTap: () => context.go('/donate'),
             ),
           ),
@@ -201,11 +253,13 @@ String _pathForSection(NavSection section) {
 class _NavTile extends StatefulWidget {
   final NavItem item;
   final bool isActive;
+  final _SidebarScanStatus scanStatus;
   final VoidCallback onTap;
 
   const _NavTile({
     required this.item,
     required this.isActive,
+    required this.scanStatus,
     required this.onTap,
   });
 
@@ -258,19 +312,71 @@ class _NavTileState extends State<_NavTile> {
                   ),
                 ),
               ),
-              if (widget.isActive)
-                Container(
-                  width: 6,
-                  height: 6,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: _accent,
-                  ),
-                ),
+              _NavIndicator(
+                section: widget.item.section,
+                isActive: widget.isActive,
+                scanStatus: widget.scanStatus,
+                accent: _accent,
+              ),
             ],
           ),
         ),
       ),
     );
   }
+}
+
+class _NavIndicator extends StatelessWidget {
+  final NavSection section;
+  final bool isActive;
+  final _SidebarScanStatus scanStatus;
+  final Color accent;
+
+  const _NavIndicator({
+    required this.section,
+    required this.isActive,
+    required this.scanStatus,
+    required this.accent,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    if (scanStatus.isScanning) {
+      return SizedBox(
+        width: 10,
+        height: 10,
+        child: CircularProgressIndicator(
+          key: Key('sidebar-scan-${section.name}'),
+          value: scanStatus.progress,
+          strokeWidth: 1.7,
+          color: accent,
+        ),
+      );
+    }
+
+    if (!isActive) {
+      return const SizedBox.shrink();
+    }
+
+    return Container(
+      key: Key('sidebar-active-dot-${section.name}'),
+      width: 6,
+      height: 6,
+      decoration: BoxDecoration(shape: BoxShape.circle, color: accent),
+    );
+  }
+}
+
+class _SidebarScanStatus {
+  final bool isScanning;
+  final double? progress;
+
+  const _SidebarScanStatus({required this.isScanning, this.progress});
+}
+
+double? _normalizedProgress(double? value) {
+  if (value == null || value.isNaN || value.isInfinite) {
+    return null;
+  }
+  return value.clamp(0.0, 1.0);
 }
