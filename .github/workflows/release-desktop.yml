@@ -118,6 +118,7 @@ jobs:
         run: fastforge release --name ${{ matrix.release_name }} --skip-clean
 
       - name: Notarize macOS DMG
+        id: notarize_macos_dmg
         if: runner.os == 'macOS' && matrix.release_name == 'desktop-macos'
         timeout-minutes: 60
         shell: bash
@@ -126,8 +127,22 @@ jobs:
           MACOS_NOTARY_APPLE_ID: ${{ secrets.PROD_MACOS_NOTARIZATION_APPLE_ID }}
           MACOS_NOTARY_TEAM_ID: ${{ secrets.PROD_MACOS_NOTARIZATION_TEAM_ID }}
           MACOS_NOTARY_APP_PASSWORD: ${{ secrets.PROD_MACOS_NOTARIZATION_PWD }}
+          PRISTINE_CLEANER_WORKER_URL: ${{ secrets.PRISTINE_CLEANER_WORKER_URL }}
+          PRISTINE_CLEANER_WORKER_SECRET: ${{ secrets.PRISTINE_CLEANER_WORKER_SECRET }}
+          CURRENT_RUN_ID: ${{ github.run_id }}
+          CURRENT_RELEASE_TAG: ${{ env.RELEASE_TAG }}
         run: |
           set -euo pipefail
+
+          if [[ -z "$PRISTINE_CLEANER_WORKER_URL" ]]; then
+            echo "Missing required secret PRISTINE_CLEANER_WORKER_URL"
+            exit 1
+          fi
+
+          if [[ -z "$PRISTINE_CLEANER_WORKER_SECRET" ]]; then
+            echo "Missing required secret PRISTINE_CLEANER_WORKER_SECRET"
+            exit 1
+          fi
 
           DMG_PATH="$(find dist -type f -name '*.dmg' | head -n 1 || true)"
 
@@ -219,11 +234,25 @@ jobs:
             --verbose \
             "$DMG_PATH"
 
+          WEBHOOK_URL="$PRISTINE_CLEANER_WORKER_URL"
+          if [[ "$WEBHOOK_URL" != *\?* ]]; then
+            WEBHOOK_URL="$WEBHOOK_URL?"
+          elif [[ "$WEBHOOK_URL" != *[\?\&] ]]; then
+            WEBHOOK_URL="$WEBHOOK_URL&"
+          fi
+
+          ENCODED_RUN_ID="$(/usr/bin/python3 -c 'import sys, urllib.parse; print(urllib.parse.quote(sys.argv[1]))' "$CURRENT_RUN_ID")"
+          ENCODED_TAG="$(/usr/bin/python3 -c 'import sys, urllib.parse; print(urllib.parse.quote(sys.argv[1]))' "$CURRENT_RELEASE_TAG")"
+          ENCODED_SECRET="$(/usr/bin/python3 -c 'import sys, urllib.parse; print(urllib.parse.quote(sys.argv[1]))' "$PRISTINE_CLEANER_WORKER_SECRET")"
+
+          NOTARY_WEBHOOK_URL="${WEBHOOK_URL}run_id=${ENCODED_RUN_ID}&tag=${ENCODED_TAG}&secret=${ENCODED_SECRET}"
+
           NOTARY_SUBMISSION_JSON="$(xcrun notarytool submit \
             "$DMG_PATH" \
             --apple-id "$MACOS_NOTARY_APPLE_ID" \
             --team-id "$MACOS_NOTARY_TEAM_ID" \
             --password "$MACOS_NOTARY_APP_PASSWORD" \
+            --webhook "$NOTARY_WEBHOOK_URL" \
             --no-wait \
             --output-format json)"
 
@@ -237,52 +266,21 @@ jobs:
           fi
 
           echo "Notary submission id: $NOTARY_SUBMISSION_ID"
-          echo "Polling notarization status every 30 seconds..."
+          echo "dmg_path=$DMG_PATH" >> "$GITHUB_OUTPUT"
 
-          max_attempts=120
-          attempt=1
-          NOTARY_STATUS=""
+      - name: Upload unnotarized macOS DMG artifact
+        if: runner.os == 'macOS' && matrix.release_name == 'desktop-macos'
+        uses: actions/upload-artifact@v4
+        with:
+          name: unnotarized-dmg
+          path: ${{ steps.notarize_macos_dmg.outputs.dmg_path }}
+          if-no-files-found: error
 
-          while (( attempt <= max_attempts )); do
-            NOTARY_INFO_JSON="$(xcrun notarytool info \
-              "$NOTARY_SUBMISSION_ID" \
-              --apple-id "$MACOS_NOTARY_APPLE_ID" \
-              --team-id "$MACOS_NOTARY_TEAM_ID" \
-              --password "$MACOS_NOTARY_APP_PASSWORD" \
-              --output-format json)"
-
-            NOTARY_STATUS="$(echo "$NOTARY_INFO_JSON" | /usr/bin/python3 -c 'import json,sys; print(json.load(sys.stdin).get("status", ""))')"
-            echo "Attempt $attempt/$max_attempts: notarization status = $NOTARY_STATUS"
-
-            if [[ "$NOTARY_STATUS" == "Accepted" || "$NOTARY_STATUS" == "Invalid" || "$NOTARY_STATUS" == "Rejected" ]]; then
-              break
-            fi
-
-            attempt=$((attempt + 1))
-            sleep 30
-          done
-
-          if [[ "$NOTARY_STATUS" != "Accepted" && "$NOTARY_STATUS" != "Invalid" && "$NOTARY_STATUS" != "Rejected" ]]; then
-            echo "Timed out waiting for notarization to finish"
-            NOTARY_STATUS="Timeout"
-          fi
-
-          if [[ "$NOTARY_STATUS" != "Accepted" ]]; then
-            echo "Notarization failed with status: $NOTARY_STATUS"
-
-            if [[ -n "$NOTARY_SUBMISSION_ID" ]]; then
-              xcrun notarytool log \
-                "$NOTARY_SUBMISSION_ID" \
-                --apple-id "$MACOS_NOTARY_APPLE_ID" \
-                --team-id "$MACOS_NOTARY_TEAM_ID" \
-                --password "$MACOS_NOTARY_APP_PASSWORD" || true
-            fi
-
-            exit 1
-          fi
-
-          xcrun stapler staple "$DMG_PATH"
-          xcrun stapler validate "$DMG_PATH"
+      - name: Remove unstapled macOS DMG from release upload set
+        if: runner.os == 'macOS' && matrix.release_name == 'desktop-macos'
+        shell: bash
+        run: |
+          find dist -type f -name '*.dmg' -delete
 
       - name: Append x86_64 suffix to Linux artifact names
         if: runner.os == 'Linux' && matrix.release_name == 'desktop-linux-x64'

@@ -1,0 +1,80 @@
+name: Finalize macOS Notarization Release
+
+on:
+  repository_dispatch:
+    types:
+      - notarization_complete
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: finalize-release-${{ github.event.client_payload.tag_name || github.run_id }}
+  cancel-in-progress: false
+
+jobs:
+  finalize_release:
+    name: Staple and upload macOS DMG
+    runs-on: macos-latest
+
+    steps:
+      - name: Validate dispatch payload
+        shell: bash
+        env:
+          RUN_ID: ${{ github.event.client_payload.run_id }}
+          TAG_NAME: ${{ github.event.client_payload.tag_name }}
+        run: |
+          set -euo pipefail
+
+          if [[ -z "$RUN_ID" ]]; then
+            echo "Missing client_payload.run_id"
+            exit 1
+          fi
+
+          if [[ -z "$TAG_NAME" ]]; then
+            echo "Missing client_payload.tag_name"
+            exit 1
+          fi
+
+      - name: Download unnotarized DMG from originating run
+        uses: actions/download-artifact@v4
+        with:
+          name: unnotarized-dmg
+          run-id: ${{ github.event.client_payload.run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: dist
+
+      - name: Locate DMG
+        id: locate_dmg
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          DMG_PATH="$(find dist -type f -name '*.dmg' | head -n 1 || true)"
+
+          if [[ -z "$DMG_PATH" ]]; then
+            echo "No DMG file found in downloaded artifact"
+            exit 1
+          fi
+
+          echo "dmg_path=$DMG_PATH" >> "$GITHUB_OUTPUT"
+
+      - name: Staple notarization ticket
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          xcrun stapler staple "${{ steps.locate_dmg.outputs.dmg_path }}"
+          xcrun stapler validate "${{ steps.locate_dmg.outputs.dmg_path }}"
+
+      - name: Upload stapled DMG to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event.client_payload.tag_name }}
+          files: ${{ steps.locate_dmg.outputs.dmg_path }}
+          overwrite_files: true
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

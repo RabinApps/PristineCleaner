@@ -174,11 +174,20 @@ Desktop release packaging is configured in `distribute_options.yaml` and automat
 
 - Triggered by pushing tags that match `v*`.
 - Can also run manually via `workflow_dispatch` with an optional `release_tag` input.
-- Builds desktop artifacts with Fastforge for:
-  - macOS: DMG
-  - Windows: EXE and MSIX
-  - Linux x86_64: DEB and RPM
-- Uploads generated files from `dist/` to GitHub Releases
+- Build phase (`.github/workflows/release-desktop.yml`):
+  - Builds desktop artifacts with Fastforge for macOS (DMG), Windows (EXE/MSIX), and Linux x86_64 (DEB/RPM).
+  - Signs and submits the macOS DMG to Apple notarization using `notarytool` with `--no-wait`.
+  - Uploads the macOS DMG as a workflow artifact named `unnotarized-dmg`.
+  - Uploads Windows and Linux artifacts to GitHub Releases.
+- Finalize phase (`.github/workflows/release-desktop-finalize.yml`):
+  - Triggered by `repository_dispatch` event type `notarization_complete` (sent by Cloudflare Worker).
+  - Downloads `unnotarized-dmg` from the originating workflow run by `run_id`.
+  - Staples and validates the DMG, then uploads the stapled DMG to the target release tag.
+
+Required secrets for async notarization callback:
+
+- `PRISTINE_CLEANER_WORKER_URL`: Cloudflare Worker endpoint used as Apple notarization webhook.
+- `PRISTINE_CLEANER_WORKER_SECRET`: shared secret appended to webhook query string and validated by the worker.
 
 ### Local packaging command (without upload)
 
@@ -204,7 +213,7 @@ Artifacts are written to `dist/`.
 
 - Very large recursive scans can be time-consuming on slow disks.
 - CI release matrix currently builds Linux `x86_64` artifacts only (ARM64 definitions exist in `distribute_options.yaml` but are not included in the workflow matrix).
-- Need to code sign macos in the future https://federicoterzi.com/blog/automatic-code-signing-and-notarization-for-macos-apps-using-github-actions/
+- Async macOS finalization depends on Apple webhook delivery and Cloudflare Worker dispatch reliability.
 
 ## Configuration Notes
 
