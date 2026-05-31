@@ -1,7 +1,7 @@
 # Pristine Cleaner
 
 <p align="center">
- <a href="https://www.paypal.com/donate/?hosted_button_id=YEJ37WF4Q3HP">
+ <a href="https://www.paypal.com/donate/?hosted_button_id=YEJ37WF4Q3HPC">
     <img alt="Donate" src="https://img.shields.io/badge/Donate-PayPal-blue.svg">
   </a>
  <a href="https://www.buymeacoffee.com/rabinapps">
