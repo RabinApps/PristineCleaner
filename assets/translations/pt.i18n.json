@@ -25,47 +25,47 @@
   "sections": {
     "home": {
       "title": "Lar",
-      "subtitle": "Obtenha uma visão geral completa da integridade\\no seu sistema com um clique.",
+      "subtitle": "Veja rapidamente os sinais vitais do seu computador\\ne detecte problemas antes que eles aumentem.",
       "features": {
-        "systemStatus": "Status do sistema",
-        "storageUsage": "Uso de armazenamento",
-        "quickActions": "Ações rápidas"
+        "systemStatus": "Pulso do sistema ao vivo",
+        "storageUsage": "Pressão de armazenamento",
+        "quickActions": "Correções com um toque"
       }
     },
     "cleanup": {
       "title": "Limpeza de lixo",
-      "subtitle": "Limpe seu sistema para alcançar o desempenho\\nmáximo e recuperar mais espaço livre.",
+      "subtitle": "Remova resíduos digitais para restaurar\\nvelocidade, estabilidade e espaço livre valioso.",
       "features": {
-        "systemJunk": "Lixo do sistema",
-        "userCache": "Cache do usuário",
-        "tempFiles": "Arquivos temporários"
+        "systemJunk": "Lixo residual do sistema",
+        "userCache": "Cache de usuário inchado",
+        "tempFiles": "Arquivos temporários obsoletos"
       }
     },
     "myClutter": {
       "title": "Minha desordem",
-      "subtitle": "Classifique seus arquivos e reduza\\na bagunça com apenas alguns cliques.",
+      "subtitle": "Transforme pastas caóticas em decisões claras\\ncom limpeza guiada em minutos.",
       "features": {
-        "largeFiles": "Arquivos grandes",
-        "duplicates": "Duplicatas",
-        "largeSimilarImages": "Grandes Imagens Semelhantes"
+        "largeFiles": "Arquivos com fome de espaço",
+        "duplicates": "Clusters duplicados",
+        "largeSimilarImages": "Conjuntos de fotos quase correspondentes"
       }
     },
     "spaceView": {
       "title": "Visualização do espaço",
-      "subtitle": "Visualize o que está ocupando mais\\nde espaço em disco e limpe rapidamente.",
+      "subtitle": "Mapeie seu disco visualmente para identificar\\no que é mais importante e liberar espaço com mais rapidez.",
       "features": {
-        "visualStorageMap": "Mapa de armazenamento visual",
-        "largeFoldersOverview": "Visão geral de pastas grandes",
-        "hiddenFilesUncovered": "Arquivos ocultos descobertos"
+        "visualStorageMap": "Mapa de armazenamento interativo",
+        "largeFoldersOverview": "Pontos de acesso de pastas pesadas",
+        "hiddenFilesUncovered": "Drenos de espaço oculto"
       }
     },
     "applications": {
       "title": "Aplicações",
-      "subtitle": "Assuma o controle de seus aplicativos.\\nDesinstale ou remova sobras antigas.",
+      "subtitle": "Domine a pegada do seu aplicativo.\\nDesinstale de forma limpa e remova sobras esquecidas.",
       "features": {
-        "appUninstaller": "Desinstalador de aplicativos",
-        "largeApps": "Aplicativos grandes",
-        "fileLeftovers": "Sobras de arquivo"
+        "appUninstaller": "Desinstalador profundo de aplicativos",
+        "largeApps": "Aplicativos pesados",
+        "fileLeftovers": "Arquivos de suporte órfãos"
       }
     },
     "myTools": {

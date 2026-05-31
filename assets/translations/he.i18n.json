@@ -25,47 +25,47 @@
   "sections": {
     "home": {
       "title": "בַּיִת",
-      "subtitle": "קבל סקירת בריאות מלאה\\nעל המערכת שלך בלחיצה אחת.",
+      "subtitle": "ראה את הסימנים החיוניים של המחשב שלך במבט חטוף\\nותפוס בעיות לפני שהם גדלים.",
       "features": {
-        "systemStatus": "מצב מערכת",
-        "storageUsage": "שימוש באחסון",
-        "quickActions": "פעולות מהירות"
+        "systemStatus": "דופק מערכת חי",
+        "storageUsage": "לחץ אחסון",
+        "quickActions": "תיקונים בלחיצה אחת"
       }
     },
     "cleanup": {
       "title": "ניקוי זבל",
-      "subtitle": "נקה את המערכת שלך כדי להשיג\\n ביצועים מקסימליים ולהשיב עוד מקום פנוי.",
+      "subtitle": "לטאטא שאריות דיגיטליות כדי לשחזר\\nמהירות, יציבות ושטח פנוי יקר.",
       "features": {
-        "systemJunk": "זבל מערכת",
-        "userCache": "מטמון משתמש",
-        "tempFiles": "קבצי זמני"
+        "systemJunk": "זבל מערכת שיורי",
+        "userCache": "מטמון משתמש נפוח",
+        "tempFiles": "קבצי טמפ' מעופשים"
       }
     },
     "myClutter": {
       "title": "הבלגן שלי",
-      "subtitle": "מיין את הקבצים שלך וצמצם\\n את הבלגן בכמה קליקים בלבד.",
+      "subtitle": "הפוך תיקיות כאוטיות להחלטות ברורות\\nעם ניקוי מודרך תוך דקות.",
       "features": {
-        "largeFiles": "קבצים גדולים",
-        "duplicates": "כפילויות",
-        "largeSimilarImages": "תמונות דומות גדולות"
+        "largeFiles": "קבצים רעבים לחלל",
+        "duplicates": "שכפול אשכולות",
+        "largeSimilarImages": "ערכות תמונות של Near-Match"
       }
     },
     "spaceView": {
       "title": "תצוגת חלל",
-      "subtitle": "דמיין מה תופס הכי הרבה שטח בדיסק ונקה במהירות.",
+      "subtitle": "מפה את הדיסק שלך באופן ויזואלי כדי לזהות את\\nהחשוב ביותר ולפנות מקום מהר יותר.",
       "features": {
-        "visualStorageMap": "מפת אחסון ויזואלית",
-        "largeFoldersOverview": "סקירה כללית של תיקיות גדולות",
-        "hiddenFilesUncovered": "קבצים נסתרים נחשפו"
+        "visualStorageMap": "מפת אחסון אינטראקטיבית",
+        "largeFoldersOverview": "נקודות חמות של תיקיות כבדות",
+        "hiddenFilesUncovered": "מנקזי שטח נסתרים"
       }
     },
     "applications": {
       "title": "יישומים",
-      "subtitle": "קח שליטה על האפליקציות שלך.\\nהסר את ההתקנה או הסר שאריות ישנות.",
+      "subtitle": "השתלט על טביעת הרגל של האפליקציה שלך.\\nהסר את ההתקנה בצורה נקייה והסר שאריות שנשכחו.",
       "features": {
-        "appUninstaller": "מסיר התקנה של אפליקציה",
-        "largeApps": "אפליקציות גדולות",
-        "fileLeftovers": "קובץ שאריות"
+        "appUninstaller": "מסיר אפליקציות עמוק",
+        "largeApps": "אפליקציות במשקל כבד",
+        "fileLeftovers": "קבצי תמיכה מיותמים"
       }
     },
     "myTools": {

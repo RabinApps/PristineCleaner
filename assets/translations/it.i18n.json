@@ -25,47 +25,47 @@
   "sections": {
     "home": {
       "title": "Casa",
-      "subtitle": "Ottieni una panoramica completa dello stato del tuo sistema in un clic.",
+      "subtitle": "Visualizza i segni vitali del tuo computer a colpo d'occhio\\ne individua i problemi prima che aumentino.",
       "features": {
-        "systemStatus": "Stato del sistema",
-        "storageUsage": "Utilizzo dello spazio di archiviazione",
-        "quickActions": "Azioni rapide"
+        "systemStatus": "Impulso del sistema in tempo reale",
+        "storageUsage": "Pressione di stoccaggio",
+        "quickActions": "Correzioni con un solo tocco"
       }
     },
     "cleanup": {
       "title": "Pulizia File Inutili",
-      "subtitle": "Pulisci il sistema per ottenere\\nprestazioni massime e recuperare spazio.",
+      "subtitle": "Elimina i residui digitali per ripristinare\\nvelocità, stabilità e prezioso spazio libero.",
       "features": {
-        "systemJunk": "File di Sistema Inutili",
-        "userCache": "Cache Utente",
-        "tempFiles": "File Temporanei"
+        "systemJunk": "Spazzatura residua del sistema",
+        "userCache": "Cache utente gonfia",
+        "tempFiles": "File temporanei obsoleti"
       }
     },
     "myClutter": {
       "title": "Il Mio Disordine",
-      "subtitle": "Ordina i tuoi file e riduci\\nil disordine in pochi clic.",
+      "subtitle": "Trasforma le cartelle caotiche in decisioni chiare\\ncon la pulizia guidata in pochi minuti.",
       "features": {
-        "largeFiles": "File Grandi",
-        "duplicates": "Duplicati",
-        "largeSimilarImages": "Immagini Simili Grandi"
+        "largeFiles": "File affamati di spazio",
+        "duplicates": "Cluster duplicati",
+        "largeSimilarImages": "Set di foto quasi corrispondenti"
       }
     },
     "spaceView": {
       "title": "Vista Spazio",
-      "subtitle": "Visualizza cosa occupa piu\\nspazio su disco e pulisci rapidamente.",
+      "subtitle": "Mappa visivamente il tuo disco per individuare\\nquello che conta di più e liberare spazio più velocemente.",
       "features": {
-        "visualStorageMap": "Mappa Visiva dello Spazio",
-        "largeFoldersOverview": "Panoramica Cartelle Grandi",
-        "hiddenFilesUncovered": "File Nascosti Individuati"
+        "visualStorageMap": "Mappa di archiviazione interattiva",
+        "largeFoldersOverview": "Hotspot di cartelle pesanti",
+        "hiddenFilesUncovered": "Drenatori di spazio nascosto"
       }
     },
     "applications": {
       "title": "Applicazioni",
-      "subtitle": "Prendi il controllo delle applicazioni.\\nDisinstalla o rimuovi vecchi residui.",
+      "subtitle": "Padroneggia l'impronta della tua app.\\nDisinstalla in modo pulito e rimuovi gli avanzi dimenticati.",
       "features": {
-        "appUninstaller": "Disinstallatore App",
-        "largeApps": "App Grandi",
-        "fileLeftovers": "Residui dei File"
+        "appUninstaller": "Programma di disinstallazione approfondita dell'app",
+        "largeApps": "App pesanti",
+        "fileLeftovers": "File di supporto orfani"
       }
     },
     "myTools": {

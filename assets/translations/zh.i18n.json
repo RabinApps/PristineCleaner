@@ -25,47 +25,47 @@
   "sections": {
     "home": {
       "title": "首页",
-      "subtitle": "一键获取系统的完整运行状况概览。",
+      "subtitle": "一目了然地查看计算机的生命体征\\n并在问题出现之前发现问题。",
       "features": {
-        "systemStatus": "系统状态",
-        "storageUsage": "存储使用情况",
-        "quickActions": "快速操作"
+        "systemStatus": "实时系统脉冲",
+        "storageUsage": "储存压力",
+        "quickActions": "一键修复"
       }
     },
     "cleanup": {
       "title": "垃圾清理",
-      "subtitle": "清理您的系统以实现\\n最佳性能并回收更多可用空间。",
+      "subtitle": "清除数字残留物以恢复\\n速度、稳定性和宝贵的可用空间。",
       "features": {
-        "systemJunk": "系统垃圾",
-        "userCache": "用户缓存",
-        "tempFiles": "临时文件"
+        "systemJunk": "残留系统垃圾",
+        "userCache": "用户缓存臃肿",
+        "tempFiles": "过时的临时文件"
       }
     },
     "myClutter": {
       "title": "我的杂乱",
-      "subtitle": "只需点击几下，即可对文件进行排序并\\n减少混乱。",
+      "subtitle": "通过几分钟内的指导清理，将混乱的文件夹转变为清晰的决策。",
       "features": {
-        "largeFiles": "大文件",
-        "duplicates": "重复项",
-        "largeSimilarImages": "大类似图像"
+        "largeFiles": "占用空间的文件",
+        "duplicates": "重复的簇",
+        "largeSimilarImages": "几乎匹配的照片集"
       }
     },
     "spaceView": {
       "title": "空间景观",
-      "subtitle": "可视化占用磁盘空间最多的\\n并快速清理。",
+      "subtitle": "直观地映射您的磁盘，\\n以查明最重要的内容并更快地释放空间。",
       "features": {
-        "visualStorageMap": "视觉存储图",
-        "largeFoldersOverview": "大文件夹概述",
-        "hiddenFilesUncovered": "发现隐藏文件"
+        "visualStorageMap": "交互式存储地图",
+        "largeFoldersOverview": "重文件夹热点",
+        "hiddenFilesUncovered": "隐藏的空间排水器"
       }
     },
     "applications": {
       "title": "应用领域",
-      "subtitle": "控制您的应用程序。\\n卸载或删除旧的残留物。",
+      "subtitle": "掌握您的应用足迹。\\n彻底卸载并删除被遗忘的残留物。",
       "features": {
-        "appUninstaller": "应用程序卸载程序",
-        "largeApps": "大型应用程序",
-        "fileLeftovers": "文件剩菜"
+        "appUninstaller": "深度应用程序卸载程序",
+        "largeApps": "重量级应用程序",
+        "fileLeftovers": "孤立的支持文件"
       }
     },
     "myTools": {

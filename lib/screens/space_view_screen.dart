@@ -278,7 +278,7 @@ class _SpaceViewStart extends StatelessWidget {
                       ],
                     ),
                   ),
-                const SizedBox(height: 14),
+                const SizedBox(height: 10),
                 ScanButton(
                   color: vm.isScanning ? Colors.redAccent : theme.accentColor,
                   label: vm.isScanning
@@ -904,7 +904,10 @@ class _StaticBubbleNode extends StatelessWidget {
             width: isSelected ? 2.6 : 1.2,
           ),
           boxShadow: [
-            BoxShadow(color: accentColor.withValues(alpha: 0.30), blurRadius: 26),
+            BoxShadow(
+              color: accentColor.withValues(alpha: 0.30),
+              blurRadius: 26,
+            ),
           ],
         ),
         child: Center(
@@ -1154,7 +1157,9 @@ class _DoneScreen extends StatelessWidget {
               onPressed: onDismiss,
               style: OutlinedButton.styleFrom(
                 foregroundColor: theme.accentColor,
-                side: BorderSide(color: theme.accentColor.withValues(alpha: 0.5)),
+                side: BorderSide(
+                  color: theme.accentColor.withValues(alpha: 0.5),
+                ),
                 padding: const EdgeInsets.symmetric(
                   horizontal: 32,
                   vertical: 14,

@@ -25,47 +25,47 @@
   "sections": {
     "home": {
       "title": "Home",
-      "subtitle": "Get a complete health overview\\nof your system in one click.",
+      "subtitle": "See your computer's vital signs at a glance\\nand catch issues before they grow.",
       "features": {
-        "systemStatus": "System Status",
-        "storageUsage": "Storage Usage",
-        "quickActions": "Quick Actions"
+        "systemStatus": "Live System Pulse",
+        "storageUsage": "Storage Pressure",
+        "quickActions": "One-Tap Fixes"
       }
     },
     "cleanup": {
       "title": "Junk Cleanup",
-      "subtitle": "Clean your system to achieve maximum\\nperformance and reclaim more free space.",
+      "subtitle": "Sweep away digital residue to restore\\nspeed, stability, and valuable free space.",
       "features": {
-        "systemJunk": "System Junk",
-        "userCache": "User Cache",
-        "tempFiles": "Temp Files"
+        "systemJunk": "Residual System Junk",
+        "userCache": "Bloated User Cache",
+        "tempFiles": "Stale Temp Files"
       }
     },
     "myClutter": {
       "title": "Clutter",
-      "subtitle": "Sort through your files and reduce\\nthe mess in just a few clicks.",
+      "subtitle": "Turn chaotic folders into clear decisions\\nwith guided cleanup in minutes.",
       "features": {
-        "largeFiles": "Large Files",
-        "duplicates": "Duplicates",
-        "largeSimilarImages": "Large Similar Images"
+        "largeFiles": "Space-Hungry Files",
+        "duplicates": "Duplicate Clusters",
+        "largeSimilarImages": "Near-Match Photo Sets"
       }
     },
     "spaceView": {
       "title": "Space View",
-      "subtitle": "Visualize what's taking up the most\\ndisk space and clean up quickly.",
+      "subtitle": "Map your disk visually to pinpoint\\nwhat matters most and free space faster.",
       "features": {
-        "visualStorageMap": "Visual Storage Map",
-        "largeFoldersOverview": "Large Folders Overview",
-        "hiddenFilesUncovered": "Hidden Files Uncovered"
+        "visualStorageMap": "Interactive Storage Map",
+        "largeFoldersOverview": "Heavy Folder Hotspots",
+        "hiddenFilesUncovered": "Hidden Space Drainers"
       }
     },
     "applications": {
       "title": "Applications",
-      "subtitle": "Take control of your applications.\\nUninstall or remove old leftovers.",
+      "subtitle": "Master your app footprint.\\nUninstall cleanly and remove forgotten leftovers.",
       "features": {
-        "appUninstaller": "App Uninstaller",
-        "largeApps": "Large Apps",
-        "fileLeftovers": "File Leftovers"
+        "appUninstaller": "Deep App Uninstaller",
+        "largeApps": "Heavyweight Apps",
+        "fileLeftovers": "Orphaned Support Files"
       }
     },
     "myTools": {

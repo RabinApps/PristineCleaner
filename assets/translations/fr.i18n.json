@@ -25,47 +25,47 @@
   "sections": {
     "home": {
       "title": "Maison",
-      "subtitle": "Obtenez un aperçu complet de l'état de santé de votre système en un seul clic.",
+      "subtitle": "Consultez les signes vitaux de votre ordinateur en un coup d'œil\\net détectez les problèmes avant qu'ils ne s'aggravent.",
       "features": {
-        "systemStatus": "État du système",
-        "storageUsage": "Storage Usage",
-        "quickActions": "Actions rapides"
+        "systemStatus": "Impulsion du système en direct",
+        "storageUsage": "Pression de stockage",
+        "quickActions": "Correctifs en un seul clic"
       }
     },
     "cleanup": {
       "title": "Nettoyage indésirable",
-      "subtitle": "Nettoyez votre système pour obtenir\\ndes performances maximales et récupérer plus d'espace libre.",
+      "subtitle": "Balayez les résidus numériques pour restaurer\\nla vitesse, la stabilité et l'espace libre précieux.",
       "features": {
-        "systemJunk": "Indésirable du système",
-        "userCache": "User Cache",
-        "tempFiles": "Fichiers temporaires"
+        "systemJunk": "Déchets système résiduels",
+        "userCache": "Cache utilisateur gonflé",
+        "tempFiles": "Fichiers temporaires périmés"
       }
     },
     "myClutter": {
       "title": "Mon désordre",
-      "subtitle": "Triez vos fichiers et réduisez\\nle désordre en quelques clics.",
+      "subtitle": "Transformez des dossiers chaotiques en décisions claires\\navec un nettoyage guidé en quelques minutes.",
       "features": {
-        "largeFiles": "Fichiers volumineux",
-        "duplicates": "Doublons",
-        "largeSimilarImages": "Grandes images similaires"
+        "largeFiles": "Fichiers gourmands en espace",
+        "duplicates": "Clusters en double",
+        "largeSimilarImages": "Séries de photos quasi-correspondantes"
       }
     },
     "spaceView": {
       "title": "Vue de l'espace",
-      "subtitle": "Visualisez ce qui occupe le plus d'espace\\ndisque et nettoyez rapidement.",
+      "subtitle": "Mappez visuellement votre disque pour identifier\\nce qui compte le plus et libérer de l'espace plus rapidement.",
       "features": {
-        "visualStorageMap": "Carte de stockage visuelle",
-        "largeFoldersOverview": "Présentation des grands dossiers",
-        "hiddenFilesUncovered": "Fichiers cachés découverts"
+        "visualStorageMap": "Carte de stockage interactive",
+        "largeFoldersOverview": "Points chauds des dossiers lourds",
+        "hiddenFilesUncovered": "Draineurs d'espace cachés"
       }
     },
     "applications": {
       "title": "Applications",
-      "subtitle": "Prenez le contrôle de vos applications.\\nDésinstallez ou supprimez les anciens restes.",
+      "subtitle": "Maîtrisez l'empreinte de votre application.\\nDésinstallez proprement et supprimez les restes oubliés.",
       "features": {
-        "appUninstaller": "Programme de désinstallation d'application",
-        "largeApps": "Applications volumineuses",
-        "fileLeftovers": "Restes de fichiers"
+        "appUninstaller": "Programme de désinstallation d'applications approfondies",
+        "largeApps": "Applications lourdes",
+        "fileLeftovers": "Fichiers de support orphelins"
       }
     },
     "myTools": {
