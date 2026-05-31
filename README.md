@@ -215,6 +215,21 @@ Artifacts are written to `dist/`.
 - CI release matrix currently builds Linux `x86_64` artifacts only (ARM64 definitions exist in `distribute_options.yaml` but are not included in the workflow matrix).
 - Async macOS finalization depends on Apple webhook delivery and Cloudflare Worker dispatch reliability.
 
+### Desktop updater source
+
+- In-app update checks use GitHub Releases from `RabinApps/PristineCleaner`.
+- Latest release metadata endpoint:
+  - `https://api.github.com/repos/RabinApps/PristineCleaner/releases/latest`
+- Release tags are expected to keep the `v` prefix (for example `v1.2.3`).
+- Installer selection is architecture-aware:
+  - macOS: DMG
+  - Windows: EXE preferred (MSIX fallback)
+  - Linux: DEB preferred (RPM fallback)
+- Architecture matching rules:
+  - `x86_64` aliases: `x86_64`, `x64`, `amd64`
+  - `arm64` aliases: `arm64`, `aarch64`
+- Current release workflow publishes Linux x86_64 artifacts only; Linux arm64 hosts are currently treated as unsupported by the updater.
+
 ## Configuration Notes
 
 - App display name/title: `PristineCleaner`

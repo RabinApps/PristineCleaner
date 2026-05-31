@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'app_version_label.dart';
+import 'desktop_update_chip.dart';
 import '../../../../core/l10n/locale_provider.dart';
 import '../../../../core/models/nav_item.dart';
 import '../../../../gen/strings.g.dart';
@@ -130,6 +131,10 @@ class SidebarWidget extends ConsumerWidget {
                 ref.read(appLocaleProvider.notifier).setLocale(locale);
               },
             ),
+          ),
+          const Padding(
+            padding: EdgeInsets.fromLTRB(10, 0, 10, 8),
+            child: DesktopUpdateChip(),
           ),
           Padding(
             padding: const EdgeInsets.only(bottom: 14),
