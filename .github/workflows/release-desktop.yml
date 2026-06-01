@@ -170,7 +170,8 @@ jobs:
             exit 1
           fi
 
-          cp -R "$APP_PATH" "$EXTRACT_DIR/"
+          # Copy the full mounted DMG contents (preserves symlinks and metadata)
+          /usr/bin/ditto -rsrc "$MOUNT_DIR/" "$EXTRACT_DIR/"
           hdiutil detach "$MOUNT_DIR" -quiet
 
           APP_PATH="$(find "$EXTRACT_DIR" -maxdepth 1 -type d -name '*.app' | head -n 1 || true)"
@@ -218,9 +219,10 @@ jobs:
           REPACKED_DMG_PATH="$TEMP_DIR/${APP_BASENAME}.dmg"
 
           rm -f "$DMG_PATH"
+          # Repack the DMG from the extracted directory so the Applications link remains
           hdiutil create \
             -volname "$APP_BASENAME" \
-            -srcfolder "$APP_PATH" \
+            -srcfolder "$EXTRACT_DIR" \
             -ov \
             -format UDZO \
             "$REPACKED_DMG_PATH"
