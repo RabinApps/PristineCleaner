@@ -56,39 +56,6 @@ Supported desktop targets:
 - Returns apps/folders sorted by size.
 - Supports selection and cleanup.
 
-### Shell and Navigation
-
-- Animated section switching.
-- Sidebar with main sections and placeholder bottom items (`My Tools`, `My Activity`).
-
-## Scan Targets By Platform
-
-### Cleanup scan paths
-
-- macOS:
-  - `~/Library/Caches`
-  - `~/Library/Logs`
-  - `/Library/Logs`
-- Linux:
-  - `~/.cache`
-  - `/tmp`
-- Windows:
-  - `%TEMP%`
-  - `%LOCALAPPDATA%\\Temp`
-
-### Applications scan paths
-
-- macOS: `/Applications` (`*.app` bundles)
-- Linux: `/opt`
-- Windows:
-  - `C:\\Program Files`
-  - `C:\\Program Files (x86)`
-
-### Clutter scan roots
-
-- Large Files: user home directory (`$HOME` or `%USERPROFILE%`)
-- Downloads: `~/Downloads` or `%USERPROFILE%\\Downloads`
-
 ## Tech Stack
 
 - Flutter (desktop)
