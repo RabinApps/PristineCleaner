@@ -188,6 +188,10 @@ class _Translations$dialogs$zh implements Translations$dialogs$en {
 	// Translations
 	@override String get stopScanningTitle => '停止扫描？';
 	@override String get stopScanningMessage => '这将取消当前扫描并放弃任何部分进度。';
+	@override String get exitConfirmationTitle => '确认退出';
+	@override String get exitConfirmationMessage => '当前正在运行扫描。您确定要退出吗？';
+	@override String get exitConfirmationWait => '等待';
+	@override String get exitConfirmationQuit => '仍然退出';
 	@override String get stopRemovalTitle => '停止移除？';
 	@override String get stopRemovalMessage => '当前文件将完成，然后剩余的文件将被跳过。';
 }
@@ -477,7 +481,7 @@ class _Translations$sections$home$zh implements Translations$sections$home$en {
 
 	// Translations
 	@override String get title => '首页';
-	@override String get subtitle => '一键获取系统的完整运行状况概览。';
+	@override String get subtitle => '一目了然地查看计算机的生命体征\n并在问题出现之前发现问题。';
 	@override late final _Translations$sections$home$features$zh features = _Translations$sections$home$features$zh._(_root);
 }
 
@@ -489,7 +493,7 @@ class _Translations$sections$cleanup$zh implements Translations$sections$cleanup
 
 	// Translations
 	@override String get title => '垃圾清理';
-	@override String get subtitle => '清理您的系统以实现\n最佳性能并回收更多可用空间。';
+	@override String get subtitle => '清除数字残留物以恢复\n速度、稳定性和宝贵的可用空间。';
 	@override late final _Translations$sections$cleanup$features$zh features = _Translations$sections$cleanup$features$zh._(_root);
 }
 
@@ -501,7 +505,7 @@ class _Translations$sections$myClutter$zh implements Translations$sections$myClu
 
 	// Translations
 	@override String get title => '我的杂乱';
-	@override String get subtitle => '只需点击几下，即可对文件进行排序并\n减少混乱。';
+	@override String get subtitle => '通过几分钟内的指导清理，将混乱的文件夹转变为清晰的决策。';
 	@override late final _Translations$sections$myClutter$features$zh features = _Translations$sections$myClutter$features$zh._(_root);
 }
 
@@ -513,7 +517,7 @@ class _Translations$sections$spaceView$zh implements Translations$sections$space
 
 	// Translations
 	@override String get title => '空间景观';
-	@override String get subtitle => '可视化占用磁盘空间最多的\n并快速清理。';
+	@override String get subtitle => '直观地映射您的磁盘，\n以查明最重要的内容并更快地释放空间。';
 	@override late final _Translations$sections$spaceView$features$zh features = _Translations$sections$spaceView$features$zh._(_root);
 }
 
@@ -525,7 +529,7 @@ class _Translations$sections$applications$zh implements Translations$sections$ap
 
 	// Translations
 	@override String get title => '应用领域';
-	@override String get subtitle => '控制您的应用程序。\n卸载或删除旧的残留物。';
+	@override String get subtitle => '掌握您的应用足迹。\n彻底卸载并删除被遗忘的残留物。';
 	@override late final _Translations$sections$applications$features$zh features = _Translations$sections$applications$features$zh._(_root);
 }
 
@@ -783,9 +787,9 @@ class _Translations$sections$home$features$zh implements Translations$sections$h
 	final TranslationsZh _root; // ignore: unused_field
 
 	// Translations
-	@override String get systemStatus => '系统状态';
-	@override String get storageUsage => '存储使用情况';
-	@override String get quickActions => '快速操作';
+	@override String get systemStatus => '实时系统脉冲';
+	@override String get storageUsage => '储存压力';
+	@override String get quickActions => '一键修复';
 }
 
 // Path: sections.cleanup.features
@@ -795,9 +799,9 @@ class _Translations$sections$cleanup$features$zh implements Translations$section
 	final TranslationsZh _root; // ignore: unused_field
 
 	// Translations
-	@override String get systemJunk => '系统垃圾';
-	@override String get userCache => '用户缓存';
-	@override String get tempFiles => '临时文件';
+	@override String get systemJunk => '残留系统垃圾';
+	@override String get userCache => '用户缓存臃肿';
+	@override String get tempFiles => '过时的临时文件';
 }
 
 // Path: sections.myClutter.features
@@ -807,9 +811,9 @@ class _Translations$sections$myClutter$features$zh implements Translations$secti
 	final TranslationsZh _root; // ignore: unused_field
 
 	// Translations
-	@override String get largeFiles => '大文件';
-	@override String get duplicates => '重复项';
-	@override String get largeSimilarImages => '大类似图像';
+	@override String get largeFiles => '占用空间的文件';
+	@override String get duplicates => '重复的簇';
+	@override String get largeSimilarImages => '几乎匹配的照片集';
 }
 
 // Path: sections.spaceView.features
@@ -819,9 +823,9 @@ class _Translations$sections$spaceView$features$zh implements Translations$secti
 	final TranslationsZh _root; // ignore: unused_field
 
 	// Translations
-	@override String get visualStorageMap => '视觉存储图';
-	@override String get largeFoldersOverview => '大文件夹概述';
-	@override String get hiddenFilesUncovered => '发现隐藏文件';
+	@override String get visualStorageMap => '交互式存储地图';
+	@override String get largeFoldersOverview => '重文件夹热点';
+	@override String get hiddenFilesUncovered => '隐藏的空间排水器';
 }
 
 // Path: sections.applications.features
@@ -831,9 +835,9 @@ class _Translations$sections$applications$features$zh implements Translations$se
 	final TranslationsZh _root; // ignore: unused_field
 
 	// Translations
-	@override String get appUninstaller => '应用程序卸载程序';
-	@override String get largeApps => '大型应用程序';
-	@override String get fileLeftovers => '文件剩菜';
+	@override String get appUninstaller => '深度应用程序卸载程序';
+	@override String get largeApps => '重量级应用程序';
+	@override String get fileLeftovers => '孤立的支持文件';
 }
 
 // Path: sections.myTools.features
@@ -874,30 +878,30 @@ extension on TranslationsZh {
 			'navigation.myTools' => '我的工具',
 			'navigation.donate' => '捐赠',
 			'sections.home.title' => '首页',
-			'sections.home.subtitle' => '一键获取系统的完整运行状况概览。',
-			'sections.home.features.systemStatus' => '系统状态',
-			'sections.home.features.storageUsage' => '存储使用情况',
-			'sections.home.features.quickActions' => '快速操作',
+			'sections.home.subtitle' => '一目了然地查看计算机的生命体征\n并在问题出现之前发现问题。',
+			'sections.home.features.systemStatus' => '实时系统脉冲',
+			'sections.home.features.storageUsage' => '储存压力',
+			'sections.home.features.quickActions' => '一键修复',
 			'sections.cleanup.title' => '垃圾清理',
-			'sections.cleanup.subtitle' => '清理您的系统以实现\n最佳性能并回收更多可用空间。',
-			'sections.cleanup.features.systemJunk' => '系统垃圾',
-			'sections.cleanup.features.userCache' => '用户缓存',
-			'sections.cleanup.features.tempFiles' => '临时文件',
+			'sections.cleanup.subtitle' => '清除数字残留物以恢复\n速度、稳定性和宝贵的可用空间。',
+			'sections.cleanup.features.systemJunk' => '残留系统垃圾',
+			'sections.cleanup.features.userCache' => '用户缓存臃肿',
+			'sections.cleanup.features.tempFiles' => '过时的临时文件',
 			'sections.myClutter.title' => '我的杂乱',
-			'sections.myClutter.subtitle' => '只需点击几下，即可对文件进行排序并\n减少混乱。',
-			'sections.myClutter.features.largeFiles' => '大文件',
-			'sections.myClutter.features.duplicates' => '重复项',
-			'sections.myClutter.features.largeSimilarImages' => '大类似图像',
+			'sections.myClutter.subtitle' => '通过几分钟内的指导清理，将混乱的文件夹转变为清晰的决策。',
+			'sections.myClutter.features.largeFiles' => '占用空间的文件',
+			'sections.myClutter.features.duplicates' => '重复的簇',
+			'sections.myClutter.features.largeSimilarImages' => '几乎匹配的照片集',
 			'sections.spaceView.title' => '空间景观',
-			'sections.spaceView.subtitle' => '可视化占用磁盘空间最多的\n并快速清理。',
-			'sections.spaceView.features.visualStorageMap' => '视觉存储图',
-			'sections.spaceView.features.largeFoldersOverview' => '大文件夹概述',
-			'sections.spaceView.features.hiddenFilesUncovered' => '发现隐藏文件',
+			'sections.spaceView.subtitle' => '直观地映射您的磁盘，\n以查明最重要的内容并更快地释放空间。',
+			'sections.spaceView.features.visualStorageMap' => '交互式存储地图',
+			'sections.spaceView.features.largeFoldersOverview' => '重文件夹热点',
+			'sections.spaceView.features.hiddenFilesUncovered' => '隐藏的空间排水器',
 			'sections.applications.title' => '应用领域',
-			'sections.applications.subtitle' => '控制您的应用程序。\n卸载或删除旧的残留物。',
-			'sections.applications.features.appUninstaller' => '应用程序卸载程序',
-			'sections.applications.features.largeApps' => '大型应用程序',
-			'sections.applications.features.fileLeftovers' => '文件剩菜',
+			'sections.applications.subtitle' => '掌握您的应用足迹。\n彻底卸载并删除被遗忘的残留物。',
+			'sections.applications.features.appUninstaller' => '深度应用程序卸载程序',
+			'sections.applications.features.largeApps' => '重量级应用程序',
+			'sections.applications.features.fileLeftovers' => '孤立的支持文件',
 			'sections.myTools.title' => '我的工具',
 			'sections.myTools.subtitle' => '您的系统保养和维护首选工具包。',
 			'sections.myTools.features.targetedScanners' => '目标扫描仪',
@@ -924,6 +928,10 @@ extension on TranslationsZh {
 			'tooltips.openInFinder' => '在 Finder 中打开',
 			'dialogs.stopScanningTitle' => '停止扫描？',
 			'dialogs.stopScanningMessage' => '这将取消当前扫描并放弃任何部分进度。',
+			'dialogs.exitConfirmationTitle' => '确认退出',
+			'dialogs.exitConfirmationMessage' => '当前正在运行扫描。您确定要退出吗？',
+			'dialogs.exitConfirmationWait' => '等待',
+			'dialogs.exitConfirmationQuit' => '仍然退出',
 			'dialogs.stopRemovalTitle' => '停止移除？',
 			'dialogs.stopRemovalMessage' => '当前文件将完成，然后剩余的文件将被跳过。',
 			'removal.barrierLabel' => '拆除进度',

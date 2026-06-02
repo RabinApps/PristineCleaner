@@ -188,6 +188,10 @@ class _Translations$dialogs$el implements Translations$dialogs$en {
 	// Translations
 	@override String get stopScanningTitle => 'Διακοπή σάρωσης;';
 	@override String get stopScanningMessage => 'Αυτό θα ακυρώσει την τρέχουσα σάρωση και θα απορρίψει οποιαδήποτε μερική πρόοδο.';
+	@override String get exitConfirmationTitle => 'Επιβεβαίωση εξόδου';
+	@override String get exitConfirmationMessage => 'Εκτελείται σάρωση. Είστε βέβαιοι ότι θέλετε να εξέλθετε;';
+	@override String get exitConfirmationWait => 'Περιμένετε';
+	@override String get exitConfirmationQuit => 'Έξοδος ούτως ή άλλως';
 	@override String get stopRemovalTitle => 'Διακοπή αφαίρεσης;';
 	@override String get stopRemovalMessage => 'Το τρέχον αρχείο θα ολοκληρωθεί και, στη συνέχεια, τα υπόλοιπα αρχεία θα παραλειφθούν.';
 }
@@ -477,7 +481,7 @@ class _Translations$sections$home$el implements Translations$sections$home$en {
 
 	// Translations
 	@override String get title => 'Σπίτι';
-	@override String get subtitle => 'Αποκτήστε μια πλήρη επισκόπηση υγείας\nτου συστήματός σας με ένα κλικ.';
+	@override String get subtitle => 'Δείτε τα ζωτικά σημεία του υπολογιστή σας με μια ματιά\nκαι εντοπίστε προβλήματα προτού αναπτυχθούν.';
 	@override late final _Translations$sections$home$features$el features = _Translations$sections$home$features$el._(_root);
 }
 
@@ -489,7 +493,7 @@ class _Translations$sections$cleanup$el implements Translations$sections$cleanup
 
 	// Translations
 	@override String get title => 'Καθαρισμός σκουπιδιών';
-	@override String get subtitle => 'Καθαρίστε το σύστημά σας για να επιτύχετε τη μέγιστη\nαπόδοση και να αποκτήσετε ξανά περισσότερο ελεύθερο χώρο.';
+	@override String get subtitle => 'Σαρώστε τα ψηφιακά υπολείμματα για να αποκαταστήσετε\nτην ταχύτητα, τη σταθερότητα και τον πολύτιμο ελεύθερο χώρο.';
 	@override late final _Translations$sections$cleanup$features$el features = _Translations$sections$cleanup$features$el._(_root);
 }
 
@@ -501,7 +505,7 @@ class _Translations$sections$myClutter$el implements Translations$sections$myClu
 
 	// Translations
 	@override String get title => 'Η ακαταστασία μου';
-	@override String get subtitle => 'Ταξινομήστε τα αρχεία σας και μειώστε\nτο χάος με λίγα μόνο κλικ.';
+	@override String get subtitle => 'Μετατρέψτε τους χαοτικούς φακέλους σε σαφείς αποφάσεις\nμε καθοδηγούμενο καθαρισμό μέσα σε λίγα λεπτά.';
 	@override late final _Translations$sections$myClutter$features$el features = _Translations$sections$myClutter$features$el._(_root);
 }
 
@@ -513,7 +517,7 @@ class _Translations$sections$spaceView$el implements Translations$sections$space
 
 	// Translations
 	@override String get title => 'Θέα Διαστήματος';
-	@override String get subtitle => 'Οραματιστείτε τι καταλαμβάνει τον περισσότερο χώρο στον δίσκο και καθαρίστε γρήγορα.';
+	@override String get subtitle => 'Αντιστοιχίστε οπτικά τον δίσκο σας για να εντοπίσετε\nτι είναι πιο σημαντικό και να ελευθερώσετε χώρο πιο γρήγορα.';
 	@override late final _Translations$sections$spaceView$features$el features = _Translations$sections$spaceView$features$el._(_root);
 }
 
@@ -525,7 +529,7 @@ class _Translations$sections$applications$el implements Translations$sections$ap
 
 	// Translations
 	@override String get title => 'Εφαρμογές';
-	@override String get subtitle => 'Πάρτε τον έλεγχο των εφαρμογών σας.\nΑπεγκαταστήστε ή αφαιρέστε παλιά υπολείμματα.';
+	@override String get subtitle => 'Κατακτήστε το αποτύπωμα της εφαρμογής σας.\nΑπεγκαταστήστε καθαρά και αφαιρέστε τα ξεχασμένα υπολείμματα.';
 	@override late final _Translations$sections$applications$features$el features = _Translations$sections$applications$features$el._(_root);
 }
 
@@ -783,9 +787,9 @@ class _Translations$sections$home$features$el implements Translations$sections$h
 	final TranslationsEl _root; // ignore: unused_field
 
 	// Translations
-	@override String get systemStatus => 'Κατάσταση συστήματος';
-	@override String get storageUsage => 'Χρήση αποθήκευσης';
-	@override String get quickActions => 'Γρήγορες Ενέργειες';
+	@override String get systemStatus => 'Ζωντανός παλμός συστήματος';
+	@override String get storageUsage => 'Πίεση αποθήκευσης';
+	@override String get quickActions => 'Διορθώσεις με ένα πάτημα';
 }
 
 // Path: sections.cleanup.features
@@ -795,9 +799,9 @@ class _Translations$sections$cleanup$features$el implements Translations$section
 	final TranslationsEl _root; // ignore: unused_field
 
 	// Translations
-	@override String get systemJunk => 'Σκουπίδια συστήματος';
-	@override String get userCache => 'Προσωρινή μνήμη χρήστη';
-	@override String get tempFiles => 'Αρχεία Temp';
+	@override String get systemJunk => 'Υπολειμματικά σκουπίδια συστήματος';
+	@override String get userCache => 'Φουσκωμένη προσωρινή μνήμη χρήστη';
+	@override String get tempFiles => 'Αρχεία Stale Temp';
 }
 
 // Path: sections.myClutter.features
@@ -807,9 +811,9 @@ class _Translations$sections$myClutter$features$el implements Translations$secti
 	final TranslationsEl _root; // ignore: unused_field
 
 	// Translations
-	@override String get largeFiles => 'Μεγάλα Αρχεία';
-	@override String get duplicates => 'Αντίγραφα';
-	@override String get largeSimilarImages => 'Μεγάλες Παρόμοιες Εικόνες';
+	@override String get largeFiles => 'Space-Hungry Files';
+	@override String get duplicates => 'Διπλότυπα συμπλέγματα';
+	@override String get largeSimilarImages => 'Σετ φωτογραφιών σχεδόν ταίριασμα';
 }
 
 // Path: sections.spaceView.features
@@ -819,9 +823,9 @@ class _Translations$sections$spaceView$features$el implements Translations$secti
 	final TranslationsEl _root; // ignore: unused_field
 
 	// Translations
-	@override String get visualStorageMap => 'Οπτικός χάρτης αποθήκευσης';
-	@override String get largeFoldersOverview => 'Επισκόπηση μεγάλων φακέλων';
-	@override String get hiddenFilesUncovered => 'Αποκαλύφθηκαν κρυφά αρχεία';
+	@override String get visualStorageMap => 'Διαδραστικός χάρτης αποθήκευσης';
+	@override String get largeFoldersOverview => 'Σημεία πρόσβασης βαριών φακέλων';
+	@override String get hiddenFilesUncovered => 'Κρυφά Στραγγιστήρια Χώρου';
 }
 
 // Path: sections.applications.features
@@ -831,9 +835,9 @@ class _Translations$sections$applications$features$el implements Translations$se
 	final TranslationsEl _root; // ignore: unused_field
 
 	// Translations
-	@override String get appUninstaller => 'Πρόγραμμα απεγκατάστασης εφαρμογών';
-	@override String get largeApps => 'Μεγάλες εφαρμογές';
-	@override String get fileLeftovers => 'Υπολείμματα αρχείου';
+	@override String get appUninstaller => 'Deep App Uninstaller';
+	@override String get largeApps => 'Εφαρμογές βαρέων βαρών';
+	@override String get fileLeftovers => 'Ορφανά αρχεία υποστήριξης';
 }
 
 // Path: sections.myTools.features
@@ -874,30 +878,30 @@ extension on TranslationsEl {
 			'navigation.myTools' => 'Τα εργαλεία μου',
 			'navigation.donate' => 'Δωρεά',
 			'sections.home.title' => 'Σπίτι',
-			'sections.home.subtitle' => 'Αποκτήστε μια πλήρη επισκόπηση υγείας\nτου συστήματός σας με ένα κλικ.',
-			'sections.home.features.systemStatus' => 'Κατάσταση συστήματος',
-			'sections.home.features.storageUsage' => 'Χρήση αποθήκευσης',
-			'sections.home.features.quickActions' => 'Γρήγορες Ενέργειες',
+			'sections.home.subtitle' => 'Δείτε τα ζωτικά σημεία του υπολογιστή σας με μια ματιά\nκαι εντοπίστε προβλήματα προτού αναπτυχθούν.',
+			'sections.home.features.systemStatus' => 'Ζωντανός παλμός συστήματος',
+			'sections.home.features.storageUsage' => 'Πίεση αποθήκευσης',
+			'sections.home.features.quickActions' => 'Διορθώσεις με ένα πάτημα',
 			'sections.cleanup.title' => 'Καθαρισμός σκουπιδιών',
-			'sections.cleanup.subtitle' => 'Καθαρίστε το σύστημά σας για να επιτύχετε τη μέγιστη\nαπόδοση και να αποκτήσετε ξανά περισσότερο ελεύθερο χώρο.',
-			'sections.cleanup.features.systemJunk' => 'Σκουπίδια συστήματος',
-			'sections.cleanup.features.userCache' => 'Προσωρινή μνήμη χρήστη',
-			'sections.cleanup.features.tempFiles' => 'Αρχεία Temp',
+			'sections.cleanup.subtitle' => 'Σαρώστε τα ψηφιακά υπολείμματα για να αποκαταστήσετε\nτην ταχύτητα, τη σταθερότητα και τον πολύτιμο ελεύθερο χώρο.',
+			'sections.cleanup.features.systemJunk' => 'Υπολειμματικά σκουπίδια συστήματος',
+			'sections.cleanup.features.userCache' => 'Φουσκωμένη προσωρινή μνήμη χρήστη',
+			'sections.cleanup.features.tempFiles' => 'Αρχεία Stale Temp',
 			'sections.myClutter.title' => 'Η ακαταστασία μου',
-			'sections.myClutter.subtitle' => 'Ταξινομήστε τα αρχεία σας και μειώστε\nτο χάος με λίγα μόνο κλικ.',
-			'sections.myClutter.features.largeFiles' => 'Μεγάλα Αρχεία',
-			'sections.myClutter.features.duplicates' => 'Αντίγραφα',
-			'sections.myClutter.features.largeSimilarImages' => 'Μεγάλες Παρόμοιες Εικόνες',
+			'sections.myClutter.subtitle' => 'Μετατρέψτε τους χαοτικούς φακέλους σε σαφείς αποφάσεις\nμε καθοδηγούμενο καθαρισμό μέσα σε λίγα λεπτά.',
+			'sections.myClutter.features.largeFiles' => 'Space-Hungry Files',
+			'sections.myClutter.features.duplicates' => 'Διπλότυπα συμπλέγματα',
+			'sections.myClutter.features.largeSimilarImages' => 'Σετ φωτογραφιών σχεδόν ταίριασμα',
 			'sections.spaceView.title' => 'Θέα Διαστήματος',
-			'sections.spaceView.subtitle' => 'Οραματιστείτε τι καταλαμβάνει τον περισσότερο χώρο στον δίσκο και καθαρίστε γρήγορα.',
-			'sections.spaceView.features.visualStorageMap' => 'Οπτικός χάρτης αποθήκευσης',
-			'sections.spaceView.features.largeFoldersOverview' => 'Επισκόπηση μεγάλων φακέλων',
-			'sections.spaceView.features.hiddenFilesUncovered' => 'Αποκαλύφθηκαν κρυφά αρχεία',
+			'sections.spaceView.subtitle' => 'Αντιστοιχίστε οπτικά τον δίσκο σας για να εντοπίσετε\nτι είναι πιο σημαντικό και να ελευθερώσετε χώρο πιο γρήγορα.',
+			'sections.spaceView.features.visualStorageMap' => 'Διαδραστικός χάρτης αποθήκευσης',
+			'sections.spaceView.features.largeFoldersOverview' => 'Σημεία πρόσβασης βαριών φακέλων',
+			'sections.spaceView.features.hiddenFilesUncovered' => 'Κρυφά Στραγγιστήρια Χώρου',
 			'sections.applications.title' => 'Εφαρμογές',
-			'sections.applications.subtitle' => 'Πάρτε τον έλεγχο των εφαρμογών σας.\nΑπεγκαταστήστε ή αφαιρέστε παλιά υπολείμματα.',
-			'sections.applications.features.appUninstaller' => 'Πρόγραμμα απεγκατάστασης εφαρμογών',
-			'sections.applications.features.largeApps' => 'Μεγάλες εφαρμογές',
-			'sections.applications.features.fileLeftovers' => 'Υπολείμματα αρχείου',
+			'sections.applications.subtitle' => 'Κατακτήστε το αποτύπωμα της εφαρμογής σας.\nΑπεγκαταστήστε καθαρά και αφαιρέστε τα ξεχασμένα υπολείμματα.',
+			'sections.applications.features.appUninstaller' => 'Deep App Uninstaller',
+			'sections.applications.features.largeApps' => 'Εφαρμογές βαρέων βαρών',
+			'sections.applications.features.fileLeftovers' => 'Ορφανά αρχεία υποστήριξης',
 			'sections.myTools.title' => 'Τα εργαλεία μου',
 			'sections.myTools.subtitle' => 'Το βασικό σας εργαλείο για τη φροντίδα και τη συντήρηση του συστήματος.',
 			'sections.myTools.features.targetedScanners' => 'Στοχευμένοι σαρωτές',
@@ -924,6 +928,10 @@ extension on TranslationsEl {
 			'tooltips.openInFinder' => 'Άνοιγμα στο Finder',
 			'dialogs.stopScanningTitle' => 'Διακοπή σάρωσης;',
 			'dialogs.stopScanningMessage' => 'Αυτό θα ακυρώσει την τρέχουσα σάρωση και θα απορρίψει οποιαδήποτε μερική πρόοδο.',
+			'dialogs.exitConfirmationTitle' => 'Επιβεβαίωση εξόδου',
+			'dialogs.exitConfirmationMessage' => 'Εκτελείται σάρωση. Είστε βέβαιοι ότι θέλετε να εξέλθετε;',
+			'dialogs.exitConfirmationWait' => 'Περιμένετε',
+			'dialogs.exitConfirmationQuit' => 'Έξοδος ούτως ή άλλως',
 			'dialogs.stopRemovalTitle' => 'Διακοπή αφαίρεσης;',
 			'dialogs.stopRemovalMessage' => 'Το τρέχον αρχείο θα ολοκληρωθεί και, στη συνέχεια, τα υπόλοιπα αρχεία θα παραλειφθούν.',
 			'removal.barrierLabel' => 'Πρόοδος αφαίρεσης',

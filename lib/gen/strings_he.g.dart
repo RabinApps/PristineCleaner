@@ -188,6 +188,10 @@ class _Translations$dialogs$he implements Translations$dialogs$en {
 	// Translations
 	@override String get stopScanningTitle => 'להפסיק לסרוק?';
 	@override String get stopScanningMessage => 'פעולה זו תבטל את הסריקה הנוכחית ותבטל כל התקדמות חלקית.';
+	@override String get exitConfirmationTitle => 'אשר יציאה';
+	@override String get exitConfirmationMessage => 'סריקה מתבצעת כעת. האם אתה בטוח שברצונך לצאת?';
+	@override String get exitConfirmationWait => 'המתן';
+	@override String get exitConfirmationQuit => 'צא בכל מקרה';
 	@override String get stopRemovalTitle => 'להפסיק את ההסרה?';
 	@override String get stopRemovalMessage => 'הקובץ הנוכחי יסתיים, ואז ידלגו על הקבצים הנותרים.';
 }
@@ -477,7 +481,7 @@ class _Translations$sections$home$he implements Translations$sections$home$en {
 
 	// Translations
 	@override String get title => 'בַּיִת';
-	@override String get subtitle => 'קבל סקירת בריאות מלאה\nעל המערכת שלך בלחיצה אחת.';
+	@override String get subtitle => 'ראה את הסימנים החיוניים של המחשב שלך במבט חטוף\nותפוס בעיות לפני שהם גדלים.';
 	@override late final _Translations$sections$home$features$he features = _Translations$sections$home$features$he._(_root);
 }
 
@@ -489,7 +493,7 @@ class _Translations$sections$cleanup$he implements Translations$sections$cleanup
 
 	// Translations
 	@override String get title => 'ניקוי זבל';
-	@override String get subtitle => 'נקה את המערכת שלך כדי להשיג\n ביצועים מקסימליים ולהשיב עוד מקום פנוי.';
+	@override String get subtitle => 'לטאטא שאריות דיגיטליות כדי לשחזר\nמהירות, יציבות ושטח פנוי יקר.';
 	@override late final _Translations$sections$cleanup$features$he features = _Translations$sections$cleanup$features$he._(_root);
 }
 
@@ -501,7 +505,7 @@ class _Translations$sections$myClutter$he implements Translations$sections$myClu
 
 	// Translations
 	@override String get title => 'הבלגן שלי';
-	@override String get subtitle => 'מיין את הקבצים שלך וצמצם\n את הבלגן בכמה קליקים בלבד.';
+	@override String get subtitle => 'הפוך תיקיות כאוטיות להחלטות ברורות\nעם ניקוי מודרך תוך דקות.';
 	@override late final _Translations$sections$myClutter$features$he features = _Translations$sections$myClutter$features$he._(_root);
 }
 
@@ -513,7 +517,7 @@ class _Translations$sections$spaceView$he implements Translations$sections$space
 
 	// Translations
 	@override String get title => 'תצוגת חלל';
-	@override String get subtitle => 'דמיין מה תופס הכי הרבה שטח בדיסק ונקה במהירות.';
+	@override String get subtitle => 'מפה את הדיסק שלך באופן ויזואלי כדי לזהות את\nהחשוב ביותר ולפנות מקום מהר יותר.';
 	@override late final _Translations$sections$spaceView$features$he features = _Translations$sections$spaceView$features$he._(_root);
 }
 
@@ -525,7 +529,7 @@ class _Translations$sections$applications$he implements Translations$sections$ap
 
 	// Translations
 	@override String get title => 'יישומים';
-	@override String get subtitle => 'קח שליטה על האפליקציות שלך.\nהסר את ההתקנה או הסר שאריות ישנות.';
+	@override String get subtitle => 'השתלט על טביעת הרגל של האפליקציה שלך.\nהסר את ההתקנה בצורה נקייה והסר שאריות שנשכחו.';
 	@override late final _Translations$sections$applications$features$he features = _Translations$sections$applications$features$he._(_root);
 }
 
@@ -783,9 +787,9 @@ class _Translations$sections$home$features$he implements Translations$sections$h
 	final TranslationsHe _root; // ignore: unused_field
 
 	// Translations
-	@override String get systemStatus => 'מצב מערכת';
-	@override String get storageUsage => 'שימוש באחסון';
-	@override String get quickActions => 'פעולות מהירות';
+	@override String get systemStatus => 'דופק מערכת חי';
+	@override String get storageUsage => 'לחץ אחסון';
+	@override String get quickActions => 'תיקונים בלחיצה אחת';
 }
 
 // Path: sections.cleanup.features
@@ -795,9 +799,9 @@ class _Translations$sections$cleanup$features$he implements Translations$section
 	final TranslationsHe _root; // ignore: unused_field
 
 	// Translations
-	@override String get systemJunk => 'זבל מערכת';
-	@override String get userCache => 'מטמון משתמש';
-	@override String get tempFiles => 'קבצי זמני';
+	@override String get systemJunk => 'זבל מערכת שיורי';
+	@override String get userCache => 'מטמון משתמש נפוח';
+	@override String get tempFiles => 'קבצי טמפ\' מעופשים';
 }
 
 // Path: sections.myClutter.features
@@ -807,9 +811,9 @@ class _Translations$sections$myClutter$features$he implements Translations$secti
 	final TranslationsHe _root; // ignore: unused_field
 
 	// Translations
-	@override String get largeFiles => 'קבצים גדולים';
-	@override String get duplicates => 'כפילויות';
-	@override String get largeSimilarImages => 'תמונות דומות גדולות';
+	@override String get largeFiles => 'קבצים רעבים לחלל';
+	@override String get duplicates => 'שכפול אשכולות';
+	@override String get largeSimilarImages => 'ערכות תמונות של Near-Match';
 }
 
 // Path: sections.spaceView.features
@@ -819,9 +823,9 @@ class _Translations$sections$spaceView$features$he implements Translations$secti
 	final TranslationsHe _root; // ignore: unused_field
 
 	// Translations
-	@override String get visualStorageMap => 'מפת אחסון ויזואלית';
-	@override String get largeFoldersOverview => 'סקירה כללית של תיקיות גדולות';
-	@override String get hiddenFilesUncovered => 'קבצים נסתרים נחשפו';
+	@override String get visualStorageMap => 'מפת אחסון אינטראקטיבית';
+	@override String get largeFoldersOverview => 'נקודות חמות של תיקיות כבדות';
+	@override String get hiddenFilesUncovered => 'מנקזי שטח נסתרים';
 }
 
 // Path: sections.applications.features
@@ -831,9 +835,9 @@ class _Translations$sections$applications$features$he implements Translations$se
 	final TranslationsHe _root; // ignore: unused_field
 
 	// Translations
-	@override String get appUninstaller => 'מסיר התקנה של אפליקציה';
-	@override String get largeApps => 'אפליקציות גדולות';
-	@override String get fileLeftovers => 'קובץ שאריות';
+	@override String get appUninstaller => 'מסיר אפליקציות עמוק';
+	@override String get largeApps => 'אפליקציות במשקל כבד';
+	@override String get fileLeftovers => 'קבצי תמיכה מיותמים';
 }
 
 // Path: sections.myTools.features
@@ -874,30 +878,30 @@ extension on TranslationsHe {
 			'navigation.myTools' => 'הכלים שלי',
 			'navigation.donate' => 'תרומה',
 			'sections.home.title' => 'בַּיִת',
-			'sections.home.subtitle' => 'קבל סקירת בריאות מלאה\nעל המערכת שלך בלחיצה אחת.',
-			'sections.home.features.systemStatus' => 'מצב מערכת',
-			'sections.home.features.storageUsage' => 'שימוש באחסון',
-			'sections.home.features.quickActions' => 'פעולות מהירות',
+			'sections.home.subtitle' => 'ראה את הסימנים החיוניים של המחשב שלך במבט חטוף\nותפוס בעיות לפני שהם גדלים.',
+			'sections.home.features.systemStatus' => 'דופק מערכת חי',
+			'sections.home.features.storageUsage' => 'לחץ אחסון',
+			'sections.home.features.quickActions' => 'תיקונים בלחיצה אחת',
 			'sections.cleanup.title' => 'ניקוי זבל',
-			'sections.cleanup.subtitle' => 'נקה את המערכת שלך כדי להשיג\n ביצועים מקסימליים ולהשיב עוד מקום פנוי.',
-			'sections.cleanup.features.systemJunk' => 'זבל מערכת',
-			'sections.cleanup.features.userCache' => 'מטמון משתמש',
-			'sections.cleanup.features.tempFiles' => 'קבצי זמני',
+			'sections.cleanup.subtitle' => 'לטאטא שאריות דיגיטליות כדי לשחזר\nמהירות, יציבות ושטח פנוי יקר.',
+			'sections.cleanup.features.systemJunk' => 'זבל מערכת שיורי',
+			'sections.cleanup.features.userCache' => 'מטמון משתמש נפוח',
+			'sections.cleanup.features.tempFiles' => 'קבצי טמפ\' מעופשים',
 			'sections.myClutter.title' => 'הבלגן שלי',
-			'sections.myClutter.subtitle' => 'מיין את הקבצים שלך וצמצם\n את הבלגן בכמה קליקים בלבד.',
-			'sections.myClutter.features.largeFiles' => 'קבצים גדולים',
-			'sections.myClutter.features.duplicates' => 'כפילויות',
-			'sections.myClutter.features.largeSimilarImages' => 'תמונות דומות גדולות',
+			'sections.myClutter.subtitle' => 'הפוך תיקיות כאוטיות להחלטות ברורות\nעם ניקוי מודרך תוך דקות.',
+			'sections.myClutter.features.largeFiles' => 'קבצים רעבים לחלל',
+			'sections.myClutter.features.duplicates' => 'שכפול אשכולות',
+			'sections.myClutter.features.largeSimilarImages' => 'ערכות תמונות של Near-Match',
 			'sections.spaceView.title' => 'תצוגת חלל',
-			'sections.spaceView.subtitle' => 'דמיין מה תופס הכי הרבה שטח בדיסק ונקה במהירות.',
-			'sections.spaceView.features.visualStorageMap' => 'מפת אחסון ויזואלית',
-			'sections.spaceView.features.largeFoldersOverview' => 'סקירה כללית של תיקיות גדולות',
-			'sections.spaceView.features.hiddenFilesUncovered' => 'קבצים נסתרים נחשפו',
+			'sections.spaceView.subtitle' => 'מפה את הדיסק שלך באופן ויזואלי כדי לזהות את\nהחשוב ביותר ולפנות מקום מהר יותר.',
+			'sections.spaceView.features.visualStorageMap' => 'מפת אחסון אינטראקטיבית',
+			'sections.spaceView.features.largeFoldersOverview' => 'נקודות חמות של תיקיות כבדות',
+			'sections.spaceView.features.hiddenFilesUncovered' => 'מנקזי שטח נסתרים',
 			'sections.applications.title' => 'יישומים',
-			'sections.applications.subtitle' => 'קח שליטה על האפליקציות שלך.\nהסר את ההתקנה או הסר שאריות ישנות.',
-			'sections.applications.features.appUninstaller' => 'מסיר התקנה של אפליקציה',
-			'sections.applications.features.largeApps' => 'אפליקציות גדולות',
-			'sections.applications.features.fileLeftovers' => 'קובץ שאריות',
+			'sections.applications.subtitle' => 'השתלט על טביעת הרגל של האפליקציה שלך.\nהסר את ההתקנה בצורה נקייה והסר שאריות שנשכחו.',
+			'sections.applications.features.appUninstaller' => 'מסיר אפליקציות עמוק',
+			'sections.applications.features.largeApps' => 'אפליקציות במשקל כבד',
+			'sections.applications.features.fileLeftovers' => 'קבצי תמיכה מיותמים',
 			'sections.myTools.title' => 'הכלים שלי',
 			'sections.myTools.subtitle' => 'ערכת הכלים שלך לטיפול ותחזוקה של המערכת.',
 			'sections.myTools.features.targetedScanners' => 'סורקים ממוקדים',
@@ -924,6 +928,10 @@ extension on TranslationsHe {
 			'tooltips.openInFinder' => 'פתח ב-Finder',
 			'dialogs.stopScanningTitle' => 'להפסיק לסרוק?',
 			'dialogs.stopScanningMessage' => 'פעולה זו תבטל את הסריקה הנוכחית ותבטל כל התקדמות חלקית.',
+			'dialogs.exitConfirmationTitle' => 'אשר יציאה',
+			'dialogs.exitConfirmationMessage' => 'סריקה מתבצעת כעת. האם אתה בטוח שברצונך לצאת?',
+			'dialogs.exitConfirmationWait' => 'המתן',
+			'dialogs.exitConfirmationQuit' => 'צא בכל מקרה',
 			'dialogs.stopRemovalTitle' => 'להפסיק את ההסרה?',
 			'dialogs.stopRemovalMessage' => 'הקובץ הנוכחי יסתיים, ואז ידלגו על הקבצים הנותרים.',
 			'removal.barrierLabel' => 'התקדמות ההסרה',

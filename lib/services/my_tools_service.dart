@@ -1,33 +1,44 @@
 import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+import 'package:path/path.dart' as p;
 import '../core/models/file_item.dart';
 import '../core/models/removal_models.dart';
 import '../core/models/scan_result.dart';
 import '../gen/strings.g.dart';
+import 'scan_manager.dart';
 
 final myToolsServiceProvider = Provider<MyToolsService>((ref) {
   return MyToolsService();
 });
 
 class MyToolsService {
+  int _nextScanId = 0;
+
+  String _nextId() => 'mytools_${_nextScanId++}';
+
   Future<ScanResult> scanTrashBins() async {
-    if (Platform.isMacOS) {
-      return _scanMacTrashWithFinder();
+    final id = _nextId();
+    try {
+      ScanManager.instance.registerScan(id);
+      if (Platform.isMacOS) {
+        return await _scanMacTrashWithFinder();
+      }
+
+      final roots = <String>[];
+      final home = _homePath;
+
+      if (Platform.isLinux) {
+        roots.add('$home/.local/share/Trash/files');
+      } else if (Platform.isWindows) {
+        roots.add('$home\\.Trash');
+        roots.add('$home\\AppData\\Local\\Temp');
+      }
+
+      return await _scanTopLevelRoots(roots, maxItems: 500);
+    } finally {
+      ScanManager.instance.unregisterScan(id);
     }
-
-    final roots = <String>[];
-    final home = _homePath;
-
-    if (Platform.isLinux) {
-      roots.add('$home/.local/share/Trash/files');
-    } else if (Platform.isWindows) {
-      roots.add('$home\\.Trash');
-      roots.add('$home\\AppData\\Local\\Temp');
-    }
-
-    return _scanTopLevelRoots(roots, maxItems: 500);
   }
 
   Future<ScanResult> _scanMacTrashWithFinder() async {
@@ -104,200 +115,285 @@ class MyToolsService {
   }
 
   Future<ScanResult> scanApplicationPermissions() async {
-    final home = _homePath;
-    final roots = <String>[];
+    final id = _nextId();
+    try {
+      ScanManager.instance.registerScan(id);
+      final home = _homePath;
+      final roots = <String>[];
 
-    if (Platform.isMacOS) {
-      roots.addAll([
-        '$home/Library/Application Support/com.apple.TCC',
-        '$home/Library/Preferences/com.apple.TCC.plist',
-        '/Library/Application Support/com.apple.TCC',
-      ]);
-    } else if (Platform.isLinux) {
-      roots.addAll(['$home/.config', '$home/.local/share']);
-    } else if (Platform.isWindows) {
-      roots.addAll(['$home\\AppData\\Roaming', '$home\\AppData\\Local']);
+      if (Platform.isMacOS) {
+        roots.addAll([
+          '$home/Library/Application Support/com.apple.TCC',
+          '$home/Library/Preferences/com.apple.TCC.plist',
+          '/Library/Application Support/com.apple.TCC',
+        ]);
+      } else if (Platform.isLinux) {
+        roots.addAll(['$home/.config', '$home/.local/share']);
+      } else if (Platform.isWindows) {
+        roots.addAll(['$home\\AppData\\Roaming', '$home\\AppData\\Local']);
+      }
+
+      return await _scanFileRoots(
+        roots,
+        recursive: true,
+        includeFile: (file, _) {
+          final name = file.path.toLowerCase();
+          return name.contains('tcc') ||
+              name.contains('permission') ||
+              name.endsWith('.db') ||
+              name.endsWith('.plist');
+        },
+        maxItems: 300,
+      );
+    } finally {
+      ScanManager.instance.unregisterScan(id);
     }
-
-    return _scanFileRoots(
-      roots,
-      recursive: true,
-      includeFile: (file, _) {
-        final name = file.path.toLowerCase();
-        return name.contains('tcc') ||
-            name.contains('permission') ||
-            name.endsWith('.db') ||
-            name.endsWith('.plist');
-      },
-      maxItems: 300,
-    );
   }
 
   Future<ScanResult> scanBackgroundItems() async {
+    final id = _nextId();
+    try {
+      ScanManager.instance.registerScan(id);
+      final home = _homePath;
+      final roots = <String>[];
+
+      if (Platform.isMacOS) {
+        roots.addAll([
+          '$home/Library/LaunchAgents',
+          '/Library/LaunchAgents',
+          '/Library/LaunchDaemons',
+          '/System/Library/LaunchAgents',
+          '/System/Library/LaunchDaemons',
+        ]);
+      } else if (Platform.isLinux) {
+        roots.addAll([
+          '$home/.config/autostart',
+          '/etc/xdg/autostart',
+          '$home/.config/systemd/user',
+          '/etc/systemd/user',
+          '/usr/lib/systemd/user',
+        ]);
+      } else if (Platform.isWindows) {
+        final appData = Platform.environment['APPDATA'] ?? '';
+        final programData =
+            Platform.environment['ProgramData'] ?? r'C:\\ProgramData';
+        roots.addAll([
+          '$appData\\Microsoft\\Windows\\Start Menu\\Programs\\Startup',
+          '$programData\\Microsoft\\Windows\\Start Menu\\Programs\\Startup',
+        ]);
+      }
+
+      return await _scanFileRoots(
+        roots,
+        recursive: false,
+        includeFile: (file, _) {
+          final path = file.path.toLowerCase();
+          if (Platform.isMacOS) {
+            return path.endsWith('.plist');
+          }
+          if (Platform.isLinux) {
+            return path.endsWith('.desktop') ||
+                path.endsWith('.service') ||
+                path.endsWith('.timer') ||
+                path.endsWith('.socket');
+          }
+          return true;
+        },
+        maxItems: 500,
+      );
+    } finally {
+      ScanManager.instance.unregisterScan(id);
+    }
+  }
+
+  List<String> _getMailAttachmentRoots() {
     final home = _homePath;
-    final roots = <String>[];
+
+    List<String> roots = [];
 
     if (Platform.isMacOS) {
       roots.addAll([
-        '$home/Library/LaunchAgents',
-        '/Library/LaunchAgents',
-        '/Library/LaunchDaemons',
-        '/System/Library/LaunchAgents',
-        '/System/Library/LaunchDaemons',
+        // Where Apple Mail extracts attachments when a user double-clicks/previews them
+        p.join(
+          home,
+          'Library',
+          'Containers',
+          'com.apple.mail',
+          'Data',
+          'Library',
+          'Mail Downloads',
+        ),
+        // Raw local mailboxes (Note: Files here are raw .eml/.mbox structures)
+        p.join(home, 'Library', 'Mail'),
       ]);
     } else if (Platform.isLinux) {
       roots.addAll([
-        '$home/.config/autostart',
-        '/etc/xdg/autostart',
-        '$home/.config/systemd/user',
-        '/etc/systemd/user',
-        '/usr/lib/systemd/user',
+        // Standard Thunderbird profile directory
+        p.join(home, '.thunderbird'),
+        // Flatpak version of Thunderbird
+        p.join(home, '.var', 'app', 'org.mozilla.Thunderbird', '.thunderbird'),
+        // Evolution Mail local directory
+        p.join(home, '.local', 'share', 'evolution', 'mail', 'local'),
       ]);
     } else if (Platform.isWindows) {
-      final appData = Platform.environment['APPDATA'] ?? '';
-      final programData =
-          Platform.environment['ProgramData'] ?? r'C:\ProgramData';
       roots.addAll([
-        '$appData\\Microsoft\\Windows\\Start Menu\\Programs\\Startup',
-        '$programData\\Microsoft\\Windows\\Start Menu\\Programs\\Startup',
+        // Windows Mail & Calendar built-in App cache
+        p.join(
+          home,
+          'AppData',
+          'Local',
+          'Packages',
+          'microsoft.windowscommunicationsapps_8wekyb3d8bbwe',
+          'LocalState',
+          'Files',
+        ),
+        // Classic Microsoft Outlook Secure Temp folder (where opened attachments live)
+        p.join(
+          home,
+          'AppData',
+          'Local',
+          'Microsoft',
+          'Windows',
+          'INetCache',
+          'Content.Outlook',
+        ),
+        // Thunderbird Windows Profiles
+        p.join(home, 'AppData', 'Roaming', 'Thunderbird', 'Profiles'),
       ]);
     }
 
-    return _scanFileRoots(
-      roots,
-      recursive: false,
-      includeFile: (file, _) {
-        final path = file.path.toLowerCase();
-        if (Platform.isMacOS) {
-          return path.endsWith('.plist');
-        }
-        if (Platform.isLinux) {
-          return path.endsWith('.desktop') ||
-              path.endsWith('.service') ||
-              path.endsWith('.timer') ||
-              path.endsWith('.socket');
-        }
-        return true;
-      },
-      maxItems: 500,
-    );
+    // Filter out paths that don't exist on the machine to prevent directory listing crashes
+    List<String> validRoots = [];
+    for (String path in roots) {
+      if (Directory(path).existsSync()) {
+        validRoots.add(path);
+      }
+    }
+
+    return validRoots;
   }
 
   Future<ScanResult> scanMailAttachments() async {
-    final home = _homePath;
-    final roots = <String>[];
+    final id = _nextId();
+    try {
+      ScanManager.instance.registerScan(id);
+      final roots = _getMailAttachmentRoots();
 
-    if (Platform.isMacOS) {
-      roots.addAll([
-        '$home/Library/Containers/com.apple.mail/Data/Library/Mail Downloads',
-        '$home/Library/Mail',
-      ]);
-    } else if (Platform.isLinux) {
-      roots.add('$home/.local/share');
-    } else if (Platform.isWindows) {
-      roots.add('$home\\AppData\\Local\\Packages');
-    }
-
-    return _scanFileRoots(
-      roots,
-      recursive: true,
-      includeFile: (file, _) {
-        final lower = file.path.toLowerCase();
-        if (Platform.isMacOS) {
-          return lower.contains('/mail downloads/') ||
-              lower.contains('/library/mail/') ||
-              lower.endsWith('.emlx') ||
-              lower.endsWith('.eml') ||
+      return await _scanFileRoots(
+        roots,
+        recursive: true,
+        includeFile: (file, _) {
+          final lower = file.path.toLowerCase();
+          if (Platform.isMacOS) {
+            return lower.contains('/mail downloads/') ||
+                lower.contains('/library/mail/') ||
+                lower.endsWith('.emlx') ||
+                lower.endsWith('.eml') ||
+                lower.endsWith('.pdf') ||
+                lower.endsWith('.zip');
+          }
+          return lower.endsWith('.eml') ||
               lower.endsWith('.pdf') ||
               lower.endsWith('.zip');
-        }
-        return lower.endsWith('.eml') ||
-            lower.endsWith('.pdf') ||
-            lower.endsWith('.zip');
-      },
-      maxItems: 500,
-    );
+        },
+        maxItems: 500,
+      );
+    } finally {
+      ScanManager.instance.unregisterScan(id);
+    }
   }
 
   Future<ScanResult> scanMalwareCandidates() async {
-    final home = _homePath;
-    final roots = <String>[];
-    if (Platform.isWindows) {
-      roots.add('$home\\Downloads');
-      roots.add('$home\\Desktop');
-    } else {
-      roots.add('$home/Downloads');
-      roots.add('$home/Desktop');
+    final id = _nextId();
+    try {
+      ScanManager.instance.registerScan(id);
+      final home = _homePath;
+      final roots = <String>[];
+      if (Platform.isWindows) {
+        roots.add('$home\\Downloads');
+        roots.add('$home\\Desktop');
+      } else {
+        roots.add('$home/Downloads');
+        roots.add('$home/Desktop');
+      }
+
+      const suspiciousExt = {
+        '.dmg',
+        '.pkg',
+        '.command',
+        '.sh',
+        '.js',
+        '.jar',
+        '.exe',
+        '.msi',
+        '.scr',
+        '.bat',
+        '.app',
+      };
+
+      return await _scanFileRoots(
+        roots,
+        recursive: true,
+        includeFile: (file, stat) {
+          final lower = file.path.toLowerCase();
+          final hasSuspiciousExt = suspiciousExt.any(lower.endsWith);
+          final executable = !Platform.isWindows && (stat.mode & 0x49) != 0;
+          return hasSuspiciousExt || executable;
+        },
+        maxItems: 400,
+      );
+    } finally {
+      ScanManager.instance.unregisterScan(id);
     }
-
-    const suspiciousExt = {
-      '.dmg',
-      '.pkg',
-      '.command',
-      '.sh',
-      '.js',
-      '.jar',
-      '.exe',
-      '.msi',
-      '.scr',
-      '.bat',
-      '.app',
-    };
-
-    return _scanFileRoots(
-      roots,
-      recursive: true,
-      includeFile: (file, stat) {
-        final lower = file.path.toLowerCase();
-        final hasSuspiciousExt = suspiciousExt.any(lower.endsWith);
-        final executable = !Platform.isWindows && (stat.mode & 0x49) != 0;
-        return hasSuspiciousExt || executable;
-      },
-      maxItems: 400,
-    );
   }
 
   Future<ScanResult> scanTimeMachineSnapshots() async {
-    if (!Platform.isMacOS) {
-      return const ScanResult(
-        items: [],
-        totalBytes: 0,
-        scanDuration: Duration.zero,
-      );
-    }
-
-    final sw = Stopwatch()..start();
-    final items = <FileItem>[];
-
+    final id = _nextId();
     try {
-      final result = await Process.run('tmutil', ['listlocalsnapshots', '/']);
-      if (result.exitCode == 0) {
-        final output = (result.stdout as String)
-            .split('\n')
-            .map((line) => line.trim())
-            .where((line) => line.isNotEmpty)
-            .toList(growable: false);
-
-        for (final line in output) {
-          final id = _extractSnapshotId(line);
-          if (id == null) continue;
-          items.add(
-            FileItem(
-              path: id,
-              name: t.myToolsService.snapshotName.replaceAll('{id}', id),
-              sizeBytes: 0,
-              modified: DateTime.now(),
-              isDirectory: false,
-              isSelected: true,
-              group: t.myToolsService.timeMachineGroup,
-            ),
-          );
-        }
+      ScanManager.instance.registerScan(id);
+      if (!Platform.isMacOS) {
+        return const ScanResult(
+          items: [],
+          totalBytes: 0,
+          scanDuration: Duration.zero,
+        );
       }
-    } catch (_) {}
 
-    sw.stop();
-    return ScanResult(items: items, totalBytes: 0, scanDuration: sw.elapsed);
+      final sw = Stopwatch()..start();
+      final items = <FileItem>[];
+
+      try {
+        final result = await Process.run('tmutil', ['listlocalsnapshots', '/']);
+        if (result.exitCode == 0) {
+          final output = (result.stdout as String)
+              .split('\n')
+              .map((line) => line.trim())
+              .where((line) => line.isNotEmpty)
+              .toList(growable: false);
+
+          for (final line in output) {
+            final id = _extractSnapshotId(line);
+            if (id == null) continue;
+            items.add(
+              FileItem(
+                path: id,
+                name: t.myToolsService.snapshotName.replaceAll('{id}', id),
+                sizeBytes: 0,
+                modified: DateTime.now(),
+                isDirectory: false,
+                isSelected: true,
+                group: t.myToolsService.timeMachineGroup,
+              ),
+            );
+          }
+        }
+      } catch (_) {}
+
+      sw.stop();
+      return ScanResult(items: items, totalBytes: 0, scanDuration: sw.elapsed);
+    } finally {
+      ScanManager.instance.unregisterScan(id);
+    }
   }
 
   Future<List<String>> deleteTimeMachineSnapshots(

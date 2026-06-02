@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'app.dart';
+import 'bridges/exit_interceptor.dart';
 import 'gen/strings.g.dart';
 
 void main() async {
@@ -23,9 +24,15 @@ void main() async {
     await windowManager.focus();
   });
 
+  final navigatorKey = GlobalKey<NavigatorState>();
+  final exitInterceptor = ExitInterceptor(navigatorKey);
+  exitInterceptor.initialize();
+
   runApp(
     TranslationProvider(
-      child: const ProviderScope(child: PristineCleanerApp()),
+      child: ProviderScope(
+        child: PristineCleanerApp(navigatorKey: navigatorKey),
+      ),
     ),
   );
 }

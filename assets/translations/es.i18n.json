@@ -108,6 +108,10 @@
   "dialogs": {
     "stopScanningTitle": "Detener escaneo?",
     "stopScanningMessage": "Esto cancelara el escaneo actual y descartara cualquier progreso parcial.",
+    "exitConfirmationTitle": "Confirmar salida",
+    "exitConfirmationMessage": "Se está ejecutando un escaneo. ¿Seguro que quieres salir?",
+    "exitConfirmationWait": "Esperar",
+    "exitConfirmationQuit": "Salir de todos modos",
     "stopRemovalTitle": "Detener eliminacion?",
     "stopRemovalMessage": "El archivo actual terminara y luego se omitiran los restantes."
   },

@@ -109,7 +109,11 @@
     "stopScanningTitle": "Interrompere la scansione?",
     "stopScanningMessage": "Questo annullera la scansione corrente e scartera i progressi parziali.",
     "stopRemovalTitle": "Interrompere la rimozione?",
-    "stopRemovalMessage": "Il file corrente verra completato, poi i restanti saranno saltati."
+    "stopRemovalMessage": "Il file corrente verra completato, poi i restanti saranno saltati.",
+    "exitConfirmationTitle": "Conferma uscita",
+    "exitConfirmationMessage": "È in corso una scansione. Sei sicuro di voler uscire?",
+    "exitConfirmationWait": "Attendi",
+    "exitConfirmationQuit": "Esci comunque"
   },
   "removal": {
     "barrierLabel": "Progresso rimozione",

@@ -11,6 +11,7 @@ import '../core/models/file_item.dart';
 import '../core/models/scan_result.dart';
 import '../core/models/space_view_snapshot.dart';
 import '../gen/strings.g.dart';
+import 'scan_manager.dart';
 
 part 'applications_service.dart';
 part 'cleanup_service.dart';
@@ -497,6 +498,11 @@ class FileService {
     StreamSubscription<dynamic>? controlSub;
 
     _activeScanTasks[taskId] = activeTask;
+    // Register this background scan with the global ScanManager so UI and
+    // exit-interceptor know a scan is active.
+    try {
+      ScanManager.instance.registerScan('file_scan_$taskId');
+    } catch (_) {}
 
     controlSub = controlPort.listen((dynamic message) {
       if (message is SendPort) {
@@ -560,6 +566,10 @@ class FileService {
       errorPort.close();
       _activeScanTasks.remove(taskId);
       isolate.kill(priority: Isolate.immediate);
+      // Ensure the scan manager is notified the scan finished.
+      try {
+        ScanManager.instance.unregisterScan('file_scan_$taskId');
+      } catch (_) {}
     }
   }
 }

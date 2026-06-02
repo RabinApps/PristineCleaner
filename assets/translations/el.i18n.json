@@ -108,6 +108,10 @@
   "dialogs": {
     "stopScanningTitle": "Διακοπή σάρωσης;",
     "stopScanningMessage": "Αυτό θα ακυρώσει την τρέχουσα σάρωση και θα απορρίψει οποιαδήποτε μερική πρόοδο.",
+    "exitConfirmationTitle": "Επιβεβαίωση εξόδου",
+    "exitConfirmationMessage": "Εκτελείται σάρωση. Είστε βέβαιοι ότι θέλετε να εξέλθετε;",
+    "exitConfirmationWait": "Περιμένετε",
+    "exitConfirmationQuit": "Έξοδος ούτως ή άλλως",
     "stopRemovalTitle": "Διακοπή αφαίρεσης;",
     "stopRemovalMessage": "Το τρέχον αρχείο θα ολοκληρωθεί και, στη συνέχεια, τα υπόλοιπα αρχεία θα παραλειφθούν."
   },

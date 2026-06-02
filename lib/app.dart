@@ -16,56 +16,59 @@ import 'screens/home_screen.dart';
 import 'screens/space_view_screen.dart';
 import 'shared/widgets/shell/shell_screen.dart';
 
-final GoRouter _router = GoRouter(
-  initialLocation: '/home',
-  routes: [
-    ShellRoute(
-      builder: (context, state, child) {
-        return ShellScreen(
-          activeSection: _sectionFromPath(state.uri.path),
-          child: child,
-        );
-      },
-      routes: [
-        GoRoute(
-          path: '/home',
-          pageBuilder: (context, state) =>
-              _fadePage(state: state, child: const HomeScreen()),
-        ),
-        GoRoute(
-          path: '/cleanup',
-          pageBuilder: (context, state) =>
-              _fadePage(state: state, child: const CleanupScreen()),
-        ),
-        GoRoute(
-          path: '/my-clutter',
-          pageBuilder: (context, state) =>
-              _fadePage(state: state, child: const MyClutterScreen()),
-        ),
-        GoRoute(
-          path: '/space-view',
-          pageBuilder: (context, state) =>
-              _fadePage(state: state, child: const SpaceViewScreen()),
-        ),
-        GoRoute(
-          path: '/applications',
-          pageBuilder: (context, state) =>
-              _fadePage(state: state, child: const ApplicationsScreen()),
-        ),
-        GoRoute(
-          path: '/my-tools',
-          pageBuilder: (context, state) =>
-              _fadePage(state: state, child: const MyToolsScreen()),
-        ),
-        GoRoute(
-          path: '/donate',
-          pageBuilder: (context, state) =>
-              _fadePage(state: state, child: const DonateScreen()),
-        ),
-      ],
-    ),
-  ],
-);
+GoRouter _createRouter(GlobalKey<NavigatorState> navigatorKey) {
+  return GoRouter(
+    navigatorKey: navigatorKey,
+    initialLocation: '/home',
+    routes: [
+      ShellRoute(
+        builder: (context, state, child) {
+          return ShellScreen(
+            activeSection: _sectionFromPath(state.uri.path),
+            child: child,
+          );
+        },
+        routes: [
+          GoRoute(
+            path: '/home',
+            pageBuilder: (context, state) =>
+                _fadePage(state: state, child: const HomeScreen()),
+          ),
+          GoRoute(
+            path: '/cleanup',
+            pageBuilder: (context, state) =>
+                _fadePage(state: state, child: const CleanupScreen()),
+          ),
+          GoRoute(
+            path: '/my-clutter',
+            pageBuilder: (context, state) =>
+                _fadePage(state: state, child: const MyClutterScreen()),
+          ),
+          GoRoute(
+            path: '/space-view',
+            pageBuilder: (context, state) =>
+                _fadePage(state: state, child: const SpaceViewScreen()),
+          ),
+          GoRoute(
+            path: '/applications',
+            pageBuilder: (context, state) =>
+                _fadePage(state: state, child: const ApplicationsScreen()),
+          ),
+          GoRoute(
+            path: '/my-tools',
+            pageBuilder: (context, state) =>
+                _fadePage(state: state, child: const MyToolsScreen()),
+          ),
+          GoRoute(
+            path: '/donate',
+            pageBuilder: (context, state) =>
+                _fadePage(state: state, child: const DonateScreen()),
+          ),
+        ],
+      ),
+    ],
+  );
+}
 
 CustomTransitionPage<void> _fadePage({
   required GoRouterState state,
@@ -104,11 +107,15 @@ NavSection _sectionFromPath(String path) {
 }
 
 class PristineCleanerApp extends ConsumerWidget {
-  const PristineCleanerApp({super.key});
+  final GlobalKey<NavigatorState>? navigatorKey;
+
+  const PristineCleanerApp({super.key, this.navigatorKey});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final appLocale = ref.watch(appLocaleProvider);
+    final _key = navigatorKey ?? GlobalKey<NavigatorState>();
+    final router = _createRouter(_key);
 
     return MaterialApp.router(
       title: t.app.title,
@@ -127,7 +134,7 @@ class PristineCleanerApp extends ConsumerWidget {
           secondary: const Color(0xFF90CAF9),
         ),
       ),
-      routerConfig: _router,
+      routerConfig: router,
     );
   }
 }

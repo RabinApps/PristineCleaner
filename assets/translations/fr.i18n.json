@@ -108,6 +108,10 @@
   "dialogs": {
     "stopScanningTitle": "Arrêter la numérisation ?",
     "stopScanningMessage": "Cela annulera l'analyse en cours et annulera toute progression partielle.",
+    "exitConfirmationTitle": "Confirmer la fermeture",
+    "exitConfirmationMessage": "Une analyse est en cours. Voulez-vous vraiment quitter ?",
+    "exitConfirmationWait": "Attendre",
+    "exitConfirmationQuit": "Quitter quand même",
     "stopRemovalTitle": "Arrêter la suppression ?",
     "stopRemovalMessage": "Le fichier en cours se terminera, puis les fichiers restants seront ignorés."
   },

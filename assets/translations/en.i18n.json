@@ -108,6 +108,10 @@
   "dialogs": {
     "stopScanningTitle": "Stop scanning?",
     "stopScanningMessage": "This will cancel the current scan and discard any partial progress.",
+    "exitConfirmationTitle": "Confirm Exit",
+    "exitConfirmationMessage": "A scan is currently running. Are you sure you want to quit?",
+    "exitConfirmationWait": "Wait",
+    "exitConfirmationQuit": "Quit Anyway",
     "stopRemovalTitle": "Stop removal?",
     "stopRemovalMessage": "The current file will finish, then remaining files will be skipped."
   },

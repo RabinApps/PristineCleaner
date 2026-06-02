@@ -268,6 +268,18 @@ class Translations$dialogs$en {
 	/// en: 'This will cancel the current scan and discard any partial progress.'
 	String get stopScanningMessage => 'This will cancel the current scan and discard any partial progress.';
 
+	/// en: 'Confirm Exit'
+	String get exitConfirmationTitle => 'Confirm Exit';
+
+	/// en: 'A scan is currently running. Are you sure you want to quit?'
+	String get exitConfirmationMessage => 'A scan is currently running. Are you sure you want to quit?';
+
+	/// en: 'Wait'
+	String get exitConfirmationWait => 'Wait';
+
+	/// en: 'Quit Anyway'
+	String get exitConfirmationQuit => 'Quit Anyway';
+
 	/// en: 'Stop removal?'
 	String get stopRemovalTitle => 'Stop removal?';
 
@@ -772,8 +784,8 @@ class Translations$sections$home$en {
 	/// en: 'Home'
 	String get title => 'Home';
 
-	/// en: 'Get a complete health overview\nof your system in one click.'
-	String get subtitle => 'Get a complete health overview\nof your system in one click.';
+	/// en: 'See your computer's vital signs at a glance\nand catch issues before they grow.'
+	String get subtitle => 'See your computer\'s vital signs at a glance\nand catch issues before they grow.';
 
 	late final Translations$sections$home$features$en features = Translations$sections$home$features$en._(_root);
 }
@@ -789,8 +801,8 @@ class Translations$sections$cleanup$en {
 	/// en: 'Junk Cleanup'
 	String get title => 'Junk Cleanup';
 
-	/// en: 'Clean your system to achieve maximum\nperformance and reclaim more free space.'
-	String get subtitle => 'Clean your system to achieve maximum\nperformance and reclaim more free space.';
+	/// en: 'Sweep away digital residue to restore\nspeed, stability, and valuable free space.'
+	String get subtitle => 'Sweep away digital residue to restore\nspeed, stability, and valuable free space.';
 
 	late final Translations$sections$cleanup$features$en features = Translations$sections$cleanup$features$en._(_root);
 }
@@ -806,8 +818,8 @@ class Translations$sections$myClutter$en {
 	/// en: 'Clutter'
 	String get title => 'Clutter';
 
-	/// en: 'Sort through your files and reduce\nthe mess in just a few clicks.'
-	String get subtitle => 'Sort through your files and reduce\nthe mess in just a few clicks.';
+	/// en: 'Turn chaotic folders into clear decisions\nwith guided cleanup in minutes.'
+	String get subtitle => 'Turn chaotic folders into clear decisions\nwith guided cleanup in minutes.';
 
 	late final Translations$sections$myClutter$features$en features = Translations$sections$myClutter$features$en._(_root);
 }
@@ -823,8 +835,8 @@ class Translations$sections$spaceView$en {
 	/// en: 'Space View'
 	String get title => 'Space View';
 
-	/// en: 'Visualize what's taking up the most\ndisk space and clean up quickly.'
-	String get subtitle => 'Visualize what\'s taking up the most\ndisk space and clean up quickly.';
+	/// en: 'Map your disk visually to pinpoint\nwhat matters most and free space faster.'
+	String get subtitle => 'Map your disk visually to pinpoint\nwhat matters most and free space faster.';
 
 	late final Translations$sections$spaceView$features$en features = Translations$sections$spaceView$features$en._(_root);
 }
@@ -840,8 +852,8 @@ class Translations$sections$applications$en {
 	/// en: 'Applications'
 	String get title => 'Applications';
 
-	/// en: 'Take control of your applications.\nUninstall or remove old leftovers.'
-	String get subtitle => 'Take control of your applications.\nUninstall or remove old leftovers.';
+	/// en: 'Master your app footprint.\nUninstall cleanly and remove forgotten leftovers.'
+	String get subtitle => 'Master your app footprint.\nUninstall cleanly and remove forgotten leftovers.';
 
 	late final Translations$sections$applications$features$en features = Translations$sections$applications$features$en._(_root);
 }
@@ -1216,14 +1228,14 @@ class Translations$sections$home$features$en {
 
 	// Translations
 
-	/// en: 'System Status'
-	String get systemStatus => 'System Status';
+	/// en: 'Live System Pulse'
+	String get systemStatus => 'Live System Pulse';
 
-	/// en: 'Storage Usage'
-	String get storageUsage => 'Storage Usage';
+	/// en: 'Storage Pressure'
+	String get storageUsage => 'Storage Pressure';
 
-	/// en: 'Quick Actions'
-	String get quickActions => 'Quick Actions';
+	/// en: 'One-Tap Fixes'
+	String get quickActions => 'One-Tap Fixes';
 }
 
 // Path: sections.cleanup.features
@@ -1234,14 +1246,14 @@ class Translations$sections$cleanup$features$en {
 
 	// Translations
 
-	/// en: 'System Junk'
-	String get systemJunk => 'System Junk';
+	/// en: 'Residual System Junk'
+	String get systemJunk => 'Residual System Junk';
 
-	/// en: 'User Cache'
-	String get userCache => 'User Cache';
+	/// en: 'Bloated User Cache'
+	String get userCache => 'Bloated User Cache';
 
-	/// en: 'Temp Files'
-	String get tempFiles => 'Temp Files';
+	/// en: 'Stale Temp Files'
+	String get tempFiles => 'Stale Temp Files';
 }
 
 // Path: sections.myClutter.features
@@ -1252,14 +1264,14 @@ class Translations$sections$myClutter$features$en {
 
 	// Translations
 
-	/// en: 'Large Files'
-	String get largeFiles => 'Large Files';
+	/// en: 'Space-Hungry Files'
+	String get largeFiles => 'Space-Hungry Files';
 
-	/// en: 'Duplicates'
-	String get duplicates => 'Duplicates';
+	/// en: 'Duplicate Clusters'
+	String get duplicates => 'Duplicate Clusters';
 
-	/// en: 'Large Similar Images'
-	String get largeSimilarImages => 'Large Similar Images';
+	/// en: 'Near-Match Photo Sets'
+	String get largeSimilarImages => 'Near-Match Photo Sets';
 }
 
 // Path: sections.spaceView.features
@@ -1270,14 +1282,14 @@ class Translations$sections$spaceView$features$en {
 
 	// Translations
 
-	/// en: 'Visual Storage Map'
-	String get visualStorageMap => 'Visual Storage Map';
+	/// en: 'Interactive Storage Map'
+	String get visualStorageMap => 'Interactive Storage Map';
 
-	/// en: 'Large Folders Overview'
-	String get largeFoldersOverview => 'Large Folders Overview';
+	/// en: 'Heavy Folder Hotspots'
+	String get largeFoldersOverview => 'Heavy Folder Hotspots';
 
-	/// en: 'Hidden Files Uncovered'
-	String get hiddenFilesUncovered => 'Hidden Files Uncovered';
+	/// en: 'Hidden Space Drainers'
+	String get hiddenFilesUncovered => 'Hidden Space Drainers';
 }
 
 // Path: sections.applications.features
@@ -1288,14 +1300,14 @@ class Translations$sections$applications$features$en {
 
 	// Translations
 
-	/// en: 'App Uninstaller'
-	String get appUninstaller => 'App Uninstaller';
+	/// en: 'Deep App Uninstaller'
+	String get appUninstaller => 'Deep App Uninstaller';
 
-	/// en: 'Large Apps'
-	String get largeApps => 'Large Apps';
+	/// en: 'Heavyweight Apps'
+	String get largeApps => 'Heavyweight Apps';
 
-	/// en: 'File Leftovers'
-	String get fileLeftovers => 'File Leftovers';
+	/// en: 'Orphaned Support Files'
+	String get fileLeftovers => 'Orphaned Support Files';
 }
 
 // Path: sections.myTools.features
@@ -1342,30 +1354,30 @@ extension on Translations {
 			'navigation.myTools' => 'Tools',
 			'navigation.donate' => 'Donate',
 			'sections.home.title' => 'Home',
-			'sections.home.subtitle' => 'Get a complete health overview\nof your system in one click.',
-			'sections.home.features.systemStatus' => 'System Status',
-			'sections.home.features.storageUsage' => 'Storage Usage',
-			'sections.home.features.quickActions' => 'Quick Actions',
+			'sections.home.subtitle' => 'See your computer\'s vital signs at a glance\nand catch issues before they grow.',
+			'sections.home.features.systemStatus' => 'Live System Pulse',
+			'sections.home.features.storageUsage' => 'Storage Pressure',
+			'sections.home.features.quickActions' => 'One-Tap Fixes',
 			'sections.cleanup.title' => 'Junk Cleanup',
-			'sections.cleanup.subtitle' => 'Clean your system to achieve maximum\nperformance and reclaim more free space.',
-			'sections.cleanup.features.systemJunk' => 'System Junk',
-			'sections.cleanup.features.userCache' => 'User Cache',
-			'sections.cleanup.features.tempFiles' => 'Temp Files',
+			'sections.cleanup.subtitle' => 'Sweep away digital residue to restore\nspeed, stability, and valuable free space.',
+			'sections.cleanup.features.systemJunk' => 'Residual System Junk',
+			'sections.cleanup.features.userCache' => 'Bloated User Cache',
+			'sections.cleanup.features.tempFiles' => 'Stale Temp Files',
 			'sections.myClutter.title' => 'Clutter',
-			'sections.myClutter.subtitle' => 'Sort through your files and reduce\nthe mess in just a few clicks.',
-			'sections.myClutter.features.largeFiles' => 'Large Files',
-			'sections.myClutter.features.duplicates' => 'Duplicates',
-			'sections.myClutter.features.largeSimilarImages' => 'Large Similar Images',
+			'sections.myClutter.subtitle' => 'Turn chaotic folders into clear decisions\nwith guided cleanup in minutes.',
+			'sections.myClutter.features.largeFiles' => 'Space-Hungry Files',
+			'sections.myClutter.features.duplicates' => 'Duplicate Clusters',
+			'sections.myClutter.features.largeSimilarImages' => 'Near-Match Photo Sets',
 			'sections.spaceView.title' => 'Space View',
-			'sections.spaceView.subtitle' => 'Visualize what\'s taking up the most\ndisk space and clean up quickly.',
-			'sections.spaceView.features.visualStorageMap' => 'Visual Storage Map',
-			'sections.spaceView.features.largeFoldersOverview' => 'Large Folders Overview',
-			'sections.spaceView.features.hiddenFilesUncovered' => 'Hidden Files Uncovered',
+			'sections.spaceView.subtitle' => 'Map your disk visually to pinpoint\nwhat matters most and free space faster.',
+			'sections.spaceView.features.visualStorageMap' => 'Interactive Storage Map',
+			'sections.spaceView.features.largeFoldersOverview' => 'Heavy Folder Hotspots',
+			'sections.spaceView.features.hiddenFilesUncovered' => 'Hidden Space Drainers',
 			'sections.applications.title' => 'Applications',
-			'sections.applications.subtitle' => 'Take control of your applications.\nUninstall or remove old leftovers.',
-			'sections.applications.features.appUninstaller' => 'App Uninstaller',
-			'sections.applications.features.largeApps' => 'Large Apps',
-			'sections.applications.features.fileLeftovers' => 'File Leftovers',
+			'sections.applications.subtitle' => 'Master your app footprint.\nUninstall cleanly and remove forgotten leftovers.',
+			'sections.applications.features.appUninstaller' => 'Deep App Uninstaller',
+			'sections.applications.features.largeApps' => 'Heavyweight Apps',
+			'sections.applications.features.fileLeftovers' => 'Orphaned Support Files',
 			'sections.myTools.title' => 'Tools',
 			'sections.myTools.subtitle' => 'Your go-to toolkit for system care and maintenance.',
 			'sections.myTools.features.targetedScanners' => 'Targeted Scanners',
@@ -1392,6 +1404,10 @@ extension on Translations {
 			'tooltips.openInFinder' => 'Open in Finder',
 			'dialogs.stopScanningTitle' => 'Stop scanning?',
 			'dialogs.stopScanningMessage' => 'This will cancel the current scan and discard any partial progress.',
+			'dialogs.exitConfirmationTitle' => 'Confirm Exit',
+			'dialogs.exitConfirmationMessage' => 'A scan is currently running. Are you sure you want to quit?',
+			'dialogs.exitConfirmationWait' => 'Wait',
+			'dialogs.exitConfirmationQuit' => 'Quit Anyway',
 			'dialogs.stopRemovalTitle' => 'Stop removal?',
 			'dialogs.stopRemovalMessage' => 'The current file will finish, then remaining files will be skipped.',
 			'removal.barrierLabel' => 'Removal progress',

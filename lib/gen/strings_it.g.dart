@@ -190,6 +190,10 @@ class _Translations$dialogs$it implements Translations$dialogs$en {
 	@override String get stopScanningMessage => 'Questo annullera la scansione corrente e scartera i progressi parziali.';
 	@override String get stopRemovalTitle => 'Interrompere la rimozione?';
 	@override String get stopRemovalMessage => 'Il file corrente verra completato, poi i restanti saranno saltati.';
+	@override String get exitConfirmationTitle => 'Conferma uscita';
+	@override String get exitConfirmationMessage => 'È in corso una scansione. Sei sicuro di voler uscire?';
+	@override String get exitConfirmationWait => 'Attendi';
+	@override String get exitConfirmationQuit => 'Esci comunque';
 }
 
 // Path: removal
@@ -477,7 +481,7 @@ class _Translations$sections$home$it implements Translations$sections$home$en {
 
 	// Translations
 	@override String get title => 'Casa';
-	@override String get subtitle => 'Ottieni una panoramica completa dello stato del tuo sistema in un clic.';
+	@override String get subtitle => 'Visualizza i segni vitali del tuo computer a colpo d\'occhio\ne individua i problemi prima che aumentino.';
 	@override late final _Translations$sections$home$features$it features = _Translations$sections$home$features$it._(_root);
 }
 
@@ -489,7 +493,7 @@ class _Translations$sections$cleanup$it implements Translations$sections$cleanup
 
 	// Translations
 	@override String get title => 'Pulizia File Inutili';
-	@override String get subtitle => 'Pulisci il sistema per ottenere\nprestazioni massime e recuperare spazio.';
+	@override String get subtitle => 'Elimina i residui digitali per ripristinare\nvelocità, stabilità e prezioso spazio libero.';
 	@override late final _Translations$sections$cleanup$features$it features = _Translations$sections$cleanup$features$it._(_root);
 }
 
@@ -501,7 +505,7 @@ class _Translations$sections$myClutter$it implements Translations$sections$myClu
 
 	// Translations
 	@override String get title => 'Il Mio Disordine';
-	@override String get subtitle => 'Ordina i tuoi file e riduci\nil disordine in pochi clic.';
+	@override String get subtitle => 'Trasforma le cartelle caotiche in decisioni chiare\ncon la pulizia guidata in pochi minuti.';
 	@override late final _Translations$sections$myClutter$features$it features = _Translations$sections$myClutter$features$it._(_root);
 }
 
@@ -513,7 +517,7 @@ class _Translations$sections$spaceView$it implements Translations$sections$space
 
 	// Translations
 	@override String get title => 'Vista Spazio';
-	@override String get subtitle => 'Visualizza cosa occupa piu\nspazio su disco e pulisci rapidamente.';
+	@override String get subtitle => 'Mappa visivamente il tuo disco per individuare\nquello che conta di più e liberare spazio più velocemente.';
 	@override late final _Translations$sections$spaceView$features$it features = _Translations$sections$spaceView$features$it._(_root);
 }
 
@@ -525,7 +529,7 @@ class _Translations$sections$applications$it implements Translations$sections$ap
 
 	// Translations
 	@override String get title => 'Applicazioni';
-	@override String get subtitle => 'Prendi il controllo delle applicazioni.\nDisinstalla o rimuovi vecchi residui.';
+	@override String get subtitle => 'Padroneggia l\'impronta della tua app.\nDisinstalla in modo pulito e rimuovi gli avanzi dimenticati.';
 	@override late final _Translations$sections$applications$features$it features = _Translations$sections$applications$features$it._(_root);
 }
 
@@ -783,9 +787,9 @@ class _Translations$sections$home$features$it implements Translations$sections$h
 	final TranslationsIt _root; // ignore: unused_field
 
 	// Translations
-	@override String get systemStatus => 'Stato del sistema';
-	@override String get storageUsage => 'Utilizzo dello spazio di archiviazione';
-	@override String get quickActions => 'Azioni rapide';
+	@override String get systemStatus => 'Impulso del sistema in tempo reale';
+	@override String get storageUsage => 'Pressione di stoccaggio';
+	@override String get quickActions => 'Correzioni con un solo tocco';
 }
 
 // Path: sections.cleanup.features
@@ -795,9 +799,9 @@ class _Translations$sections$cleanup$features$it implements Translations$section
 	final TranslationsIt _root; // ignore: unused_field
 
 	// Translations
-	@override String get systemJunk => 'File di Sistema Inutili';
-	@override String get userCache => 'Cache Utente';
-	@override String get tempFiles => 'File Temporanei';
+	@override String get systemJunk => 'Spazzatura residua del sistema';
+	@override String get userCache => 'Cache utente gonfia';
+	@override String get tempFiles => 'File temporanei obsoleti';
 }
 
 // Path: sections.myClutter.features
@@ -807,9 +811,9 @@ class _Translations$sections$myClutter$features$it implements Translations$secti
 	final TranslationsIt _root; // ignore: unused_field
 
 	// Translations
-	@override String get largeFiles => 'File Grandi';
-	@override String get duplicates => 'Duplicati';
-	@override String get largeSimilarImages => 'Immagini Simili Grandi';
+	@override String get largeFiles => 'File affamati di spazio';
+	@override String get duplicates => 'Cluster duplicati';
+	@override String get largeSimilarImages => 'Set di foto quasi corrispondenti';
 }
 
 // Path: sections.spaceView.features
@@ -819,9 +823,9 @@ class _Translations$sections$spaceView$features$it implements Translations$secti
 	final TranslationsIt _root; // ignore: unused_field
 
 	// Translations
-	@override String get visualStorageMap => 'Mappa Visiva dello Spazio';
-	@override String get largeFoldersOverview => 'Panoramica Cartelle Grandi';
-	@override String get hiddenFilesUncovered => 'File Nascosti Individuati';
+	@override String get visualStorageMap => 'Mappa di archiviazione interattiva';
+	@override String get largeFoldersOverview => 'Hotspot di cartelle pesanti';
+	@override String get hiddenFilesUncovered => 'Drenatori di spazio nascosto';
 }
 
 // Path: sections.applications.features
@@ -831,9 +835,9 @@ class _Translations$sections$applications$features$it implements Translations$se
 	final TranslationsIt _root; // ignore: unused_field
 
 	// Translations
-	@override String get appUninstaller => 'Disinstallatore App';
-	@override String get largeApps => 'App Grandi';
-	@override String get fileLeftovers => 'Residui dei File';
+	@override String get appUninstaller => 'Programma di disinstallazione approfondita dell\'app';
+	@override String get largeApps => 'App pesanti';
+	@override String get fileLeftovers => 'File di supporto orfani';
 }
 
 // Path: sections.myTools.features
@@ -874,30 +878,30 @@ extension on TranslationsIt {
 			'navigation.myTools' => 'I Miei Strumenti',
 			'navigation.donate' => 'Dona',
 			'sections.home.title' => 'Casa',
-			'sections.home.subtitle' => 'Ottieni una panoramica completa dello stato del tuo sistema in un clic.',
-			'sections.home.features.systemStatus' => 'Stato del sistema',
-			'sections.home.features.storageUsage' => 'Utilizzo dello spazio di archiviazione',
-			'sections.home.features.quickActions' => 'Azioni rapide',
+			'sections.home.subtitle' => 'Visualizza i segni vitali del tuo computer a colpo d\'occhio\ne individua i problemi prima che aumentino.',
+			'sections.home.features.systemStatus' => 'Impulso del sistema in tempo reale',
+			'sections.home.features.storageUsage' => 'Pressione di stoccaggio',
+			'sections.home.features.quickActions' => 'Correzioni con un solo tocco',
 			'sections.cleanup.title' => 'Pulizia File Inutili',
-			'sections.cleanup.subtitle' => 'Pulisci il sistema per ottenere\nprestazioni massime e recuperare spazio.',
-			'sections.cleanup.features.systemJunk' => 'File di Sistema Inutili',
-			'sections.cleanup.features.userCache' => 'Cache Utente',
-			'sections.cleanup.features.tempFiles' => 'File Temporanei',
+			'sections.cleanup.subtitle' => 'Elimina i residui digitali per ripristinare\nvelocità, stabilità e prezioso spazio libero.',
+			'sections.cleanup.features.systemJunk' => 'Spazzatura residua del sistema',
+			'sections.cleanup.features.userCache' => 'Cache utente gonfia',
+			'sections.cleanup.features.tempFiles' => 'File temporanei obsoleti',
 			'sections.myClutter.title' => 'Il Mio Disordine',
-			'sections.myClutter.subtitle' => 'Ordina i tuoi file e riduci\nil disordine in pochi clic.',
-			'sections.myClutter.features.largeFiles' => 'File Grandi',
-			'sections.myClutter.features.duplicates' => 'Duplicati',
-			'sections.myClutter.features.largeSimilarImages' => 'Immagini Simili Grandi',
+			'sections.myClutter.subtitle' => 'Trasforma le cartelle caotiche in decisioni chiare\ncon la pulizia guidata in pochi minuti.',
+			'sections.myClutter.features.largeFiles' => 'File affamati di spazio',
+			'sections.myClutter.features.duplicates' => 'Cluster duplicati',
+			'sections.myClutter.features.largeSimilarImages' => 'Set di foto quasi corrispondenti',
 			'sections.spaceView.title' => 'Vista Spazio',
-			'sections.spaceView.subtitle' => 'Visualizza cosa occupa piu\nspazio su disco e pulisci rapidamente.',
-			'sections.spaceView.features.visualStorageMap' => 'Mappa Visiva dello Spazio',
-			'sections.spaceView.features.largeFoldersOverview' => 'Panoramica Cartelle Grandi',
-			'sections.spaceView.features.hiddenFilesUncovered' => 'File Nascosti Individuati',
+			'sections.spaceView.subtitle' => 'Mappa visivamente il tuo disco per individuare\nquello che conta di più e liberare spazio più velocemente.',
+			'sections.spaceView.features.visualStorageMap' => 'Mappa di archiviazione interattiva',
+			'sections.spaceView.features.largeFoldersOverview' => 'Hotspot di cartelle pesanti',
+			'sections.spaceView.features.hiddenFilesUncovered' => 'Drenatori di spazio nascosto',
 			'sections.applications.title' => 'Applicazioni',
-			'sections.applications.subtitle' => 'Prendi il controllo delle applicazioni.\nDisinstalla o rimuovi vecchi residui.',
-			'sections.applications.features.appUninstaller' => 'Disinstallatore App',
-			'sections.applications.features.largeApps' => 'App Grandi',
-			'sections.applications.features.fileLeftovers' => 'Residui dei File',
+			'sections.applications.subtitle' => 'Padroneggia l\'impronta della tua app.\nDisinstalla in modo pulito e rimuovi gli avanzi dimenticati.',
+			'sections.applications.features.appUninstaller' => 'Programma di disinstallazione approfondita dell\'app',
+			'sections.applications.features.largeApps' => 'App pesanti',
+			'sections.applications.features.fileLeftovers' => 'File di supporto orfani',
 			'sections.myTools.title' => 'I Miei Strumenti',
 			'sections.myTools.subtitle' => 'Il tuo kit principale per cura e manutenzione del sistema.',
 			'sections.myTools.features.targetedScanners' => 'Scansioni Mirate',
@@ -926,6 +930,10 @@ extension on TranslationsIt {
 			'dialogs.stopScanningMessage' => 'Questo annullera la scansione corrente e scartera i progressi parziali.',
 			'dialogs.stopRemovalTitle' => 'Interrompere la rimozione?',
 			'dialogs.stopRemovalMessage' => 'Il file corrente verra completato, poi i restanti saranno saltati.',
+			'dialogs.exitConfirmationTitle' => 'Conferma uscita',
+			'dialogs.exitConfirmationMessage' => 'È in corso una scansione. Sei sicuro di voler uscire?',
+			'dialogs.exitConfirmationWait' => 'Attendi',
+			'dialogs.exitConfirmationQuit' => 'Esci comunque',
 			'removal.barrierLabel' => 'Progresso rimozione',
 			'removal.preparing' => 'Preparazione...',
 			'removal.removingFrom' => 'Rimozione da {title}',

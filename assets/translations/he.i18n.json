@@ -108,6 +108,10 @@
   "dialogs": {
     "stopScanningTitle": "להפסיק לסרוק?",
     "stopScanningMessage": "פעולה זו תבטל את הסריקה הנוכחית ותבטל כל התקדמות חלקית.",
+    "exitConfirmationTitle": "אשר יציאה",
+    "exitConfirmationMessage": "סריקה מתבצעת כעת. האם אתה בטוח שברצונך לצאת?",
+    "exitConfirmationWait": "המתן",
+    "exitConfirmationQuit": "צא בכל מקרה",
     "stopRemovalTitle": "להפסיק את ההסרה?",
     "stopRemovalMessage": "הקובץ הנוכחי יסתיים, ואז ידלגו על הקבצים הנותרים."
   },

@@ -108,6 +108,10 @@
   "dialogs": {
     "stopScanningTitle": "Parar de digitalizar?",
     "stopScanningMessage": "Isto cancelará a verificação atual e descartará qualquer progresso parcial.",
+    "exitConfirmationTitle": "Confirmar saída",
+    "exitConfirmationMessage": "Uma verificação está em andamento. Tem certeza de que deseja sair?",
+    "exitConfirmationWait": "Aguardar",
+    "exitConfirmationQuit": "Sair mesmo assim",
     "stopRemovalTitle": "Interromper a remoção?",
     "stopRemovalMessage": "O arquivo atual será concluído e os arquivos restantes serão ignorados."
   },

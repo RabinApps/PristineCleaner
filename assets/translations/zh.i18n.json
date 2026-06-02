@@ -108,6 +108,10 @@
   "dialogs": {
     "stopScanningTitle": "停止扫描？",
     "stopScanningMessage": "这将取消当前扫描并放弃任何部分进度。",
+    "exitConfirmationTitle": "确认退出",
+    "exitConfirmationMessage": "当前正在运行扫描。您确定要退出吗？",
+    "exitConfirmationWait": "等待",
+    "exitConfirmationQuit": "仍然退出",
     "stopRemovalTitle": "停止移除？",
     "stopRemovalMessage": "当前文件将完成，然后剩余的文件将被跳过。"
   },
