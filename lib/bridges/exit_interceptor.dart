@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 import '../services/scan_manager.dart';
-import '../widgets/exit_confirmation_dialog.dart';
+import '../shared/widgets/exit_confirmation_dialog.dart';
 
 /// Wires platform exit requests to a confirmation dialog when a scan is active.
 class ExitInterceptor {

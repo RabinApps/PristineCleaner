@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../gen/strings.g.dart';
+import '../../gen/strings.g.dart';
 
 /// Simple confirmation dialog shown when user attempts to quit while scanning.
 /// Returns `true` to allow quit, `false` to cancel.
