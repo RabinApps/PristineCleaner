@@ -99,14 +99,17 @@ Future<Map<String, dynamic>> _scanApplicationsPayload(
   int processed = 0;
   int processedBytes = 0;
 
-  for (final dir in candidates) {
+  for (final entity in candidates) {
     if (isCancelled()) throw const ScanCancelledException();
     try {
-      final size = await _dirSizePayload(dir.path);
+      final stat = await entity.stat();
+      final isDirectory = entity is Directory;
+      final size = isDirectory ? await _dirSizePayload(entity.path) : stat.size;
       if (isCancelled()) throw const ScanCancelledException();
-      final stat = await dir.stat();
-      final rawName = _basename(dir.path);
-      final name = Platform.isMacOS ? rawName.replaceAll('.app', '') : rawName;
+      final rawName = _basename(entity.path);
+      final name = (Platform.isMacOS && isDirectory)
+          ? rawName.replaceAll('.app', '')
+          : rawName;
       processed++;
       processedBytes += size;
       emitter.push(
@@ -118,13 +121,15 @@ Future<Map<String, dynamic>> _scanApplicationsPayload(
       items.add(
         _fileItemToPayload(
           FileItem(
-            path: dir.path,
+            path: entity.path,
             name: name,
             sizeBytes: size,
             modified: stat.modified,
-            iconPath: await _resolveApplicationIconPath(dir.path),
+            iconPath: isDirectory
+                ? await _resolveApplicationIconPath(entity.path)
+                : null,
             lastUsed: stat.accessed,
-            isDirectory: true,
+            isDirectory: isDirectory,
           ),
         ),
       );
@@ -494,39 +499,86 @@ String appDisplayNameFromRaw(String value) {
       .join(' ');
 }
 
-Future<List<Directory>> _collectApplicationCandidates() async {
-  final dirs = <Directory>[];
+Future<List<FileSystemEntity>> _collectApplicationCandidates() async {
+  final candidates = <FileSystemEntity>[];
+
   if (Platform.isMacOS) {
     for (final path in ['/Applications', '/System/Applications']) {
       final appsDir = Directory(path);
       if (!await appsDir.exists()) continue;
       await for (final entity in appsDir.list(followLinks: false)) {
         if (entity is Directory && entity.path.endsWith('.app')) {
-          dirs.add(entity);
+          candidates.add(entity);
         }
       }
     }
-  } else if (Platform.isWindows) {
+    return candidates;
+  }
+
+  if (Platform.isWindows) {
     for (final dir in [r'C:\Program Files', r'C:\Program Files (x86)']) {
       final root = Directory(dir);
       if (!await root.exists()) continue;
       await for (final entity in root.list(followLinks: false)) {
         if (entity is Directory) {
-          dirs.add(entity);
+          candidates.add(entity);
         }
       }
     }
-  } else if (Platform.isLinux) {
-    final optDir = Directory('/opt');
-    if (await optDir.exists()) {
-      await for (final entity in optDir.list(followLinks: false)) {
-        if (entity is Directory) {
-          dirs.add(entity);
-        }
-      }
-    }
+    return candidates;
   }
-  return dirs;
+
+  if (Platform.isLinux) {
+    // Paths to scan on Linux (include executables, desktop files, opt dirs, and share/applications)
+    final paths = [
+      '/usr/bin',
+      '/bin',
+      '/usr/local/bin',
+      '/opt',
+      '/usr/share/applications',
+      '/usr/lib',
+    ];
+
+    for (final rootPath in paths) {
+      final root = Directory(rootPath);
+      if (!await root.exists()) continue;
+      try {
+        await for (final entity in root.list(followLinks: false)) {
+          // Include directories (useful for /opt and /usr/lib subdirs)
+          if (entity is Directory) {
+            candidates.add(entity);
+            continue;
+          }
+
+          // Include .desktop files under /usr/share/applications
+          if (entity is File) {
+            final name = _basename(entity.path).toLowerCase();
+            if (rootPath == '/usr/share/applications' &&
+                name.endsWith('.desktop')) {
+              candidates.add(entity);
+              continue;
+            }
+
+            // For bin directories, include executable files
+            if ((rootPath == '/usr/bin' ||
+                rootPath == '/bin' ||
+                rootPath == '/usr/local/bin')) {
+              try {
+                final stat = await entity.stat();
+                // POSIX execute bits mask (0o111 == 73 decimal == 0x49)
+                if ((stat.mode & 0x49) != 0 && stat.size > 0) {
+                  candidates.add(entity);
+                }
+              } catch (_) {}
+            }
+          }
+        }
+      } catch (_) {}
+    }
+    return candidates;
+  }
+
+  return candidates;
 }
 
 Future<String?> _resolveApplicationIconPath(String appPath) async {
