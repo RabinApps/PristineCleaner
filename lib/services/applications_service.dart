@@ -582,55 +582,104 @@ Future<List<FileSystemEntity>> _collectApplicationCandidates() async {
 }
 
 Future<String?> _resolveApplicationIconPath(String appPath) async {
-  if (!Platform.isMacOS || !appPath.endsWith('.app')) return null;
-  final resourcesDir = Directory('$appPath/Contents/Resources');
-  if (!await resourcesDir.exists()) return null;
+  // macOS: existing .app bundle logic
+  if (Platform.isMacOS && appPath.endsWith('.app')) {
+    final resourcesDir = Directory('$appPath/Contents/Resources');
+    if (!await resourcesDir.exists()) return null;
 
-  final candidates = <String>{'AppIcon', 'icon'};
-  final infoPlist = File('$appPath/Contents/Info.plist');
-  final plistContent = await _readMacOsPlistXml(infoPlist.path);
-  if (plistContent != null) {
+    final candidates = <String>{'AppIcon', 'icon'};
+    final infoPlist = File('$appPath/Contents/Info.plist');
+    final plistContent = await _readMacOsPlistXml(infoPlist.path);
+    if (plistContent != null) {
+      try {
+        final iconFileMatch = RegExp(
+          r'<key>\s*CFBundleIconFile\s*</key>\s*<string>([^<]+)</string>',
+        ).firstMatch(plistContent);
+        final iconNameMatch = RegExp(
+          r'<key>\s*CFBundleIconName\s*</key>\s*<string>([^<]+)</string>',
+        ).firstMatch(plistContent);
+        final iconFile = iconFileMatch?.group(1)?.trim();
+        final iconName = iconNameMatch?.group(1)?.trim();
+        if (iconFile != null && iconFile.isNotEmpty) {
+          candidates.add(_stripFileExtension(iconFile));
+        }
+        if (iconName != null && iconName.isNotEmpty) {
+          candidates.add(_stripFileExtension(iconName));
+        }
+      } catch (_) {}
+    }
+
+    for (final base in candidates) {
+      final resolved = await _resolveApplicationIconCandidate(
+        resourcesDir.path,
+        base,
+      );
+      if (resolved != null) return resolved;
+    }
+
     try {
-      final iconFileMatch = RegExp(
-        r'<key>\s*CFBundleIconFile\s*</key>\s*<string>([^<]+)</string>',
-      ).firstMatch(plistContent);
-      final iconNameMatch = RegExp(
-        r'<key>\s*CFBundleIconName\s*</key>\s*<string>([^<]+)</string>',
-      ).firstMatch(plistContent);
-      final iconFile = iconFileMatch?.group(1)?.trim();
-      final iconName = iconNameMatch?.group(1)?.trim();
-      if (iconFile != null && iconFile.isNotEmpty) {
-        candidates.add(_stripFileExtension(iconFile));
-      }
-      if (iconName != null && iconName.isNotEmpty) {
-        candidates.add(_stripFileExtension(iconName));
+      await for (final entity in resourcesDir.list(followLinks: false)) {
+        if (entity is! File) continue;
+        final name = _basename(entity.path).toLowerCase();
+        final isImage = _supportedApplicationIconExtensions.any(
+          (ext) => name.endsWith(ext),
+        );
+        if (!isImage) continue;
+        if (!name.contains('icon') && !name.contains('app')) continue;
+        if (name.endsWith('.icns')) {
+          return _materializeMacOsIcnsPreview(entity.path);
+        }
+        return entity.path;
       }
     } catch (_) {}
+
+    return null;
   }
 
-  for (final base in candidates) {
-    final resolved = await _resolveApplicationIconCandidate(
-      resourcesDir.path,
-      base,
-    );
-    if (resolved != null) return resolved;
-  }
-
-  try {
-    await for (final entity in resourcesDir.list(followLinks: false)) {
-      if (entity is! File) continue;
-      final name = _basename(entity.path).toLowerCase();
-      final isImage = _supportedApplicationIconExtensions.any(
-        (ext) => name.endsWith(ext),
-      );
-      if (!isImage) continue;
-      if (!name.contains('icon') && !name.contains('app')) continue;
-      if (name.endsWith('.icns')) {
-        return _materializeMacOsIcnsPreview(entity.path);
+  // Linux: support .desktop files and directories
+  if (Platform.isLinux) {
+    try {
+      if (appPath.endsWith('.desktop')) {
+        final resolved = await _resolveLinuxIconFromDesktopFile(appPath);
+        if (resolved != null) return resolved;
       }
-      return entity.path;
-    }
-  } catch (_) {}
+
+      final dir = Directory(appPath);
+      if (await dir.exists()) {
+        final rawName = _basename(appPath);
+        final candidates = [rawName, 'icon', 'app', 'logo'];
+        try {
+          await for (final entity in dir.list(followLinks: false)) {
+            if (entity is! File) continue;
+            final name = _basename(entity.path).toLowerCase();
+            if (_supportedApplicationIconExtensions.any(
+              (ext) => name.endsWith(ext),
+            )) {
+              if (name.contains('icon') ||
+                  name.contains('app') ||
+                  candidates.any((c) => name.startsWith(c.toLowerCase()))) {
+                return entity.path;
+              }
+            }
+          }
+        } catch (_) {}
+
+        // Try to find icons in standard icon dirs using raw name
+        final found = await _findIconInDirs(rawName);
+        if (found != null) return found;
+      }
+    } catch (_) {}
+    return null;
+  }
+
+  // Windows: look for .ico or image files beside the exe or in the folder
+  if (Platform.isWindows) {
+    try {
+      final resolved = await _resolveWindowsIconFromPath(appPath);
+      if (resolved != null) return resolved;
+    } catch (_) {}
+    return null;
+  }
 
   return null;
 }
@@ -640,6 +689,9 @@ const _supportedApplicationIconExtensions = [
   '.jpg',
   '.jpeg',
   '.webp',
+  '.svg',
+  '.xpm',
+  '.ico',
   '.icns',
 ];
 
@@ -656,6 +708,134 @@ Future<String?> _resolveApplicationIconCandidate(
     }
     return sourcePath;
   }
+  return null;
+}
+
+Future<String?> _findIconInDirs(String iconName) async {
+  final home = Platform.environment['HOME'] ?? '';
+  final iconDirs = [
+    '/usr/share/icons/hicolor',
+    '/usr/share/icons',
+    '/usr/share/pixmaps',
+    if (home.isNotEmpty) '$home/.local/share/icons',
+    if (home.isNotEmpty) '$home/.icons',
+  ];
+
+  for (final dirPath in iconDirs) {
+    try {
+      final dir = Directory(dirPath);
+      if (!await dir.exists()) continue;
+
+      // Try direct matches first
+      for (final ext in _supportedApplicationIconExtensions) {
+        final candidate = File(
+          '${dir.path}${Platform.pathSeparator}$iconName$ext',
+        );
+        if (await candidate.exists()) return candidate.path;
+      }
+
+      // Search one level deep for matches (common theme layouts)
+      await for (final child in dir.list(followLinks: false)) {
+        if (child is Directory) {
+          try {
+            await for (final file in child.list(followLinks: false)) {
+              if (file is! File) continue;
+              final name = _basename(file.path).toLowerCase();
+              for (final ext in _supportedApplicationIconExtensions) {
+                if (name == (iconName + ext).toLowerCase()) return file.path;
+              }
+            }
+          } catch (_) {}
+        }
+      }
+    } catch (_) {}
+  }
+
+  return null;
+}
+
+Future<String?> _resolveLinuxIconFromDesktopFile(String desktopPath) async {
+  try {
+    final file = File(desktopPath);
+    if (!await file.exists()) return null;
+    final content = await file.readAsLines();
+    for (final raw in content) {
+      final line = raw.trim();
+      if (!line.startsWith('Icon=')) continue;
+      final iconVal = line.substring(5).trim();
+      if (iconVal.isEmpty) continue;
+      // Absolute path
+      if (iconVal.startsWith('/')) {
+        if (await File(iconVal).exists()) return iconVal;
+      }
+      // If contains extension and relative path, try relative to desktop file
+      final maybePath =
+          '${Directory(desktopPath).parent.path}${Platform.pathSeparator}$iconVal';
+      if (await File(maybePath).exists()) return maybePath;
+
+      // Try icon theme dirs
+      final found = await _findIconInDirs(iconVal);
+      if (found != null) return found;
+
+      // If iconVal has no extension, try common extensions
+      for (final ext in _supportedApplicationIconExtensions) {
+        final found2 = await _findIconInDirs(
+          iconVal + ext.replaceFirst('.', ''),
+        );
+        if (found2 != null) return found2;
+      }
+    }
+  } catch (_) {}
+  return null;
+}
+
+Future<String?> _resolveWindowsIconFromPath(String path) async {
+  try {
+    final file = File(path);
+    final dir = file.existsSync() ? file.parent : Directory(path);
+    // If path is a directory, search inside
+    if (await dir.exists()) {
+      final folder = Directory(path);
+      try {
+        await for (final entity in folder.list(followLinks: false)) {
+          if (entity is! File) continue;
+          final name = _basename(entity.path).toLowerCase();
+          if (name.endsWith('.ico') ||
+              _supportedApplicationIconExtensions.any(
+                (ext) => name.endsWith(ext),
+              )) {
+            return entity.path;
+          }
+        }
+      } catch (_) {}
+      return null;
+    }
+
+    // Otherwise look in same directory for matching icon files
+    final parent = file.parent;
+    final base = _stripFileExtension(_basename(file.path));
+    for (final ext in _supportedApplicationIconExtensions) {
+      final candidate = File(
+        '${parent.path}${Platform.pathSeparator}$base$ext',
+      );
+      if (await candidate.exists()) return candidate.path;
+    }
+
+    // Generic icon.* matches
+    try {
+      await for (final entity in parent.list(followLinks: false)) {
+        if (entity is! File) continue;
+        final name = _basename(entity.path).toLowerCase();
+        if (name.startsWith('icon') || name.startsWith(base)) {
+          if (_supportedApplicationIconExtensions.any(
+            (ext) => name.endsWith(ext),
+          )) {
+            return entity.path;
+          }
+        }
+      }
+    } catch (_) {}
+  } catch (_) {}
   return null;
 }
 
