@@ -3,6 +3,7 @@ import 'dart:isolate';
 import 'dart:async';
 import 'dart:math' as math;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image/image.dart' as img;
 import 'package:system_info2/system_info2.dart';
@@ -1462,6 +1463,16 @@ Future<String?> _hashFileContentFnv64(String path) async {
 }
 
 String _basename(String path) => path.split(Platform.pathSeparator).last;
+
+/// Test-only access to the library-private path basename helper.
+@visibleForTesting
+String basenameForTest(String path) => _basename(path);
+
+/// Test-only access to the library-private 64-bit Hamming distance helper
+/// used for perceptual image comparison.
+@visibleForTesting
+int hammingDistance64ForTest(String aHex, String bHex) =>
+    _hammingDistance64(aHex, bHex);
 
 Map<String, dynamic> _fileItemToPayload(FileItem item) => {
   'path': item.path,

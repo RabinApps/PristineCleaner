@@ -30,7 +30,7 @@ class NavItem {
     NavItem(
       section: NavSection.home,
       label: t.navigation.home,
-      icon: Icons.favorite_rounded,
+      icon: Icons.home,
       theme: SectionThemes.home,
     ),
     NavItem(

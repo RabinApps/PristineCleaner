@@ -80,6 +80,7 @@ class ScanViewModel {
   ScanViewModel withToggled(int index) {
     final r = result;
     if (r == null) return this;
+    if (index < 0 || index >= r.items.length) return this;
     final items = List<FileItem>.from(r.items);
     items[index] = items[index].copyWith(isSelected: !items[index].isSelected);
     return copyWith(result: r.withUpdatedItems(items));

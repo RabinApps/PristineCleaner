@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart' as p;
 import '../core/models/file_item.dart';
@@ -646,6 +647,12 @@ class MyToolsService {
     }
     return Directory.current.path;
   }
+
+  @visibleForTesting
+  String? extractSnapshotId(String line) => _extractSnapshotId(line);
+
+  @visibleForTesting
+  String basename(String path) => _basename(path);
 
   String? _extractSnapshotId(String line) {
     if (line.contains('com.apple.TimeMachine.')) {

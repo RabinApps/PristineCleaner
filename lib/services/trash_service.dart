@@ -9,6 +9,15 @@ import '../core/models/removal_models.dart';
 final trashServiceProvider = Provider<TrashService>((ref) => TrashService());
 
 class TrashService {
+  /// Moves [path] to the OS trash, returning whether it succeeded.
+  ///
+  /// Injectable so tests can exercise the failure path without driving the
+  /// real OS trash.
+  final Future<bool> Function(String path) _moveToTrash;
+
+  TrashService({Future<bool> Function(String path)? moveToTrash})
+    : _moveToTrash = moveToTrash ?? _moveToTrashPath;
+
   Future<bool> moveToTrash(String path) async {
     return Isolate.run<bool>(() => _moveToTrashPath(path));
   }
@@ -52,9 +61,23 @@ class TrashService {
         if (permanent) {
           await _permanentDeleteItem(item);
         } else {
-          final ok = await _moveToTrashPath(item.path);
+          final ok = await _moveToTrash(item.path);
           if (!ok) {
-            await _permanentDeleteItem(item);
+            // Do NOT silently fall back to a permanent delete: the user asked
+            // for a recoverable move-to-Trash, so a failure is reported as an
+            // error and the file is left untouched.
+            errors.add('${item.name}: could not move to Trash');
+            onProgress?.call(
+              RemovalProgress(
+                processedItems: i + 1,
+                totalItems: items.length,
+                deletedItems: deleted.length,
+                deletedBytes: deletedBytes,
+                currentItemName: item.name,
+                stopRequested: token.isStopRequested,
+              ),
+            );
+            continue;
           }
         }
 

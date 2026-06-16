@@ -1,11 +1,9 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../core/models/scan_result.dart';
 import '../gen/strings.g.dart';
 import '../core/theme/section_themes.dart';
-import '../shared/widgets/glossy_icon_widget.dart';
 import '../providers/home_provider.dart';
 
 class HomeScreen extends ConsumerWidget {
@@ -26,45 +24,17 @@ class HomeScreen extends ConsumerWidget {
       ),
       child: Stack(
         children: [
-          Padding(
-            padding: const EdgeInsets.only(bottom: 120),
-            child: Center(
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  // Left: orb + disk ring
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      GlossyIconWidget(
-                        baseColor: theme.orbColor,
-                        icon: theme.icon,
-                        size: 240,
-                      ),
-                      const SizedBox(height: 20),
-                      homeAsync.when(
-                        data: (data) => _DiskRing(
-                          info: data.diskInfo,
-                          accentColor: theme.accentColor,
-                        ),
-                        loading: () => const SizedBox(
-                          width: 60,
-                          height: 60,
-                          child: CircularProgressIndicator(
-                            color: Color(0xFF66BB6A),
-                            strokeWidth: 3,
-                          ),
-                        ),
-                        error: (error, stackTrace) => const SizedBox.shrink(),
-                      ),
-                    ],
-                  ),
-
-                  const SizedBox(width: 60),
-
-                  // Right: info column
-                  Column(
+          Center(
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // Right: info column. Constrained so the title/subtitle wrap
+                // instead of forcing the Row past the available width on
+                // narrow windows.
+                ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 420),
+                  child: Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -78,12 +48,15 @@ class HomeScreen extends ConsumerWidget {
                         ),
                       ),
                       const SizedBox(height: 8),
-                      Text(
-                        theme.subtitle,
-                        style: TextStyle(
-                          color: Color(0xFFBBBBBB),
-                          fontSize: 15,
-                          height: 1.6,
+                      Flexible(
+                        child: Text(
+                          theme.subtitle,
+                          maxLines: 3,
+                          style: TextStyle(
+                            color: Color(0xFFBBBBBB),
+                            fontSize: 15,
+                            height: 1.6,
+                          ),
                         ),
                       ),
                       const SizedBox(height: 28),
@@ -102,8 +75,8 @@ class HomeScreen extends ConsumerWidget {
                       ),
                     ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ],
@@ -268,71 +241,4 @@ class _StatRow extends StatelessWidget {
       ],
     );
   }
-}
-
-class _DiskRing extends StatelessWidget {
-  final DiskInfo info;
-  final Color accentColor;
-  const _DiskRing({required this.info, required this.accentColor});
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 90,
-      height: 90,
-      child: CustomPaint(
-        painter: _RingPainter(progress: info.usedPercent, color: accentColor),
-        child: Center(
-          child: Text(
-            '${(info.usedPercent * 100).toStringAsFixed(0)}%',
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _RingPainter extends CustomPainter {
-  final double progress;
-  final Color color;
-  const _RingPainter({required this.progress, required this.color});
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final center = Offset(size.width / 2, size.height / 2);
-    final radius = min(size.width, size.height) / 2 - 6;
-    const strokeWidth = 8.0;
-
-    // Background ring
-    canvas.drawCircle(
-      center,
-      radius,
-      Paint()
-        ..color = Colors.white12
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = strokeWidth,
-    );
-
-    // Progress arc
-    canvas.drawArc(
-      Rect.fromCircle(center: center, radius: radius),
-      -pi / 2,
-      2 * pi * progress,
-      false,
-      Paint()
-        ..color = color
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = strokeWidth
-        ..strokeCap = StrokeCap.round,
-    );
-  }
-
-  @override
-  bool shouldRepaint(_RingPainter old) =>
-      old.progress != progress || old.color != color;
 }

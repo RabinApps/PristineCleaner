@@ -266,11 +266,21 @@ Future<String?> _averageImageHash64(String path) async {
 }
 
 int _hammingDistance64(String aHex, String bHex) {
-  var value = int.parse(aHex, radix: 16) ^ int.parse(bHex, radix: 16);
+  // Parse in two 32-bit halves: a full 16-hex-digit value with the high bit
+  // set (>= 2^63) overflows Dart's signed-int range and makes int.parse throw,
+  // which would otherwise abort the whole similar-image scan.
+  final a = aHex.padLeft(16, '0');
+  final b = bHex.padLeft(16, '0');
+
   var count = 0;
-  while (value != 0) {
-    value &= (value - 1);
-    count++;
+  for (final start in const [0, 8]) {
+    final aHalf = int.parse(a.substring(start, start + 8), radix: 16);
+    final bHalf = int.parse(b.substring(start, start + 8), radix: 16);
+    var value = aHalf ^ bHalf;
+    while (value != 0) {
+      value &= (value - 1);
+      count++;
+    }
   }
   return count;
 }
