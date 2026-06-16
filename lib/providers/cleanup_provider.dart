@@ -85,8 +85,21 @@ class CleanupNotifier extends Notifier<ScanViewModel> {
     if (selected.isEmpty) return;
     state = state.copyWith(isCleaning: true, clearError: true);
     try {
-      await ref.read(trashServiceProvider).deleteItems(selected);
-      state = const ScanViewModel(isDone: true);
+      final errors = await ref.read(trashServiceProvider).deleteItems(selected);
+      if (errors.isEmpty) {
+        state = const ScanViewModel(isDone: true);
+      } else {
+        // Some items could not be removed (e.g. move-to-Trash failed). Keep the
+        // results visible and surface the failure instead of reporting a clean
+        // sweep that did not happen.
+        state = state.copyWith(
+          isCleaning: false,
+          error: t.errors.itemsFailedToRemove.replaceAll(
+            '{count}',
+            '${errors.length}',
+          ),
+        );
+      }
     } catch (e) {
       state = state.copyWith(isCleaning: false, error: e.toString());
     }

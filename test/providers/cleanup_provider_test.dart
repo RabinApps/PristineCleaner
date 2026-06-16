@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pristine_cleaner/core/models/file_item.dart';
 import 'package:pristine_cleaner/core/models/scan_result.dart';
+import 'package:pristine_cleaner/core/models/scan_view_model.dart';
 import 'package:pristine_cleaner/providers/cleanup_provider.dart';
 import 'package:pristine_cleaner/services/file_service.dart';
 import 'package:pristine_cleaner/services/trash_service.dart';
@@ -87,6 +88,47 @@ void main() {
     expect(trashService.deletedItems, hasLength(2));
     expect(container.read(cleanupProvider).isDone, isTrue);
   });
+
+  test(
+    'clean surfaces an error and does not report done on failures',
+    () async {
+      useEnglishLocale();
+      final trashService = _FailingTrashService();
+      final container = ProviderContainer(
+        overrides: [trashServiceProvider.overrideWithValue(trashService)],
+      );
+      addTearDown(container.dispose);
+
+      final notifier = container.read(cleanupProvider.notifier);
+      // Seed a result with a selected item directly.
+      notifier.state = ScanViewModel(
+        result: testScanResult([
+          testFileItem(path: '/cache/a.log', name: 'a.log', sizeBytes: 10),
+        ]),
+      );
+
+      await notifier.clean();
+
+      final vm = container.read(cleanupProvider);
+      expect(vm.isDone, isFalse);
+      expect(vm.isCleaning, isFalse);
+      expect(vm.error, isNotNull);
+      // Results remain visible so the user can retry.
+      expect(vm.result?.items, hasLength(1));
+    },
+  );
+}
+
+class _FailingTrashService extends TrashService {
+  @override
+  Future<List<String>> deleteItems(
+    List<FileItem> items, {
+    bool permanent = false,
+  }) async {
+    return items
+        .map((item) => '${item.name}: could not move to Trash')
+        .toList();
+  }
 }
 
 class _BlockingCleanupFileService extends FileService {

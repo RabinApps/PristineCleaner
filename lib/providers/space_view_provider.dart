@@ -160,16 +160,26 @@ class SpaceViewNotifier extends Notifier<ScanViewModel> {
     state = state.copyWith(isCleaning: true, clearError: true);
     try {
       _snapshot = null;
-      await ref.read(trashServiceProvider).deleteItems(selected);
-      final root = state.selectedParentPath ?? _defaultRootPath();
-      state = ScanViewModel(
-        isDone: true,
-        selectedParentPath: root,
-        selectedParentName: _pathLabel(root),
-        currentPath: root,
-        currentName: _pathLabel(root),
-        breadcrumbs: [root],
-      );
+      final errors = await ref.read(trashServiceProvider).deleteItems(selected);
+      if (errors.isEmpty) {
+        final root = state.selectedParentPath ?? _defaultRootPath();
+        state = ScanViewModel(
+          isDone: true,
+          selectedParentPath: root,
+          selectedParentName: _pathLabel(root),
+          currentPath: root,
+          currentName: _pathLabel(root),
+          breadcrumbs: [root],
+        );
+      } else {
+        state = state.copyWith(
+          isCleaning: false,
+          error: t.errors.itemsFailedToRemove.replaceAll(
+            '{count}',
+            '${errors.length}',
+          ),
+        );
+      }
     } catch (e) {
       state = state.copyWith(isCleaning: false, error: e.toString());
     }
