@@ -20,7 +20,22 @@
     "spaceView": "Vue de l'espace",
     "applications": "Applications",
     "myTools": "Mes outils",
-    "donate": "Faire un don"
+    "donate": "Faire un don",
+    "settings": "Paramètres"
+  },
+  "settings": {
+    "title": "Paramètres",
+    "subtitle": "Adaptez PristineCleaner à votre façon de travailler.",
+    "sectionLanguage": "Langue",
+    "sectionUpdates": "Mises à jour",
+    "sectionBehavior": "Comportement",
+    "autoCheckUpdates": "Vérifier les mises à jour au démarrage",
+    "autoCheckUpdatesSub": "Recherche automatiquement de nouvelles versions au lancement.",
+    "checkForUpdates": "Vérifier les mises à jour",
+    "launchAtLogin": "Lancer à la connexion",
+    "launchAtLoginSub": "Ouvre PristineCleaner automatiquement à la connexion.",
+    "confirmBeforeRemoving": "Confirmer avant de supprimer",
+    "confirmBeforeRemovingSub": "Affiche une boîte de dialogue de confirmation avant la suppression."
   },
   "sections": {
     "home": {
@@ -113,7 +128,12 @@
     "exitConfirmationWait": "Attendre",
     "exitConfirmationQuit": "Quitter quand même",
     "stopRemovalTitle": "Arrêter la suppression ?",
-    "stopRemovalMessage": "Le fichier en cours se terminera, puis les fichiers restants seront ignorés."
+    "stopRemovalMessage": "Le fichier en cours se terminera, puis les fichiers restants seront ignorés.",
+    "confirmRemovalTitle": "Supprimer les éléments sélectionnés ?",
+    "confirmRemovalMessage": "{count} élément(s) seront déplacés vers la Corbeille.",
+    "confirmRemovalMessagePermanent": "{count} élément(s) seront définitivement supprimés. Action irréversible.",
+    "confirmRemovalCancel": "Annuler",
+    "confirmRemovalConfirm": "Supprimer"
   },
   "removal": {
     "barrierLabel": "Progression de la suppression",

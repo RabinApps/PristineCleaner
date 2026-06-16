@@ -8,6 +8,7 @@ import 'package:pristine_cleaner/gen/strings.g.dart';
 import '../core/models/scan_result.dart';
 import '../services/my_tools_service.dart';
 import '../services/trash_service.dart';
+import '../core/settings/settings_provider.dart';
 import '../core/theme/section_themes.dart';
 import '../shared/removal/removal_flow.dart';
 import '../shared/widgets/removal_screen.dart';
@@ -214,6 +215,7 @@ class _MyToolsScreenState extends ConsumerState<MyToolsScreen> {
       selectedItems: selected,
       trashService: ref.read(trashServiceProvider),
       permanent: tool.scanType == MyToolScanType.trashBins,
+      requireConfirmation: ref.read(settingsProvider).confirmBeforeRemoving,
     );
     if (outcome == null) return;
     notifier.applyActiveDetailRemovalOutcome(outcome: outcome);

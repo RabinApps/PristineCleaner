@@ -20,7 +20,22 @@
     "spaceView": "Visualização do espaço",
     "applications": "Aplicações",
     "myTools": "Minhas ferramentas",
-    "donate": "Doar"
+    "donate": "Doar",
+    "settings": "Configurações"
+  },
+  "settings": {
+    "title": "Configurações",
+    "subtitle": "Ajuste o PristineCleaner ao seu jeito de trabalhar.",
+    "sectionLanguage": "Idioma",
+    "sectionUpdates": "Atualizações",
+    "sectionBehavior": "Comportamento",
+    "autoCheckUpdates": "Verificar atualizações ao iniciar",
+    "autoCheckUpdatesSub": "Procura automaticamente por novas versões ao abrir o app.",
+    "checkForUpdates": "Verificar atualizações",
+    "launchAtLogin": "Iniciar ao fazer login",
+    "launchAtLoginSub": "Abre o PristineCleaner automaticamente ao fazer login.",
+    "confirmBeforeRemoving": "Confirmar antes de remover",
+    "confirmBeforeRemovingSub": "Mostra uma caixa de confirmação antes de remover arquivos."
   },
   "sections": {
     "home": {
@@ -113,7 +128,12 @@
     "exitConfirmationWait": "Aguardar",
     "exitConfirmationQuit": "Sair mesmo assim",
     "stopRemovalTitle": "Interromper a remoção?",
-    "stopRemovalMessage": "O arquivo atual será concluído e os arquivos restantes serão ignorados."
+    "stopRemovalMessage": "O arquivo atual será concluído e os arquivos restantes serão ignorados.",
+    "confirmRemovalTitle": "Remover os itens selecionados?",
+    "confirmRemovalMessage": "{count} item(ns) serão movidos para a Lixeira.",
+    "confirmRemovalMessagePermanent": "{count} item(ns) serão excluídos permanentemente. Isso não pode ser desfeito.",
+    "confirmRemovalCancel": "Cancelar",
+    "confirmRemovalConfirm": "Remover"
   },
   "removal": {
     "barrierLabel": "Progresso da remoção",

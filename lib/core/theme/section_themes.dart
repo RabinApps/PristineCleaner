@@ -193,6 +193,21 @@ class SectionThemes {
     orbColor: Color(0xFF7B59C9),
   );
 
+  static const settings = SectionTheme(
+    id: 'settings',
+    title: 'Settings',
+    subtitle: 'Tune PristineCleaner to fit\nthe way you like to work.',
+    icon: Icons.settings_rounded,
+    features: [],
+    backgroundGradient: [
+      Color(0xFF1E1E1E),
+      Color(0xFF161616),
+      Color(0xFF0C0C0C),
+    ],
+    accentColor: Color(0xFF90A4AE),
+    orbColor: Color(0xFF455A64),
+  );
+
   static const all = [
     home,
     cleanup,

@@ -10,8 +10,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pristine_cleaner/app.dart';
 import 'package:pristine_cleaner/core/models/scan_result.dart';
+import 'package:pristine_cleaner/core/settings/settings_provider.dart';
 import 'package:pristine_cleaner/gen/strings.g.dart';
 import 'package:pristine_cleaner/providers/home_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class _FakeHomeNotifier extends HomeNotifier {
   @override
@@ -40,10 +42,16 @@ void main() {
     addTearDown(tester.view.resetPhysicalSize);
     addTearDown(tester.view.resetDevicePixelRatio);
 
+    SharedPreferences.setMockInitialValues({});
+    final prefs = await SharedPreferences.getInstance();
+
     await tester.pumpWidget(
       TranslationProvider(
         child: ProviderScope(
-          overrides: [homeProvider.overrideWith(_FakeHomeNotifier.new)],
+          overrides: [
+            homeProvider.overrideWith(_FakeHomeNotifier.new),
+            sharedPreferencesProvider.overrideWithValue(prefs),
+          ],
           child: const PristineCleanerApp(),
         ),
       ),

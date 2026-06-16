@@ -20,7 +20,22 @@
     "spaceView": "תצוגת חלל",
     "applications": "יישומים",
     "myTools": "הכלים שלי",
-    "donate": "תרומה"
+    "donate": "תרומה",
+    "settings": "הגדרות"
+  },
+  "settings": {
+    "title": "הגדרות",
+    "subtitle": "התאם את PristineCleaner לדרך העבודה שלך.",
+    "sectionLanguage": "שפה",
+    "sectionUpdates": "עדכונים",
+    "sectionBehavior": "התנהגות",
+    "autoCheckUpdates": "בדוק עדכונים בעת ההפעלה",
+    "autoCheckUpdatesSub": "חפש גרסאות חדשות אוטומטית עם פתיחת האפליקציה.",
+    "checkForUpdates": "בדוק עדכונים",
+    "launchAtLogin": "הפעל בעת הכניסה",
+    "launchAtLoginSub": "פתח את PristineCleaner אוטומטית בעת הכניסה למחשב.",
+    "confirmBeforeRemoving": "אשר לפני הסרה",
+    "confirmBeforeRemovingSub": "הצג חלון אישור לפני הסרת קבצים."
   },
   "sections": {
     "home": {
@@ -113,7 +128,12 @@
     "exitConfirmationWait": "המתן",
     "exitConfirmationQuit": "צא בכל מקרה",
     "stopRemovalTitle": "להפסיק את ההסרה?",
-    "stopRemovalMessage": "הקובץ הנוכחי יסתיים, ואז ידלגו על הקבצים הנותרים."
+    "stopRemovalMessage": "הקובץ הנוכחי יסתיים, ואז ידלגו על הקבצים הנותרים.",
+    "confirmRemovalTitle": "להסיר את הפריטים שנבחרו?",
+    "confirmRemovalMessage": "{count} פריטים יועברו לאשפה.",
+    "confirmRemovalMessagePermanent": "{count} פריטים יימחקו לצמיתות. לא ניתן לבטל פעולה זו.",
+    "confirmRemovalCancel": "ביטול",
+    "confirmRemovalConfirm": "הסר"
   },
   "removal": {
     "barrierLabel": "התקדמות ההסרה",

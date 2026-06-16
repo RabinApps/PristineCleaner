@@ -8,6 +8,7 @@ import 'package:pristine_cleaner/gen/strings.g.dart';
 
 import '../core/models/file_item.dart';
 import '../services/trash_service.dart';
+import '../core/settings/settings_provider.dart';
 import '../core/theme/section_themes.dart';
 import '../shared/removal/removal_flow.dart';
 import '../shared/widgets/section_landing_layout.dart';
@@ -120,6 +121,7 @@ class _MyClutterScreenState extends ConsumerState<MyClutterScreen> {
       accentColor: SectionThemes.myClutter.accentColor,
       selectedItems: selected,
       trashService: ref.read(trashServiceProvider),
+      requireConfirmation: ref.read(settingsProvider).confirmBeforeRemoving,
     );
     if (outcome == null) return;
     ref.read(myClutterProvider.notifier).applyRemovalOutcome(outcome);

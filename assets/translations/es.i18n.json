@@ -20,7 +20,22 @@
     "spaceView": "Vista de Espacio",
     "applications": "Aplicaciones",
     "myTools": "Mis Herramientas",
-    "donate": "Donar"
+    "donate": "Donar",
+    "settings": "Ajustes"
+  },
+  "settings": {
+    "title": "Ajustes",
+    "subtitle": "Ajusta PristineCleaner a tu forma de trabajar.",
+    "sectionLanguage": "Idioma",
+    "sectionUpdates": "Actualizaciones",
+    "sectionBehavior": "Comportamiento",
+    "autoCheckUpdates": "Buscar actualizaciones al iniciar",
+    "autoCheckUpdatesSub": "Busca nuevas versiones automáticamente al abrir la app.",
+    "checkForUpdates": "Buscar actualizaciones",
+    "launchAtLogin": "Abrir al iniciar sesión",
+    "launchAtLoginSub": "Abre PristineCleaner automáticamente al iniciar sesión.",
+    "confirmBeforeRemoving": "Confirmar antes de eliminar",
+    "confirmBeforeRemovingSub": "Muestra un diálogo de confirmación antes de eliminar archivos."
   },
   "sections": {
     "home": {
@@ -113,7 +128,12 @@
     "exitConfirmationWait": "Esperar",
     "exitConfirmationQuit": "Salir de todos modos",
     "stopRemovalTitle": "Detener eliminacion?",
-    "stopRemovalMessage": "El archivo actual terminara y luego se omitiran los restantes."
+    "stopRemovalMessage": "El archivo actual terminara y luego se omitiran los restantes.",
+    "confirmRemovalTitle": "¿Eliminar los elementos seleccionados?",
+    "confirmRemovalMessage": "{count} elemento(s) se moverán a la Papelera.",
+    "confirmRemovalMessagePermanent": "{count} elemento(s) se eliminarán permanentemente. Esto no se puede deshacer.",
+    "confirmRemovalCancel": "Cancelar",
+    "confirmRemovalConfirm": "Eliminar"
   },
   "removal": {
     "barrierLabel": "Progreso de eliminacion",

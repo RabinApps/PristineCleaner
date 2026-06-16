@@ -8,6 +8,7 @@ import 'package:file_picker/file_picker.dart';
 import '../core/models/file_item.dart';
 import '../gen/strings.g.dart';
 import '../services/trash_service.dart';
+import '../core/settings/settings_provider.dart';
 import '../core/theme/section_themes.dart';
 import '../core/models/scan_view_model.dart';
 import '../shared/removal/removal_flow.dart';
@@ -72,6 +73,7 @@ class SpaceViewScreen extends ConsumerWidget {
       accentColor: theme.accentColor,
       selectedItems: selected,
       trashService: ref.read(trashServiceProvider),
+      requireConfirmation: ref.read(settingsProvider).confirmBeforeRemoving,
     );
     if (outcome == null) return;
     notifier.applyRemovalOutcome(outcome);

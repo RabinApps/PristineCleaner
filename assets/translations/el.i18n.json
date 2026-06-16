@@ -20,7 +20,22 @@
     "spaceView": "Θέα Διαστήματος",
     "applications": "Εφαρμογές",
     "myTools": "Τα εργαλεία μου",
-    "donate": "Δωρεά"
+    "donate": "Δωρεά",
+    "settings": "Ρυθμίσεις"
+  },
+  "settings": {
+    "title": "Ρυθμίσεις",
+    "subtitle": "Προσαρμόστε το PristineCleaner στον τρόπο εργασίας σας.",
+    "sectionLanguage": "Γλώσσα",
+    "sectionUpdates": "Ενημερώσεις",
+    "sectionBehavior": "Συμπεριφορά",
+    "autoCheckUpdates": "Έλεγχος ενημερώσεων κατά την εκκίνηση",
+    "autoCheckUpdatesSub": "Αναζήτηση νέων εκδόσεων αυτόματα κατά την εκκίνηση.",
+    "checkForUpdates": "Έλεγχος ενημερώσεων",
+    "launchAtLogin": "Εκκίνηση κατά τη σύνδεση",
+    "launchAtLoginSub": "Άνοιγμα του PristineCleaner αυτόματα κατά τη σύνδεση.",
+    "confirmBeforeRemoving": "Επιβεβαίωση πριν την αφαίρεση",
+    "confirmBeforeRemovingSub": "Εμφάνιση παραθύρου επιβεβαίωσης πριν την αφαίρεση αρχείων."
   },
   "sections": {
     "home": {
@@ -113,7 +128,12 @@
     "exitConfirmationWait": "Περιμένετε",
     "exitConfirmationQuit": "Έξοδος ούτως ή άλλως",
     "stopRemovalTitle": "Διακοπή αφαίρεσης;",
-    "stopRemovalMessage": "Το τρέχον αρχείο θα ολοκληρωθεί και, στη συνέχεια, τα υπόλοιπα αρχεία θα παραλειφθούν."
+    "stopRemovalMessage": "Το τρέχον αρχείο θα ολοκληρωθεί και, στη συνέχεια, τα υπόλοιπα αρχεία θα παραλειφθούν.",
+    "confirmRemovalTitle": "Αφαίρεση επιλεγμένων στοιχείων;",
+    "confirmRemovalMessage": "{count} στοιχείο(α) θα μετακινηθούν στον Κάδο.",
+    "confirmRemovalMessagePermanent": "{count} στοιχείο(α) θα διαγραφούν οριστικά. Δεν είναι δυνατή η αναίρεση.",
+    "confirmRemovalCancel": "Ακύρωση",
+    "confirmRemovalConfirm": "Αφαίρεση"
   },
   "removal": {
     "barrierLabel": "Πρόοδος αφαίρεσης",

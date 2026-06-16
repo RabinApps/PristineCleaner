@@ -20,7 +20,22 @@
     "spaceView": "Vista Spazio",
     "applications": "Applicazioni",
     "myTools": "I Miei Strumenti",
-    "donate": "Dona"
+    "donate": "Dona",
+    "settings": "Impostazioni"
+  },
+  "settings": {
+    "title": "Impostazioni",
+    "subtitle": "Adatta PristineCleaner al tuo modo di lavorare.",
+    "sectionLanguage": "Lingua",
+    "sectionUpdates": "Aggiornamenti",
+    "sectionBehavior": "Comportamento",
+    "autoCheckUpdates": "Controlla aggiornamenti all'avvio",
+    "autoCheckUpdatesSub": "Cerca automaticamente nuove versioni all'apertura dell'app.",
+    "checkForUpdates": "Controlla aggiornamenti",
+    "launchAtLogin": "Avvia all'accesso",
+    "launchAtLoginSub": "Apri PristineCleaner automaticamente all'accesso.",
+    "confirmBeforeRemoving": "Conferma prima di rimuovere",
+    "confirmBeforeRemovingSub": "Mostra una finestra di conferma prima di rimuovere i file."
   },
   "sections": {
     "home": {
@@ -113,7 +128,12 @@
     "exitConfirmationTitle": "Conferma uscita",
     "exitConfirmationMessage": "È in corso una scansione. Sei sicuro di voler uscire?",
     "exitConfirmationWait": "Attendi",
-    "exitConfirmationQuit": "Esci comunque"
+    "exitConfirmationQuit": "Esci comunque",
+    "confirmRemovalTitle": "Rimuovere gli elementi selezionati?",
+    "confirmRemovalMessage": "{count} elemento/i verranno spostati nel Cestino.",
+    "confirmRemovalMessagePermanent": "{count} elemento/i verranno eliminati definitivamente. Operazione irreversibile.",
+    "confirmRemovalCancel": "Annulla",
+    "confirmRemovalConfirm": "Rimuovi"
   },
   "removal": {
     "barrierLabel": "Progresso rimozione",

@@ -4,8 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'app_version_label.dart';
-import 'desktop_update_chip.dart';
-import '../../../../core/l10n/locale_provider.dart';
 import '../../../../core/models/nav_item.dart';
 import '../../../../gen/strings.g.dart';
 import '../../../../providers/applications_provider.dart';
@@ -21,7 +19,6 @@ class SidebarWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final appLocale = ref.watch(appLocaleProvider);
     final cleanupStatus = ref.watch(
       cleanupProvider.select(
         (vm) => _SidebarScanStatus(
@@ -113,7 +110,7 @@ class SidebarWidget extends ConsumerWidget {
           ),
 
           Padding(
-            padding: const EdgeInsets.fromLTRB(10, 0, 10, 8),
+            padding: const EdgeInsets.fromLTRB(10, 0, 10, 4),
             child: _NavTile(
               item: NavItem.donateItem(),
               isActive: activeSection == NavSection.donate,
@@ -122,113 +119,20 @@ class SidebarWidget extends ConsumerWidget {
             ),
           ),
 
-          // Version label
           Padding(
             padding: const EdgeInsets.fromLTRB(10, 0, 10, 8),
-            child: _LanguageSelector(
-              currentLocale: appLocale,
-              onLocaleSelected: (locale) {
-                ref.read(appLocaleProvider.notifier).setLocale(locale);
-              },
+            child: _NavTile(
+              item: NavItem.settingsItem(),
+              isActive: activeSection == NavSection.settings,
+              scanStatus: const _SidebarScanStatus(isScanning: false),
+              onTap: () => context.go('/settings'),
             ),
           ),
-          const Padding(
-            padding: EdgeInsets.fromLTRB(10, 0, 10, 8),
-            child: DesktopUpdateChip(),
-          ),
+
+          // Version label
           Padding(
             padding: const EdgeInsets.only(bottom: 14),
             child: AppVersionLabel(),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _LanguageSelector extends StatelessWidget {
-  final AppLocale currentLocale;
-  final ValueChanged<AppLocale> onLocaleSelected;
-
-  const _LanguageSelector({
-    required this.currentLocale,
-    required this.onLocaleSelected,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.04),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
-      ),
-      child: Row(
-        children: [
-          Icon(
-            Icons.language_rounded,
-            size: 15,
-            color: Colors.white.withValues(alpha: 0.62),
-          ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Text(
-              t.language.label,
-              style: TextStyle(
-                color: Colors.white.withValues(alpha: 0.72),
-                fontSize: 11,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ),
-          DropdownButtonHideUnderline(
-            child: DropdownButton<AppLocale>(
-              value: currentLocale,
-              dropdownColor: const Color(0xFF252525),
-              style: const TextStyle(color: Colors.white, fontSize: 11),
-              iconEnabledColor: Colors.white70,
-              items: [
-                DropdownMenuItem(
-                  value: AppLocale.en,
-                  child: Text(t.language.english),
-                ),
-                DropdownMenuItem(
-                  value: AppLocale.es,
-                  child: Text(t.language.spanish),
-                ),
-                DropdownMenuItem(
-                  value: AppLocale.it,
-                  child: Text(t.language.italian),
-                ),
-                DropdownMenuItem(
-                  value: AppLocale.fr,
-                  child: Text(t.language.french),
-                ),
-                DropdownMenuItem(
-                  value: AppLocale.he,
-                  child: Text(t.language.hebrew),
-                ),
-                DropdownMenuItem(
-                  value: AppLocale.el,
-                  child: Text(t.language.greek),
-                ),
-                DropdownMenuItem(
-                  value: AppLocale.pt,
-                  child: Text(t.language.portuguese),
-                ),
-                DropdownMenuItem(
-                  value: AppLocale.zh,
-                  child: Text(t.language.mandarin),
-                ),
-              ],
-              onChanged: (value) {
-                if (value != null) {
-                  onLocaleSelected(value);
-                }
-              },
-            ),
           ),
         ],
       ),
@@ -252,6 +156,8 @@ String _pathForSection(NavSection section) {
       return '/my-tools';
     case NavSection.donate:
       return '/donate';
+    case NavSection.settings:
+      return '/settings';
   }
 }
 

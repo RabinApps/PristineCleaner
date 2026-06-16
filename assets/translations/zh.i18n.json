@@ -20,7 +20,22 @@
     "spaceView": "空间景观",
     "applications": "应用领域",
     "myTools": "我的工具",
-    "donate": "捐赠"
+    "donate": "捐赠",
+    "settings": "设置"
+  },
+  "settings": {
+    "title": "设置",
+    "subtitle": "根据您的使用习惯调整 PristineCleaner。",
+    "sectionLanguage": "语言",
+    "sectionUpdates": "更新",
+    "sectionBehavior": "行为",
+    "autoCheckUpdates": "启动时检查更新",
+    "autoCheckUpdatesSub": "应用启动时自动检查新版本。",
+    "checkForUpdates": "检查更新",
+    "launchAtLogin": "登录时启动",
+    "launchAtLoginSub": "登录电脑时自动打开 PristineCleaner。",
+    "confirmBeforeRemoving": "删除前确认",
+    "confirmBeforeRemovingSub": "删除文件前显示确认对话框。"
   },
   "sections": {
     "home": {
@@ -113,7 +128,12 @@
     "exitConfirmationWait": "等待",
     "exitConfirmationQuit": "仍然退出",
     "stopRemovalTitle": "停止移除？",
-    "stopRemovalMessage": "当前文件将完成，然后剩余的文件将被跳过。"
+    "stopRemovalMessage": "当前文件将完成，然后剩余的文件将被跳过。",
+    "confirmRemovalTitle": "移除所选项目？",
+    "confirmRemovalMessage": "{count} 个项目将被移到废纸篓。",
+    "confirmRemovalMessagePermanent": "{count} 个项目将被永久删除。此操作无法撤销。",
+    "confirmRemovalCancel": "取消",
+    "confirmRemovalConfirm": "移除"
   },
   "removal": {
     "barrierLabel": "拆除进度",

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../core/models/nav_item.dart';
 import '../../../gen/strings.g.dart';
 import 'sidebar/sidebar_widget.dart';
+import 'startup_update_checker.dart';
 
 class ShellScreen extends StatelessWidget {
   final NavSection activeSection;
@@ -18,10 +19,15 @@ class ShellScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF111111),
-      body: Row(
+      body: Stack(
         children: [
-          SidebarWidget(activeSection: activeSection),
-          Expanded(child: child),
+          Row(
+            children: [
+              SidebarWidget(activeSection: activeSection),
+              Expanded(child: child),
+            ],
+          ),
+          const StartupUpdateChecker(),
         ],
       ),
     );

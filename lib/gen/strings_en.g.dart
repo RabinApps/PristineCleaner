@@ -40,37 +40,38 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	Translations $copyWith({TranslationMetadata<AppLocale, Translations>? meta}) => Translations(meta: meta ?? this.$meta);
 
 	// Translations
-	late final Translations$app$en app = Translations$app$en._(_root);
-	late final Translations$language$en language = Translations$language$en._(_root);
-	late final Translations$navigation$en navigation = Translations$navigation$en._(_root);
-	late final Translations$sections$en sections = Translations$sections$en._(_root);
-	late final Translations$progress$en progress = Translations$progress$en._(_root);
-	late final Translations$errors$en errors = Translations$errors$en._(_root);
-	late final Translations$buttons$en buttons = Translations$buttons$en._(_root);
-	late final Translations$tooltips$en tooltips = Translations$tooltips$en._(_root);
-	late final Translations$dialogs$en dialogs = Translations$dialogs$en._(_root);
-	late final Translations$removal$en removal = Translations$removal$en._(_root);
-	late final Translations$done$en done = Translations$done$en._(_root);
-	late final Translations$donate$en donate = Translations$donate$en._(_root);
-	late final Translations$cleanupManager$en cleanupManager = Translations$cleanupManager$en._(_root);
-	late final Translations$projectDirectory$en projectDirectory = Translations$projectDirectory$en._(_root);
-	late final Translations$searchAndSort$en searchAndSort = Translations$searchAndSort$en._(_root);
-	late final Translations$spaceView$en spaceView = Translations$spaceView$en._(_root);
-	late final Translations$home$en home = Translations$home$en._(_root);
-	late final Translations$myToolsPage$en myToolsPage = Translations$myToolsPage$en._(_root);
-	late final Translations$myToolsMessages$en myToolsMessages = Translations$myToolsMessages$en._(_root);
-	late final Translations$myToolsCatalog$en myToolsCatalog = Translations$myToolsCatalog$en._(_root);
-	late final Translations$cleanupCategories$en cleanupCategories = Translations$cleanupCategories$en._(_root);
-	late final Translations$myClutterDashboard$en myClutterDashboard = Translations$myClutterDashboard$en._(_root);
-	late final Translations$scanResults$en scanResults = Translations$scanResults$en._(_root);
-	late final Translations$spaceViewStart$en spaceViewStart = Translations$spaceViewStart$en._(_root);
-	late final Translations$shell$en shell = Translations$shell$en._(_root);
-	late final Translations$myToolsService$en myToolsService = Translations$myToolsService$en._(_root);
+	late final Translations$app$en app = Translations$app$en.internal(_root);
+	late final Translations$language$en language = Translations$language$en.internal(_root);
+	late final Translations$navigation$en navigation = Translations$navigation$en.internal(_root);
+	late final Translations$settings$en settings = Translations$settings$en.internal(_root);
+	late final Translations$sections$en sections = Translations$sections$en.internal(_root);
+	late final Translations$progress$en progress = Translations$progress$en.internal(_root);
+	late final Translations$errors$en errors = Translations$errors$en.internal(_root);
+	late final Translations$buttons$en buttons = Translations$buttons$en.internal(_root);
+	late final Translations$tooltips$en tooltips = Translations$tooltips$en.internal(_root);
+	late final Translations$dialogs$en dialogs = Translations$dialogs$en.internal(_root);
+	late final Translations$removal$en removal = Translations$removal$en.internal(_root);
+	late final Translations$done$en done = Translations$done$en.internal(_root);
+	late final Translations$donate$en donate = Translations$donate$en.internal(_root);
+	late final Translations$cleanupManager$en cleanupManager = Translations$cleanupManager$en.internal(_root);
+	late final Translations$projectDirectory$en projectDirectory = Translations$projectDirectory$en.internal(_root);
+	late final Translations$searchAndSort$en searchAndSort = Translations$searchAndSort$en.internal(_root);
+	late final Translations$spaceView$en spaceView = Translations$spaceView$en.internal(_root);
+	late final Translations$home$en home = Translations$home$en.internal(_root);
+	late final Translations$myToolsPage$en myToolsPage = Translations$myToolsPage$en.internal(_root);
+	late final Translations$myToolsMessages$en myToolsMessages = Translations$myToolsMessages$en.internal(_root);
+	late final Translations$myToolsCatalog$en myToolsCatalog = Translations$myToolsCatalog$en.internal(_root);
+	late final Translations$cleanupCategories$en cleanupCategories = Translations$cleanupCategories$en.internal(_root);
+	late final Translations$myClutterDashboard$en myClutterDashboard = Translations$myClutterDashboard$en.internal(_root);
+	late final Translations$scanResults$en scanResults = Translations$scanResults$en.internal(_root);
+	late final Translations$spaceViewStart$en spaceViewStart = Translations$spaceViewStart$en.internal(_root);
+	late final Translations$shell$en shell = Translations$shell$en.internal(_root);
+	late final Translations$myToolsService$en myToolsService = Translations$myToolsService$en.internal(_root);
 }
 
 // Path: app
 class Translations$app$en {
-	Translations$app$en._(this._root);
+	Translations$app$en.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -82,7 +83,7 @@ class Translations$app$en {
 
 // Path: language
 class Translations$language$en {
-	Translations$language$en._(this._root);
+	Translations$language$en.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -118,7 +119,7 @@ class Translations$language$en {
 
 // Path: navigation
 class Translations$navigation$en {
-	Translations$navigation$en._(this._root);
+	Translations$navigation$en.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -144,26 +145,74 @@ class Translations$navigation$en {
 
 	/// en: 'Donate'
 	String get donate => 'Donate';
+
+	/// en: 'Settings'
+	String get settings => 'Settings';
 }
 
-// Path: sections
-class Translations$sections$en {
-	Translations$sections$en._(this._root);
+// Path: settings
+class Translations$settings$en {
+	Translations$settings$en.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
 	// Translations
-	late final Translations$sections$home$en home = Translations$sections$home$en._(_root);
-	late final Translations$sections$cleanup$en cleanup = Translations$sections$cleanup$en._(_root);
-	late final Translations$sections$myClutter$en myClutter = Translations$sections$myClutter$en._(_root);
-	late final Translations$sections$spaceView$en spaceView = Translations$sections$spaceView$en._(_root);
-	late final Translations$sections$applications$en applications = Translations$sections$applications$en._(_root);
-	late final Translations$sections$myTools$en myTools = Translations$sections$myTools$en._(_root);
+
+	/// en: 'Settings'
+	String get title => 'Settings';
+
+	/// en: 'Tune PristineCleaner to fit the way you like to work.'
+	String get subtitle => 'Tune PristineCleaner to fit the way you like to work.';
+
+	/// en: 'Language'
+	String get sectionLanguage => 'Language';
+
+	/// en: 'Updates'
+	String get sectionUpdates => 'Updates';
+
+	/// en: 'Behavior'
+	String get sectionBehavior => 'Behavior';
+
+	/// en: 'Check for updates on launch'
+	String get autoCheckUpdates => 'Check for updates on launch';
+
+	/// en: 'Automatically look for new versions when the app starts.'
+	String get autoCheckUpdatesSub => 'Automatically look for new versions when the app starts.';
+
+	/// en: 'Check for updates'
+	String get checkForUpdates => 'Check for updates';
+
+	/// en: 'Launch at login'
+	String get launchAtLogin => 'Launch at login';
+
+	/// en: 'Open PristineCleaner automatically when you sign in.'
+	String get launchAtLoginSub => 'Open PristineCleaner automatically when you sign in.';
+
+	/// en: 'Confirm before removing'
+	String get confirmBeforeRemoving => 'Confirm before removing';
+
+	/// en: 'Show a confirmation dialog before files are removed.'
+	String get confirmBeforeRemovingSub => 'Show a confirmation dialog before files are removed.';
+}
+
+// Path: sections
+class Translations$sections$en {
+	Translations$sections$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+	late final Translations$sections$home$en home = Translations$sections$home$en.internal(_root);
+	late final Translations$sections$cleanup$en cleanup = Translations$sections$cleanup$en.internal(_root);
+	late final Translations$sections$myClutter$en myClutter = Translations$sections$myClutter$en.internal(_root);
+	late final Translations$sections$spaceView$en spaceView = Translations$sections$spaceView$en.internal(_root);
+	late final Translations$sections$applications$en applications = Translations$sections$applications$en.internal(_root);
+	late final Translations$sections$myTools$en myTools = Translations$sections$myTools$en.internal(_root);
 }
 
 // Path: progress
 class Translations$progress$en {
-	Translations$progress$en._(this._root);
+	Translations$progress$en.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -181,7 +230,7 @@ class Translations$progress$en {
 
 // Path: errors
 class Translations$errors$en {
-	Translations$errors$en._(this._root);
+	Translations$errors$en.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -193,7 +242,7 @@ class Translations$errors$en {
 
 // Path: buttons
 class Translations$buttons$en {
-	Translations$buttons$en._(this._root);
+	Translations$buttons$en.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -241,7 +290,7 @@ class Translations$buttons$en {
 
 // Path: tooltips
 class Translations$tooltips$en {
-	Translations$tooltips$en._(this._root);
+	Translations$tooltips$en.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -256,7 +305,7 @@ class Translations$tooltips$en {
 
 // Path: dialogs
 class Translations$dialogs$en {
-	Translations$dialogs$en._(this._root);
+	Translations$dialogs$en.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -285,11 +334,26 @@ class Translations$dialogs$en {
 
 	/// en: 'The current file will finish, then remaining files will be skipped.'
 	String get stopRemovalMessage => 'The current file will finish, then remaining files will be skipped.';
+
+	/// en: 'Remove selected items?'
+	String get confirmRemovalTitle => 'Remove selected items?';
+
+	/// en: '{count} item(s) will be moved to Trash.'
+	String get confirmRemovalMessage => '{count} item(s) will be moved to Trash.';
+
+	/// en: '{count} item(s) will be permanently deleted. This cannot be undone.'
+	String get confirmRemovalMessagePermanent => '{count} item(s) will be permanently deleted. This cannot be undone.';
+
+	/// en: 'Cancel'
+	String get confirmRemovalCancel => 'Cancel';
+
+	/// en: 'Remove'
+	String get confirmRemovalConfirm => 'Remove';
 }
 
 // Path: removal
 class Translations$removal$en {
-	Translations$removal$en._(this._root);
+	Translations$removal$en.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -352,7 +416,7 @@ class Translations$removal$en {
 
 // Path: done
 class Translations$done$en {
-	Translations$done$en._(this._root);
+	Translations$done$en.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -373,7 +437,7 @@ class Translations$done$en {
 
 // Path: donate
 class Translations$donate$en {
-	Translations$donate$en._(this._root);
+	Translations$donate$en.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -397,7 +461,7 @@ class Translations$donate$en {
 
 // Path: cleanupManager
 class Translations$cleanupManager$en {
-	Translations$cleanupManager$en._(this._root);
+	Translations$cleanupManager$en.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -433,7 +497,7 @@ class Translations$cleanupManager$en {
 
 // Path: projectDirectory
 class Translations$projectDirectory$en {
-	Translations$projectDirectory$en._(this._root);
+	Translations$projectDirectory$en.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -454,7 +518,7 @@ class Translations$projectDirectory$en {
 
 // Path: searchAndSort
 class Translations$searchAndSort$en {
-	Translations$searchAndSort$en._(this._root);
+	Translations$searchAndSort$en.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -481,7 +545,7 @@ class Translations$searchAndSort$en {
 
 // Path: spaceView
 class Translations$spaceView$en {
-	Translations$spaceView$en._(this._root);
+	Translations$spaceView$en.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -499,7 +563,7 @@ class Translations$spaceView$en {
 
 // Path: home
 class Translations$home$en {
-	Translations$home$en._(this._root);
+	Translations$home$en.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -538,7 +602,7 @@ class Translations$home$en {
 
 // Path: myToolsPage
 class Translations$myToolsPage$en {
-	Translations$myToolsPage$en._(this._root);
+	Translations$myToolsPage$en.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -556,7 +620,7 @@ class Translations$myToolsPage$en {
 
 // Path: myToolsMessages
 class Translations$myToolsMessages$en {
-	Translations$myToolsMessages$en._(this._root);
+	Translations$myToolsMessages$en.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -598,49 +662,49 @@ class Translations$myToolsMessages$en {
 	/// en: 'Something went wrong.'
 	String get somethingWentWrong => 'Something went wrong.';
 
-	late final Translations$myToolsMessages$fallback$en fallback = Translations$myToolsMessages$fallback$en._(_root);
+	late final Translations$myToolsMessages$fallback$en fallback = Translations$myToolsMessages$fallback$en.internal(_root);
 }
 
 // Path: myToolsCatalog
 class Translations$myToolsCatalog$en {
-	Translations$myToolsCatalog$en._(this._root);
+	Translations$myToolsCatalog$en.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
 	// Translations
-	late final Translations$myToolsCatalog$appLeftovers$en appLeftovers = Translations$myToolsCatalog$appLeftovers$en._(_root);
-	late final Translations$myToolsCatalog$backgroundItems$en backgroundItems = Translations$myToolsCatalog$backgroundItems$en._(_root);
-	late final Translations$myToolsCatalog$downloads$en downloads = Translations$myToolsCatalog$downloads$en._(_root);
-	late final Translations$myToolsCatalog$largeOld$en largeOld = Translations$myToolsCatalog$largeOld$en._(_root);
-	late final Translations$myToolsCatalog$similarImages$en similarImages = Translations$myToolsCatalog$similarImages$en._(_root);
-	late final Translations$myToolsCatalog$trashBins$en trashBins = Translations$myToolsCatalog$trashBins$en._(_root);
-	late final Translations$myToolsCatalog$duplicateFinder$en duplicateFinder = Translations$myToolsCatalog$duplicateFinder$en._(_root);
-	late final Translations$myToolsCatalog$applicationPermissions$en applicationPermissions = Translations$myToolsCatalog$applicationPermissions$en._(_root);
-	late final Translations$myToolsCatalog$systemJunk$en systemJunk = Translations$myToolsCatalog$systemJunk$en._(_root);
-	late final Translations$myToolsCatalog$timeMachineSnapshot$en timeMachineSnapshot = Translations$myToolsCatalog$timeMachineSnapshot$en._(_root);
-	late final Translations$myToolsCatalog$loginItems$en loginItems = Translations$myToolsCatalog$loginItems$en._(_root);
-	late final Translations$myToolsCatalog$mailAttachments$en mailAttachments = Translations$myToolsCatalog$mailAttachments$en._(_root);
-	late final Translations$myToolsCatalog$malwareFinder$en malwareFinder = Translations$myToolsCatalog$malwareFinder$en._(_root);
-	late final Translations$myToolsCatalog$uninstaller$en uninstaller = Translations$myToolsCatalog$uninstaller$en._(_root);
+	late final Translations$myToolsCatalog$appLeftovers$en appLeftovers = Translations$myToolsCatalog$appLeftovers$en.internal(_root);
+	late final Translations$myToolsCatalog$backgroundItems$en backgroundItems = Translations$myToolsCatalog$backgroundItems$en.internal(_root);
+	late final Translations$myToolsCatalog$downloads$en downloads = Translations$myToolsCatalog$downloads$en.internal(_root);
+	late final Translations$myToolsCatalog$largeOld$en largeOld = Translations$myToolsCatalog$largeOld$en.internal(_root);
+	late final Translations$myToolsCatalog$similarImages$en similarImages = Translations$myToolsCatalog$similarImages$en.internal(_root);
+	late final Translations$myToolsCatalog$trashBins$en trashBins = Translations$myToolsCatalog$trashBins$en.internal(_root);
+	late final Translations$myToolsCatalog$duplicateFinder$en duplicateFinder = Translations$myToolsCatalog$duplicateFinder$en.internal(_root);
+	late final Translations$myToolsCatalog$applicationPermissions$en applicationPermissions = Translations$myToolsCatalog$applicationPermissions$en.internal(_root);
+	late final Translations$myToolsCatalog$systemJunk$en systemJunk = Translations$myToolsCatalog$systemJunk$en.internal(_root);
+	late final Translations$myToolsCatalog$timeMachineSnapshot$en timeMachineSnapshot = Translations$myToolsCatalog$timeMachineSnapshot$en.internal(_root);
+	late final Translations$myToolsCatalog$loginItems$en loginItems = Translations$myToolsCatalog$loginItems$en.internal(_root);
+	late final Translations$myToolsCatalog$mailAttachments$en mailAttachments = Translations$myToolsCatalog$mailAttachments$en.internal(_root);
+	late final Translations$myToolsCatalog$malwareFinder$en malwareFinder = Translations$myToolsCatalog$malwareFinder$en.internal(_root);
+	late final Translations$myToolsCatalog$uninstaller$en uninstaller = Translations$myToolsCatalog$uninstaller$en.internal(_root);
 }
 
 // Path: cleanupCategories
 class Translations$cleanupCategories$en {
-	Translations$cleanupCategories$en._(this._root);
+	Translations$cleanupCategories$en.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
 	// Translations
-	late final Translations$cleanupCategories$userCache$en userCache = Translations$cleanupCategories$userCache$en._(_root);
-	late final Translations$cleanupCategories$userLogs$en userLogs = Translations$cleanupCategories$userLogs$en._(_root);
-	late final Translations$cleanupCategories$languageFiles$en languageFiles = Translations$cleanupCategories$languageFiles$en._(_root);
-	late final Translations$cleanupCategories$systemLogs$en systemLogs = Translations$cleanupCategories$systemLogs$en._(_root);
-	late final Translations$cleanupCategories$brokenLoginItems$en brokenLoginItems = Translations$cleanupCategories$brokenLoginItems$en._(_root);
+	late final Translations$cleanupCategories$userCache$en userCache = Translations$cleanupCategories$userCache$en.internal(_root);
+	late final Translations$cleanupCategories$userLogs$en userLogs = Translations$cleanupCategories$userLogs$en.internal(_root);
+	late final Translations$cleanupCategories$languageFiles$en languageFiles = Translations$cleanupCategories$languageFiles$en.internal(_root);
+	late final Translations$cleanupCategories$systemLogs$en systemLogs = Translations$cleanupCategories$systemLogs$en.internal(_root);
+	late final Translations$cleanupCategories$brokenLoginItems$en brokenLoginItems = Translations$cleanupCategories$brokenLoginItems$en.internal(_root);
 }
 
 // Path: myClutterDashboard
 class Translations$myClutterDashboard$en {
-	Translations$myClutterDashboard$en._(this._root);
+	Translations$myClutterDashboard$en.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -691,7 +755,7 @@ class Translations$myClutterDashboard$en {
 
 // Path: scanResults
 class Translations$scanResults$en {
-	Translations$scanResults$en._(this._root);
+	Translations$scanResults$en.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -724,7 +788,7 @@ class Translations$scanResults$en {
 
 // Path: spaceViewStart
 class Translations$spaceViewStart$en {
-	Translations$spaceViewStart$en._(this._root);
+	Translations$spaceViewStart$en.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -745,7 +809,7 @@ class Translations$spaceViewStart$en {
 
 // Path: shell
 class Translations$shell$en {
-	Translations$shell$en._(this._root);
+	Translations$shell$en.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -757,7 +821,7 @@ class Translations$shell$en {
 
 // Path: myToolsService
 class Translations$myToolsService$en {
-	Translations$myToolsService$en._(this._root);
+	Translations$myToolsService$en.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -775,7 +839,7 @@ class Translations$myToolsService$en {
 
 // Path: sections.home
 class Translations$sections$home$en {
-	Translations$sections$home$en._(this._root);
+	Translations$sections$home$en.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -787,12 +851,12 @@ class Translations$sections$home$en {
 	/// en: 'See your computer's vital signs at a glance\nand catch issues before they grow.'
 	String get subtitle => 'See your computer\'s vital signs at a glance\nand catch issues before they grow.';
 
-	late final Translations$sections$home$features$en features = Translations$sections$home$features$en._(_root);
+	late final Translations$sections$home$features$en features = Translations$sections$home$features$en.internal(_root);
 }
 
 // Path: sections.cleanup
 class Translations$sections$cleanup$en {
-	Translations$sections$cleanup$en._(this._root);
+	Translations$sections$cleanup$en.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -804,12 +868,12 @@ class Translations$sections$cleanup$en {
 	/// en: 'Sweep away digital residue to restore\nspeed, stability, and valuable free space.'
 	String get subtitle => 'Sweep away digital residue to restore\nspeed, stability, and valuable free space.';
 
-	late final Translations$sections$cleanup$features$en features = Translations$sections$cleanup$features$en._(_root);
+	late final Translations$sections$cleanup$features$en features = Translations$sections$cleanup$features$en.internal(_root);
 }
 
 // Path: sections.myClutter
 class Translations$sections$myClutter$en {
-	Translations$sections$myClutter$en._(this._root);
+	Translations$sections$myClutter$en.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -821,12 +885,12 @@ class Translations$sections$myClutter$en {
 	/// en: 'Turn chaotic folders into clear decisions\nwith guided cleanup in minutes.'
 	String get subtitle => 'Turn chaotic folders into clear decisions\nwith guided cleanup in minutes.';
 
-	late final Translations$sections$myClutter$features$en features = Translations$sections$myClutter$features$en._(_root);
+	late final Translations$sections$myClutter$features$en features = Translations$sections$myClutter$features$en.internal(_root);
 }
 
 // Path: sections.spaceView
 class Translations$sections$spaceView$en {
-	Translations$sections$spaceView$en._(this._root);
+	Translations$sections$spaceView$en.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -838,12 +902,12 @@ class Translations$sections$spaceView$en {
 	/// en: 'Map your disk visually to pinpoint\nwhat matters most and free space faster.'
 	String get subtitle => 'Map your disk visually to pinpoint\nwhat matters most and free space faster.';
 
-	late final Translations$sections$spaceView$features$en features = Translations$sections$spaceView$features$en._(_root);
+	late final Translations$sections$spaceView$features$en features = Translations$sections$spaceView$features$en.internal(_root);
 }
 
 // Path: sections.applications
 class Translations$sections$applications$en {
-	Translations$sections$applications$en._(this._root);
+	Translations$sections$applications$en.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -855,12 +919,12 @@ class Translations$sections$applications$en {
 	/// en: 'Master your app footprint.\nUninstall cleanly and remove forgotten leftovers.'
 	String get subtitle => 'Master your app footprint.\nUninstall cleanly and remove forgotten leftovers.';
 
-	late final Translations$sections$applications$features$en features = Translations$sections$applications$features$en._(_root);
+	late final Translations$sections$applications$features$en features = Translations$sections$applications$features$en.internal(_root);
 }
 
 // Path: sections.myTools
 class Translations$sections$myTools$en {
-	Translations$sections$myTools$en._(this._root);
+	Translations$sections$myTools$en.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -872,12 +936,12 @@ class Translations$sections$myTools$en {
 	/// en: 'Your go-to toolkit for system care and maintenance.'
 	String get subtitle => 'Your go-to toolkit for system care and maintenance.';
 
-	late final Translations$sections$myTools$features$en features = Translations$sections$myTools$features$en._(_root);
+	late final Translations$sections$myTools$features$en features = Translations$sections$myTools$features$en.internal(_root);
 }
 
 // Path: myToolsMessages.fallback
 class Translations$myToolsMessages$fallback$en {
-	Translations$myToolsMessages$fallback$en._(this._root);
+	Translations$myToolsMessages$fallback$en.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -937,7 +1001,7 @@ class Translations$myToolsMessages$fallback$en {
 
 // Path: myToolsCatalog.appLeftovers
 class Translations$myToolsCatalog$appLeftovers$en {
-	Translations$myToolsCatalog$appLeftovers$en._(this._root);
+	Translations$myToolsCatalog$appLeftovers$en.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -952,7 +1016,7 @@ class Translations$myToolsCatalog$appLeftovers$en {
 
 // Path: myToolsCatalog.backgroundItems
 class Translations$myToolsCatalog$backgroundItems$en {
-	Translations$myToolsCatalog$backgroundItems$en._(this._root);
+	Translations$myToolsCatalog$backgroundItems$en.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -967,7 +1031,7 @@ class Translations$myToolsCatalog$backgroundItems$en {
 
 // Path: myToolsCatalog.downloads
 class Translations$myToolsCatalog$downloads$en {
-	Translations$myToolsCatalog$downloads$en._(this._root);
+	Translations$myToolsCatalog$downloads$en.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -982,7 +1046,7 @@ class Translations$myToolsCatalog$downloads$en {
 
 // Path: myToolsCatalog.largeOld
 class Translations$myToolsCatalog$largeOld$en {
-	Translations$myToolsCatalog$largeOld$en._(this._root);
+	Translations$myToolsCatalog$largeOld$en.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -997,7 +1061,7 @@ class Translations$myToolsCatalog$largeOld$en {
 
 // Path: myToolsCatalog.similarImages
 class Translations$myToolsCatalog$similarImages$en {
-	Translations$myToolsCatalog$similarImages$en._(this._root);
+	Translations$myToolsCatalog$similarImages$en.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -1012,7 +1076,7 @@ class Translations$myToolsCatalog$similarImages$en {
 
 // Path: myToolsCatalog.trashBins
 class Translations$myToolsCatalog$trashBins$en {
-	Translations$myToolsCatalog$trashBins$en._(this._root);
+	Translations$myToolsCatalog$trashBins$en.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -1027,7 +1091,7 @@ class Translations$myToolsCatalog$trashBins$en {
 
 // Path: myToolsCatalog.duplicateFinder
 class Translations$myToolsCatalog$duplicateFinder$en {
-	Translations$myToolsCatalog$duplicateFinder$en._(this._root);
+	Translations$myToolsCatalog$duplicateFinder$en.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -1042,7 +1106,7 @@ class Translations$myToolsCatalog$duplicateFinder$en {
 
 // Path: myToolsCatalog.applicationPermissions
 class Translations$myToolsCatalog$applicationPermissions$en {
-	Translations$myToolsCatalog$applicationPermissions$en._(this._root);
+	Translations$myToolsCatalog$applicationPermissions$en.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -1057,7 +1121,7 @@ class Translations$myToolsCatalog$applicationPermissions$en {
 
 // Path: myToolsCatalog.systemJunk
 class Translations$myToolsCatalog$systemJunk$en {
-	Translations$myToolsCatalog$systemJunk$en._(this._root);
+	Translations$myToolsCatalog$systemJunk$en.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -1072,7 +1136,7 @@ class Translations$myToolsCatalog$systemJunk$en {
 
 // Path: myToolsCatalog.timeMachineSnapshot
 class Translations$myToolsCatalog$timeMachineSnapshot$en {
-	Translations$myToolsCatalog$timeMachineSnapshot$en._(this._root);
+	Translations$myToolsCatalog$timeMachineSnapshot$en.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -1087,7 +1151,7 @@ class Translations$myToolsCatalog$timeMachineSnapshot$en {
 
 // Path: myToolsCatalog.loginItems
 class Translations$myToolsCatalog$loginItems$en {
-	Translations$myToolsCatalog$loginItems$en._(this._root);
+	Translations$myToolsCatalog$loginItems$en.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -1102,7 +1166,7 @@ class Translations$myToolsCatalog$loginItems$en {
 
 // Path: myToolsCatalog.mailAttachments
 class Translations$myToolsCatalog$mailAttachments$en {
-	Translations$myToolsCatalog$mailAttachments$en._(this._root);
+	Translations$myToolsCatalog$mailAttachments$en.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -1117,7 +1181,7 @@ class Translations$myToolsCatalog$mailAttachments$en {
 
 // Path: myToolsCatalog.malwareFinder
 class Translations$myToolsCatalog$malwareFinder$en {
-	Translations$myToolsCatalog$malwareFinder$en._(this._root);
+	Translations$myToolsCatalog$malwareFinder$en.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -1132,7 +1196,7 @@ class Translations$myToolsCatalog$malwareFinder$en {
 
 // Path: myToolsCatalog.uninstaller
 class Translations$myToolsCatalog$uninstaller$en {
-	Translations$myToolsCatalog$uninstaller$en._(this._root);
+	Translations$myToolsCatalog$uninstaller$en.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -1147,7 +1211,7 @@ class Translations$myToolsCatalog$uninstaller$en {
 
 // Path: cleanupCategories.userCache
 class Translations$cleanupCategories$userCache$en {
-	Translations$cleanupCategories$userCache$en._(this._root);
+	Translations$cleanupCategories$userCache$en.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -1162,7 +1226,7 @@ class Translations$cleanupCategories$userCache$en {
 
 // Path: cleanupCategories.userLogs
 class Translations$cleanupCategories$userLogs$en {
-	Translations$cleanupCategories$userLogs$en._(this._root);
+	Translations$cleanupCategories$userLogs$en.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -1177,7 +1241,7 @@ class Translations$cleanupCategories$userLogs$en {
 
 // Path: cleanupCategories.languageFiles
 class Translations$cleanupCategories$languageFiles$en {
-	Translations$cleanupCategories$languageFiles$en._(this._root);
+	Translations$cleanupCategories$languageFiles$en.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -1192,7 +1256,7 @@ class Translations$cleanupCategories$languageFiles$en {
 
 // Path: cleanupCategories.systemLogs
 class Translations$cleanupCategories$systemLogs$en {
-	Translations$cleanupCategories$systemLogs$en._(this._root);
+	Translations$cleanupCategories$systemLogs$en.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -1207,7 +1271,7 @@ class Translations$cleanupCategories$systemLogs$en {
 
 // Path: cleanupCategories.brokenLoginItems
 class Translations$cleanupCategories$brokenLoginItems$en {
-	Translations$cleanupCategories$brokenLoginItems$en._(this._root);
+	Translations$cleanupCategories$brokenLoginItems$en.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -1222,7 +1286,7 @@ class Translations$cleanupCategories$brokenLoginItems$en {
 
 // Path: sections.home.features
 class Translations$sections$home$features$en {
-	Translations$sections$home$features$en._(this._root);
+	Translations$sections$home$features$en.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -1240,7 +1304,7 @@ class Translations$sections$home$features$en {
 
 // Path: sections.cleanup.features
 class Translations$sections$cleanup$features$en {
-	Translations$sections$cleanup$features$en._(this._root);
+	Translations$sections$cleanup$features$en.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -1258,7 +1322,7 @@ class Translations$sections$cleanup$features$en {
 
 // Path: sections.myClutter.features
 class Translations$sections$myClutter$features$en {
-	Translations$sections$myClutter$features$en._(this._root);
+	Translations$sections$myClutter$features$en.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -1276,7 +1340,7 @@ class Translations$sections$myClutter$features$en {
 
 // Path: sections.spaceView.features
 class Translations$sections$spaceView$features$en {
-	Translations$sections$spaceView$features$en._(this._root);
+	Translations$sections$spaceView$features$en.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -1294,7 +1358,7 @@ class Translations$sections$spaceView$features$en {
 
 // Path: sections.applications.features
 class Translations$sections$applications$features$en {
-	Translations$sections$applications$features$en._(this._root);
+	Translations$sections$applications$features$en.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -1312,7 +1376,7 @@ class Translations$sections$applications$features$en {
 
 // Path: sections.myTools.features
 class Translations$sections$myTools$features$en {
-	Translations$sections$myTools$features$en._(this._root);
+	Translations$sections$myTools$features$en.internal(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -1353,6 +1417,19 @@ extension on Translations {
 			'navigation.applications' => 'Applications',
 			'navigation.myTools' => 'Tools',
 			'navigation.donate' => 'Donate',
+			'navigation.settings' => 'Settings',
+			'settings.title' => 'Settings',
+			'settings.subtitle' => 'Tune PristineCleaner to fit the way you like to work.',
+			'settings.sectionLanguage' => 'Language',
+			'settings.sectionUpdates' => 'Updates',
+			'settings.sectionBehavior' => 'Behavior',
+			'settings.autoCheckUpdates' => 'Check for updates on launch',
+			'settings.autoCheckUpdatesSub' => 'Automatically look for new versions when the app starts.',
+			'settings.checkForUpdates' => 'Check for updates',
+			'settings.launchAtLogin' => 'Launch at login',
+			'settings.launchAtLoginSub' => 'Open PristineCleaner automatically when you sign in.',
+			'settings.confirmBeforeRemoving' => 'Confirm before removing',
+			'settings.confirmBeforeRemovingSub' => 'Show a confirmation dialog before files are removed.',
 			'sections.home.title' => 'Home',
 			'sections.home.subtitle' => 'See your computer\'s vital signs at a glance\nand catch issues before they grow.',
 			'sections.home.features.systemStatus' => 'Live System Pulse',
@@ -1410,6 +1487,11 @@ extension on Translations {
 			'dialogs.exitConfirmationQuit' => 'Quit Anyway',
 			'dialogs.stopRemovalTitle' => 'Stop removal?',
 			'dialogs.stopRemovalMessage' => 'The current file will finish, then remaining files will be skipped.',
+			'dialogs.confirmRemovalTitle' => 'Remove selected items?',
+			'dialogs.confirmRemovalMessage' => '{count} item(s) will be moved to Trash.',
+			'dialogs.confirmRemovalMessagePermanent' => '{count} item(s) will be permanently deleted. This cannot be undone.',
+			'dialogs.confirmRemovalCancel' => 'Cancel',
+			'dialogs.confirmRemovalConfirm' => 'Remove',
 			'removal.barrierLabel' => 'Removal progress',
 			'removal.preparing' => 'Preparing...',
 			'removal.removingFrom' => 'Removing from {title}',

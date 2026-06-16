@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../gen/strings.g.dart';
+import '../core/settings/settings_provider.dart';
 import '../core/theme/section_themes.dart';
 import '../services/trash_service.dart';
 import '../shared/removal/removal_flow.dart';
@@ -73,6 +74,7 @@ class ApplicationsScreen extends ConsumerWidget {
       accentColor: theme.accentColor,
       selectedItems: selected,
       trashService: ref.read(trashServiceProvider),
+      requireConfirmation: ref.read(settingsProvider).confirmBeforeRemoving,
     );
     if (outcome == null) return;
     notifier.applyRemovalOutcome(outcome);

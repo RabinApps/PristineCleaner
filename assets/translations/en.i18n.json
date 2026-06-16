@@ -20,7 +20,22 @@
     "spaceView": "Space View",
     "applications": "Applications",
     "myTools": "Tools",
-    "donate": "Donate"
+    "donate": "Donate",
+    "settings": "Settings"
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Tune PristineCleaner to fit the way you like to work.",
+    "sectionLanguage": "Language",
+    "sectionUpdates": "Updates",
+    "sectionBehavior": "Behavior",
+    "autoCheckUpdates": "Check for updates on launch",
+    "autoCheckUpdatesSub": "Automatically look for new versions when the app starts.",
+    "checkForUpdates": "Check for updates",
+    "launchAtLogin": "Launch at login",
+    "launchAtLoginSub": "Open PristineCleaner automatically when you sign in.",
+    "confirmBeforeRemoving": "Confirm before removing",
+    "confirmBeforeRemovingSub": "Show a confirmation dialog before files are removed."
   },
   "sections": {
     "home": {
@@ -113,7 +128,12 @@
     "exitConfirmationWait": "Wait",
     "exitConfirmationQuit": "Quit Anyway",
     "stopRemovalTitle": "Stop removal?",
-    "stopRemovalMessage": "The current file will finish, then remaining files will be skipped."
+    "stopRemovalMessage": "The current file will finish, then remaining files will be skipped.",
+    "confirmRemovalTitle": "Remove selected items?",
+    "confirmRemovalMessage": "{count} item(s) will be moved to Trash.",
+    "confirmRemovalMessagePermanent": "{count} item(s) will be permanently deleted. This cannot be undone.",
+    "confirmRemovalCancel": "Cancel",
+    "confirmRemovalConfirm": "Remove"
   },
   "removal": {
     "barrierLabel": "Removal progress",

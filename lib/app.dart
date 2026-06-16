@@ -13,6 +13,7 @@ import 'screens/donate_screen.dart';
 import 'screens/my_tools_screen.dart';
 import 'screens/my_clutter_screen.dart';
 import 'screens/home_screen.dart';
+import 'screens/settings_screen.dart';
 import 'screens/space_view_screen.dart';
 import 'shared/widgets/shell/shell_screen.dart';
 
@@ -64,6 +65,11 @@ GoRouter _createRouter(GlobalKey<NavigatorState> navigatorKey) {
             pageBuilder: (context, state) =>
                 _fadePage(state: state, child: const DonateScreen()),
           ),
+          GoRoute(
+            path: '/settings',
+            pageBuilder: (context, state) =>
+                _fadePage(state: state, child: const SettingsScreen()),
+          ),
         ],
       ),
     ],
@@ -101,21 +107,37 @@ NavSection _sectionFromPath(String path) {
       return NavSection.myTools;
     case '/donate':
       return NavSection.donate;
+    case '/settings':
+      return NavSection.settings;
     default:
       return NavSection.home;
   }
 }
 
-class PristineCleanerApp extends ConsumerWidget {
+class PristineCleanerApp extends ConsumerStatefulWidget {
   final GlobalKey<NavigatorState>? navigatorKey;
 
   const PristineCleanerApp({super.key, this.navigatorKey});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<PristineCleanerApp> createState() => _PristineCleanerAppState();
+}
+
+class _PristineCleanerAppState extends ConsumerState<PristineCleanerApp> {
+  late final GoRouter _router;
+
+  @override
+  void initState() {
+    super.initState();
+    // Created once so locale (or any other) rebuilds don't reset navigation.
+    _router = _createRouter(
+      widget.navigatorKey ?? GlobalKey<NavigatorState>(),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final appLocale = ref.watch(appLocaleProvider);
-    final _key = navigatorKey ?? GlobalKey<NavigatorState>();
-    final router = _createRouter(_key);
 
     return MaterialApp.router(
       title: t.app.title,
@@ -134,7 +156,7 @@ class PristineCleanerApp extends ConsumerWidget {
           secondary: const Color(0xFF90CAF9),
         ),
       ),
-      routerConfig: router,
+      routerConfig: _router,
     );
   }
 }

@@ -11,6 +11,7 @@ enum NavSection {
   applications,
   myTools,
   donate,
+  settings,
 }
 
 class NavItem {
@@ -70,5 +71,12 @@ class NavItem {
     label: t.navigation.donate,
     icon: Icons.volunteer_activism_rounded,
     theme: SectionThemes.home,
+  );
+
+  static NavItem settingsItem() => NavItem(
+    section: NavSection.settings,
+    label: t.navigation.settings,
+    icon: Icons.settings_rounded,
+    theme: SectionThemes.settings,
   );
 }
